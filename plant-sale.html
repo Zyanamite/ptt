@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Plant Sale | PTT Landscaping Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #1a3b2e;
+            --primary-light: #2d6a4f;
+            --accent: #74c69d;
+            --accent-glow: #52b788;
+            --bg-light: #f8faf8;
+            --bg-glass: rgba(255, 255, 255, 0.75);
+            --text-dark: #1e2a23;
+            --text-soft: #3a4d41;
+            --white: #ffffff;
+            --shadow-sm: 0 10px 30px -10px rgba(0, 20, 10, 0.1);
+            --shadow-md: 0 20px 40px -15px rgba(0, 30, 10, 0.15);
+            --shadow-glow: 0 0 20px rgba(82, 183, 136, 0.3);
+            --border-radius-card: 28px;
+            --border-radius-btn: 60px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', 'Padauk', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: -10%;
+            right: -10%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle at 70% 30%, rgba(116, 198, 157, 0.15), transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -10%;
+            left: -5%;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(circle at 20% 80%, rgba(45, 106, 79, 0.1), transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.02em; }
+        .section-title { text-align: center; margin-bottom: 60px; }
+        .section-title h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 16px; }
+        .lang-switcher { display: flex; gap: 8px; margin-left: 20px; }
+        .lang-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: var(--text-dark); padding: 8px 16px; border-radius: 40px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: var(--transition); backdrop-filter: blur(5px); background: rgba(255,255,255,0.4); }
+        .lang-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .lang-btn:hover { background: var(--primary-light); color: white; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 32px; border-radius: var(--border-radius-btn); font-weight: 600; text-decoration: none; transition: var(--transition); border: none; cursor: pointer; font-size: 1rem; backdrop-filter: blur(5px); }
+        .btn-primary { background: var(--primary); color: white; box-shadow: var(--shadow-sm); }
+        .btn-primary:hover { background: var(--primary-light); transform: translateY(-3px); box-shadow: var(--shadow-md), var(--shadow-glow); }
+        .btn-outline { background: transparent; border: 1.5px solid var(--primary); color: var(--primary); }
+        .btn-outline:hover { background: var(--primary); color: white; }
+        header { position: sticky; top: 0; z-index: 1000; padding: 16px 0; backdrop-filter: blur(12px); background: rgba(255, 255, 255, 0.7); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); border-bottom: 1px solid rgba(255,255,255,0.5); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo h1 { font-size: 1.9rem; font-weight: 700; color: var(--primary); line-height: 1.2; }
+        .logo span { font-size: 0.8rem; opacity: 0.8; font-weight: 500; letter-spacing: 1px; color: var(--text-soft); }
+        .header-right { display: flex; align-items: center; gap: 20px; }
+        nav ul { display: flex; list-style: none; gap: 36px; }
+        nav a { color: var(--text-dark); text-decoration: none; font-weight: 600; font-size: 1rem; transition: var(--transition); padding: 8px 0; border-bottom: 2px solid transparent; }
+        nav a:hover { color: var(--primary); border-bottom-color: var(--accent); }
+        .menu-toggle { display: none; font-size: 1.8rem; cursor: pointer; color: var(--primary); }
+        .page-header { padding: 80px 0 60px; text-align: center; }
+        .page-header h1 { font-size: 3.5rem; color: var(--primary); margin-bottom: 20px; }
+        .page-header .breadcrumb { color: var(--text-soft); }
+        .page-header .breadcrumb a { color: var(--primary); text-decoration: none; }
+        .service-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; margin: 40px 0; }
+        .service-hero-image { background: url('https://images.pexels.com/photos/4503269/pexels-photo-4503269.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') center/cover; border-radius: 40px; min-height: 400px; box-shadow: var(--shadow-md); border: 4px solid rgba(255,255,255,0.8); }
+        .plant-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 25px; margin: 50px 0; }
+        .plant-card { background: var(--bg-glass); backdrop-filter: blur(8px); padding: 25px; border-radius: var(--border-radius-card); box-shadow: var(--shadow-sm); border: 1px solid rgba(255,255,255,0.6); text-align: center; }
+        .plant-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+        .plant-card .plant-price { font-size: 1.5rem; color: var(--primary); font-weight: 700; margin: 10px 0; }
+        .pricing-card { background: var(--bg-glass); backdrop-filter: blur(8px); padding: 40px; border-radius: var(--border-radius-card); box-shadow: var(--shadow-md); border: 1px solid rgba(255,255,255,0.6); text-align: center; max-width: 500px; margin: 40px auto; }
+        footer { margin-top: 80px; padding: 40px 0; text-align: center; border-top: 1px solid rgba(0,0,0,0.05); color: var(--text-soft); }
+        @media (max-width: 992px) { .service-hero { grid-template-columns: 1fr; } .page-header h1 { font-size: 2.5rem; } }
+        @media (max-width: 768px) {
+            .header-right { gap: 10px; }
+            .menu-toggle { display: block; }
+            nav { position: absolute; top: 85px; left: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+            nav.active { max-height: 400px; }
+            nav ul { flex-direction: column; padding: 24px; gap: 16px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container header-content">
+        <div class="logo">
+            <h1>PTT Landscaping</h1>
+            <span data-lang-en="PREMIUM SERVICES" data-lang-my="အထူးဝန်ဆောင်မှု">PREMIUM SERVICES</span>
+        </div>
+        <div class="header-right">
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="my">မြန်မာ</button>
+            </div>
+            <div class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></div>
+        </div>
+        <nav id="navMenu">
+            <ul>
+                <li><a href="index.html" data-lang-en="Home" data-lang-my="ပင်မ">Home</a></li>
+                <li><a href="index.html#services" data-lang-en="Services" data-lang-my="ဝန်ဆောင်မှုများ">Services</a></li>
+                <li><a href="index.html#gallery" data-lang-en="Gallery" data-lang-my="လက်ရာများ">Gallery</a></li>
+                <li><a href="index.html#contact" data-lang-en="Contact" data-lang-my="ဆက်သွယ်ရန်">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<main>
+    <div class="container">
+        <div class="page-header">
+            <div class="breadcrumb"><a href="index.html" data-lang-en="Home" data-lang-my="ပင်မ">Home</a> / <span data-lang-en="Plant Sale" data-lang-my="Plant Sale">Plant Sale</span></div>
+            <h1><span data-lang-en="Plant Sale" data-lang-my="အပင်ရောင်းချခြင်း">Plant Sale</span></h1>
+            <p class="subhead" data-lang-en="Quality plants for your home and garden" data-lang-my="သင့်အိမ်နှင့် ဥယျာဉ်အတွက် အရည်အသွေးမီအပင်များ">Quality plants for your home and garden</p>
+        </div>
+        <div class="service-hero">
+            <div>
+                <h2 data-lang-en="Healthy Plants, Happy Homes" data-lang-my="ကျန်းမာသောအပင်များ၊ ပျော်ရွှင်သောအိမ်များ">Healthy Plants, Happy Homes</h2>
+                <p style="margin: 20px 0;" data-lang-en="Browse our extensive collection of indoor and outdoor plants. From low-maintenance succulents to statement trees, we have plants for every space and skill level. All plants are locally grown and acclimated." data-lang-my="ကျွန်ုပ်တို့၏ အိမ်တွင်းနှင့် ပြင်ပအပင်မျိုးစုံကို ကြည့်ရှုလိုက်ပါ။">Browse our extensive collection of indoor and outdoor plants. From low-maintenance succulents to statement trees, we have plants for every space and skill level.</p>
+                <a href="index.html#contact" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> <span data-lang-en="Order Plants" data-lang-my="အပင်မှာယူရန်">Order Plants</span></a>
+            </div>
+            <div class="service-hero-image"></div>
+        </div>
+        <h2 style="text-align:center; margin-bottom:30px;" data-lang-en="Popular Plants" data-lang-my="လူကြိုက်များသောအပင်များ">Popular Plants</h2>
+        <div class="plant-grid">
+            <div class="plant-card"><i class="fas fa-leaf"></i><h3>Monstera</h3><p class="plant-price">$45 - $120</p><p data-lang-en="Swiss cheese plant" data-lang-my="ဆွစ်ချိစ်ပင်">Swiss cheese plant</p></div>
+            <div class="plant-card"><i class="fas fa-tree"></i><h3>Fiddle Leaf Fig</h3><p class="plant-price">$65 - $200</p><p data-lang-en="Popular indoor tree" data-lang-my="လူကြိုက်များသော အိမ်တွင်းအပင်">Popular indoor tree</p></div>
+            <div class="plant-card"><i class="fas fa-flower"></i><h3>Orchids</h3><p class="plant-price">$25 - $80</p><p data-lang-en="Various colors available" data-lang-my="အရောင်စုံရရှိနိုင်">Various colors available</p></div>
+            <div class="plant-card"><i class="fas fa-seedling"></i><h3>Succulents</h3><p class="plant-price">$8 - $30</p><p data-lang-en="Low maintenance" data-lang-my="ပြုစုရလွယ်ကူ">Low maintenance</p></div>
+        </div>
+        <div class="pricing-card">
+            <h3 data-lang-en="Delivery Available" data-lang-my="အိမ်အရောက်ပို့ဆောင်ပေးသည်">Delivery Available</h3>
+            <p data-lang-en="Free delivery on orders over $200" data-lang-my="၂၀၀ ဒေါ်လာနှင့်အထက် မှာယူပါက အခမဲ့ပို့ဆောင်ပေးသည်">Free delivery on orders over $200</p>
+            <a href="index.html#contact" class="btn btn-outline" style="margin-top: 20px;"><span data-lang-en="Browse Catalog" data-lang-my="ကတ်တလောက်ကြည့်ရန်">Browse Catalog</span> <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+</main>
+<footer>
+    <div class="container">
+        <p>© 2025 PTT Landscaping Services. <span data-lang-en="All rights reserved." data-lang-my="မူပိုင်ခွင့်အားလုံး လက်ဝယ်ရှိသည်။">All rights reserved.</span></p>
+    </div>
+</footer>
+<script>
+    (function() {
+        let currentLang = 'en';
+        function switchLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.lang === lang) btn.classList.add('active');
+            });
+            document.querySelectorAll('[data-lang-en][data-lang-my]').forEach(el => {
+                const text = el.dataset[`lang${lang === 'en' ? 'En' : 'My'}`];
+                if (text) el.textContent = text;
+            });
+            localStorage.setItem('ptt_lang_pref', lang);
+        }
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() { switchLanguage(this.dataset.lang); });
+        });
+        const savedLang = localStorage.getItem('ptt_lang_pref');
+        if (savedLang && (savedLang === 'en' || savedLang === 'my')) switchLanguage(savedLang);
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        if (menuToggle) menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
+        document.querySelectorAll('nav a').forEach(link => link.addEventListener('click', () => navMenu.classList.remove('active')));
+    })();
+</script>
+</body>
+</html>
