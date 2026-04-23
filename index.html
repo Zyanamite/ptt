@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>PTT Landscaping Services | Premium Garden & Landscape Design</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts - Modern & Myanmar Support -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ----- Modern Reset & Variables ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a3b2e;
+            --primary-light: #2d6a4f;
+            --accent: #74c69d;
+            --accent-glow: #52b788;
+            --bg-light: #f8faf8;
+            --bg-glass: rgba(255, 255, 255, 0.75);
+            --text-dark: #1e2a23;
+            --text-soft: #3a4d41;
+            --white: #ffffff;
+            --shadow-sm: 0 10px 30px -10px rgba(0, 20, 10, 0.1);
+            --shadow-md: 0 20px 40px -15px rgba(0, 30, 10, 0.15);
+            --shadow-glow: 0 0 20px rgba(82, 183, 136, 0.3);
+            --border-radius-card: 28px;
+            --border-radius-btn: 60px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'Padauk', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Background decorative blobs */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -10%;
+            right: -10%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle at 70% 30%, rgba(116, 198, 157, 0.15), transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -10%;
+            left: -5%;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(circle at 20% 80%, rgba(45, 106, 79, 0.1), transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ----- Typography ----- */
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+        .section-title .subhead {
+            color: var(--text-soft);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ----- Language Switcher ----- */
+        .lang-switcher {
+            display: flex;
+            gap: 8px;
+            margin-left: 20px;
+        }
+        .lang-btn {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: var(--text-dark);
+            padding: 8px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            backdrop-filter: blur(5px);
+            background: rgba(255,255,255,0.4);
+        }
+        .lang-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .lang-btn:hover {
+            background: var(--primary-light);
+            color: white;
+        }
+
+        /* ----- Buttons ----- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: var(--border-radius-btn);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            backdrop-filter: blur(5px);
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+        .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md), var(--shadow-glow);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* ----- Header (Glassmorphism) ----- */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 16px 0;
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.5);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.2;
+        }
+        .logo span {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: var(--text-soft);
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 36px;
+        }
+        nav a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+            padding: 8px 0;
+            border-bottom: 2px solid transparent;
+        }
+        nav a:hover {
+            color: var(--primary);
+            border-bottom-color: var(--accent);
+        }
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--primary);
+        }
+
+        /* ----- Hero Section ----- */
+        .hero {
+            padding: 80px 0 100px;
+            position: relative;
+        }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 40px;
+        }
+        .hero-content h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            color: var(--primary);
+        }
+        .hero-highlight {
+            color: var(--primary-light);
+            border-bottom: 4px solid var(--accent);
+            display: inline-block;
+        }
+        .hero-content p {
+            font-size: 1.1rem;
+            color: var(--text-soft);
+            margin-bottom: 36px;
+        }
+        .hero-image {
+            background: url('https://images.pexels.com/photos/4916511/pexels-photo-4916511.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') center/cover;
+            border-radius: 40px;
+            min-height: 400px;
+            box-shadow: var(--shadow-md);
+            border: 4px solid rgba(255,255,255,0.8);
+            transform: rotate(1deg);
+        }
+
+        /* ----- Services Grid (Modern Card Style) ----- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .service-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(8px);
+            padding: 40px 28px;
+            border-radius: var(--border-radius-card);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 1px solid rgba(255,255,255,0.6);
+            text-align: left;
+        }
+        .service-card:hover {
+            transform: translateY(-12px);
+            box-shadow: var(--shadow-md), var(--shadow-glow);
+            background: rgba(255, 255, 255, 0.85);
+            border-color: var(--accent);
+        }
+        .service-icon {
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin-bottom: 24px;
+            background: linear-gradient(145deg, #e9f5ef, #d0e8da);
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+        }
+        .service-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+        }
+        .service-card p {
+            color: var(--text-soft);
+            margin-bottom: 20px;
+        }
+        .service-tag {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* ----- Gallery (Masonry style with hover effect) ----- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .gallery-item {
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            aspect-ratio: 1 / 1;
+            transition: var(--transition);
+            border: 3px solid rgba(255,255,255,0.7);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        .gallery-item:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-md);
+        }
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        /* ----- Contact Section (Glass Card) ----- */
+        .contact-card {
+            display: grid;
+            grid-template-columns: 1.2fr 1.8fr;
+            gap: 30px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            padding: 50px;
+            border-radius: 50px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+        .contact-info h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+        .info-item i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            background: white;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 18px;
+            box-shadow: var(--shadow-sm);
+        }
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 16px 20px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 40px;
+            font-family: inherit;
+            font-size: 1rem;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(5px);
+            transition: var(--transition);
+        }
+        .contact-form textarea {
+            border-radius: 30px;
+            min-height: 130px;
+        }
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(116,198,157,0.2);
+            background: white;
+        }
+        #form-status {
+            margin-top: 20px;
+            font-weight: 500;
+        }
+
+        /* ----- Footer ----- */
+        footer {
+            margin-top: 80px;
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            color: var(--text-soft);
+        }
+
+        /* ----- Mobile Responsive ----- */
+        @media (max-width: 992px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-right {
+                gap: 10px;
+            }
+            .lang-switcher {
+                margin-left: 0;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            nav {
+                position: absolute;
+                top: 85px;
+                left: 0;
+                width: 100%;
+                background: rgba(255,255,255,0.95);
+                backdrop-filter: blur(20px);
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.4s ease;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            }
+            nav.active {
+                max-height: 400px;
+            }
+            nav ul {
+                flex-direction: column;
+                padding: 24px;
+                gap: 16px;
+                text-align: center;
+            }
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            .contact-card {
+                grid-template-columns: 1fr;
+                padding: 30px 24px;
+            }
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container header-content">
+        <div class="logo">
+            <h1>PTT Landscaping</h1>
+            <span data-lang-en="PREMIUM SERVICES" data-lang-my="အထူးဝန်ဆောင်မှု">PREMIUM SERVICES</span>
+        </div>
+        <div class="header-right">
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="my">မြန်မာ</button>
+            </div>
+            <div class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+        <nav id="navMenu">
+            <ul>
+                <li><a href="#home" data-lang-en="Home" data-lang-my="ပင်မ">Home</a></li>
+                <li><a href="#services" data-lang-en="Services" data-lang-my="ဝန်ဆောင်မှုများ">Services</a></li>
+                <li><a href="#gallery" data-lang-en="Gallery" data-lang-my="လက်ရာများ">Gallery</a></li>
+                <li><a href="#contact" data-lang-en="Contact" data-lang-my="ဆက်သွယ်ရန်">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <!-- Hero -->
+    <section id="home" class="hero">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <h1>
+                    <span data-lang-en="Bring Your Dream " data-lang-my="သင့်အိမ်မက်ထဲက ">Bring Your Dream </span>
+                    <span class="hero-highlight" data-lang-en="Garden to Life" data-lang-my="စိမ်းလန်းစိုပြည်မှု">Garden to Life</span>
+                </h1>
+                <p data-lang-en="From outdoor landscapes to indoor greenery, balcony gardens to fence designs, and complete plant sales & maintenance services — we do it all with expertise and passion."
+                   data-lang-my="Outdoor မှ Indoor အထိ၊ Balcony မှ Fence အထိ အားလုံးအတွက် ကျွမ်းကျင် Landscape ဝန်ဆောင်မှုများ။ အပင်ရောင်းချခြင်းနှင့် ပြုပြင်ထိန်းသိမ်းခြင်းတို့လည်း ပါဝင်သည်။">
+                    From outdoor landscapes to indoor greenery, balcony gardens to fence designs, and complete plant sales & maintenance services — we do it all with expertise and passion.
+                </p>
+                <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                    <a href="#contact" class="btn btn-primary">
+                        <i class="fas fa-leaf"></i> 
+                        <span data-lang-en="Free Consultation" data-lang-my="အခမဲ့ တိုင်ပင်မယ်">Free Consultation</span>
+                    </a>
+                    <a href="tel:09987654321" class="btn btn-outline">
+                        <i class="fas fa-phone-alt"></i> 
+                        <span data-lang-en="Call Now" data-lang-my="ဖုန်းဆက်ရန်">Call Now</span>
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image"></div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-lang-en="Our Services" data-lang-my="ကျွန်ုပ်တို့၏ ဝန်ဆောင်မှုများ">Our Services</h2>
+                <div class="subhead" data-lang-en="From indoor decoration to commercial outdoor spaces, we have a complete range of services."
+                     data-lang-my="အိမ်တွင်းအလှဆင်ခြင်းမှ စီးပွားရေးလုပ်ငန်းသုံး ပြင်ပနေရာများအထိ အစုံအလင်ရှိပါသည်။">
+                    From indoor decoration to commercial outdoor spaces, we have a complete range of services.
+                </div>
+            </div>
+            <div class="services-grid">
+                <!-- Outdoor Landscape -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-tree"></i></div>
+                    <h3 data-lang-en="Outdoor Landscape" data-lang-my="Outdoor Landscape">Outdoor Landscape</h3>
+                    <p data-lang-en="Complete design and construction for gardens, yards, parking areas and public spaces."
+                       data-lang-my="ခြံဝန်း၊ ဥယျာဉ်၊ ကားပါကင်နှင့် အများသုံးနေရာများအတွက် ပြီးပြည့်စုံသော ဒီဇိုင်းနှင့် တည်ဆောက်မှု။">
+                        Complete design and construction for gardens, yards, parking areas and public spaces.
+                    </p>
+                    <span class="service-tag" data-lang-en="Outdoor" data-lang-my="ပြင်ပ">Outdoor</span>
+                </div>
+                <!-- Indoor Landscape -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-home"></i></div>
+                    <h3 data-lang-en="Indoor Landscape" data-lang-my="Indoor Landscape">Indoor Landscape</h3>
+                    <p data-lang-en="Indoor decorative plants and green walls for offices, living rooms, and hotel lobbies."
+                       data-lang-my="ရုံးခန်း၊ ဧည့်ခန်း၊ ဟိုတယ်လော်ဘီများအတွက် အိမ်တွင်းအလှဆင်အပင်များနှင့် စိမ်းလန်းသောနံရံများ။">
+                        Indoor decorative plants and green walls for offices, living rooms, and hotel lobbies.
+                    </p>
+                    <span class="service-tag" data-lang-en="Indoor" data-lang-my="အိမ်တွင်း">Indoor</span>
+                </div>
+                <!-- Balcony Landscape -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-sun-plant-wilt"></i></div>
+                    <h3 data-lang-en="Balcony Landscape" data-lang-my="Balcony Landscape">Balcony Landscape</h3>
+                    <p data-lang-en="Transform small balcony or veranda spaces into private mini gardens."
+                       data-lang-my="လသာဆောင် သို့မဟုတ် ဝရန်တာနေရာလေးတွေကို သီးသန့်ဥယျာဉ်ကလေးများအဖြစ် အသွင်ပြောင်းပေးခြင်း။">
+                        Transform small balcony or veranda spaces into private mini gardens.
+                    </p>
+                    <span class="service-tag" data-lang-en="Balcony" data-lang-my="လသာဆောင်">Balcony</span>
+                </div>
+                <!-- Fence Landscape -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-border-all"></i></div>
+                    <h3 data-lang-en="Fence Landscape" data-lang-my="Fence Landscape">Fence Landscape</h3>
+                    <p data-lang-en="Beautify fence lines with decorative plants, climbers, and shrubs."
+                       data-lang-my="ခြံစည်းရိုးတစ်လျှောက် အလှဆင်အပင်များ၊ နွယ်ပင်များ၊ ချုံပုတ်များဖြင့် လှပစွာ ကာရံပေးခြင်း။">
+                        Beautify fence lines with decorative plants, climbers, and shrubs.
+                    </p>
+                    <span class="service-tag" data-lang-en="Fence" data-lang-my="ခြံစည်းရိုး">Fence</span>
+                </div>
+                <!-- Plant Sale Service -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-seedling"></i></div>
+                    <h3 data-lang-en="Plant Sale" data-lang-my="Plant Sale">Plant Sale</h3>
+                    <p data-lang-en="Quality indoor/outdoor ornamental plants, orchids, and mature trees for sale."
+                       data-lang-my="အရည်အသွေးမီ အိမ်တွင်း/အပြင် အလှစိုက်ပင်များ၊ သစ်ခွများ၊ သစ်ပင်ကြီးများ ရောင်းချပေးခြင်း။">
+                        Quality indoor/outdoor ornamental plants, orchids, and mature trees for sale.
+                    </p>
+                    <span class="service-tag" data-lang-en="Plant Sale" data-lang-my="အပင်ရောင်း">Plant Sale</span>
+                </div>
+                <!-- Maintenance Service -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-trowel"></i></div>
+                    <h3 data-lang-en="Maintenance" data-lang-my="Maintenance">Maintenance</h3>
+                    <p data-lang-en="Regular care including mowing, weeding, pest control, and irrigation maintenance."
+                       data-lang-my="မြက်ရိတ်ခြင်း၊ ပေါင်းသင်ခြင်း၊ ပိုးသတ်ခြင်း၊ ရေသွင်းစနစ်ထိန်းသိမ်းခြင်း စသည့် ပုံမှန်ပြုစုမှုများ။">
+                        Regular care including mowing, weeding, pest control, and irrigation maintenance.
+                    </p>
+                    <span class="service-tag" data-lang-en="Maintenance" data-lang-my="ပြုပြင်ထိန်းသိမ်းခြင်း">Maintenance</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-lang-en="Our Work" data-lang-my="လက်ရာများ">Our Work</h2>
+                <div class="subhead" data-lang-en="Take a look at some of our creations."
+                     data-lang-my="ကျွန်ုပ်တို့၏ ဖန်တီးမှုများ အချို့ကို ကြည့်ရှုလိုက်ပါ။">
+                    Take a look at some of our creations.
+                </div>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item"><img src="https://images.pexels.com/photos/3094215/pexels-photo-3094215.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Outdoor landscape"></div>
+                <div class="gallery-item"><img src="https://images.pexels.com/photos/6190288/pexels-photo-6190288.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Indoor plants"></div>
+                <div class="gallery-item"><img src="https://images.pexels.com/photos/5998120/pexels-photo-5998120.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Balcony garden"></div>
+                <div class="gallery-item"><img src="https://images.pexels.com/photos/4507715/pexels-photo-4507715.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Fence landscape"></div>
+                <div class="gallery-item"><img src="https://images.pexels.com/photos/4503269/pexels-photo-4503269.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Plant sale"></div>
+                <div class="gallery-item"><img src="https://images.pexels.com/photos/1301856/pexels-photo-1301856.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Maintenance work"></div>
+                <div class="gallery-item"><img src="https://images.pexels.com/photos/4916511/pexels-photo-4916511.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Garden design"></div>
+                <div class="gallery-item"><img src="https://images.pexels.com/photos/1695238/pexels-photo-1695238.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Hardscaping"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-lang-en="Get In Touch" data-lang-my="စတင်ဆက်သွယ်လိုက်ပါ">Get In Touch</h2>
+                <div class="subhead" data-lang-en="Free consultation for your dream design."
+                     data-lang-my="သင့်စိတ်ကြိုက် ဒီဇိုင်းအတွက် အခမဲ့တိုင်ပင်ဆွေးနွေးနိုင်ပါသည်။">
+                    Free consultation for your dream design.
+                </div>
+            </div>
+            <div class="contact-card">
+                <div class="contact-info">
+                    <h3 data-lang-en="Contact Info" data-lang-my="ဆက်သွယ်ရန်">Contact Info</h3>
+                    <div class="info-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <div><strong data-lang-en="Phone" data-lang-my="ဖုန်း">Phone</strong><br>09 987 654 321</div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <div><strong data-lang-en="Email" data-lang-my="အီးမေးလ်">Email</strong><br>hello@pttlandscaping.com</div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div><strong data-lang-en="Address" data-lang-my="လိပ်စာ">Address</strong><br>No. 42, Pyay Road, Yangon</div>
+                    </div>
+                    <div style="margin-top: 30px;">
+                        <a href="#" style="color: var(--primary); margin-right: 20px; font-size: 1.8rem;"><i class="fab fa-facebook"></i></a>
+                        <a href="#" style="color: var(--primary); margin-right: 20px; font-size: 1.8rem;"><i class="fab fa-viber"></i></a>
+                        <a href="#" style="color: var(--primary); font-size: 1.8rem;"><i class="fab fa-facebook-messenger"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <input type="text" id="from_name" name="from_name" data-lang-en-placeholder="Your Name" data-lang-my-placeholder="သင့်အမည်" placeholder="Your Name" required>
+                        <input type="email" id="reply_to" name="reply_to" data-lang-en-placeholder="Email Address" data-lang-my-placeholder="အီးမေးလ်လိပ်စာ" placeholder="Email Address" required>
+                        <input type="tel" id="phone" name="phone" data-lang-en-placeholder="Phone Number" data-lang-my-placeholder="ဖုန်းနံပါတ်" placeholder="Phone Number">
+                        <textarea id="message" name="message" data-lang-en-placeholder="Write your message here..." data-lang-my-placeholder="သိလိုသည်များ ရေးသားပါ..." placeholder="Write your message here..."></textarea>
+                        <button type="submit" class="btn btn-primary" style="width:100%;">
+                            <i class="fas fa-paper-plane"></i> 
+                            <span data-lang-en="Send Message" data-lang-my="ပေးပို့မည်">Send Message</span>
+                        </button>
+                        <div id="form-status"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <p>© 2025 PTT Landscaping Services. <span data-lang-en="All rights reserved." data-lang-my="မူပိုင်ခွင့်အားလုံး လက်ဝယ်ရှိသည်။">All rights reserved.</span></p>
+        <p style="margin-top: 12px; opacity:0.8;">
+            <span data-lang-en="Expertise • Reliability • Creativity" data-lang-my="ကျွမ်းကျင်မှု • ယုံကြည်စိတ်ချရမှု • ဖန်တီးမှု">Expertise • Reliability • Creativity</span>
+        </p>
+    </div>
+</footer>
+
+<!-- EmailJS Library -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+    (function() {
+        // ---------- Language System ----------
+        const translations = {
+            en: {
+                // Elements with data-lang-en attribute will be handled automatically
+            },
+            my: {
+                // Elements with data-lang-my attribute will be handled automatically
+            }
+        };
+
+        let currentLang = 'en';
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            
+            // Update language button active states
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Update all elements with data-lang attributes
+            document.querySelectorAll('[data-lang-en][data-lang-my]').forEach(el => {
+                const text = el.dataset[`lang${lang === 'en' ? 'En' : 'My'}`];
+                if (text) {
+                    el.textContent = text;
+                }
+            });
+
+            // Update placeholder attributes for form inputs
+            document.querySelectorAll('[data-lang-en-placeholder][data-lang-my-placeholder]').forEach(el => {
+                const placeholder = el.dataset[`lang${lang === 'en' ? 'En' : 'My'}Placeholder`];
+                if (placeholder) {
+                    el.placeholder = placeholder;
+                }
+            });
+
+            // Update HTML lang attribute
+            document.documentElement.lang = lang === 'en' ? 'en' : 'my';
+
+            // Save preference to localStorage
+            localStorage.setItem('ptt_lang_pref', lang);
+        }
+
+        // Add event listeners to language buttons
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                switchLanguage(this.dataset.lang);
+            });
+        });
+
+        // Load saved language preference
+        const savedLang = localStorage.getItem('ptt_lang_pref');
+        if (savedLang && (savedLang === 'en' || savedLang === 'my')) {
+            switchLanguage(savedLang);
+        }
+
+        // ---------- EmailJS Initialization ----------
+        // !!! IMPORTANT: Replace 'YOUR_PUBLIC_KEY' with your actual EmailJS Public Key
+        emailjs.init('YOUR_PUBLIC_KEY');
+
+        // ---------- Mobile Menu Toggle ----------
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        if (menuToggle) {
+            menuToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+            });
+        }
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // ---------- Smooth Scroll ----------
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // ---------- Contact Form (EmailJS) ----------
+        const form = document.getElementById('contactForm');
+        const statusDiv = document.getElementById('form-status');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const loadingMsg = currentLang === 'en' ? 
+                '<span style="color: #2d6a4f;"><i class="fas fa-spinner fa-pulse"></i> Sending...</span>' : 
+                '<span style="color: #2d6a4f;"><i class="fas fa-spinner fa-pulse"></i> ပေးပို့နေပါသည်...</span>';
+            const successMsg = currentLang === 'en' ? 
+                '<span style="color: #1a3b2e;"><i class="fas fa-check-circle"></i> Sent successfully! We will contact you soon.</span>' : 
+                '<span style="color: #1a3b2e;"><i class="fas fa-check-circle"></i> အောင်မြင်စွာ ပေးပို့ပြီးပါပြီ။ မကြာမီ ပြန်လည်ဆက်သွယ်ပါမည်။</span>';
+            const errorMsg = currentLang === 'en' ? 
+                '<span style="color: #b00020;"><i class="fas fa-exclamation-triangle"></i> Failed to send. Please call us directly.</span>' : 
+                '<span style="color: #b00020;"><i class="fas fa-exclamation-triangle"></i> ပေးပို့မှု မအောင်မြင်ပါ။ ကျေးဇူးပြု၍ ဖုန်းဖြင့် ဆက်သွယ်ပါ။</span>';
+
+            statusDiv.innerHTML = loadingMsg;
+
+            const formData = {
+                from_name: document.getElementById('from_name').value,
+                reply_to: document.getElementById('reply_to').value,
+                phone: document.getElementById('phone').value,
+                message: document.getElementById('message').value
+            };
+
+            // !!! REPLACE THESE with your actual EmailJS Service ID and Template ID
+            const serviceID = 'YOUR_SERVICE_ID';
+            const templateID = 'YOUR_TEMPLATE_ID';
+
+            emailjs.send(serviceID, templateID, formData)
+                .then(function(response) {
+                    console.log('SUCCESS!', response);
+                    statusDiv.innerHTML = successMsg;
+                    form.reset();
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    statusDiv.innerHTML = errorMsg;
+                });
+        });
+
+        // ---------- Update Form Placeholders When Language Changes ----------
+        const originalSwitchLanguage = switchLanguage;
+        window.switchLanguage = function(lang) {
+            originalSwitchLanguage(lang);
+            // Form placeholders are already updated via the data-lang-placeholder attributes
+        };
+        switchLanguage = function(lang) {
+            originalSwitchLanguage(lang);
+        };
+    })();
+</script>
+</body>
+</html>
