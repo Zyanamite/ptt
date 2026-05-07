@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Catalog & Price Guide | ပန်းသတင်း Landscape</title>
+    <style>
+        :root {
+            --green-dark: #1a3b2b;
+            --green-mid: #2d5a3f;
+            --green-light: #e8f5e9;
+            --gold: #c78d20;
+            --gold-light: #fef7e8;
+            --bg: #fafbf9;
+            --card-bg: #ffffff;
+            --text: #1e2e21;
+            --text-light: #556b5c;
+            --shadow: 0 4px 20px rgba(0,0,0,0.05);
+            --shadow-hover: 0 12px 32px rgba(0,0,0,0.1);
+            --radius: 18px;
+            --border-subtle: 1px solid #e0e8e1;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'Noto Sans Myanmar', 'Padauk', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .top-bar {
+            background: var(--green-dark);
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+        }
+        .top-bar .brand {
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+        }
+        .top-bar .brand small {
+            font-weight: 400;
+            font-size: 0.7rem;
+            opacity: 0.8;
+            display: block;
+            letter-spacing: 0;
+        }
+        .btn-main {
+            background: var(--gold);
+            color: #fff;
+            padding: 10px 22px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(199,141,32,0.3);
+        }
+        .btn-main:hover { background: #b07a1a; transform: translateY(-1px); }
+        .container { max-width: 1360px; margin: 0 auto; padding: 24px 20px; }
+        header {
+            text-align: center;
+            margin: 10px 0 20px;
+        }
+        header h1 {
+            font-size: 2.6rem;
+            color: var(--green-dark);
+            margin-bottom: 4px;
+        }
+        header .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+        .price-note {
+            background: var(--gold-light);
+            display: inline-block;
+            padding: 10px 28px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            color: #5c4710;
+            margin: 12px 0;
+            border: 1px solid #f0d78c;
+        }
+        .quick-jump {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 24px 0 30px;
+        }
+        .quick-jump a {
+            background: white;
+            border: var(--border-subtle);
+            padding: 8px 18px;
+            border-radius: 24px;
+            text-decoration: none;
+            color: var(--green-dark);
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .quick-jump a:hover {
+            background: var(--green-dark);
+            color: white;
+            border-color: var(--green-dark);
+        }
+        .category-title {
+            font-size: 1.9rem;
+            color: var(--green-dark);
+            border-left: 6px solid var(--gold);
+            padding-left: 18px;
+            margin: 44px 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 22px;
+            margin-bottom: 30px;
+        }
+        .plant-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: var(--border-subtle);
+        }
+        .plant-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+        .plant-card .badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--gold);
+            color: white;
+            font-size: 0.7rem;
+            padding: 5px 12px;
+            border-radius: 14px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            z-index: 5;
+        }
+        .badge.fruit { background: #e07b39; }
+        .badge.orchid { background: #6b7dd4; }
+        .badge.pot { background: #b54b4b; }
+        .plant-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: #eef3ed;
+            border-bottom: 1px solid #e0e8e1;
+            display: block;
+        }
+        .plant-body {
+            padding: 18px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .plant-body h3 {
+            font-size: 1.2rem;
+            color: #1a3b2b;
+            margin-bottom: 2px;
+        }
+        .sci-name {
+            font-style: italic;
+            font-size: 0.8rem;
+            color: #6c8574;
+            margin-bottom: 5px;
+        }
+        .burmese {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2d5a3f;
+            margin-bottom: 6px;
+        }
+        .desc {
+            font-size: 0.85rem;
+            color: #4a5c4f;
+            margin-bottom: 4px;
+        }
+        .desc-mm {
+            font-size: 0.85rem;
+            color: #4a5c4f;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        .tags span {
+            background: #e8f5e9;
+            color: #1a3b2b;
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        .price {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #9e5e00;
+            background: #fff4e0;
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 22px;
+            margin-top: auto;
+            align-self: flex-start;
+            border: 1px solid #f0d78c;
+        }
+        .pots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .pot-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            text-align: center;
+            padding-bottom: 16px;
+            border: var(--border-subtle);
+        }
+        .pot-card img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            background: #fdf2f5;
+        }
+        .pot-card h4 { margin: 12px 0 4px; font-size: 1rem; }
+        .pot-card .pot-price { font-weight: 700; color: #b54b4b; }
+        footer {
+            background: var(--green-dark);
+            color: #c8e6c9;
+            text-align: center;
+            padding: 32px 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+        }
+        footer a { color: #f5d87c; text-decoration: none; }
+        @media print {
+            body { background: white; }
+            .top-bar, .quick-jump, .btn-main, .badge { display: none; }
+            .plant-card { box-shadow: none; break-inside: avoid; border: 1px solid #ccc; }
+            .grid { gap: 10px; grid-template-columns: repeat(2, 1fr); }
+            .plant-img { height: 170px; }
+            .category-title { border-left: none; border-bottom: 2px solid #1a3b2b; }
+            footer { background: none; color: #333; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="top-bar">
+    <div class="brand">ပန်းသတင်း <small>LANDSCAPE</small></div>
+    <a href="https://zyanamite.github.io//ptt/" class="btn-main" target="_blank" rel="noopener">
+        🌐 Go to Main Site
+    </a>
+</div>
+
+<div class="container">
+
+    <header>
+        <h1>🌿 Plant Catalog & Price Guide</h1>
+        <p class="subtitle">စိုက်ပင် စာရင်းနှင့် ဈေးနှုန်းလမ်းညွှန်</p>
+        <div class="price-note">
+            📍 Prices are for standard nursery sizes (1–5 gal). Varies by size and availability. All plants Myanmar‑grown.<br>
+            ဈေးနှုန်းများမှာ သာမန်ပျိုးအိုးအရွယ် (၁–၅ ဂါလံ) အတွက်ဖြစ်ပြီး အပင်အရွယ်နှင့် ရရှိနိုင်မှုပေါ် မူတည်ပါသည်။
+        </div>
+    </header>
+
+    <!-- Quick Jump -->
+    <div class="quick-jump">
+        <a href="#fruits">🍋 Fruits / သစ်သီးပင်</a>
+        <a href="#orchids">🌸 Orchids / သစ်ခွ</a>
+        <a href="#pots">🪴 Pots / အိုး</a>
+        <a href="#shrubs">🌺 Shrubs & Climbers</a>
+        <a href="#trees">🌳 Trees & Palms</a>
+        <a href="#indoor">🪴 Indoor & Shade</a>
+        <a href="#perennials">🌸 Perennials & Groundcovers</a>
+        <a href="#fence">🌿 Fence & Balcony Specials</a>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  FRUIT PLANTS (25)                     -->
+    <!-- ═══════════════════════════════════════ -->
+    <h2 id="fruits" class="category-title">🍋 Fruit Plants / သစ်သီးပင် (၂၅ မျိုး)</h2>
+    <div class="grid">
+
+        <div class="plant-card"><span class="badge fruit">Popular</span><img class="plant-img" src="images/mango-fruit.jpg" alt="Mango"><div class="plant-body"><h3>Mango (grafted)</h3><div class="sci-name">Mangifera indica</div><div class="burmese">သရက်ပင် (Tha-yet Pin)</div><div class="desc">King of fruits. Grafted varieties: Sein Ta Lone, Ma Chit Su, Yin Kwe.</div><div class="desc-mm">သရက်ဘုရင်။ စိန်တစ်လုံး၊ မချစ်စု၊ ရင်ကွဲ စသည့် ကိုင်းဆက်မျိုးများ။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Medium</span><span>📏 10-20m</span></div><span class="price">12,000 – 30,000 Ks</span></div></div>
+        <div class="plant-card"><span class="badge fruit">Popular</span><img class="plant-img" src="images/jackfruit.jpg" alt="Jackfruit"><div class="plant-body"><h3>Jackfruit</h3><div class="sci-name">Artocarpus heterophyllus</div><div class="burmese">ပိန္နဲပင် (Pein-ne Pin)</div><div class="desc">Giant fruit, sweet & nutritious. Thrives in any Myanmar soil.</div><div class="desc-mm">ချိုသောအသီးကြီး။ မြန်မာမြေတိုင်းတွင် ဖြစ်ထွန်းသည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Medium</span><span>📏 10-20m</span></div><span class="price">10,000 – 20,000 Ks</span></div></div>
+        <div class="plant-card"><span class="badge fruit">Premium</span><img class="plant-img" src="images/durian.jpg" alt="Durian"><div class="plant-body"><h3>Durian (grafted)</h3><div class="sci-name">Durio zibethinus</div><div class="burmese">ဒူးရင်းပင် (Du-yin Pin)</div><div class="desc">Monthong & local varieties. Rich flavour, high market value.</div><div class="desc-mm">မွန်သောင်းနှင့် မြန်မာမျိုးများ။ ဈေးကွက်တန်ဖိုးမြင့်သည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 High</span><span>📏 15-25m</span></div><span class="price">15,000 – 45,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/papaya.jpg" alt="Papaya"><div class="plant-body"><h3>Papaya</h3><div class="sci-name">Carica papaya</div><div class="burmese">သင်္ဘောပင် (Thin-baw Pin)</div><div class="desc">Fast-growing, fruits within a year. Solo & local varieties.</div><div class="desc-mm">တစ်နှစ်အတွင်း သီးသည်။ ဆိုလိုနှင့် မြန်မာမျိုးများ။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Medium</span><span>📏 2-5m</span></div><span class="price">3,000 – 8,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/guava.jpg" alt="Guava"><div class="plant-body"><h3>Guava</h3><div class="sci-name">Psidium guajava</div><div class="burmese">မာလကာပင် (Ma-la-ka Pin)</div><div class="desc">Crunchy, vitamin-rich fruit. Bears year-round.</div><div class="desc-mm">ကြွပ်သောအသီး၊ ဗီတာမင်ကြွယ်ဝသည်။ တစ်နှစ်ပတ်လုံးသီးသည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Medium</span><span>📏 3-6m</span></div><span class="price">5,000 – 12,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/custard-apple.jpg" alt="Custard Apple"><div class="plant-body"><h3>Custard Apple</h3><div class="sci-name">Annona squamosa</div><div class="burmese">ဩဇာပင် (Aw-za Pin)</div><div class="desc">Sweet, creamy flesh. Drought-tolerant small tree.</div><div class="desc-mm">ချိုသောအသား၊ ရေရှားဒဏ်ခံနိုင်သောအပင်ငယ်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Low</span><span>📏 3-6m</span></div><span class="price">6,000 – 15,000 Ks</span></div></div>
+        <div class="plant-card"><span class="badge fruit">Trending</span><img class="plant-img" src="images/avocado.jpg" alt="Avocado"><div class="plant-body"><h3>Avocado (grafted)</h3><div class="sci-name">Persea americana</div><div class="burmese">ထောပတ်ပင် (Htaw-bat Pin)</div><div class="desc">Buttery fruit, high demand. Grafted varieties fruit in 3 years.</div><div class="desc-mm">ထောပတ်သီး ဝယ်လိုအားများ။ ကိုင်းဆက်ပင်များ ၃ နှစ်အတွင်းသီးသည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Medium</span><span>📏 8-15m</span></div><span class="price">10,000 – 25,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/banana.jpg" alt="Banana"><div class="plant-body"><h3>Banana (Dwarf)</h3><div class="sci-name">Musa spp.</div><div class="burmese">ငှက်ပျောပင် (Hnget-pyaw Pin)</div><div class="desc">Rakhine, Red, Dwarf Cavendish. Fruits in 8-12 months.</div><div class="desc-mm">ရခိုင်၊ အနီ၊ ထောင့်အငှက်ပျောမျိုးများ။ ၈-၁၂ လအတွင်းသီးသည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 High</span><span>📏 1.5-3m</span></div><span class="price">2,500 – 6,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/pomelo.jpg" alt="Pomelo"><div class="plant-body"><h3>Pomelo</h3><div class="sci-name">Citrus maxima</div><div class="burmese">ကျွဲကောပင် (Kywe-gaw Pin)</div><div class="desc">Sweet-tangy citrus giant. Popular in Myanmar gardens.</div><div class="desc-mm">ချိုချဉ်သော အသီးကြီး။ မြန်မာခြံများတွင် စိုက်များသည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Medium</span><span>📏 5-10m</span></div><span class="price">8,000 – 18,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/lime.jpg" alt="Lime"><div class="plant-body"><h3>Lime / Lemon</h3><div class="sci-name">Citrus aurantiifolia</div><div class="burmese">သံပုရာပင် / ရှောက်ပင် (Than-bu-ya / Shauk Pin)</div><div class="desc">Essential kitchen plant. Can grow in large pots.</div><div class="desc-mm">မီးဖိုချောင်အတွက် မရှိမဖြစ်။ အိုးကြီးများတွင် စိုက်နိုင်သည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Medium</span><span>📏 2-4m</span></div><span class="price">4,000 – 10,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/starfruit.jpg" alt="Star Fruit"><div class="plant-body"><h3>Star Fruit</h3><div class="sci-name">Averrhoa carambola</div><div class="burmese">စောင်းလျားပင် (Zaung-ya Pin)</div><div class="desc">Unique star-shaped fruit. Sweet & sour varieties available.</div><div class="desc-mm">ကြယ်ပုံသဏ္ဌာန်အသီး။ အချိုနှင့်အချဉ်မျိုး ရနိုင်သည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Medium</span><span>📏 5-10m</span></div><span class="price">7,000 – 15,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/pomegranate.jpg" alt="Pomegranate"><div class="plant-body"><h3>Pomegranate</h3><div class="sci-name">Punica granatum</div><div class="burmese">သလဲပင် (Tha-le Pin)</div><div class="desc">Red jewel-like arils. Very drought-hardy.</div><div class="desc-mm">အနီရောင်ပတဲအသီး။ အပင်ခိုင်သည်နှင့် ရေရှားဒဏ်ခံနိုင်သည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Low</span><span>📏 3-5m</span></div><span class="price">6,000 – 14,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/dragon-fruit.jpg" alt="Dragon Fruit"><div class="plant-body"><h3>Dragon Fruit</h3><div class="sci-name">Hylocereus undatus</div><div class="burmese">နဂါးမောက်သီး (Na-gar-mauk Thee)</div><div class="desc">Exotic cactus fruit. Grows easily on a post.</div><div class="desc-mm">ထူးဆန်းသော ရှားစောင်းသီး။ တိုင်တွင် အလွယ်တကူစိုက်နိုင်သည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Low</span><span>📏 Climber</span></div><span class="price">3,000 – 8,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/soursop.jpg" alt="Soursop"><div class="plant-body"><h3>Soursop</h3><div class="sci-name">Annona muricata</div><div class="burmese">ဒူးရင်းရိုင်း (Du-yin-yaing)</div><div class="desc">Spiky green fruit, creamy pulp. Medicinal properties.</div><div class="desc-mm">အစိမ်းရောင်ဆူးသီး၊ နူးညံ့သောအသား။ ဆေးဖက်ဝင်သည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Medium</span><span>📏 4-8m</span></div><span class="price">8,000 – 18,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/sapodilla.jpg" alt="Sapodilla"><div class="plant-body"><h3>Sapodilla</h3><div class="sci-name">Manilkara zapota</div><div class="burmese">သပွတ်ပင် (Tha-but Pin)</div><div class="desc">Brown sugar-sweet fruit. Evergreen shade tree.</div><div class="desc-mm">ထန်းညက်သကြားချိုသောအသီး။ အမြဲစိမ်းအရိပ်ရပင်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Low</span><span>📏 5-10m</span></div><span class="price">6,000 – 14,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/langsat.jpg" alt="Langsat"><div class="plant-body"><h3>Langsat / Duku</h3><div class="sci-name">Lansium domesticum</div><div class="burmese">လန်းဆတ်ပင် (Lan-sat Pin)</div><div class="desc">Translucent sweet-sour flesh. Tropical favourite.</div><div class="desc-mm">ဝင်းလက်သောချိုချဉ်အသား။ အပူပိုင်းဒေသအကြိုက်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 High</span><span>📏 10-20m</span></div><span class="price">12,000 – 25,000 Ks</span></div></div>
+        <div class="plant-card"><span class="badge fruit">Premium</span><img class="plant-img" src="images/mangosteen.jpg" alt="Mangosteen"><div class="plant-body"><h3>Mangosteen</h3><div class="sci-name">Garcinia mangostana</div><div class="burmese">မင်းဂွတ်ပင် (Min-gut Pin)</div><div class="desc">Queen of fruits. Slow-growing but highly prized.</div><div class="desc-mm">သစ်သီးဘုရင်မ။ ကြီးထွားနှေးသော်လည်း တန်ဖိုးမြင့်သည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 High</span><span>📏 6-20m</span></div><span class="price">15,000 – 35,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/rambutan.jpg" alt="Rambutan"><div class="plant-body"><h3>Rambutan</h3><div class="sci-name">Nephelium lappaceum</div><div class="burmese">ကြက်မောက်ပင် (Kyet-mauk Pin)</div><div class="desc">Hairy red fruit, sweet translucent flesh.</div><div class="desc-mm">အနီရောင်အမွှေးသီး၊ ချိုသောအသား။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 High</span><span>📏 8-15m</span></div><span class="price">10,000 – 22,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/lychee.jpg" alt="Lychee"><div class="plant-body"><h3>Lychee</h3><div class="sci-name">Litchi chinensis</div><div class="burmese">လိုင်ချီးပင် (Lychee Pin)</div><div class="desc">Fragrant, juicy fruit. Needs cool dry season to flower.</div><div class="desc-mm">ရနံ့သင်းသောအသီး။ ပွင့်ရန် အေးသောနွေလိုအပ်သည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Medium</span><span>📏 6-12m</span></div><span class="price">10,000 – 22,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/tamarind.jpg" alt="Tamarind"><div class="plant-body"><h3>Tamarind (Sweet)</h3><div class="sci-name">Tamarindus indica</div><div class="burmese">မန်ကျည်းပင် (Ma-gyi Pin)</div><div class="desc">Sweet brown pulp. Large shade tree, drought-proof.</div><div class="desc-mm">ချိုသောအညိုရောင်အသား။ အရိပ်ရအပင်ကြီး၊ ရေရှားဒဏ်ခံနိုင်သည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Low</span><span>📏 10-20m</span></div><span class="price">5,000 – 12,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/jujube.jpg" alt="Jujube"><div class="plant-body"><h3>Jujube</h3><div class="sci-name">Ziziphus mauritiana</div><div class="burmese">ဆီးပင် (Zee Pin)</div><div class="desc">Small apple-like fruit. Hardy tree, any soil.</div><div class="desc-mm">ပန်းသီးနှင့်တူသောအသီးငယ်။ မည်သည့်မြေတွင်မဆိုဖြစ်ထွန်းသည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Low</span><span>📏 4-8m</span></div><span class="price">4,000 – 10,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/passion-fruit.jpg" alt="Passion Fruit"><div class="plant-body"><h3>Passion Fruit</h3><div class="sci-name">Passiflora edulis</div><div class="burmese">ပတ်ရှင်သီး (Passion Thee)</div><div class="desc">Tangy aromatic pulp. Fast-growing vine.</div><div class="desc-mm">ချဉ်သောရနံ့အသား။ အလျင်အမြန်ကြီးထွားသောနွယ်ပင်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Medium</span><span>📏 Climber</span></div><span class="price">3,000 – 7,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/persimmon.jpg" alt="Persimmon"><div class="plant-body"><h3>Persimmon</h3><div class="sci-name">Diospyros kaki</div><div class="burmese">တည်ပင် (Tee Pin)</div><div class="desc">Bright orange fruit. Cooler highland areas ideal.</div><div class="desc-mm">လိမ္မော်ရောင်တောက်ပသောအသီး။ အေးသောကုန်းမြင့်ဒေသများအတွက်သင့်တော်သည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Medium</span><span>📏 5-10m</span></div><span class="price">10,000 – 25,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/burmese-grape.jpg" alt="Burmese Grape"><div class="plant-body"><h3>Burmese Grape</h3><div class="sci-name">Baccaurea ramiflora</div><div class="burmese">ကနစိုပင် / လီးသီး (Ka-na-so / Lee Thee Pin)</div><div class="desc">Native Myanmar fruit. Tangy-sweet, growing in popularity.</div><div class="desc-mm">မြန်မာဇာတိအသီး။ ချဉ်ချိုအရသာ၊ လူကြိုက်များလာသည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Medium</span><span>📏 8-15m</span></div><span class="price">8,000 – 18,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/mulberry.jpg" alt="Mulberry"><div class="plant-body"><h3>Mulberry</h3><div class="sci-name">Morus alba</div><div class="burmese">ပိုးစာပင် (Poe-za Pin)</div><div class="desc">Sweet berries, fast grower. Leaves feed silkworms too.</div><div class="desc-mm">ချိုသောအသီးငယ်များ၊ အလျင်အမြန်ကြီးထွားသည်။ အရွက်ဖြင့် ပိုးမွေးနိုင်သည်။</div><div class="tags"><span>☀️ Full Sun</span><span>💧 Medium</span><span>📏 4-10m</span></div><span class="price">4,000 – 8,000 Ks</span></div></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  ORCHIDS (20)                          -->
+    <!-- ═══════════════════════════════════════ -->
+    <h2 id="orchids" class="category-title">🌸 Orchids / သစ်ခွ (၂၀ မျိုး)</h2>
+    <div class="grid">
+
+        <div class="plant-card"><span class="badge orchid">Bestseller</span><img class="plant-img" src="images/dendrobium-hybrid.jpg" alt="Dendrobium"><div class="plant-body"><h3>Dendrobium (Hybrid Mix)</h3><div class="sci-name">Dendrobium hybrids</div><div class="burmese">ဒန်ဒရိုဘီယမ် သစ်ခွ (Dendrobium Thit-khwa)</div><div class="desc">Myanmar's most popular orchid genus. Long-lasting sprays in purple, pink, white.</div><div class="desc-mm">မြန်မာတွင် လူကြိုက်အများဆုံးသစ်ခွ။ ခရမ်း၊ ပန်းရောင်၊ အဖြူရောင်ဖြာပွင့်များ။</div><div class="tags"><span>🌤️ Bright Indirect</span><span>💧 Medium</span><span>📏 30-60cm</span></div><span class="price">8,000 – 18,000 Ks</span></div></div>
+        <div class="plant-card"><span class="badge orchid">Rare</span><img class="plant-img" src="images/vanda.jpg" alt="Vanda"><div class="plant-body"><h3>Vanda (Blue/Purple)</h3><div class="sci-name">Vanda coerulea / hybrids</div><div class="burmese">ဗန်ဒါသစ်ခွ (Vanda Thit-khwa)</div><div class="desc">Striking large blooms. Native to Myanmar highlands. Needs high humidity.</div><div class="desc-mm">ကြီးမားလှပသောပွင့်များ။ မြန်မာကုန်းမြင့်မှ ဇာတိဖြစ်သည်။ စွတ်စိုမှုလိုအပ်သည်။</div><div class="tags"><span>🌤️ Bright Indirect</span><span>💧 High</span><span>📏 40-80cm</span></div><span class="price">15,000 – 35,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/cymbidium.jpg" alt="Cymbidium"><div class="plant-body"><h3>Cymbidium (Boat Orchid)</h3><div class="sci-name">Cymbidium spp.</div><div class="burmese">စင်ဘီဒီယမ် သစ်ခွ (Cymbidium Thit-khwa)</div><div class="desc">Elegant sprays for cooler months. Popular gift orchid.</div><div class="desc-mm">အေးသောလများတွင် ကြော့ရှင်းသောပွင့်ခိုင်များ။ လက်ဆောင်ပေးရန် လူကြိုက်များသည်။</div><div class="tags"><span>🌤️ Bright Indirect</span><span>💧 Medium</span><span>📏 40-70cm</span></div><span class="price">12,000 – 25,000 Ks</span></div></div>
+        <div class="plant-card"><span class="badge orchid">Native</span><img class="plant-img" src="images/paphiopedilum.jpg" alt="Paphiopedilum"><div class="plant-body"><h3>Slipper Orchid</h3><div class="sci-name">Paphiopedilum hirsutissimum</div><div class="burmese">ဖိနပ်သစ်ခွ (Phi-nat Thit-khwa)</div><div class="desc">Rare Myanmar native. Distinctive pouch flower. Collector's item.</div><div class="desc-mm">ရှားပါးမြန်မာဇာတိသစ်ခွ။ ဖိနပ်ပုံသဏ္ဌာန်ပွင့်ရှိသည်။ စုဆောင်းသူများအတွက်ဖြစ်သည်။</div><div class="tags"><span>🌿 Shade</span><span>💧 High</span><span>📏 15-25cm</span></div><span class="price">20,000 – 50,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/rhynchostylis.jpg" alt="Rhynchostylis"><div class="plant-body"><h3>Foxtail Orchid</h3><div class="sci-name">Rhynchostylis retusa</div><div class="burmese">မြွေမြီးသစ်ခွ (Mwe-mi Thit-khwa)</div><div class="desc">Dense, drooping pink/white flower spikes. Strong fragrance.</div><div class="desc-mm">ပန်းရောင်/အဖြူတွဲလျားပွင့်ခိုင်။ ရနံ့ပြင်းသည်။</div><div class="tags"><span>🌤️ Bright Indirect</span><span>💧 Medium</span><span>📏 30-50cm</span></div><span class="price">10,000 – 22,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/phalaenopsis.jpg" alt="Phalaenopsis"><div class="plant-body"><h3>Moth Orchid</h3><div class="sci-name">Phalaenopsis parishii</div><div class="burmese">ဖလေနော့ပ်စစ် သစ်ခွ (Phalaenopsis Thit-khwa)</div><div class="desc">Easy-care indoor orchid. Blooms for months. Perfect for beginners.</div><div class="desc-mm">ပြုစုရလွယ်သော အိမ်တွင်းသစ်ခွ။ လပေါင်းများစွာ ပွင့်သည်။</div><div class="tags"><span>🏠 Indoor</span><span>💧 Low</span><span>📏 20-40cm</span></div><span class="price">10,000 – 20,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/aerides.jpg" alt="Aerides"><div class="plant-body"><h3>Fox Brush Orchid</h3><div class="sci-name">Aerides odorata</div><div class="burmese">အေရီးဒီးစ် သစ်ခွ (Aerides Thit-khwa)</div><div class="desc">Waxy, fragrant white/pink flowers. Hardy outdoor orchid.</div><div class="desc-mm">ဖယောင်းသားဖြူ/ပန်းရောင်ပွင့်များ။ အပြင်စိုက်ရန် ခံနိုင်ရည်ရှိသည်။</div><div class="tags"><span>🌤️ Bright Indirect</span><span>💧 Medium</span><span>📏 25-45cm</span></div><span class="price">9,000 – 18,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/bulbophyllum.jpg" alt="Bulbophyllum"><div class="plant-body"><h3>Bulbophyllum</h3><div class="sci-name">Bulbophyllum spp.</div><div class="burmese">ဘူလ်ဘိုဖီလမ် သစ်ခွ</div><div class="desc">Strangely beautiful flowers. Many Myanmar native species.</div><div class="desc-mm">ထူးဆန်းလှပသောပွင့်များ။ မြန်မာဇာတိမျိုးစိတ်များစွာရှိသည်။</div><div class="tags"><span>🌿 Shade</span><span>💧 High</span><span>📏 15-40cm</span></div><span class="price">8,000 – 18,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/coelogyne.jpg" alt="Coelogyne"><div class="plant-body"><h3>Coelogyne</h3><div class="sci-name">Coelogyne spp.</div><div class="burmese">စီလော်ဂျင်နီ သစ်ခွ</div><div class="desc">Fragrant, often white or green blooms. Cool-grower orchid.</div><div class="desc-mm">ရနံ့သင်းသော အဖြူ/အစိမ်းပွင့်များ။ အေးသောရာသီဥတုကြိုက်သည်။</div><div class="tags"><span>🌿 Shade</span><span>💧 Medium</span><span>📏 25-50cm</span></div><span class="price">10,000 – 22,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/eria.jpg" alt="Eria"><div class="plant-body"><h3>Eria</h3><div class="sci-name">Eria flava</div><div class="burmese">အီးရီးယား သစ်ခွ</div><div class="desc">Small, fuzzy flowers. Easy to grow mounted.</div><div class="desc-mm">အမွှေးနုအပွင့်ငယ်များ။ တွယ်စိုက်ရန်လွယ်ကူသည်။</div><div class="tags"><span>🌤️ Bright Indirect</span><span>💧 Medium</span><span>📏 20-40cm</span></div><span class="price">7,000 – 15,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/phaius.jpg" alt="Phaius"><div class="plant-body"><h3>Phaius (Nun Orchid)</h3><div class="sci-name">Phaius wallichii</div><div class="burmese">ဖေးယပ်စ် သစ်ခွ</div><div class="desc">Tall spikes, terrestrial. Grows in garden beds.</div><div class="desc-mm">အရပ်ရှည်သောပွင့်တံ၊ မြေတွင်စိုက်နိုင်သည်။</div><div class="tags"><span>🌿 Shade</span><span>💧 High</span><span>📏 60-120cm</span></div><span class="price">12,000 – 25,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/thunia.jpg" alt="Thunia"><div class="plant-body"><h3>Thunia</h3><div class="sci-name">Thunia marshalliana</div><div class="burmese">ထူနီးယား သစ်ခွ</div><div class="desc">Large white/pink blooms. Seasonal growth, needs dry rest.</div><div class="desc-mm">အဖြူ/ပန်းရောင်ပွင့်ကြီးများ။ ရာသီအလိုက်ကြီးထွား၊ နွေတွင်ရေလျှော့ရန်။</div><div class="tags"><span>🌤️ Bright Indirect</span><span>💧 Seasonal</span><span>📏 30-70cm</span></div><span class="price">10,000 – 20,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/renanthera.jpg" alt="Renanthera"><div class="plant-body"><h3>Renanthera</h3><div class="sci-name">Renanthera imschootiana</div><div class="burmese">ရီနန်သီရာ သစ်ခွ</div><div class="desc">Vibrant red sprays. Native to Myanmar, needs bright light.</div><div class="desc-mm">အနီရောင်တောက်ပသောဖြာပွင့်များ။ မြန်မာဇာတိ၊ အလင်းရောင်များများလိုသည်။</div><div class="tags"><span>☀️ Bright</span><span>💧 High</span><span>📏 40-80cm</span></div><span class="price">15,000 – 35,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/pleione.jpg" alt="Pleione"><div class="plant-body"><h3>Pleione</h3><div class="sci-name">Pleione praecox</div><div class="burmese">ပလီယိုနီ သစ်ခွ</div><div class="desc">Miniature, cool-grower orchid. Beautiful pink blooms.</div><div class="desc-mm">အရွယ်သေးသော အေးသောရာသီကြိုက်သစ်ခွ။ ပန်းရောင်လှပသောပွင့်များ။</div><div class="tags"><span>🌿 Shade</span><span>💧 Medium</span><span>📏 10-20cm</span></div><span class="price">12,000 – 25,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/cleisostoma.jpg" alt="Cleisostoma"><div class="plant-body"><h3>Cleisostoma</h3><div class="sci-name">Cleisostoma brevipes</div><div class="burmese">ကလိုင်ဆိုစတိုမာ သစ်ခွ</div><div class="desc">Tiny flowers on arching spikes. Good for small spaces.</div><div class="desc-mm">ကောက်ကွေးသောတံပေါ်တွင် ပွင့်ငယ်ကလေးများ။ နေရာကျဉ်းအတွက်သင့်တော်သည်။</div><div class="tags"><span>🌤️ Bright Indirect</span><span>💧 Medium</span><span>📏 15-30cm</span></div><span class="price">8,000 – 16,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/acampe.jpg" alt="Acampe"><div class="plant-body"><h3>Acampe</h3><div class="sci-name">Acampe spp.</div><div class="burmese">အေကမ်ပီ သစ်ခွ</div><div class="desc">Robust, fragrant small flowers. Tolerates heat well.</div><div class="desc-mm">ကြံ့ခိုင်ပြီး ရနံ့သင်းသောပွင့်ငယ်များ။ အပူဒဏ်ခံနိုင်သည်။</div><div class="tags"><span>🌤️ Bright</span><span>💧 Medium</span><span>📏 20-40cm</span></div><span class="price">7,000 – 15,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/ascocentrum.jpg" alt="Ascocentrum"><div class="plant-body"><h3>Ascocentrum</h3><div class="sci-name">Ascocentron spp.</div><div class="burmese">အက်စကိုစင်ထရမ် သစ်ခွ</div><div class="desc">Dense clusters of tiny bright flowers. Compact grower.</div><div class="desc-mm">ပွင့်ငယ်များစုဖွဲ့ထားသောတောက်ပသောသစ်ခွ။ အရွယ်သေးကျစ်လစ်သည်။</div><div class="tags"><span>🌤️ Bright Indirect</span><span>💧 Medium</span><span>📏 15-30cm</span></div><span class="price">10,000 – 20,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/pholidota.jpg" alt="Pholidota"><div class="plant-body"><h3>Pholidota (Rattlesnake Orchid)</h3><div class="sci-name">Pholidata spp.</div><div class="burmese">ဖိုလီဒိုတာ သစ်ခွ</div><div class="desc">Chains of tiny white flowers. Pendulous growth habit.</div><div class="desc-mm">အဖြူရောင်ပွင့်ငယ်များ ကွင်းဆက်ကဲ့သို့။ တွဲလျားကျသောပုံစံ။</div><div class="tags"><span>🌿 Shade</span><span>💧 Medium</span><span>📏 20-35cm</span></div><span class="price">8,000 – 18,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/nervilia.jpg" alt="Nervilia"><div class="plant-body"><h3>Nervilia</h3><div class="sci-name">Nervilia aragoana</div><div class="burmese">နာဗီလီယာ သစ်ခွ</div><div class="desc">Rare ground orchid. Unique round leaf, shy flower.</div><div class="desc-mm">ရှားပါးမြေသစ်ခွ။ ထူးခြားသောအရွက်ဝိုင်း၊ ရှက်တတ်သောပွင့်။</div><div class="tags"><span>🌿 Shade</span><span>💧 Medium</span><span>📏 10-20cm</span></div><span class="price">6,000 – 12,000 Ks</span></div></div>
+        <div class="plant-card"><span class="badge orchid">Rare</span><img class="plant-img" src="images/blue-vanda.jpg" alt="Blue Vanda"><div class="plant-body"><h3>Blue Vanda (Coerulea)</h3><div class="sci-name">Vanda coerulea</div><div class="burmese">ဗန်ဒါအပြာ (Vanda A-pya)</div><div class="desc">True Myanmar native species. Protected, limited nursery stock.</div><div class="desc-mm">မြန်မာဇာတိစစ်စစ်မျိုး။ ထိန်းသိမ်းထားပြီး အကန့်အသတ်ဖြင့်ရောင်းချသည်။</div><div class="tags"><span>🌤️ Bright</span><span>💧 High</span><span>📏 40-80cm</span></div><span class="price">25,000 – 60,000 Ks</span></div></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  POTS & CONTAINERS                     -->
+    <!-- ═══════════════════════════════════════ -->
+    <h2 id="pots" class="category-title">🪴 Pots & Containers / အိုးများ</h2>
+    <div class="pots-grid">
+
+        <div class="pot-card"><img src="images/pot-terracotta.jpg" alt="Terracotta"><h4>Terracotta Pot</h4><p class="burmese">မြေအိုး (Myay Oh)</p><p>Breathable, classic look. 6″–16″ diameter.</p><span class="pot-price">2,500 – 12,000 Ks</span></div>
+        <div class="pot-card"><img src="images/pot-cement.jpg" alt="Cement Pot"><h4>Cement Pot</h4><p class="burmese">ဘိလပ်မြေအိုး (Bi-lat-mye Oh)</p><p>Heavy-duty, weather-proof. Modern matte finish. 10″–24″.</p><span class="pot-price">5,000 – 25,000 Ks</span></div>
+        <div class="pot-card"><img src="images/pot-glazed.jpg" alt="Glazed Ceramic"><h4>Glazed Ceramic Pot</h4><p class="burmese">စဉ့်အိုး / ကြွေအိုး (Sint Oh / Kywei Oh)</p><p>High-shine colours. Indoor/outdoor. 8″–18″.</p><span class="pot-price">8,000 – 35,000 Ks</span></div>
+        <div class="pot-card"><img src="images/pot-plastic.jpg" alt="Plastic Nursery Pot"><h4>Plastic Nursery Pot</h4><p class="burmese">ပလတ်စတစ်အိုး (Plastic Oh)</p><p>Lightweight, affordable. 1-gal to 15-gal sizes.</p><span class="pot-price">500 – 4,000 Ks</span></div>
+        <div class="pot-card"><img src="images/pot-growbag.jpg" alt="Grow Bag"><h4>Fabric Grow Bag</h4><p class="burmese">စိုက်အိတ် (Saik Ait)</p><p>Air-prunes roots, healthy growth. 5–20 gallon.</p><span class="pot-price">1,500 – 6,000 Ks</span></div>
+        <div class="pot-card"><img src="images/pot-hanging.jpg" alt="Hanging Basket"><h4>Hanging Basket</h4><p class="burmese">ဆွဲအိုး (Swel Oh)</p><p>Coco liner + chain. Perfect for ferns & trailing plants.</p><span class="pot-price">4,000 – 10,000 Ks</span></div>
+        <div class="pot-card"><img src="images/pot-selfwatering.jpg" alt="Self-Watering Pot"><h4>Self-Watering Pot</h4><p class="burmese">ရေလှောင်အိုး (Yay-hlaung Oh)</p><p>Reservoir base, ideal for busy plant parents. 8″–14″.</p><span class="pot-price">7,000 – 18,000 Ks</span></div>
+        <div class="pot-card"><img src="images/pot-orchid.jpg" alt="Orchid Pot"><h4>Orchid Pot (Slotted)</h4><p class="burmese">သစ်ခွအိုး (Thit-khwa Oh)</p><p>Extra drainage holes for healthy orchid roots. 4″–10″.</p><span class="pot-price">3,000 – 8,000 Ks</span></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  SHRUBS & CLIMBERS (15)                -->
+    <!-- ═══════════════════════════════════════ -->
+    <h2 id="shrubs" class="category-title">🌺 Shrubs & Climbers / ချုံပင်နှင့်နွယ်ပင် (၁၅ မျိုး)</h2>
+    <div class="grid">
+
+        <div class="plant-card"><img class="plant-img" src="images/bougainvillea.jpg" alt="Bougainvillea"><div class="plant-body"><h3>Bougainvillea</h3><div class="sci-name">Bougainvillea spectabilis</div><div class="burmese">စက္ကူပန်း (Sakku Pan)</div><div class="desc">Bright papery bracts, great for fences & walls. Loves full sun.</div><div class="desc-mm">ခြံစည်းရိုး၊ နံရံများအတွက် အကောင်းဆုံး။ နေရောင်အပြည့်ကြိုက်သည်။</div><span class="price">8,000 – 15,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/ixora.jpg" alt="Ixora"><div class="plant-body"><h3>Ixora</h3><div class="sci-name">Ixora coccinea</div><div class="burmese">ပိန်းနဲပန်း (Pein-ne Pan)</div><div class="desc">Red/orange flower clusters. Ideal for low hedges.</div><div class="desc-mm">အနီ/လိမ္မော်ပွင့်ခိုင်။ အကာအရံအတွက် အကောင်းဆုံး။</div><span class="price">5,000 – 10,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/hibiscus.jpg" alt="Hibiscus"><div class="plant-body"><h3>Hibiscus</h3><div class="sci-name">Hibiscus rosa-sinensis</div><div class="burmese">ခေါင်ရန်းပန်း (Khaung-yan Pan)</div><div class="desc">Large trumpet blooms. Great accent shrub.</div><div class="desc-mm">ကြီးမားသောပွင့်များ။ တစ်ပင်တည်းချရန် သင့်တော်သည်။</div><span class="price">6,000 – 12,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/rangoon-creeper.jpg" alt="Rangoon Creeper"><div class="plant-body"><h3>Rangoon Creeper</h3><div class="sci-name">Combretum indicum</div><div class="burmese">မြတ်လေးနွယ် (Myat-lay-nwe)</div><div class="desc">Fragrant colour-changing blooms (white→pink→red). Trellis climber.</div><div class="desc-mm">အဖြူ၊ပန်းရောင်၊အနီပြောင်းလဲသောပန်း။ စင်တင်နွယ်ပင်။</div><span class="price">5,000 – 10,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/bleeding-heart.jpg" alt="Bleeding Heart Vine"><div class="plant-body"><h3>Bleeding Heart Vine</h3><div class="sci-name">Clerodendrum thomsoniae</div><div class="burmese">ဂုလ္လီပန်း (Gulli Pan)</div><div class="desc">Red heart flowers against white calyces. Beautiful fence climber.</div><div class="desc-mm">အဖြူခွက်ထဲမှ အနီနှလုံးပုံပွင့်။ ခြံစည်းရိုးတင်ရန် လှပသည်။</div><span class="price">6,500 – 12,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/muang.jpg" alt="Muang"><div class="plant-body"><h3>Muang / Orange Trumpet</h3><div class="sci-name">Pyrostegia venusta</div><div class="burmese">မောင်းပန်း (Maung Pan)</div><div class="desc">Masses of orange tubular flowers in dry season. Myanmar classic.</div><div class="desc-mm">နွေရာသီတွင် လိမ္မော်ပွင့်များ အစီအရီ။ မြန်မာရိုးရာပန်း။</div><span class="price">4,000 – 8,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/king-jasmine.jpg" alt="King Jasmine"><div class="plant-body"><h3>King Jasmine</h3><div class="sci-name">Jasminum rex</div><div class="burmese">မြတ်လေးဘုရင် (Myat-lay Bayin)</div><div class="desc">Larger blooms than common jasmine, intensely fragrant.</div><div class="desc-mm">မြတ်လေးထက်ပွင့်ကြီးပြီး ရနံ့အလွန်ပြင်းသည်။</div><span class="price">8,000 – 18,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/allamanda.jpg" alt="Allamanda"><div class="plant-body"><h3>Allamanda</h3><div class="sci-name">Allamanda cathartica</div><div class="burmese">ရွှေကြက်ရင်း (Shwe-kyet-yin)</div><div class="desc">Golden trumpet flowers year-round. Fast fence cover.</div><div class="desc-mm">ရွှေရောင်ပွင့်များ တစ်နှစ်ပတ်လုံးပွင့်သည်။ ခြံစည်းရိုးဖုံးရန် မြန်သည်။</div><span class="price">4,000 – 8,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/pagoda-flower.jpg" alt="Pagoda Flower"><div class="plant-body"><h3>Pagoda Flower</h3><div class="sci-name">Clerodendrum paniculatum</div><div class="burmese">ပုဂံပန်း (Bagan Pan)</div><div class="desc">Pagoda-shaped red/orange flower clusters.</div><div class="desc-mm">ဘုရားပုံသဏ္ဌာန် အနီ/လိမ္မော်ပွင့်ခိုင်များ။</div><span class="price">6,000 – 12,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/night-jasmine.jpg" alt="Night Jasmine"><div class="plant-body"><h3>Night Jasmine</h3><div class="sci-name">Cestrum nocturnum</div><div class="burmese">ညပန်း (Nya Pan)</div><div class="desc">Intoxicating fragrance at night. Fast-growing shrub.</div><div class="desc-mm">ညအခါ မူးမေ့ဖွယ်ရနံ့။ အလျင်အမြန်ကြီးထွားသောချုံပင်။</div><span class="price">4,000 – 8,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/garlic-vine.jpg" alt="Garlic Vine"><div class="plant-body"><h3>Garlic Vine</h3><div class="sci-name">Mansoa alliacea</div><div class="burmese">ကြက်သွန်နွယ် (Kyet-thun Nwe)</div><div class="desc">Lavender blooms, leaves smell like garlic when crushed.</div><div class="desc-mm">ခရမ်းနုရောင်ပွင့်များ၊ အရွက်ကြိတ်လျှင် ကြက်သွန်ဖြူနံ့ထွက်သည်။</div><span class="price">5,000 – 10,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/amherstia.jpg" alt="Pride of Myanmar"><div class="plant-body"><h3>Pride of Myanmar</h3><div class="sci-name">Amherstia nobilis</div><div class="burmese">သိုက်ပန်း (Thaik Pan)</div><div class="desc">Stunning red hanging blooms. Rare and beautiful Burmese native.</div><div class="desc-mm">အနီရောင်တွဲလျားပွင့်များ။ ရှားပါးလှပသောမြန်မာဇာတိပင်။</div><span class="price">20,000 – 50,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/gardenia.jpg" alt="Gardenia"><div class="plant-body"><h3>Gardenia</h3><div class="sci-name">Gardenia jasminoides</div><div class="burmese">ဇီးဖြူပန်း (Zee-byu Pan)</div><div class="desc">Pure white, heavenly scented blooms. Compact shrub.</div><div class="desc-mm">ဖြူစင်မွှေးကြိုင်သောပွင့်များ။ ကျစ်လစ်သောချုံပင်။</div><span class="price">6,000 – 14,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/butterfly-bush.jpg" alt="Butterfly Bush"><div class="plant-body"><h3>Butterfly Bush</h3><div class="sci-name">Buddleja asiatica</div><div class="burmese">လိပ်ပြာပန်း (Leik-pyar Pan)</div><div class="desc">Attracts butterflies with fragrant white flower spikes.</div><div class="desc-mm">အဖြူရောင်ပွင့်တံများဖြင့် လိပ်ပြာများကိုဆွဲဆောင်သည်။</div><span class="price">4,000 – 8,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/jungle-flame.jpg" alt="Jungle Flame"><div class="plant-body"><h3>Jungle Flame</h3><div class="sci-name">Ixora chinensis</div><div class="burmese">ပိန်းနဲပန်းအနီ (Pein-ne Pan A-ni)</div><div class="desc">Compact habit with bright red flower clusters. Great pot plant.</div><div class="desc-mm">အနီရောင်တောက်ပသောပွင့်ခိုင်များ။ အိုးတွင်စိုက်ရန်အကောင်းဆုံး။</div><span class="price">5,000 – 10,000 Ks</span></div></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  TREES & PALMS (12)                    -->
+    <!-- ═══════════════════════════════════════ -->
+    <h2 id="trees" class="category-title">🌳 Trees & Palms / သစ်ပင်နှင့်ထန်းပင် (၁၂ မျိုး)</h2>
+    <div class="grid">
+
+        <div class="plant-card"><img class="plant-img" src="images/frangipani.jpg" alt="Frangipani"><div class="plant-body"><h3>Frangipani / Plumeria</h3><div class="sci-name">Plumeria rubra</div><div class="burmese">ဇီဇဝါပန်း (Zi-zawar Pan)</div><div class="desc">Iconic fragrant flowers. Minimal care shade tree.</div><div class="desc-mm">ရနံ့သင်းသော ရိုးရာပန်း။ ဂရုစိုက်မှုနည်းသည်။</div><span class="price">15,000 – 30,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/golden-shower.jpg" alt="Golden Shower Tree"><div class="plant-body"><h3>Golden Shower Tree</h3><div class="sci-name">Cassia fistula</div><div class="burmese">ငုရွှေဝါပန်း (Ngu-shwe-war)</div><div class="desc">Yellow cascading blooms in hot season. National flower of Myanmar.</div><div class="desc-mm">နွေရာသီတွင် အဝါရောင်ပွင့်ခိုင်များ။ မြန်မာ့သင်္ကေတပန်း။</div><span class="price">20,000 – 45,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/foxtail-palm.jpg" alt="Foxtail Palm"><div class="plant-body"><h3>Foxtail Palm</h3><div class="sci-name">Wodyetia bifurcata</div><div class="burmese">မြီးတောင်အုန်း (Myi-taung Ohn)</div><div class="desc">Bushy fronds, modern driveway palm.</div><div class="desc-mm">ခေတ်မီအိမ်ရှေ့လမ်းအတွက် အကောင်းဆုံး။</div><span class="price">25,000 – 50,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/teak.jpg" alt="Teak"><div class="plant-body"><h3>Teak</h3><div class="sci-name">Tectona grandis</div><div class="burmese">ကျွန်းပင် (Kyun Pin)</div><div class="desc">Investment timber tree. Can also be a landscape specimen.</div><div class="desc-mm">ရင်းနှီးမြှုပ်နှံမှုအတွက်သစ်ပင်။ ရှုခင်းအတွက်လည်းသုံးနိုင်သည်။</div><span class="price">3,000 – 8,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/neem.jpg" alt="Neem"><div class="plant-body"><h3>Neem</h3><div class="sci-name">Azadirachta indica</div><div class="burmese">တမာပင် (Ta-ma Pin)</div><div class="desc">Medicinal shade tree. Pest-repellent properties.</div><div class="desc-mm">ဆေးဖက်ဝင်အရိပ်ရပင်။ ပိုးမွှားနှိမ်နင်းနိုင်စွမ်းရှိသည်။</div><span class="price">3,000 – 7,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/areca-palm.jpg" alt="Areca Palm"><div class="plant-body"><h3>Areca Palm</h3><div class="sci-name">Dypsis lutescens</div><div class="burmese">အုန်းချယ်ပင် (Ohn-chel Pin)</div><div class="desc">Clumping palm, excellent indoor or outdoor screen.</div><div class="desc-mm">စုဖွဲ့ပေါက်သောထန်း။ အိမ်တွင်း/အပြင် ကာကွယ်ရန် အကောင်းဆုံး။</div><span class="price">8,000 – 18,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/rain-tree.jpg" alt="Rain Tree"><div class="plant-body"><h3>Rain Tree</h3><div class="sci-name">Samanea saman</div><div class="burmese">မိုးသစ်ပင် (Moe-thit Pin)</div><div class="desc">Wide canopy shade tree. Great for large gardens.</div><div class="desc-mm">ကျယ်ပြန့်သောအရိပ်ရပင်။ ခြံကြီးများအတွက်အကောင်းဆုံး။</div><span class="price">10,000 – 25,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/mezali.jpg" alt="Mezali"><div class="plant-body"><h3>Mezali</h3><div class="sci-name">Cassia siamea</div><div class="burmese">မယ်ဇလီပင် (Me-za-li Pin)</div><div class="desc">Yellow blooms, fast-growing shade tree. Edible leaves.</div><div class="desc-mm">အဝါရောင်ပွင့်များ၊ အလျင်အမြန်ကြီးထွားသောအရိပ်ရပင်။ အရွက်စားနိုင်သည်။</div><span class="price">5,000 – 12,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/star-flower.jpg" alt="Star Flower Tree"><div class="plant-body"><h3>Star Flower Tree</h3><div class="sci-name">Mimusops elengi</div><div class="burmese">ခရေပင် (Kha-yay Pin)</div><div class="desc">Fragrant star-shaped flowers. Dense shade, long-lived.</div><div class="desc-mm">ကြယ်ပုံသဏ္ဌာန်ရနံ့သင်းသောပန်း။ အရိပ်သည်းပြီး သက်တမ်းရှည်သည်။</div><span class="price">8,000 – 18,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/mohur.jpg" alt="Mohur Tree"><div class="plant-body"><h3>Mohur Tree / Flamboyant</h3><div class="sci-name">Delonix regia</div><div class="burmese">စိန်ပန်းပင် (Sein-pan Pin)</div><div class="desc">Fiery red/orange blooms in summer. Stunning specimen tree.</div><div class="desc-mm">နွေရာသီတွင် အနီ/လိမ္မော်ရောင်တောက်ပသောပွင့်များ။</div><span class="price">10,000 – 25,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/travellers-palm.jpg" alt="Travellers Palm"><div class="plant-body"><h3>Travellers Palm</h3><div class="sci-name">Ravenala madagascariensis</div><div class="burmese">ခရီးသွားထန်း (Kha-yi-thwa Htan)</div><div class="desc">Banana-like fan shape. Stores water in leaf bases.</div><div class="desc-mm">ငှက်ပျောရွက်နှင့်တူသောယပ်ပုံစံ။ အရွက်ခြေတွင် ရေသိုလှောင်သည်။</div><span class="price">15,000 – 35,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/fishtail-palm.jpg" alt="Fish Tail Palm"><div class="plant-body"><h3>Fish Tail Palm</h3><div class="sci-name">Caryota mitis</div><div class="burmese">ငါးမြီးထန်း (Nga-mi Htan)</div><div class="desc">Unique fishtail-shaped leaflets. Clumping palm.</div><div class="desc-mm">ထူးခြားသောငါးမြီးပုံအရွက်။ စုဖွဲ့ပေါက်သောထန်း။</div><span class="price">12,000 – 28,000 Ks</span></div></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  INDOOR & SHADE (12)                   -->
+    <!-- ═══════════════════════════════════════ -->
+    <h2 id="indoor" class="category-title">🪴 Indoor & Shade Plants / အိမ်တွင်းနှင့်အရိပ်ပင် (၁၂ မျိုး)</h2>
+    <div class="grid">
+
+        <div class="plant-card"><img class="plant-img" src="images/snake-plant.jpg" alt="Snake Plant"><div class="plant-body"><h3>Snake Plant</h3><div class="sci-name">Dracaena trifasciata</div><div class="burmese">မြွေလျှာပင် (Mwe-yar Pin)</div><div class="desc">Indestructible, air-purifying. Low light & water.</div><div class="desc-mm">မသေသလောက်သောအိမ်တွင်းပင်။ အလင်းနှင့်ရေအနည်းငယ်လိုသည်။</div><span class="price">4,000 – 8,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/peace-lily.jpg" alt="Peace Lily"><div class="plant-body"><h3>Peace Lily</h3><div class="sci-name">Spathiphyllum wallisii</div><div class="burmese">ငြိမ်းချမ်းရေးလီလီ (Nyein-chan-yay Lily)</div><div class="desc">White elegant blooms. Great for offices & corners.</div><div class="desc-mm">အဖြူရောင်ကြော့ရှင်းသောပန်း။ ရုံးခန်းများအတွက်သင့်တော်သည်။</div><span class="price">7,000 – 12,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/pothos.jpg" alt="Money Plant"><div class="plant-body"><h3>Money Plant / Pothos</h3><div class="sci-name">Epipremnum aureum</div><div class="burmese">ငွေပင် (Ngwe Pin)</div><div class="desc">Trailing vine for shelves & hanging baskets.</div><div class="desc-mm">တွဲဆွဲထားနိုင်သောနွယ်ပင်။ စင်ပေါ်၊ ဆွဲခြင်းတောင်းအတွက်။</div><span class="price">3,000 – 6,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/croton.jpg" alt="Croton"><div class="plant-body"><h3>Croton</h3><div class="sci-name">Codiaeum variegatum</div><div class="burmese">ဇော်ဂျီပင် (Zaw-gyi Pin)</div><div class="desc">Colourful foliage in yellow, red, orange. Indoor/outdoor.</div><div class="desc-mm">အရောင်စုံအရွက်များ။ အိမ်တွင်း/အပြင်စိုက်နိုင်သည်။</div><span class="price">6,000 – 14,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/chinese-evergreen.jpg" alt="Aglaonema"><div class="plant-body"><h3>Chinese Evergreen</h3><div class="sci-name">Aglaonema commutatum</div><div class="burmese">အဂ်လော်နီးမား (Aglaonema)</div><div class="desc">Silver-green patterned leaves. Tolerates deep shade.</div><div class="desc-mm">ငွေရောင်အစိမ်းရောင်အရွက်ပုံစံ။ အရိပ်အလွန်အုံ့ခံနိုင်သည်။</div><span class="price">5,000 – 10,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/monstera.jpg" alt="Monstera"><div class="plant-body"><h3>Swiss Cheese Plant</h3><div class="sci-name">Monstera deliciosa</div><div class="burmese">မွန်စတီရာ (Monstera)</div><div class="desc">Iconic split leaves. Statement indoor plant.</div><div class="desc-mm">ထင်ရှားသောအရွက်ခွဲပုံစံ။ အိမ်တွင်းထင်ရှားသောအပင်။</div><span class="price">8,000 – 18,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/boston-fern.jpg" alt="Boston Fern"><div class="plant-body"><h3>Boston Fern</h3><div class="sci-name">Nephrolepis exaltata</div><div class="burmese">ဒေါင်းမြီးပင် (Daung-mi Pin)</div><div class="desc">Classic lush green fern. Loves humidity, perfect bathroom plant.</div><div class="desc-mm">စိမ်းစိုသောရှေးရိုးအတိုင်ပင်။ စွတ်စိုမှုကြိုက်၍ ရေချိုးခန်းအတွက်အကောင်းဆုံး။</div><span class="price">5,000 – 10,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/zz-plant.jpg" alt="ZZ Plant"><div class="plant-body"><h3>ZZ Plant</h3><div class="sci-name">Zamioculcas zamiifolia</div><div class="burmese">ဇီဇီပင် (ZZ Pin)</div><div class="desc">Glossy leaves, survives neglect. Ultra low-light tolerant.</div><div class="desc-mm">အရောင်တောက်သောအရွက်များ။ ဂရုစိုက်မှုအနည်းဆုံးလိုအပ်သည်။</div><span class="price">5,000 – 12,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/dracaena.jpg" alt="Dracaena"><div class="plant-body"><h3>Dracaena (Dragon Tree)</h3><div class="sci-name">Dracaena marginata</div><div class="burmese">ဒရာစီနာ (Dracaena)</div><div class="desc">Spiky, architectural foliage. Easy indoor statement plant.</div><div class="desc-mm">ချွန်ထက်သောအရွက်ပုံစံ။ အိမ်တွင်းထင်ရှားလွယ်ကူသောအပင်။</div><span class="price">6,000 – 15,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/spider-plant.jpg" alt="Spider Plant"><div class="plant-body"><h3>Spider Plant</h3><div class="sci-name">Chlorophytum comosum</div><div class="burmese">ပင့်ကူပင် (Pint-ku Pin)</div><div class="desc">Air-purifying, produces baby plantlets. Hanging baskets.</div><div class="desc-mm">လေသန့်စင်ပေးပြီး သားပေါက်များထွက်သည်။ ဆွဲခြင်းတောင်းအတွက်ဖြစ်သည်။</div><span class="price">2,500 – 5,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/rubber-plant.jpg" alt="Rubber Plant"><div class="plant-body"><h3>Rubber Plant</h3><div class="sci-name">Ficus elastica</div><div class="burmese">ရာဘာပင် (Rubber Pin)</div><div class="desc">Large glossy leaves. Grows tall indoors.</div><div class="desc-mm">အရွက်ကြီးများတောက်ပသည်။ အိမ်တွင်းတွင် အရပ်ရှည်စွာပေါက်သည်။</div><span class="price">7,000 – 15,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/calathea.jpg" alt="Calathea"><div class="plant-body"><h3>Calathea (Prayer Plant)</h3><div class="sci-name">Calathea spp.</div><div class="burmese">ကလာသီယာ (Calathea)</div><div class="desc">Striking leaf patterns, moves with light. Shade lover.</div><div class="desc-mm">ထင်ရှားသောအရွက်ပုံစံ၊ အလင်းနှင့်အတူရွေ့လျားသည်။ အရိပ်ကြိုက်သည်။</div><span class="price">6,000 – 12,000 Ks</span></div></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  PERENNIALS & GROUNDCOVERS (12)        -->
+    <!-- ═══════════════════════════════════════ -->
+    <h2 id="perennials" class="category-title">🌸 Perennials & Groundcovers / နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင် (၁၂ မျိုး)</h2>
+    <div class="grid">
+
+        <div class="plant-card"><img class="plant-img" src="images/jasmine.jpg" alt="Arabian Jasmine"><div class="plant-body"><h3>Arabian Jasmine</h3><div class="sci-name">Jasminum sambac</div><div class="burmese">မြတ်လေးပန်း (Myat-lay Pan)</div><div class="desc">Sweet fragrance, small white flowers. Perfect near doors.</div><div class="desc-mm">မွှေးကြိုင်သောအဖြူရောင်ပွင့်ငယ်များ။ တံခါးဝအနီးအတွက်အကောင်းဆုံး။</div><span class="price">4,000 – 9,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/mexican-petunia.jpg" alt="Mexican Petunia"><div class="plant-body"><h3>Mexican Petunia</h3><div class="sci-name">Ruellia simplex</div><div class="burmese">ပုလဲပန်း (Pale Pan)</div><div class="desc">Purple/pink blooms. Fast-spreading border plant.</div><div class="desc-mm">ခရမ်း/ပန်းရောင်ပွင့်များ။ အကာအရံအနားသတ်အတွက်မြန်မြန်ပျံ့နှံ့သည်။</div><span class="price">3,000 – 6,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/lantana.jpg" alt="Lantana"><div class="plant-body"><h3>Lantana</h3><div class="sci-name">Lantana camara</div><div class="burmese">လန်တာနာ (Lantana)</div><div class="desc">Multi-coloured flower clusters. Drought-proof groundcover.</div><div class="desc-mm">အရောင်စုံပွင့်ခိုင်ငယ်များ။ ရေရှားဒဏ်ခံမြေဖုံးပင်။</div><span class="price">3,500 – 7,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/coleus.jpg" alt="Coleus"><div class="plant-body"><h3>Coleus</h3><div class="sci-name">Plectranthus scutellarioides</div><div class="burmese">ရောင်စုံဆေးပင် (Yaung-son Say Pin)</div><div class="desc">Vivid foliage in endless colour combos. Shade or sun varieties.</div><div class="desc-mm">အရောင်စုံအရွက်များ။ အရိပ်နှင့်နေရောင်မျိုးများရှိသည်။</div><span class="price">2,000 – 5,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/marigold.jpg" alt="Marigold"><div class="plant-body"><h3>Marigold</h3><div class="sci-name">Tagetes erecta</div><div class="burmese">ထပ်တစ်ရာပန်း (Htat-ta-yar Pan)</div><div class="desc">Golden blooms year-round. Pest repellent companion plant.</div><div class="desc-mm">တစ်နှစ်ပတ်လုံးပွင့်သော ရွှေရောင်ပန်း။ ပိုးမွှားတားသောတွဲဖက်အပင်။</div><span class="price">1,500 – 3,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/portulaca.jpg" alt="Portulaca"><div class="plant-body"><h3>Moss Rose / 9 o'clock</h3><div class="sci-name">Portulaca grandiflora</div><div class="burmese">၉ နာရီပန်း (Ko-nar-yi Pan)</div><div class="desc">Succulent leaves, bright blooms. Sun-loving groundcover.</div><div class="desc-mm">ရေသိုလှောင်ရွက်နှင့်တောက်ပသောပွင့်များ။ နေရောင်ကြိုက်မြေဖုံးပင်။</div><span class="price">1,000 – 2,500 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/canna.jpg" alt="Canna"><div class="plant-body"><h3>Canna Lily</h3><div class="sci-name">Canna indica</div><div class="burmese">ငှက်ပျောပန်းနီ (Hnget-pyaw Pan-ni)</div><div class="desc">Tropical foliage with red/yellow blooms. Great for borders.</div><div class="desc-mm">အနီ/အဝါရောင်ပွင့်များနှင့်အပူပိုင်းအရွက်များ။ အကာအရံအတွက်ကောင်းသည်။</div><span class="price">3,000 – 6,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/heliconia.jpg" alt="Heliconia"><div class="plant-body"><h3>Heliconia</h3><div class="sci-name">Heliconia psittacorum</div><div class="burmese">ဟယ်လီကိုနီယာ (Heliconia)</div><div class="desc">Exotic lobster-claw blooms. Tropical statement plant.</div><div class="desc-mm">ထူးဆန်းသောပုစွန်ခြေသည်းပုံပွင့်။ အပူပိုင်းထင်ရှားသောအပင်။</div><span class="price">5,000 – 12,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/barleria.jpg" alt="Barleria"><div class="plant-body"><h3>Barleria (Porcupine Flower)</h3><div class="sci-name">Barleria cristata</div><div class="burmese">ဖြူခက်ပြာ (Phyu-khet-pyar)</div><div class="desc">Purple/pink or white flowers. Hardy perennial shrub.</div><div class="desc-mm">ခရမ်း/ပန်းရောင်/အဖြူပွင့်များ။ ခံနိုင်ရည်ရှိသောနှစ်ကြာခံပင်။</div><span class="price">3,000 – 6,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/plumbago.jpg" alt="Plumbago"><div class="plant-body"><h3>Plumbago</h3><div class="sci-name">Plumbago auriculata</div><div class="burmese">ပလမ်ဘာဂို (Plumbago)</div><div class="desc">Sky-blue flower clusters. Versatile shrub or groundcover.</div><div class="desc-mm">ကောင်းကင်ပြာပွင့်ခိုင်များ။ ချုံပင် သို့မဟုတ် မြေဖုံးအဖြစ်သုံးနိုင်သည်။</div><span class="price">4,000 – 8,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/pentas.jpg" alt="Pentas"><div class="plant-body"><h3>Pentas (Star Cluster)</h3><div class="sci-name">Pentas lanceolata</div><div class="burmese">ကြယ်စုပန်း (Kyal-su Pan)</div><div class="desc">Butterfly magnet. Blooms pink, red, purple, white.</div><div class="desc-mm">လိပ်ပြာများကိုဆွဲဆောင်သည်။ ပန်းရောင်၊ အနီ၊ ခရမ်း၊ အဖြူပွင့်သည်။</div><span class="price">2,000 – 4,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/euphorbia.jpg" alt="Euphorbia"><div class="plant-body"><h3>Euphorbia (Crown of Thorns)</h3><div class="sci-name">Euphorbia milii</div><div class="burmese">သရဖူဆူးပင် (Tha-ra-phu Su Pin)</div><div class="desc">Spiky succulent with colourful bracts year-round.</div><div class="desc-mm">ဆူးရှိသောရေသိုလှောင်ပင်။ တစ်နှစ်ပတ်လုံးအရောင်စုံပွင့်ဖတ်များရှိသည်။</div><span class="price">3,000 – 7,000 Ks</span></div></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  FENCE & BALCONY SPECIALS (10)         -->
+    <!-- ═══════════════════════════════════════ -->
+    <h2 id="fence" class="category-title">🌿 Fence & Balcony Specials / ခြံစည်းရိုးနှင့်လသာဆောင်အထူး (၁၀ မျိုး)</h2>
+    <div class="grid">
+
+        <div class="plant-card"><img class="plant-img" src="images/bamboo.jpg" alt="Dwarf Bamboo"><div class="plant-body"><h3>Dwarf Bamboo (Clumping)</h3><div class="sci-name">Bambusa multiplex</div><div class="burmese">ဝါးပုပင် (Wah-pu Pin)</div><div class="desc">Non-invasive clumper. Instant privacy screen.</div><div class="desc-mm">စုဖွဲ့ပေါက်သောမပြန့်သောမျိုး။ ချက်ချင်းကာကွယ်ရန်အကောင်းဆုံး။</div><span class="price">10,000 – 20,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/thunbergia.jpg" alt="Clock Vine"><div class="plant-body"><h3>Clock Vine</h3><div class="sci-name">Thunbergia grandiflora</div><div class="burmese">ဆေးဒန်းနွယ် (Say-dan Nwe)</div><div class="desc">Blue/purple drooping blooms. Fast fence cover.</div><div class="desc-mm">အပြာ/ခရမ်းတွဲလျားပွင့်များ။ ခြံစည်းရိုးဖုံးရန်အမြန်ဆုံးနွယ်ပင်။</div><span class="price">4,000 – 8,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/morning-glory.jpg" alt="Morning Glory"><div class="plant-body"><h3>Morning Glory</h3><div class="sci-name">Ipomoea purpurea</div><div class="burmese">ကြက်မောက်နွယ် (Kyet-mauk Nwe)</div><div class="desc">Blue/purple trumpet flowers each morning. Rapid climber.</div><div class="desc-mm">နံနက်တိုင်းပွင့်သောအပြာ/ခရမ်းခေါင်းလောင်းပွင့်။ အလွန်လျင်မြန်သောနွယ်ပင်။</div><span class="price">2,000 – 4,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/clematis.jpg" alt="Clematis"><div class="plant-body"><h3>Clematis</h3><div class="sci-name">Clematis spp.</div><div class="burmese">ကလီမက်တစ် (Clematis)</div><div class="desc">Large star-shaped blooms in many colours. Trellis plant.</div><div class="desc-mm">ကြယ်ပုံသဏ္ဌာန်အရောင်စုံပွင့်ကြီးများ။ စင်တင်ရန်ဖြစ်သည်။</div><span class="price">5,000 – 12,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/aspagarus.jpg" alt="Asparagus Fern"><div class="plant-body"><h3>Asparagus Fern</h3><div class="sci-name">Asparagus setaceus</div><div class="burmese">ကညွတ်အတိုင်ပင် (Ka-nyut A-tain Pin)</div><div class="desc">Feathery foliage, great in hanging baskets. Balcony favourite.</div><div class="desc-mm">အမွှေးနုကဲ့သို့အရွက်များ၊ ဆွဲခြင်းတောင်းအတွက်အကောင်းဆုံး။ လသာဆောင်အကြိုက်။</div><span class="price">3,000 – 6,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/snake-jasmine.jpg" alt="Snake Jasmine"><div class="plant-body"><h3>Snake Jasmine</h3><div class="sci-name">Rhinacanthus nasutus</div><div class="burmese">မြွေမြတ်လေး (Mwe-myat-lay)</div><div class="desc">Small white flowers, medicinal leaves. Compact fence shrub.</div><div class="desc-mm">အဖြူရောင်ပွင့်ငယ်များ၊ ဆေးဖက်ဝင်အရွက်။ ကျစ်လစ်သောခြံစည်းရိုးချုံပင်။</div><span class="price">3,500 – 7,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/vinca.jpg" alt="Vinca"><div class="plant-body"><h3>Vinca (Periwinkle)</h3><div class="sci-name">Catharanthus roseus</div><div class="burmese">သင်္ဘောမန်ကျည်း (Thin-baw Ma-gyi)</div><div class="desc">Pink/white blooms year-round. Balcony pot or groundcover.</div><div class="desc-mm">တစ်နှစ်ပတ်လုံး ပန်းရောင်/အဖြူပွင့်သည်။ လသာဆောင်အိုး သို့မဟုတ် မြေဖုံးအဖြစ်သုံးနိုင်သည်။</div><span class="price">1,500 – 3,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/clitoria.jpg" alt="Butterfly Pea"><div class="plant-body"><h3>Butterfly Pea</h3><div class="sci-name">Clitoria ternatea</div><div class="burmese">ပဲပုပ်ပန်း (Pe-pote Pan)</div><div class="desc">Edible blue flowers for tea. Rapid climber for fences.</div><div class="desc-mm">လက်ဖက်ရည်အတွက် စားနိုင်သောအပြာရောင်ပွင့်။ ခြံစည်းရိုးအတွက်အမြန်နွယ်ပင်။</div><span class="price">2,000 – 4,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/caladium.jpg" alt="Caladium"><div class="plant-body"><h3>Caladium</h3><div class="sci-name">Caladium bicolor</div><div class="burmese">ကလေဒီယမ် (Caladium)</div><div class="desc">Heart-shaped leaves in pink, red, white. Shade balcony star.</div><div class="desc-mm">နှလုံးပုံအရွက်များ ပန်းရောင်၊ အနီ၊ အဖြူ။ အရိပ်ရလသာဆောင်အတွက်အကောင်းဆုံး။</div><span class="price">3,000 – 7,000 Ks</span></div></div>
+        <div class="plant-card"><img class="plant-img" src="images/ruellia.jpg" alt="Ruellia"><div class="plant-body"><h3>Ruellia (Wild Petunia)</h3><div class="sci-name">Ruellia brittoniana</div><div class="burmese">ရူးလီးယား (Ruellia)</div><div class="desc">Purple/pink bell-shaped blooms. Low-maintenance border.</div><div class="desc-mm">ခရမ်း/ပန်းရောင်ခေါင်းလောင်းပုံပွင့်။ ဂရုစိုက်မှုနည်းသောအနားသတ်ပင်။</div><span class="price">2,500 – 5,000 Ks</span></div></div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <strong>🌿 ပန်းသတင်း Landscape</strong><br>
+        📞 09-XXX-XXX-XXX | ✉️ info@pantathin.com<br>
+        <a href="https://zyanamite.github.io//ptt/" target="_blank" rel="noopener">🌐 zyanamite.github.io//ptt/</a><br>
+        All plants grown in Myanmar | အပင်အားလုံး မြန်မာပြည်တွင်းစိုက်ပျိုးသည်<br>
+        Prices are indicative. ဈေးနှုန်းများမှာ ခန့်မှန်းခြေဖြစ်သည်။<br>
+        <small>&copy; 2025 Pantathin Landscape | Printed catalog version 3.0</small>
+    </footer>
+
+</div>
+</body>
+</html>
