@@ -857,7 +857,23 @@ class CompleteEstimator {
     this.populatePlantCategories();
     this.setupEventListeners();
   }
-
+// Add this to your index.html calculator initialization
+window.addEventListener('load', () => {
+    const savedPackage = sessionStorage.getItem('selectedPackage');
+    if (savedPackage) {
+        const pkg = JSON.parse(savedPackage);
+        calculator.services.push({
+            id: Date.now(),
+            serviceType: 'Service Package',
+            optionName: pkg.name,
+            price: pkg.price
+        });
+        calculator.updateDisplay();
+        sessionStorage.removeItem('selectedPackage');
+        // Switch to summary tab
+        switchCalculatorTab('summary');
+    }
+});
   // Load plant prices from catalog
   async loadPriceData() {
     try {
