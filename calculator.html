@@ -288,46 +288,56 @@
         document.getElementById('btn-email').addEventListener('click', emailEstimate);
 
         // =========== PLANT PARSER ===========
-       function fetchPlantPrices() {
+function fetchPlantPrices() {
     return fetch('plant-catalogs.html')
         .then(r => r.text())
         .then(html => {
             const d = new DOMParser().parseFromString(html, 'text/html');
-            
-            // Strategy: find ALL price spans, then navigate up to find the plant name (h3) and category (h2)
-            const priceSpans = d.querySelectorAll('.price');
-            console.log('🌱 Found', priceSpans.length, '.price elements');
+            console.log('🌱 HTML fetched, length:', html.length);
 
-            if (priceSpans.length === 0) {
-                plantItems.innerHTML = '<p class="error-text">❌ No .price elements found in catalog.</p>';
+            // Find ALL h3 elements (plant names)
+            const allH3 = d.querySelectorAll('h3');
+            console.log('   Found', allH3.length, '<h3> elements');
+
+            if (allH3.length === 0) {
+                plantItems.innerHTML = '<p class="error-text">❌ No plant names (<h3>) found in catalog.</p>';
                 return;
             }
 
-            // Temporary storage: { category: { plant: { lo, hi } } }
             const tempCatalog = {};
 
-            priceSpans.forEach(span => {
-                const priceText = span.textContent.trim();
+            allH3.forEach(h3 => {
+                const plantName = h3.textContent.trim();
+                // Look for a price text near this h3.
+                // Strategy: go up to the nearest container that could hold both name and price
+                // (like .plant-card, .pot-card, or just the parent div), then find any element
+                // containing "Ks" with digits.
+                let container = h3.closest('.plant-card, .pot-card') || h3.parentElement;
+                if (!container) return;
+
+                // Find all text nodes or elements that contain a pattern like "12,000 – 30,000 Ks"
+                // Using a recursive text search inside the container
+                const allElements = container.querySelectorAll('*');
+                let priceText = '';
+                for (let el of allElements) {
+                    const txt = el.textContent.trim();
+                    // Check if this text looks like a price range
+                    if (/[\d,]+ ?[-–] ?[\d,]+ Ks/.test(txt)) {
+                        priceText = txt;
+                        break; // take the first matching
+                    }
+                }
+                if (!priceText) return; // no price found for this plant
+
                 const match = priceText.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
                 if (!match) return;
 
-                // Find the nearest h3 (plant name) – look inside the same parent card/container
-                let plantName = '';
-                let parent = span.parentElement;
-                while (parent && parent !== d.body) {
-                    const h3 = parent.querySelector('h3');
-                    if (h3) {
-                        plantName = h3.textContent.trim();
-                        break;
-                    }
-                    parent = parent.parentElement;
-                }
-                if (!plantName) return; // can't find plant name
+                const lo = parseInt(match[1].replace(/,/g, ''));
+                const hi = parseInt(match[2].replace(/,/g, ''));
 
-                // Find the category by looking for the nearest h2 above this span in the DOM
+                // Determine category: nearest <h2> above in the DOM
                 let category = 'Uncategorized';
-                let el = span.previousElementSibling;
-                // First check siblings going backwards
+                let el = h3.previousElementSibling;
                 while (el) {
                     if (el.tagName === 'H2') {
                         category = el.textContent.trim();
@@ -335,33 +345,28 @@
                     }
                     el = el.previousElementSibling;
                 }
-                // If not found in siblings, look up through ancestors
                 if (category === 'Uncategorized') {
-                    let ancestor = span.parentElement;
-                    while (ancestor && ancestor !== d.body) {
-                        const h2 = ancestor.querySelector('h2');
+                    let parent = h3.parentElement;
+                    while (parent && parent !== d.body) {
+                        const h2 = parent.querySelector('h2');
                         if (h2) {
                             category = h2.textContent.trim();
                             break;
                         }
-                        ancestor = ancestor.parentElement;
+                        parent = parent.parentElement;
                     }
                 }
-
-                const lo = parseInt(match[1].replace(/,/g, ''));
-                const hi = parseInt(match[2].replace(/,/g, ''));
 
                 if (!tempCatalog[category]) tempCatalog[category] = {};
                 tempCatalog[category][plantName] = { lo, hi };
             });
 
-            // Copy to global priceCatalog
             priceCatalog = tempCatalog;
             console.log('📋 Plant categories parsed:', Object.keys(priceCatalog));
             fillPlantCategories();
         })
         .catch(err => {
-            console.error('Plant fetch error:', err);
+            console.error('❌ Plant fetch error:', err);
             // Fallback
             priceCatalog = {
                 '🍋 Fruit Plants': {
