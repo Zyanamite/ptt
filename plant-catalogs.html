@@ -521,23 +521,7 @@
 <!--  JAVASCRIPT: Price & Stock Engine      -->
 <!-- ═══════════════════════════════════════ -->
 <script>
-    // ── Back to Top Button ──
-const backToTopBtn = document.getElementById('backToTop');
-
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 500) {
-        backToTopBtn.classList.add('visible');
-    } else {
-        backToTopBtn.classList.remove('visible');
-    }
-});
-
-backToTopBtn.addEventListener('click', () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-});
+   
 // ╔══════════════════════════════════════════╗
 // ║  CHANGE THIS URL TO YOUR GOOGLE SHEET   ║
 // ╚══════════════════════════════════════════╝
@@ -969,6 +953,23 @@ document.getElementById('sheetLink').href = GOOGLE_SHEET_CSV_URL;
 renderAllCards();
 // Then try loading live prices
 loadPrices();
+     // ── Back to Top Button ──
+const backToTopBtn = document.getElementById('backToTop');
+
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 500) {
+        backToTopBtn.classList.add('visible');
+    } else {
+        backToTopBtn.classList.remove('visible');
+    }
+});
+
+backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
 </script>
 <!-- Back to Top Button -->
 <button class="back-to-top" id="backToTop" title="Back to top" aria-label="Back to top">
