@@ -343,29 +343,6 @@
         }
         .pot-card h4 { margin: 12px 0 4px; font-size: 1rem; }
         .pot-card .pot-price { font-weight: 700; color: #b54b4b; }
-
-        /* ── Footer ── */
-        footer {
-            background: var(--green-dark);
-            color: #c8e6c9;
-            text-align: center;
-            padding: 32px 20px;
-            margin-top: 40px;
-            font-size: 0.9rem;
-        }
-        footer a { color: #f5d87c; text-decoration: none; }
-
-        /* ── Print ── */
-        @media print {
-            body { background: white; }
-            .top-bar, .quick-jump, .btn-main, .btn-refresh, .price-status,
-            .stock-badge, .badge, .edit-hint, .note-line { display: none; }
-            .plant-card { box-shadow: none; break-inside: avoid; border: 1px solid #ccc; opacity: 1 !important; }
-            .grid { gap: 10px; grid-template-columns: repeat(2, 1fr); }
-            .plant-img { height: 170px; }
-            .category-title { border-left: none; border-bottom: 2px solid #1a3b2b; }
-            footer { background: none; color: #333; }
-        }
         /* ── Back to Top Button ── */
 .back-to-top {
     position: fixed;
@@ -398,6 +375,29 @@
     transform: translateY(-4px);
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
 }
+        /* ── Footer ── */
+        footer {
+            background: var(--green-dark);
+            color: #c8e6c9;
+            text-align: center;
+            padding: 32px 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+        }
+        footer a { color: #f5d87c; text-decoration: none; }
+
+        /* ── Print ── */
+        @media print {
+            body { background: white; }
+            .top-bar, .quick-jump, .btn-main, .btn-refresh, .price-status,
+            .stock-badge, .badge, .edit-hint, .note-line { display: none; }
+            .plant-card { box-shadow: none; break-inside: avoid; border: 1px solid #ccc; opacity: 1 !important; }
+            .grid { gap: 10px; grid-template-columns: repeat(2, 1fr); }
+            .plant-img { height: 170px; }
+            .category-title { border-left: none; border-bottom: 2px solid #1a3b2b; }
+            footer { background: none; color: #333; }
+        }
+
     </style>
 </head>
 <body>
@@ -429,10 +429,7 @@
             No coding needed.
         </div>
     </header>
-<!-- Back to Top Button -->
-<button class="back-to-top" id="backToTop" title="Back to top" aria-label="Back to top">
-    ↑
-</button>
+
     <!-- Quick Jump -->
     <div class="quick-jump">
         <a href="#fruits">🍋 Fruits / သစ်သီးပင်</a>
@@ -973,6 +970,9 @@ renderAllCards();
 // Then try loading live prices
 loadPrices();
 </script>
-
+<!-- Back to Top Button -->
+<button class="back-to-top" id="backToTop" title="Back to top" aria-label="Back to top">
+    ↑
+</button>
 </body>
 </html>
