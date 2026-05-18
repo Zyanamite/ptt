@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ပန်းသတင်း Landscaping Services</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans Myanmar', 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #f5f0e8 0%, #e8f5e9 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .nav {
+            background: #FFF8DC;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid #2d5a27;
+        }
+
+        .nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2d5a27;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #2d5a27;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: #2d5a27;
+            color: white;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(rgba(45, 90, 39, 0.9), rgba(45, 90, 39, 0.8));
+            color: white;
+            padding: 80px 20px 60px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .premium-badge {
+            display: inline-block;
+            background: #DAA520;
+            padding: 8px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin: 10px 0;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            margin-top: 15px;
+            opacity: 0.9;
+        }
+
+        /* Section Styles */
+        .section {
+            margin: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            color: #2d5a27;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        /* Calculator */
+        .calculator-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .calc-header {
+            background: linear-gradient(135deg, #2d5a27, #1a3a18);
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+        }
+
+        .calc-header h2 {
+            margin-bottom: 15px;
+        }
+
+        .calc-tabs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .calc-tab-btn {
+            background: rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.3s;
+        }
+
+        .calc-tab-btn.active {
+            background: white;
+            color: #2d5a27;
+            border-color: white;
+        }
+
+        .calc-body {
+            padding: 30px;
+        }
+
+        .calc-panel {
+            display: none;
+        }
+
+        .calc-panel.active {
+            display: block;
+        }
+
+        /* Plant Selection */
+        .plant-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            background: #f8f9e9;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #2d5a27;
+            margin-bottom: 5px;
+        }
+
+        .form-group select,
+        .form-group input {
+            padding: 10px;
+            border: 2px solid #b8d4b0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn-add {
+            background: #2d5a27;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            align-self: end;
+            transition: background 0.3s;
+        }
+
+        .btn-add:hover {
+            background: #3a7a35;
+        }
+
+        /* Service Cards */
+        .service-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .service-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 25px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .service-card:hover,
+        .service-card.selected {
+            border-color: #2d5a27;
+            background: #f8f9e9;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .service-card .icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .service-card h3 {
+            color: #2d5a27;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .service-card p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* Service Options */
+        .service-options {
+            background: #f8f9e9;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .service-options h3 {
+            color: #2d5a27;
+            margin-bottom: 15px;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .option-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #2d5a27;
+        }
+
+        .option-card h4 {
+            color: #2d5a27;
+            margin-bottom: 5px;
+        }
+
+        .option-price {
+            color: #8B4513;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .btn-service-add {
+            background: #2d5a27;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Items List */
+        .items-list {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .items-list h3 {
+            color: #2d5a27;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #b8d4b0;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-detail {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .item-title {
+            font-weight: 600;
+            color: #2d5a27;
+        }
+
+        .item-sub {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .item-cost {
+            font-weight: bold;
+            color: #8B4513;
+        }
+
+        .btn-remove {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Summary */
+        .summary-block {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .summary-block h3 {
+            color: #2d5a27;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #b8d4b0;
+        }
+
+        .subtotal {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .total-section {
+            background: linear-gradient(135deg, #2d5a27, #1a3a18);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .discount-tag {
+            background: #DAA520;
+            color: #333;
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .total-section h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .total-section .note {
+            opacity: 0.8;
+            margin: 15px 0;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .btn-action {
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-action.gold {
+            background: #DAA520;
+            color: #333;
+        }
+
+        .btn-action.white {
+            background: white;
+            color: #2d5a27;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+
+        .empty-text {
+            text-align: center;
+            color: #999;
+            padding: 20px;
+        }
+
+        /* Our Work */
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .work-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .work-card .icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .work-card h3 {
+            color: #2d5a27;
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2d5a27;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .plant-selector { grid-template-columns: 1fr; }
+            .service-cards { grid-template-columns: repeat(2, 1fr); }
+            .nav .container { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-brand">🌿 ပန်းသတင်း LANDSCAPE</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="plant-catalogs.html">Plant Catalog</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="#calculator">Calculator</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    
+
+    <main class="container">
+        <section class="section" id="calculator">
+            <h2 class="section-title">🌿 Complete Project Estimator</h2>
+            <p class="section-subtitle">Calculate both plants & services for your dream garden</p>
+            
+            <div class="calculator-container">
+                <div class="calc-header">
+                    <h2>Price Estimator</h2>
+                    <div class="calc-tabs">
+                        <button class="calc-tab-btn active" onclick="showPanel('plants')">🌱 Plants</button>
+                        <button class="calc-tab-btn" onclick="showPanel('services')">🔧 Services</button>
+                        <button class="calc-tab-btn" onclick="showPanel('summary')">📋 Estimate</button>
+                    </div>
+                </div>
+                
+                <div class="calc-body">
+                    <!-- Plants Panel -->
+                    <div id="panel-plants" class="calc-panel active">
+                        <div class="plant-selector">
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select id="plant-cat" onchange="loadPlants()">
+                                    <option value="">Loading...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Plant</label>
+                                <select id="plant-name">
+                                    <option value="">Select plant...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Size</label>
+                                <select id="plant-size">
+                                    <option value="small">Small</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="large">Large</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Qty</label>
+                                <input type="number" id="plant-qty" value="1" min="1" max="500">
+                            </div>
+                            <button class="btn-add" onclick="addPlantItem()">+ Add</button>
+                        </div>
+                        
+                        <div class="items-list">
+                            <h3>🌱 Selected Items</h3>
+                            <div id="plant-items"><p class="empty-text">No plants selected yet.</p></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Services Panel -->
+                    <div id="panel-services" class="calc-panel">
+                        <div class="service-cards">
+                            <div class="service-card" onclick="pickService('outdoor', this)">
+                                <div class="icon">🏡</div>
+                                <h3>Outdoor Landscaping</h3>
+                                <p>Full garden design & installation</p>
+                            </div>
+                            <div class="service-card" onclick="pickService('indoor', this)">
+                                <div class="icon">🏢</div>
+                                <h3>Indoor Greenery</h3>
+                                <p>Office & home indoor plants</p>
+                            </div>
+                            <div class="service-card" onclick="pickService('balcony', this)">
+                                <div class="icon">🌺</div>
+                                <h3>Balcony Gardens</h3>
+                                <p>Small space transformations</p>
+                            </div>
+                            <div class="service-card" onclick="pickService('fence', this)">
+                                <div class="icon">🏗️</div>
+                                <h3>Fence & Screening</h3>
+                                <p>Privacy & decorative fences</p>
+                            </div>
+                            <div class="service-card" onclick="pickService('maintenance', this)">
+                                <div class="icon">✂️</div>
+                                <h3>Maintenance</h3>
+                                <p>Regular garden care</p>
+                            </div>
+                        </div>
+                        
+                        <div id="service-opts" class="service-options" style="display:none;">
+                            <h3 id="service-opts-title">Service Options</h3>
+                            <div id="service-opts-grid" class="option-grid"></div>
+                        </div>
+                        
+                        <div class="items-list">
+                            <h3>🔧 Services Selected</h3>
+                            <div id="service-items"><p class="empty-text">No services selected yet.</p></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Summary Panel -->
+                    <div id="panel-summary" class="calc-panel">
+                        <div class="summary-block">
+                            <h3>🌱 Selected Items</h3>
+                            <div id="sum-plants"></div>
+                            <div class="subtotal">Plants Subtotal: <span id="plants-total">0 Ks</span></div>
+                        </div>
+                        
+                        <div class="summary-block">
+                            <h3>🔧 Services Selected</h3>
+                            <div id="sum-services"></div>
+                            <div class="subtotal">Services Subtotal: <span id="services-total">0 Ks</span></div>
+                        </div>
+                        
+                        <div class="total-section">
+                            <div id="discount-msg"></div>
+                            <h2>Total Estimate: <span id="grand-total">0 Ks</span></h2>
+                            <p class="note">* Final price may vary based on site survey</p>
+                            <div class="action-btns">
+                                <button class="btn-action gold" onclick="emailEstimate()">📧 Email Estimate</button>
+                                <button class="btn-action white" onclick="window.print()">🖨️ Print</button>
+                                <button class="btn-action white" onclick="clearAll()">🔄 Start Over</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+     
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p style="font-size: 1.2em;">🌿 ပန်းသတင်း Landscape Services</p>
+            <p>Premium Landscaping & Plant Services</p>
+            <p style="margin-top: 10px;">📞 Contact us for custom quotes and site visits</p>
+            <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.8;">© 2024 ပန်းသတင်း Landscape. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        var plantList = [];
+        var serviceList = [];
+        var priceCatalog = {};
+
+        var serviceCatalog = {
+            outdoor: {
+                title: 'Outdoor Landscaping Services',
+                items: [
+                    { name: 'Garden Design & Planning', price: 50000 },
+                    { name: 'Soil Preparation & Grading', price: 30000 },
+                    { name: 'Plant Installation (per 10 plants)', price: 20000 },
+                    { name: 'Irrigation System Setup', price: 80000 },
+                    { name: 'Lawn Installation (500 sq ft)', price: 250000 },
+                    { name: 'Water Feature Installation', price: 150000 }
+                ]
+            },
+            indoor: {
+                title: 'Indoor Greenery Services',
+                items: [
+                    { name: 'Indoor Plant Consultation', price: 20000 },
+                    { name: 'Office Plant Setup (5 plants)', price: 50000 },
+                    { name: 'Indoor Garden Wall', price: 120000 },
+                    { name: 'Monthly Maintenance', price: 15000 }
+                ]
+            },
+            balcony: {
+                title: 'Balcony Garden Services',
+                items: [
+                    { name: 'Balcony Assessment & Design', price: 15000 },
+                    { name: 'Railing Planters (set of 5)', price: 25000 },
+                    { name: 'Vertical Garden Setup', price: 40000 },
+                    { name: 'Complete Balcony Makeover', price: 100000 }
+                ]
+            },
+            fence: {
+                title: 'Fence & Screening Services',
+                items: [
+                    { name: 'Living Fence Design', price: 25000 },
+                    { name: 'Bamboo Screening (per 10 ft)', price: 30000 },
+                    { name: 'Privacy Hedge (per 20 ft)', price: 100000 },
+                    { name: 'Decorative Trellis Setup', price: 35000 }
+                ]
+            },
+            maintenance: {
+                title: 'Maintenance Services',
+                items: [
+                    { name: 'Monthly Garden Care', price: 30000 },
+                    { name: 'Pruning & Trimming (per hour)', price: 5000 },
+                    { name: 'Fertilization Treatment', price: 15000 },
+                    { name: 'Organic Pest Control', price: 20000 },
+                    { name: 'Seasonal Cleanup', price: 25000 }
+                ]
+            }
+        };
+
+        function fetchPrices() {
+            fetch('plant-catalogs.html')
+                .then(function(r) { return r.text(); })
+                .then(function(html) {
+                    var d = new DOMParser().parseFromString(html, 'text/html');
+                    d.querySelectorAll('h2').forEach(function(h) {
+                        var cat = h.textContent.trim();
+                        var el = h.nextElementSibling;
+                        while (el && el.tagName !== 'H2') {
+                            if (el.tagName === 'H3' || el.tagName === 'H4') {
+                                var nm = el.textContent.trim();
+                                var nx = el.nextElementSibling;
+                                var tx = nx ? nx.textContent : '';
+                                var m = tx.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
+                                if (m) {
+                                    if (!priceCatalog[cat]) priceCatalog[cat] = {};
+                                    priceCatalog[cat][nm] = {
+                                        lo: parseInt(m[1].replace(/,/g, '')),
+                                        hi: parseInt(m[2].replace(/,/g, ''))
+                                    };
+                                }
+                            }
+                            el = el.nextElementSibling;
+                        }
+                    });
+                    fillCats();
+                })
+                .catch(function() {
+                    priceCatalog = {
+                        '🍋 Fruit Plants': {
+                            'Mango (grafted)': { lo: 12000, hi: 30000 },
+                            'Jackfruit': { lo: 10000, hi: 20000 }
+                        },
+                        '🌸 Orchids': {
+                            'Dendrobium': { lo: 8000, hi: 18000 }
+                        }
+                    };
+                    fillCats();
+                });
+        }
+
+        function fillCats() {
+            var s = document.getElementById('plant-cat');
+            s.innerHTML = '<option value="">Select Category...</option>';
+            Object.keys(priceCatalog).sort().forEach(function(c) {
+                var o = document.createElement('option');
+                o.value = c;
+                o.textContent = c;
+                s.appendChild(o);
+            });
+        }
+
+        function loadPlants() {
+            var c = document.getElementById('plant-cat').value;
+            var s = document.getElementById('plant-name');
+            s.innerHTML = '<option value="">Select plant...</option>';
+            if (c && priceCatalog[c]) {
+                Object.keys(priceCatalog[c]).sort().forEach(function(p) {
+                    var o = document.createElement('option');
+                    o.value = p;
+                    o.textContent = p;
+                    s.appendChild(o);
+                });
+            }
+        }
+
+        function addPlantItem() {
+            var c = document.getElementById('plant-cat').value;
+            var n = document.getElementById('plant-name').value;
+            var s = document.getElementById('plant-size').value;
+            var q = parseInt(document.getElementById('plant-qty').value);
+            if (!c || !n) { alert('Select category and plant'); return; }
+            
+            var pr = priceCatalog[c][n];
+            var u = s === 'small' ? pr.lo : s === 'medium' ? Math.round((pr.lo + pr.hi) / 2) : pr.hi;
+            plantList.push({ cat: c, name: n, size: s, qty: q, unit: u, total: u * q });
+            document.getElementById('plant-name').value = '';
+            document.getElementById('plant-qty').value = '1';
+            refresh();
+        }
+
+        function pickService(t, card) {
+            document.querySelectorAll('.service-card').forEach(function(c) { c.classList.remove('selected'); });
+            card.classList.add('selected');
+            var d = serviceCatalog[t];
+            document.getElementById('service-opts-title').textContent = d.title;
+            var g = document.getElementById('service-opts-grid');
+            var h = '';
+            d.items.forEach(function(i) {
+                h += '<div class="option-card"><h4>' + i.name + '</h4>';
+                h += '<div class="option-price">' + i.price.toLocaleString() + ' Ks</div>';
+                h += '<button class="btn-service-add" onclick="addServiceItem(\'' + d.title + '\', \'' + i.name + '\', ' + i.price + ')">+ Add Service</button></div>';
+            });
+            g.innerHTML = h;
+            document.getElementById('service-opts').style.display = 'block';
+        }
+
+        function addServiceItem(t, n, p) {
+            serviceList.push({ type: t, name: n, price: p });
+            refresh();
+        }
+
+        function delPlant(i) { plantList.splice(i, 1); refresh(); }
+        function delService(i) { serviceList.splice(i, 1); refresh(); }
+
+        function refresh() {
+            var ph = '';
+            plantList.forEach(function(p, i) {
+                ph += '<div class="list-item"><div class="item-detail"><div class="item-title">' + p.name + '</div>';
+                ph += '<div class="item-sub">' + p.size + ' | Qty: ' + p.qty + ' | ' + p.unit.toLocaleString() + ' Ks each</div></div>';
+                ph += '<div class="item-cost">' + p.total.toLocaleString() + ' Ks</div>';
+                ph += '<button class="btn-remove" onclick="delPlant(' + i + ')">×</button></div>';
+            });
+            document.getElementById('plant-items').innerHTML = ph || '<p class="empty-text">No plants selected yet.</p>';
+            
+            var sh = '';
+            serviceList.forEach(function(s, i) {
+                sh += '<div class="list-item"><div class="item-detail"><div class="item-title">' + s.name + '</div>';
+                sh += '<div class="item-sub">' + s.type + '</div></div>';
+                sh += '<div class="item-cost">' + s.price.toLocaleString() + ' Ks</div>';
+                sh += '<button class="btn-remove" onclick="delService(' + i + ')">×</button></div>';
+            });
+            document.getElementById('service-items').innerHTML = sh || '<p class="empty-text">No services selected yet.</p>';
+            
+            // Summary
+            var sp = '', pt = 0;
+            plantList.forEach(function(p, i) {
+                sp += '<div class="list-item"><span>' + p.name + ' (' + p.size + ') × ' + p.qty + '</span>';
+                sp += '<span>' + p.total.toLocaleString() + ' Ks</span>';
+                sp += '<button class="btn-remove" onclick="delPlant(' + i + ')">×</button></div>';
+                pt += p.total;
+            });
+            document.getElementById('sum-plants').innerHTML = sp || '<p class="empty-text">No plants selected</p>';
+            document.getElementById('plants-total').textContent = pt.toLocaleString() + ' Ks';
+            
+            var ss = '', st = 0;
+            serviceList.forEach(function(s, i) {
+                ss += '<div class="list-item"><span>' + s.name + '</span>';
+                ss += '<span>' + s.price.toLocaleString() + ' Ks</span>';
+                ss += '<button class="btn-remove" onclick="delService(' + i + ')">×</button></div>';
+                st += s.price;
+            });
+            document.getElementById('sum-services').innerHTML = ss || '<p class="empty-text">No services selected</p>';
+            document.getElementById('services-total').textContent = st.toLocaleString() + ' Ks';
+            
+            var tot = pt + st, disc = 0, msg = '';
+            if (tot > 500000) { disc = 0.10; msg = '🎉 10% discount on orders over 500,000 Ks!'; }
+            else if (tot > 200000) { disc = 0.05; msg = '🎉 5% discount on orders over 200,000 Ks!'; }
+            var da = Math.round(tot * disc), gt = tot - da;
+            document.getElementById('discount-msg').innerHTML = msg ? '<div class="discount-tag">' + msg + ' (Save ' + da.toLocaleString() + ' Ks)</div>' : '';
+            document.getElementById('grand-total').textContent = gt.toLocaleString() + ' Ks';
+        }
+
+        function showPanel(p) {
+            document.querySelectorAll('.calc-panel').forEach(function(x) { x.classList.remove('active'); });
+            document.querySelectorAll('.calc-tab-btn').forEach(function(x) { x.classList.remove('active'); });
+            document.getElementById('panel-' + p).classList.add('active');
+            event.target.classList.add('active');
+            if (p === 'summary') refresh();
+        }
+
+        function emailEstimate() {
+            var m = 'ESTIMATE FROM ပန်းသတင်း LANDSCAPE\n' + '='.repeat(40) + '\n\n';
+            if (plantList.length) {
+                m += 'PLANTS:\n';
+                plantList.forEach(function(p) { m += '• ' + p.name + ' (' + p.size + ') × ' + p.qty + ': ' + p.total.toLocaleString() + ' Ks\n'; });
+                m += '\n';
+            }
+            if (serviceList.length) {
+                m += 'SERVICES:\n';
+                serviceList.forEach(function(s) { m += '• ' + s.name + ': ' + s.price.toLocaleString() + ' Ks\n'; });
+                m += '\n';
+            }
+            m += '='.repeat(40) + '\nTOTAL: ' + document.getElementById('grand-total').textContent;
+            alert(m);
+        }
+
+        function clearAll() {
+            if (confirm('Clear everything?')) {
+                plantList = [];
+                serviceList = [];
+                refresh();
+                document.getElementById('service-opts').style.display = 'none';
+                document.querySelectorAll('.service-card').forEach(function(c) { c.classList.remove('selected'); });
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', fetchPrices);
+    </script>
+</body>
+</html>
