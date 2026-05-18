@@ -288,68 +288,91 @@
         document.getElementById('btn-email').addEventListener('click', emailEstimate);
 
         // =========== PLANT PARSER ===========
-        function fetchPlantPrices() {
-            return fetch('plant-catalogs.html')
-                .then(r => r.text())
-                .then(html => {
-                    const d = new DOMParser().parseFromString(html, 'text/html');
-                    const cards = d.querySelectorAll('.plant-card');
-                    console.log('🌱 Found', cards.length, 'plant cards');
+       function fetchPlantPrices() {
+    return fetch('plant-catalogs.html')
+        .then(r => r.text())
+        .then(html => {
+            const d = new DOMParser().parseFromString(html, 'text/html');
+            
+            // Strategy: find ALL price spans, then navigate up to find the plant name (h3) and category (h2)
+            const priceSpans = d.querySelectorAll('.price');
+            console.log('🌱 Found', priceSpans.length, '.price elements');
 
-                    if (cards.length === 0) {
-                        plantItems.innerHTML = '<p class="error-text">❌ No plant cards found.</p>';
-                        return;
+            if (priceSpans.length === 0) {
+                plantItems.innerHTML = '<p class="error-text">❌ No .price elements found in catalog.</p>';
+                return;
+            }
+
+            // Temporary storage: { category: { plant: { lo, hi } } }
+            const tempCatalog = {};
+
+            priceSpans.forEach(span => {
+                const priceText = span.textContent.trim();
+                const match = priceText.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
+                if (!match) return;
+
+                // Find the nearest h3 (plant name) – look inside the same parent card/container
+                let plantName = '';
+                let parent = span.parentElement;
+                while (parent && parent !== d.body) {
+                    const h3 = parent.querySelector('h3');
+                    if (h3) {
+                        plantName = h3.textContent.trim();
+                        break;
                     }
+                    parent = parent.parentElement;
+                }
+                if (!plantName) return; // can't find plant name
 
-                    cards.forEach(card => {
-                        const h3 = card.querySelector('h3');
-                        const priceSpan = card.querySelector('.price');
-                        if (!h3 || !priceSpan) return;
-
-                        const name = h3.textContent.trim();
-                        const priceText = priceSpan.textContent.trim();
-                        const match = priceText.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
-                        if (!match) return;
-
-                        // Determine category by nearest preceding h2
-                        let cat = 'Uncategorized';
-                        let el = card.previousElementSibling;
-                        while (el) {
-                            if (el.tagName === 'H2') {
-                                cat = el.textContent.trim();
-                                break;
-                            }
-                            el = el.previousElementSibling;
+                // Find the category by looking for the nearest h2 above this span in the DOM
+                let category = 'Uncategorized';
+                let el = span.previousElementSibling;
+                // First check siblings going backwards
+                while (el) {
+                    if (el.tagName === 'H2') {
+                        category = el.textContent.trim();
+                        break;
+                    }
+                    el = el.previousElementSibling;
+                }
+                // If not found in siblings, look up through ancestors
+                if (category === 'Uncategorized') {
+                    let ancestor = span.parentElement;
+                    while (ancestor && ancestor !== d.body) {
+                        const h2 = ancestor.querySelector('h2');
+                        if (h2) {
+                            category = h2.textContent.trim();
+                            break;
                         }
-                        if (cat === 'Uncategorized') {
-                            let p = card.parentElement;
-                            while (p && p !== d.body) {
-                                const h2 = p.querySelector('h2');
-                                if (h2) { cat = h2.textContent.trim(); break; }
-                                p = p.parentElement;
-                            }
-                        }
+                        ancestor = ancestor.parentElement;
+                    }
+                }
 
-                        if (!priceCatalog[cat]) priceCatalog[cat] = {};
-                        priceCatalog[cat][name] = {
-                            lo: parseInt(match[1].replace(/,/g, '')),
-                            hi: parseInt(match[2].replace(/,/g, ''))
-                        };
-                    });
+                const lo = parseInt(match[1].replace(/,/g, ''));
+                const hi = parseInt(match[2].replace(/,/g, ''));
 
-                    console.log('📋 Plant categories:', Object.keys(priceCatalog));
-                    fillPlantCategories();
-                })
-                .catch(err => {
-                    console.error('Plant fetch error:', err);
-                    // Fallback
-                    priceCatalog = {
-                        '🍋 Fruit Plants': { 'Mango (grafted)': { lo:12000, hi:30000 }, 'Jackfruit': { lo:10000, hi:20000 } },
-                        '🌸 Orchids': { 'Dendrobium': { lo:8000, hi:18000 } }
-                    };
-                    fillPlantCategories();
-                });
-        }
+                if (!tempCatalog[category]) tempCatalog[category] = {};
+                tempCatalog[category][plantName] = { lo, hi };
+            });
+
+            // Copy to global priceCatalog
+            priceCatalog = tempCatalog;
+            console.log('📋 Plant categories parsed:', Object.keys(priceCatalog));
+            fillPlantCategories();
+        })
+        .catch(err => {
+            console.error('Plant fetch error:', err);
+            // Fallback
+            priceCatalog = {
+                '🍋 Fruit Plants': {
+                    'Mango (grafted)': { lo: 12000, hi: 30000 },
+                    'Jackfruit': { lo: 10000, hi: 20000 }
+                },
+                '🌸 Orchids': { 'Dendrobium': { lo: 8000, hi: 18000 } }
+            };
+            fillPlantCategories();
+        });
+}
 
         function fillPlantCategories() {
             const cats = Object.keys(priceCatalog).sort();
