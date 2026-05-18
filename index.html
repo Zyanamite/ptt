@@ -294,6 +294,209 @@
             .contact-card { grid-template-columns: 1fr; padding: 30px 24px; }
             .gallery-grid { grid-template-columns: 1fr; }
         }
+        .calculator-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #666;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s;
+}
+
+.tab-btn.active {
+  color: #2d5a27;
+  border-bottom-color: #2d5a27;
+  font-weight: bold;
+}
+
+.calc-tab {
+  display: none;
+}
+
+.calc-tab.active {
+  display: block;
+}
+
+/* Service Cards */
+.service-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin: 30px 0;
+}
+
+.service-card {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 2px solid transparent;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border-color: #2d5a27;
+}
+
+.service-icon {
+  font-size: 40px;
+  margin-bottom: 15px;
+}
+
+.service-card h3 {
+  color: #2d5a27;
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+.service-card p {
+  color: #666;
+  font-size: 14px;
+}
+
+/* Service Details Form */
+.service-details {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  margin-top: 30px;
+}
+
+.service-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.service-option:last-child {
+  border-bottom: none;
+}
+
+.service-option label {
+  font-weight: 500;
+  flex: 1;
+}
+
+.service-option select,
+.service-option input {
+  width: 150px;
+  padding: 8px;
+  border: 1px solid #b8d4b0;
+  border-radius: 5px;
+}
+
+/* Estimate Summary */
+.estimate-summary {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.summary-section {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.summary-item-details {
+  flex: 1;
+}
+
+.summary-item-price {
+  font-weight: bold;
+  color: #2d5a27;
+  margin: 0 20px;
+}
+
+.remove-item {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.subtotal {
+  text-align: right;
+  font-size: 18px;
+  font-weight: bold;
+  color: #2d5a27;
+  margin-top: 15px;
+}
+
+.total-section {
+  text-align: center;
+  border-bottom: none;
+}
+
+.total-section h2 {
+  color: #2d5a27;
+  font-size: 32px;
+  margin: 20px 0;
+}
+
+.note {
+  color: #999;
+  font-style: italic;
+  margin: 10px 0 20px;
+}
+
+.send-btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.send-btn:hover {
+  background: #45a049;
+}
+
+.discount-info {
+  background: #fff3cd;
+  color: #856404;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 20px 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+  }
+  
+  .service-categories {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
     </style>
 </head>
 <body>
@@ -412,6 +615,126 @@
             </div>
         </div>
     </section>
+    <!-- Complete Price & Service Estimator -->
+<div class="calculator-section">
+  <h2>🌿 Complete Project Estimator</h2>
+  <p>Calculate both plants & services for your dream garden</p>
+  
+  <div class="calculator-tabs">
+    <button class="tab-btn active" onclick="switchTab('plants')">🌱 Plants & Products</button>
+    <button class="tab-btn" onclick="switchTab('services')">🔧 Services</button>
+    <button class="tab-btn" onclick="switchTab('summary')">📋 Full Estimate</button>
+  </div>
+  
+  <!-- Plants Tab -->
+  <div id="plants-tab" class="calc-tab active">
+    <div class="plant-calculator">
+      <div class="selection-area">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category:</label>
+            <select id="plant-category">
+              <option value="">Select category...</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Plant/Product:</label>
+            <select id="plant-name">
+              <option value="">Select item...</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Size/Quality:</label>
+            <select id="plant-size">
+              <option value="small">Small/Standard</option>
+              <option value="medium">Medium/Premium</option>
+              <option value="large">Large/Deluxe</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Quantity:</label>
+            <input type="number" id="plant-quantity" value="1" min="1" max="500">
+          </div>
+        </div>
+        
+        <button onclick="addPlantToEstimate()" class="add-btn">+ Add to Estimate</button>
+      </div>
+      
+      <div class="selected-plants-list" id="selected-plants"></div>
+    </div>
+  </div>
+  
+  <!-- Services Tab -->
+  <div id="services-tab" class="calc-tab">
+    <div class="services-calculator">
+      <div class="service-categories">
+        <div class="service-card" onclick="selectService('outdoor')">
+          <div class="service-icon">🏡</div>
+          <h3>Outdoor Landscaping</h3>
+          <p>Full garden design & installation</p>
+        </div>
+        
+        <div class="service-card" onclick="selectService('indoor')">
+          <div class="service-icon">🏢</div>
+          <h3>Indoor Greenery</h3>
+          <p>Office & home indoor plants</p>
+        </div>
+        
+        <div class="service-card" onclick="selectService('balcony')">
+          <div class="service-icon">🌺</div>
+          <h3>Balcony Gardens</h3>
+          <p>Small space transformations</p>
+        </div>
+        
+        <div class="service-card" onclick="selectService('fence')">
+          <div class="service-icon">🏗️</div>
+          <h3>Fence & Screening</h3>
+          <p>Privacy & decorative fences</p>
+        </div>
+        
+        <div class="service-card" onclick="selectService('maintenance')">
+          <div class="service-icon">✂️</div>
+          <h3>Maintenance</h3>
+          <p>Regular garden care</p>
+        </div>
+      </div>
+      
+      <div id="service-details" class="service-details" style="display:none;">
+        <h3 id="service-title"></h3>
+        <div id="service-form"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Summary Tab -->
+  <div id="summary-tab" class="calc-tab">
+    <div class="estimate-summary">
+      <div class="summary-section">
+        <h3>🌱 Selected Items</h3>
+        <div id="summary-plants"></div>
+        <div class="subtotal">Plants Subtotal: <span id="plants-subtotal">0 Ks</span></div>
+      </div>
+      
+      <div class="summary-section">
+        <h3>🔧 Services Selected</h3>
+        <div id="summary-services"></div>
+        <div class="subtotal">Services Subtotal: <span id="services-subtotal">0 Ks</span></div>
+      </div>
+      
+      <div class="summary-section total-section">
+        <div class="discount-info" id="discount-info"></div>
+        <h2>Total Estimate: <span id="grand-total">0 Ks</span></h2>
+        <p class="note">* Final price may vary based on site survey</p>
+        <button onclick="sendEstimate()" class="send-btn">📧 Send This Estimate</button>
+      </div>
+    </div>
+  </div>
+</div>
     <section id="gallery">
         <div class="container">
             <div class="section-title">
@@ -520,6 +843,417 @@
               .catch(() => { statusDiv.innerHTML = errorMsg; });
         });
     })();
+    // Complete Estimator with Services
+class CompleteEstimator {
+  constructor() {
+    this.plants = [];
+    this.services = [];
+    this.priceData = {};
+    this.init();
+  }
+
+  async init() {
+    await this.loadPriceData();
+    this.populatePlantCategories();
+    this.setupEventListeners();
+  }
+
+  // Load plant prices from catalog
+  async loadPriceData() {
+    try {
+      const response = await fetch('plant-catalogs.html');
+      const html = await response.text();
+      this.parsePlantPrices(html);
+    } catch (error) {
+      console.log('Using default prices...');
+      this.setDefaultPrices();
+    }
+  }
+
+  // Parse plant prices from your catalog page
+  parsePlantPrices(html) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    
+    // Match price patterns like "12,000 – 30,000 Ks"
+    const sections = doc.querySelectorAll('h2');
+    
+    sections.forEach(section => {
+      const category = section.textContent.trim();
+      let current = section.nextElementSibling;
+      
+      while (current && current.tagName !== 'H2') {
+        if (current.tagName === 'H3' || current.tagName === 'H4') {
+          const plantName = current.textContent.trim();
+          const priceText = current.nextElementSibling?.textContent || '';
+          const priceMatch = priceText.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
+          
+          if (priceMatch) {
+            if (!this.priceData[category]) {
+              this.priceData[category] = {};
+            }
+            
+            this.priceData[category][plantName] = {
+              low: parseInt(priceMatch[1].replace(/,/g, '')),
+              high: parseInt(priceMatch[2].replace(/,/g, ''))
+            };
+          }
+        }
+        current = current.nextElementSibling;
+      }
+    });
+  }
+
+  // Service pricing data (customize these based on your actual rates)
+  getServicePricing() {
+    return {
+      outdoor: {
+        name: 'Outdoor Landscaping',
+        options: [
+          { name: 'Garden Design & Planning', basePrice: 50000, unit: 'project' },
+          { name: 'Soil Preparation & Grading', basePrice: 30000, unit: 'area' },
+          { name: 'Plant Installation (per plant)', basePrice: 2000, unit: 'count' },
+          { name: 'Irrigation System Setup', basePrice: 80000, unit: 'system' },
+          { name: 'Lawn/Turf Installation (per sq ft)', basePrice: 500, unit: 'sqft' },
+          { name: 'Garden Path/Walkway', basePrice: 50000, unit: 'path' },
+          { name: 'Water Feature Installation', basePrice: 150000, unit: 'feature' },
+          { name: 'Outdoor Lighting Setup', basePrice: 60000, unit: 'system' }
+        ]
+      },
+      indoor: {
+        name: 'Indoor Greenery',
+        options: [
+          { name: 'Indoor Plant Consultation', basePrice: 20000, unit: 'visit' },
+          { name: 'Plant Selection & Placement', basePrice: 15000, unit: 'room' },
+          { name: 'Office Plant Installation', basePrice: 35000, unit: 'office' },
+          { name: 'Custom Planter Installation', basePrice: 25000, unit: 'planter' },
+          { name: 'Indoor Garden Wall Setup', basePrice: 120000, unit: 'wall' },
+          { name: 'Plant Maintenance (monthly)', basePrice: 15000, unit: 'month' }
+        ]
+      },
+      balcony: {
+        name: 'Balcony Gardens',
+        options: [
+          { name: 'Balcony Assessment & Design', basePrice: 15000, unit: 'visit' },
+          { name: 'Railing Planters Installation', basePrice: 20000, unit: 'set' },
+          { name: 'Vertical Garden Setup', basePrice: 40000, unit: 'wall' },
+          { name: 'Hanging Basket System', basePrice: 15000, unit: 'system' },
+          { name: 'Small Water Feature', basePrice: 35000, unit: 'feature' },
+          { name: 'Balcony Furniture Arrangement', basePrice: 20000, unit: 'setup' }
+        ]
+      },
+      fence: {
+        name: 'Fence & Screening',
+        options: [
+          { name: 'Living Fence Design', basePrice: 25000, unit: 'design' },
+          { name: 'Bamboo Screening (per ft)', basePrice: 3000, unit: 'ft' },
+          { name: 'Climbing Plant Trellis', basePrice: 15000, unit: 'section' },
+          { name: 'Privacy Hedge Planting (per ft)', basePrice: 5000, unit: 'ft' },
+          { name: 'Decorative Fence Panel', basePrice: 25000, unit: 'panel' },
+          { name: 'Fence Maintenance/Repair', basePrice: 20000, unit: 'visit' }
+        ]
+      },
+      maintenance: {
+        name: 'Plant Maintenance',
+        options: [
+          { name: 'Monthly Garden Maintenance', basePrice: 30000, unit: 'month' },
+          { name: 'Pruning & Trimming (per hour)', basePrice: 5000, unit: 'hour' },
+          { name: 'Fertilization Treatment', basePrice: 15000, unit: 'treatment' },
+          { name: 'Pest Control (organic)', basePrice: 20000, unit: 'treatment' },
+          { name: 'Plant Replacement Service', basePrice: 10000, unit: 'visit' },
+          { name: 'Seasonal Cleanup', basePrice: 25000, unit: 'season' },
+          { name: 'Soil Testing & Amendment', basePrice: 15000, unit: 'test' }
+        ]
+      }
+    };
+  }
+
+  // Populate plant categories dropdown
+  populatePlantCategories() {
+    const categorySelect = document.getElementById('plant-category');
+    const categories = Object.keys(this.priceData);
+    
+    categories.forEach(category => {
+      const option = document.createElement('option');
+      option.value = category;
+      option.textContent = category;
+      categorySelect.appendChild(option);
+    });
+  }
+
+  // Add plant to estimate
+  addPlantToEstimate() {
+    const category = document.getElementById('plant-category').value;
+    const plantName = document.getElementById('plant-name').value;
+    const size = document.getElementById('plant-size').value;
+    const quantity = parseInt(document.getElementById('plant-quantity').value);
+    
+    if (!category || !plantName) {
+      alert('Please select both category and plant');
+      return;
+    }
+    
+    const priceRange = this.priceData[category][plantName];
+    let unitPrice;
+    
+    switch(size) {
+      case 'small': unitPrice = priceRange.low; break;
+      case 'medium': unitPrice = Math.round((priceRange.low + priceRange.high) / 2); break;
+      case 'large': unitPrice = priceRange.high; break;
+    }
+    
+    const totalPrice = unitPrice * quantity;
+    
+    this.plants.push({
+      id: Date.now(),
+      category,
+      plantName,
+      size,
+      quantity,
+      unitPrice,
+      totalPrice
+    });
+    
+    this.updateAllDisplays();
+    this.clearPlantForm();
+  }
+
+  // Add service to estimate
+  addServiceToEstimate(serviceType, optionIndex, quantity = 1) {
+    const serviceData = this.getServicePricing()[serviceType];
+    const option = serviceData.options[optionIndex];
+    
+    const totalPrice = option.basePrice * quantity;
+    
+    this.services.push({
+      id: Date.now(),
+      serviceType,
+      serviceName: serviceData.name,
+      optionName: option.name,
+      unitPrice: option.basePrice,
+      quantity,
+      totalPrice
+    });
+    
+    this.updateAllDisplays();
+  }
+
+  // Calculate discounts
+  calculateDiscount(total) {
+    let discount = 0;
+    let discountText = '';
+    
+    if (total > 500000) {
+      discount = 0.10;
+      discountText = '10% discount on orders over 500,000 Ks!';
+    } else if (total > 200000) {
+      discount = 0.05;
+      discountText = '5% discount on orders over 200,000 Ks!';
+    }
+    
+    return { discount, discountText };
+  }
+
+  // Update all displays
+  updateAllDisplays() {
+    this.updatePlantsDisplay();
+    this.updateSummaryDisplay();
+  }
+
+  // Update plants list display
+  updatePlantsDisplay() {
+    const plantsDiv = document.getElementById('selected-plants');
+    let html = '';
+    
+    this.plants.forEach((plant, index) => {
+      html += `
+        <div class="summary-item">
+          <div class="summary-item-details">
+            <strong>${plant.plantName}</strong><br>
+            <small>${plant.category} | ${plant.size} | Qty: ${plant.quantity}</small>
+          </div>
+          <div class="summary-item-price">
+            ${plant.totalPrice.toLocaleString()} Ks
+          </div>
+          <button class="remove-item" onclick="estimator.removePlant(${index})">×</button>
+        </div>
+      `;
+    });
+    
+    plantsDiv.innerHTML = html || '<p class="empty-message">No plants added yet. Select from catalog above.</p>';
+  }
+
+  // Update summary tab
+  updateSummaryDisplay() {
+    // Plants summary
+    const plantsSummaryDiv = document.getElementById('summary-plants');
+    const plantsSubtotal = document.getElementById('plants-subtotal');
+    let plantsHtml = '';
+    let plantsTotal = 0;
+    
+    this.plants.forEach((plant, index) => {
+      plantsHtml += `
+        <div class="summary-item">
+          <span>${plant.plantName} (${plant.size}) × ${plant.quantity}</span>
+          <span>${plant.totalPrice.toLocaleString()} Ks</span>
+          <button class="remove-item" onclick="estimator.removePlant(${index})">×</button>
+        </div>
+      `;
+      plantsTotal += plant.totalPrice;
+    });
+    
+    plantsSummaryDiv.innerHTML = plantsHtml || '<p>No plants selected</p>';
+    plantsSubtotal.textContent = `${plantsTotal.toLocaleString()} Ks`;
+    
+    // Services summary
+    const servicesSummaryDiv = document.getElementById('summary-services');
+    const servicesSubtotal = document.getElementById('services-subtotal');
+    let servicesHtml = '';
+    let servicesTotal = 0;
+    
+    this.services.forEach((service, index) => {
+      servicesHtml += `
+        <div class="summary-item">
+          <div>
+            <strong>${service.serviceName}</strong><br>
+            <small>${service.optionName} × ${service.quantity}</small>
+          </div>
+          <span>${service.totalPrice.toLocaleString()} Ks</span>
+          <button class="remove-item" onclick="estimator.removeService(${index})">×</button>
+        </div>
+      `;
+      servicesTotal += service.totalPrice;
+    });
+    
+    servicesSummaryDiv.innerHTML = servicesHtml || '<p>No services selected</p>';
+    servicesSubtotal.textContent = `${servicesTotal.toLocaleString()} Ks`;
+    
+    // Grand total with discount
+    const subtotal = plantsTotal + servicesTotal;
+    const { discount, discountText } = this.calculateDiscount(subtotal);
+    const discountAmount = subtotal * discount;
+    const grandTotal = subtotal - discountAmount;
+    
+    document.getElementById('discount-info').innerHTML = discountText ? 
+      `<strong>${discountText}</strong> (Save ${discountAmount.toLocaleString()} Ks)` : '';
+    
+    document.getElementById('grand-total').textContent = `${grandTotal.toLocaleString()} Ks`;
+  }
+
+  // Service selection handler
+  selectService(serviceType) {
+    const serviceData = this.getServicePricing()[serviceType];
+    const detailsDiv = document.getElementById('service-details');
+    const titleDiv = document.getElementById('service-title');
+    const formDiv = document.getElementById('service-form');
+    
+    titleDiv.textContent = serviceData.name;
+    
+    let formHtml = '';
+    serviceData.options.forEach((option, index) => {
+      formHtml += `
+        <div class="service-option">
+          <label>${option.name} (${option.basePrice.toLocaleString()} Ks/${option.unit})</label>
+          <input type="number" id="qty-${index}" value="1" min="1" max="100" style="width: 80px;">
+          <button onclick="estimator.addServiceToEstimate('${serviceType}', ${index}, parseInt(document.getElementById('qty-${index}').value))">
+            Add
+          </button>
+        </div>
+      `;
+    });
+    
+    formDiv.innerHTML = formHtml;
+    detailsDiv.style.display = 'block';
+  }
+
+  // Remove items
+  removePlant(index) {
+    this.plants.splice(index, 1);
+    this.updateAllDisplays();
+  }
+
+  removeService(index) {
+    this.services.splice(index, 1);
+    this.updateAllDisplays();
+  }
+
+  // Clear form
+  clearPlantForm() {
+    document.getElementById('plant-name').value = '';
+    document.getElementById('plant-quantity').value = '1';
+  }
+
+  // Send estimate (you can customize this)
+  sendEstimate() {
+    let estimateText = 'ESTIMATE SUMMARY\n';
+    estimateText += '='.repeat(40) + '\n\n';
+    
+    if (this.plants.length > 0) {
+      estimateText += 'PLANTS & PRODUCTS:\n';
+      this.plants.forEach(plant => {
+        estimateText += `- ${plant.plantName} (${plant.size}) × ${plant.quantity}: ${plant.totalPrice.toLocaleString()} Ks\n`;
+      });
+    }
+    
+    if (this.services.length > 0) {
+      estimateText += '\nSERVICES:\n';
+      this.services.forEach(service => {
+        estimateText += `- ${service.serviceName} - ${service.optionName}: ${service.totalPrice.toLocaleString()} Ks\n`;
+      });
+    }
+    
+    const totalText = document.getElementById('grand-total').textContent;
+    estimateText += `\n${'='.repeat(40)}\n`;
+    estimateText += `TOTAL: ${totalText}\n`;
+    estimateText += `\n* Final price may vary based on site survey\n`;
+    estimateText += `\nContact: ပန်းသတင်း Landscaping Services`;
+    
+    // You can either show this in an alert or implement email sending
+    alert(estimateText);
+    
+    // Or open email client:
+    // window.location.href = `mailto:your@email.com?subject=Landscape Estimate Request&body=${encodeURIComponent(estimateText)}`;
+  }
+
+  // Setup event listeners
+  setupEventListeners() {
+    const categorySelect = document.getElementById('plant-category');
+    categorySelect.addEventListener('change', (e) => {
+      const plantSelect = document.getElementById('plant-name');
+      plantSelect.innerHTML = '<option value="">Select plant...</option>';
+      
+      if (this.priceData[e.target.value]) {
+        Object.keys(this.priceData[e.target.value]).forEach(plant => {
+          const option = document.createElement('option');
+          option.value = plant;
+          option.textContent = plant;
+          plantSelect.appendChild(option);
+        });
+      }
+    });
+  }
+}
+
+// Tab switching function
+function switchTab(tabName) {
+  // Update buttons
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  // Update tab content
+  document.querySelectorAll('.calc-tab').forEach(tab => tab.classList.remove('active'));
+  document.getElementById(`${tabName}-tab`).classList.add('active');
+}
+
+// Global functions for HTML onclick handlers
+let estimator;
+window.addPlantToEstimate = () => estimator.addPlantToEstimate();
+window.selectService = (type) => estimator.selectService(type);
+
+// Initialize
+window.addEventListener('DOMContentLoaded', () => {
+  estimator = new CompleteEstimator();
+});
 </script>
 </body>
 </html>
