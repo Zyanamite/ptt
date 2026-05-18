@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌿 Services & Pricing Guide - ပန်းသတင်း Landscape</title>
+    <style>
+        :root {
+            --primary: #2d5a27;
+            --secondary: #8B4513;
+            --accent: #D2691E;
+            --light: #f8f9e9;
+            --cream: #FFF8DC;
+            --gold: #DAA520;
+            --text: #333;
+            --border: #b8d4b0;
+            --card-bg: #ffffff;
+            --header-bg: linear-gradient(135deg, #2d5a27, #1a3a18);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans Myanmar', 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #f5f0e8 0%, #e8f5e9 100%);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation Bar */
+        .nav-bar {
+            background: var(--cream);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-brand {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .price-update {
+            background: var(--light);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            color: var(--secondary);
+            border: 1px solid var(--border);
+        }
+
+        /* Header */
+        .page-header {
+            background: var(--header-bg);
+            color: white;
+            padding: 60px 0 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="80" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.5;
+        }
+
+        .page-header .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .page-header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+
+        .update-info {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-top: 15px;
+            font-size: 0.95em;
+        }
+
+        /* Category Section */
+        .category-section {
+            margin: 50px 0;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .category-header {
+            background: linear-gradient(135deg, var(--primary), #1a3a18);
+            color: white;
+            padding: 20px 30px;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .category-icon {
+            font-size: 1.5em;
+        }
+
+        .category-description {
+            padding: 15px 30px;
+            background: var(--light);
+            color: #666;
+            font-style: italic;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* Service Cards Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 0;
+            padding: 0;
+        }
+
+        .service-item {
+            padding: 25px;
+            border-right: 1px solid #f0f0f0;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s;
+            position: relative;
+            background: white;
+        }
+
+        .service-item:hover {
+            background: var(--light);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+
+        .service-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .badge-popular {
+            background: #FFF3CD;
+            color: #856404;
+        }
+
+        .badge-premium {
+            background: #D4EDDA;
+            color: #155724;
+        }
+
+        .badge-essential {
+            background: #CCE5FF;
+            color: #004085;
+        }
+
+        .badge-special {
+            background: #F8D7DA;
+            color: #721C24;
+        }
+
+        .service-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .service-myanmar {
+            color: var(--secondary);
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .service-description {
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .service-description-mm {
+            color: #888;
+            font-size: 0.9em;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .service-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .price-range {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--accent);
+            background: #FFF3E0;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .service-duration {
+            color: #666;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .includes-list {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .includes-list li {
+            list-style: none;
+            padding: 3px 0;
+        }
+
+        .includes-list li::before {
+            content: '✓ ';
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Package Cards */
+        .packages-section {
+            margin: 50px 0;
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .package-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .package-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            border-color: var(--primary);
+        }
+
+        .package-card.featured {
+            border-color: var(--gold);
+            background: linear-gradient(135deg, #FFF8DC, white);
+        }
+
+        .package-card.featured::before {
+            content: 'BEST VALUE';
+            position: absolute;
+            top: 15px;
+            right: -30px;
+            background: var(--gold);
+            color: white;
+            padding: 5px 40px;
+            transform: rotate(45deg);
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .package-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .package-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .package-price {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--accent);
+            margin: 15px 0;
+        }
+
+        .package-price small {
+            font-size: 0.5em;
+            color: #666;
+        }
+
+        .package-features {
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .package-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            list-style: none;
+        }
+
+        .package-features li::before {
+            content: '🌿 ';
+        }
+
+        .package-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .package-btn:hover {
+            background: #3a7a35;
+            transform: translateY(-2px);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--header-bg);
+            color: white;
+            text-align: center;
+            padding: 60px 0;
+            margin: 60px 0;
+            border-radius: 20px;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 2px solid white;
+        }
+
+        .cta-btn.primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .cta-btn.secondary {
+            background: transparent;
+            color: white;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+
+        .footer a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2em;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .service-item {
+                border-right: none;
+            }
+            
+            .packages-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .package-card.featured::before {
+                right: -25px;
+                padding: 5px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                🌿 ပန်းသတင်း LANDSCAPE
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="plant-catalogs.html">Plant Catalog</a></li>
+                <li><a href="services.html" class="active">Services</a></li>
+                <li><a href="index.html#calculator">Calculator</a></li>
+            </ul>
+            <div class="price-update">
+                🔄 Prices Updated: <span id="update-date"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>🌿 Our Services & Pricing</h1>
+            <p class="subtitle">Professional Landscaping Services စျေးနှုန်းလမ်းညွှန်</p>
+            <div class="update-info">
+                💡 All services include consultation. Final pricing after site survey.
+                ဈေးနှုန်းအားလုံး ကွင်းဆင်းစစ်ဆေးပြီးမှ အတည်ပြုပါမည်။
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Outdoor Landscaping -->
+        <section class="category-section">
+            <div class="category-header">
+                <span class="category-icon">🏡</span>
+                Outdoor Landscaping / အိမ်ပြင်ပန်းဥယျာဉ်
+            </div>
+            <div class="category-description">
+                Complete outdoor transformation services from design to installation. 
+                အိမ်အပြင်ဘက် ပန်းဥယျာဉ်ဒီဇိုင်းဆွဲခြင်းမှ တပ်ဆင်ခြင်းအထိ ဝန်ဆောင်မှုအပြည့်။
+            </div>
+            <div class="services-grid">
+                <div class="service-item">
+                    <span class="service-badge badge-popular">Popular</span>
+                    <div class="service-name">Garden Design & Planning</div>
+                    <div class="service-myanmar">ဥယျာဉ်ဒီဇိုင်းရေးဆွဲခြင်း</div>
+                    <div class="service-description">
+                        Professional landscape design tailored to your space, style, and budget. 
+                        Includes 2D/3D visualization and plant selection guide.
+                    </div>
+                    <div class="service-description-mm">
+                        သင့်နေရာ၊ စတိုင်နှင့် ဘတ်ဂျက်နှင့်ကိုက်ညီသော ကျွမ်းကျင်ဒီဇိုင်း။
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">50,000 – 150,000 Ks</span>
+                        <span class="service-duration">⏱️ 1-2 weeks</span>
+                    </div>
+                    <ul class="includes-list">
+                        <li>Site survey & analysis</li>
+                        <li>2D layout plan</li>
+                        <li>Plant recommendation list</li>
+                        <li>Material suggestions</li>
+                    </ul>
+                </div>
+
+                <div class="service-item">
+                    <span class="service-badge badge-essential">Essential</span>
+                    <div class="service-name">Soil Preparation & Grading</div>
+                    <div class="service-myanmar">မြေပြင်ဆင်ခြင်းနှင့် အဆင့်ညှိခြင်း</div>
+                    <div class="service-description">
+                        Complete soil testing, amendment, and grading for optimal plant growth.
+                        We ensure proper drainage and nutrient balance.
+                    </div>
+                    <div class="service-description-mm">
+                        အပင်အကောင်းဆုံးကြီးထွားရန် မြေဆီလွှာစစ်ဆေးခြင်းနှင့် ပြင်ဆင်ခြင်း။
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">30,000 – 80,000 Ks</span>
+                        <span class="service-duration">⏱️ 2-5 days</span>
+                    </div>
+                    <ul class="includes-list">
+                        <li>Soil pH testing</li>
+                        <li>Organic matter mixing</li>
+                        <li>Drainage system setup</li>
+                        <li>Area leveling</li>
+                    </ul>
+                </div>
+
+                <div class="service-item">
+                    <span class="service-badge badge-popular">Popular</span>
+                    <div class="service-name">Plant Installation Service</div>
+                    <div class="service-myanmar">အပင်စိုက်ပျိုးခြင်းဝန်ဆောင်မှု</div>
+                    <div class="service-description">
+                        Professional planting with proper spacing, depth, and aftercare.
+                        Price per 10 plants installation.
+                    </div>
+                    <div class="service-description-mm">
+                        အပင် ၁၀ ပင်လျှင် စနစ်တကျစိုက်ပျိုးပေးခြင်း။
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">15,000 – 30,000 Ks</span>
+                        <span class="service-duration">⏱️ Per 10 plants</span>
+                    </div>
+                    <ul class="includes-list">
+                        <li>Proper hole digging</li>
+                        <li>Root preparation</li>
+                        <li>Initial fertilization</li>
+                        <li>Watering setup</li>
+                    </ul>
+                </div>
+
+                <div class="service-item">
+                    <span class="service-badge badge-premium">Premium</span>
+                    <div class="service-name">Irrigation System Installation</div>
+                    <div class="service-myanmar">ရေသွင်းစနစ်တပ်ဆင်ခြင်း</div>
+                    <div class="service-description">
+                        Automated drip or sprinkler system design and installation.
+                        Save water and time with smart irrigation.
+                    </div>
+                    <div class="service-description-mm">
+                        အလိုအလျောက်ရေသွင်းစနစ် တပ်ဆင်ပေးခြင်း။
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">80,000 – 250,000 Ks</span>
+                        <span class="service-duration">⏱️ 3-7 days</span>
+                    </div>
+                    <ul class="includes-list">
+                        <li>System design plan</li>
+                        <li>Timer controller</li>
+                        <li>Drip lines/sprinklers</li>
+                        <li>1-year warranty</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Indoor Greenery -->
+        <section class="category-section">
+            <div class="category-header">
+                <span class="category-icon">🏢</span>
+                Indoor Greenery / အိမ်တွင်းအပင်အလှဆင်ခြင်း
+            </div>
+            <div class="category-description">
+                Bring nature indoors with our professional indoor plant design and maintenance services.
+                အိမ်တွင်း၊ ရုံးခန်းများတွင် သဘာဝအလှတရားဖန်တီးပေးခြင်း။
+            </div>
+            <div class="services-grid">
+                <div class="service-item">
+                    <span class="service-badge badge-popular">Popular</span>
+                    <div class="service-name">Indoor Plant Consultation</div>
+                    <div class="service-myanmar">အိမ်တွင်းအပင်အတိုင်ပင်ခံ</div>
+                    <div class="service-description">
+                        Expert assessment of your space for optimal plant selection.
+                        We consider light, humidity, and your lifestyle.
+                    </div>
+                    <div class="service-description-mm">
+                        သင့်နေရာအတွက် အကောင်းဆုံးအပင်များရွေးချယ်ရန် ကျွမ်းကျင်အကြံဉာဏ်ပေးခြင်း။
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">20,000 Ks</span>
+                        <span class="service-duration">⏱️ 1-2 hours</span>
+                    </div>
+                </div>
+
+                <div class="service-item">
+                    <span class="service-badge badge-essential">Essential</span>
+                    <div class="service-name">Office Plant Setup</div>
+                    <div class="service-myanmar">ရုံးခန်းအပင်တပ်ဆင်ခြင်း</div>
+                    <div class="service-description">
+                        Complete office greening solution with low-maintenance plants.
+                        Package for 5 plants including decorative pots.
+                    </div>
+                    <div class="service-description-mm">
+                        အပင် ၅ ပင်ပါအော်ဖီးစ်အစိမ်းရောင်ဖန်တီးမှုပက်ကေ့ချ်။
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">50,000 – 100,000 Ks</span>
+                        <span class="service-duration">⏱️ 1 day</span>
+                    </div>
+                </div>
+
+                <div class="service-item">
+                    <span class="service-badge badge-premium">Premium</span>
+                    <div class="service-name">Living Wall / Vertical Garden</div>
+                    <div class="service-myanmar">နံရံစိမ်းဥယျာဉ်</div>
+                    <div class="service-description">
+                        Stunning indoor vertical garden installation. 
+                        Custom design with automatic irrigation system included.
+                    </div>
+                    <div class="service-description-mm">
+                        အလိုအလျောက်ရေသွင်းစနစ်ပါဝင်သော နံရံစိမ်းဥယျာဉ်တပ်ဆင်ခြင်း။
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">120,000 – 350,000 Ks</span>
+                        <span class="service-duration">⏱️ 3-5 days</span>
+                    </div>
+                </div>
+
+                <div class="service-item">
+                    <span class="service-badge badge-special">Monthly</span>
+                    <div class="service-name">Indoor Plant Maintenance</div>
+                    <div class="service-myanmar">အိမ်တွင်းအပင်ထိန်းသိမ်းခြင်း</div>
+                    <div class="service-description">
+                        Regular care including watering, pruning, fertilizing, and pest check.
+                        Monthly visit service.
+                    </div>
+                    <div class="service-description-mm">
+                        လစဉ်ရေလောင်း၊ ကိုင်းဖြတ်၊ မြေသြဇာကျွေးခြင်းဝန်ဆောင်မှု။
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">15,000 – 30,000 Ks/month</span>
+                        <span class="service-duration">⏱️ Monthly visit</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Balcony Gardens -->
+        <section class="category-section">
+            <div class="category-header">
+                <span class="category-icon">🌺</span>
+                Balcony & Small Spaces / လသာဆောင်နှင့် နေရာကျဉ်းဥယျာဉ်
+            </div>
+            <div class="category-description">
+                Transform your balcony or small space into a green paradise.
+                လသာဆောင်နှင့် နေရာကျဉ်းလေးများကို စိမ်းလန်းသောပရဒိသုအဖြစ်ပြောင်းလဲခြင်း။
+            </div>
+            <div class="services-grid">
+                <div class="service-item">
+                    <div class="service-name">Balcony Assessment & Design</div>
+                    <div class="service-myanmar">လသာဆောင်အကဲဖြတ်ဒီဇိုင်း</div>
+                    <div class="service-description">
+                        Space optimization plan with weight consideration and wind factors.
+                        Perfect for condos and apartments.
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">15,000 – 30,000 Ks</span>
+                        <span class="service-duration">⏱️ 1 day</span>
+                    </div>
+                </div>
+
+                <div class="service-item">
+                    <span class="service-badge badge-popular">Popular</span>
+                    <div class="service-name">Railing Planter System</div>
+                    <div class="service-myanmar">လက်ရန်းစိုက်ခွက်စနစ်</div>
+                    <div class="service-description">
+                        Custom railing planters with automatic watering system.
+                        Set of 5 planters with installation.
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">25,000 – 50,000 Ks</span>
+                        <span class="service-duration">⏱️ Half day</span>
+                    </div>
+                </div>
+
+                <div class="service-item">
+                    <div class="service-name">Vertical Garden for Balcony</div>
+                    <div class="service-myanmar">လသာဆောင်ဒေါင်လိုက်ဥယျာဉ်</div>
+                    <div class="service-description">
+                        Space-saving vertical planting system.
+                        Includes structure, plants, and irrigation.
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">40,000 – 100,000 Ks</span>
+                        <span class="service-duration">⏱️ 1-2 days</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fence & Screening -->
+        <section class="category-section">
+            <div class="category-header">
+                <span class="category-icon">🏗️</span>
+                Fence & Screening / ခြံစည်းရိုးနှင့် ကာရံခြင်း
+            </div>
+            <div class="category-description">
+                Natural privacy solutions with living fences and decorative screening.
+                သဘာဝကာရံနည်းလမ်းများဖြင့် လှပသော ခြံစည်းရိုးများဖန်တီးခြင်း။
+            </div>
+            <div class="services-grid">
+                <div class="service-item">
+                    <span class="service-badge badge-popular">Popular</span>
+                    <div class="service-name">Living Fence Installation</div>
+                    <div class="service-myanmar">သက်ရှိခြံစည်းရိုးတပ်ဆင်ခြင်း</div>
+                    <div class="service-description">
+                        Beautiful flowering or evergreen fence using climbing plants.
+                        Price per 10 feet with trellis structure.
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">30,000 – 80,000 Ks</span>
+                        <span class="service-duration">⏱️ Per 10 ft</span>
+                    </div>
+                </div>
+
+                <div class="service-item">
+                    <div class="service-name">Bamboo Screening</div>
+                    <div class="service-myanmar">ဝါးကာရံခြင်း</div>
+                    <div class="service-description">
+                        Natural bamboo screens for instant privacy.
+                        Durable and weather-resistant treatment included.
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">3,000 – 5,000 Ks</span>
+                        <span class="service-duration">⏱️ Per foot</span>
+                    </div>
+                </div>
+
+                <div class="service-item">
+                    <span class="service-badge badge-premium">Premium</span>
+                    <div class="service-name">Decorative Trellis & Climbers</div>
+                    <div class="service-myanmar">အလှဆင်စင်လှေကားနှင့်နွယ်ပင်များ</div>
+                    <div class="service-description">
+                        Custom-designed trellis with fragrant flowering climbers.
+                        Complete with planting and training.
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">35,000 – 80,000 Ks</span>
+                        <span class="service-duration">⏱️ Per section</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Maintenance Services -->
+        <section class="category-section">
+            <div class="category-header">
+                <span class="category-icon">✂️</span>
+                Maintenance Services / ထိန်းသိမ်းစောင့်ရှောက်ခြင်း
+            </div>
+            <div class="category-description">
+                Keep your garden healthy and beautiful with our professional maintenance plans.
+                သင့်ဥယျာဉ်ကို အမြဲလှပကျန်းမာစေရန် ကျွမ်းကျင်ထိန်းသိမ်းမှုအစီအစဉ်များ။
+            </div>
+            <div class="services-grid">
+                <div class="service-item">
+                    <span class="service-badge badge-essential">Essential</span>
+                    <div class="service-name">Monthly Garden Care</div>
+                    <div class="service-myanmar">လစဉ်ဥယျာဉ်ထိန်းသိမ်းခြင်း</div>
+                    <div class="service-description">
+                        Regular maintenance: weeding, pruning, fertilizing, pest inspection.
+                        One visit per month. Price varies by garden size.
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">30,000 – 80,000 Ks/month</span>
+                        <span class="service-duration">⏱️ Monthly</span>
+                    </div>
+                </div>
+
+                <div class="service-item">
+                    <div class="service-name">Pruning & Trimming</div>
+                    <div class="service-myanmar">ကိုင်းဖြတ်ခြင်းနှင့်ပုံသွင်းခြင်း</div>
+                    <div class="service-description">
+                        Professional pruning for health, shape, and flowering.
+                        Per hour service with cleanup included.
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">5,000 – 8,000 Ks/hour</span>
+                        <span class="service-duration">⏱️ Per hour</span>
+                    </div>
+                </div>
+
+                <div class="service-item">
+                    <span class="service-badge badge-special">Organic</span>
+                    <div class="service-name">Pest Control (Organic)</div>
+                    <div class="service-myanmar">သဘာဝပိုးသတ်ခြင်း</div>
+                    <div class="service-description">
+                        Eco-friendly pest management using neem and natural solutions.
+                        Safe for pets and children.
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">20,000 – 40,000 Ks/treatment</span>
+                        <span class="service-duration">⏱️ Per visit</span>
+                    </div>
+                </div>
+
+                <div class="service-item">
+                    <div class="service-name">Seasonal Cleanup</div>
+                    <div class="service-myanmar">ရာသီအလိုက်သန့်ရှင်းရေး</div>
+                    <div class="service-description">
+                        Complete garden cleanup: leaf removal, deadheading, mulching.
+                        Recommended 2-4 times per year.
+                    </div>
+                    <div class="service-details">
+                        <span class="price-range">25,000 – 50,000 Ks</span>
+                        <span class="service-duration">⏱️ Per season</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Service Packages -->
+        <section class="packages-section">
+            <h2 style="text-align: center; color: var(--primary); font-size: 2.2em; margin-bottom: 10px;">
+                🎯 Service Packages
+            </h2>
+            <p style="text-align: center; color: #666; margin-bottom: 40px;">
+                Bundled services at special prices / အထူးပက်ကေ့ချ်များ
+            </p>
+            
+            <div class="packages-grid">
+                <!-- Basic Package -->
+                <div class="package-card">
+                    <div class="package-icon">🌱</div>
+                    <div class="package-name">Starter Package</div>
+                    <div class="package-price">
+                        150,000 Ks<br>
+                        <small>Perfect for beginners</small>
+                    </div>
+                    <ul class="package-features">
+                        <li>Garden consultation (1 hour)</li>
+                        <li>Soil testing & preparation</li>
+                        <li>10 plants installation</li>
+                        <li>Basic pruning tutorial</li>
+                        <li>1-month follow-up visit</li>
+                    </ul>
+                    <button class="package-btn" onclick="addPackageToCalculator('starter')">
+                        Add to Estimate
+                    </button>
+                </div>
+
+                <!-- Popular Package -->
+                <div class="package-card featured">
+                    <div class="package-icon">🌳</div>
+                    <div class="package-name">Garden Makeover</div>
+                    <div class="package-price">
+                        450,000 Ks<br>
+                        <small>Most popular choice</small>
+                    </div>
+                    <ul class="package-features">
+                        <li>Complete garden design</li>
+                        <li>Soil preparation & grading</li>
+                        <li>25 plants of your choice</li>
+                        <li>Drip irrigation system</li>
+                        <li>Decorative pebble paths</li>
+                        <li>3-month maintenance plan</li>
+                    </ul>
+                    <button class="package-btn" onclick="addPackageToCalculator('makeover')">
+                        Add to Estimate
+                    </button>
+                </div>
+
+                <!-- Premium Package -->
+                <div class="package-card">
+                    <div class="package-icon">🏰</div>
+                    <div class="package-name">Premium Estate</div>
+                    <div class="package-price">
+                        950,000 Ks<br>
+                        <small>Complete transformation</small>
+                    </div>
+                    <ul class="package-features">
+                        <li>Full landscape design</li>
+                        <li>Soil engineering & drainage</li>
+                        <li>50+ premium plants</li>
+                        <li>Automatic irrigation</li>
+                        <li>Outdoor lighting setup</li>
+                        <li>Water feature installation</li>
+                        <li>6-month maintenance</li>
+                        <li>1-year plant warranty</li>
+                    </ul>
+                    <button class="package-btn" onclick="addPackageToCalculator('premium')">
+                        Add to Estimate
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>Ready to Transform Your Space?</h2>
+            <p style="font-size: 1.2em; margin: 20px 0;">
+                သင့်နေရာကို စိမ်းလန်းလှပစေရန် အဆင်သင့်ဖြစ်ပြီလား?
+            </p>
+            <div class="cta-buttons">
+                <a href="index.html#calculator" class="cta-btn primary">
+                    📊 Use Price Calculator
+                </a>
+                <a href="index.html" class="cta-btn secondary">
+                    🏠 Back to Home
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p style="font-size: 1.2em; margin-bottom: 10px;">
+                🌿 ပန်းသတင်း Landscape Services
+            </p>
+            <p>Premium Landscaping & Plant Services</p>
+            <p style="margin-top: 15px;">
+                📍 Yangon, Myanmar | 📞 Contact for Consultation
+            </p>
+            <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.8;">
+                © 2024 ပန်းသတင်း Landscape. All services are customizable. 
+                Site survey required for final pricing.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Set today's date for price update
+        document.getElementById('update-date').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Package prices for calculator integration
+        const packages = {
+            starter: { name: 'Starter Package', price: 150000 },
+            makeover: { name: 'Garden Makeover Package', price: 450000 },
+            premium: { name: 'Premium Estate Package', price: 950000 }
+        };
+
+        // Function to add package to calculator (can be called from index.html)
+        function addPackageToCalculator(packageType) {
+            const pkg = packages[packageType];
+            
+            // Try to communicate with parent page or redirect to calculator
+            if (window.opener && !window.opener.closed) {
+                // If opened from calculator page
+                window.opener.postMessage({
+                    type: 'addPackage',
+                    package: pkg
+                }, '*');
+                window.close();
+            } else {
+                // Store in sessionStorage and redirect
+                sessionStorage.setItem('selectedPackage', JSON.stringify(pkg));
+                window.location.href = 'index.html#calculator';
+            }
+        }
+
+        // Handle message from calculator page
+        window.addEventListener('message', function(event) {
+            if (event.data.type === 'requestPackages') {
+                event.source.postMessage({
+                    type: 'packagesData',
+                    packages: packages
+                }, '*');
+            }
+        });
+
+        console.log('🌿 Services page loaded successfully!');
+        console.log('Browse our services and use the calculator for estimates.');
+    </script>
+</body>
+</html>
