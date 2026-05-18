@@ -407,7 +407,7 @@
     <div class="brand">ပန်းသတင်း <small>LANDSCAPE</small></div>
     <div class="top-bar-actions">
         <span class="price-status loading" id="priceStatus">🔄 Loading prices...</span>
-        <button class="btn-refresh" onclick="loadPrices()" title="Refresh prices from Google Sheet">🔄 Refresh Prices</button>
+        <button class="btn-refresh" id="btnRefresh" title="Refresh prices from Google Sheet">🔄 Refresh Prices</button>
         <a href="https://zyanamite.github.io//ptt/" class="btn-main" target="_blank" rel="noopener">
             🌐 Go to Main Site
         </a>
@@ -792,54 +792,63 @@ const plantData = {
     ]
 };
 
-// ── Price Loading Logic ──
-let sheetPrices = {};
+// ── Price Loading Logic (CSP-safe — no eval, no inline handlers) ──
+var sheetPrices = {};
 
-async function loadPrices() {
-    const statusEl = document.getElementById('priceStatus');
+function loadPrices() {
+    var statusEl = document.getElementById('priceStatus');
+    if (!statusEl) return;
+    
     statusEl.textContent = '🔄 Loading prices...';
     statusEl.className = 'price-status loading';
 
-    try {
-        const response = await fetch(GOOGLE_SHEET_CSV_URL);
-        if (!response.ok) throw new Error('Sheet not accessible');
-        const csvText = await response.text();
-        const rows = csvText.trim().split('\n').map(row => {
-            const cols = [];
-            let current = '';
-            let inQuotes = false;
-            for (let char of row) {
-                if (char === '"') { inQuotes = !inQuotes; }
-                else if (char === ',' && !inQuotes) { cols.push(current.trim()); current = ''; }
-                else { current += char; }
+    fetch(GOOGLE_SHEET_CSV_URL)
+        .then(function(response) {
+            if (!response.ok) throw new Error('Sheet not accessible');
+            return response.text();
+        })
+        .then(function(csvText) {
+            var rows = csvText.trim().split('\n').map(function(row) {
+                var cols = [];
+                var current = '';
+                var inQuotes = false;
+                for (var i = 0; i < row.length; i++) {
+                    var char = row.charAt(i);
+                    if (char === '"') { inQuotes = !inQuotes; }
+                    else if (char === ',' && !inQuotes) { cols.push(current.trim()); current = ''; }
+                    else { current += char; }
+                }
+                cols.push(current.trim());
+                return cols;
+            });
+
+            sheetPrices = {};
+            for (var i = 1; i < rows.length; i++) {
+                var filename = rows[i][0];
+                var price = rows[i][1];
+                var status = rows[i][2];
+                var note = rows[i][3];
+                if (filename && price) {
+                    sheetPrices[filename.trim()] = {
+                        price: price.trim(),
+                        status: (status || 'instock').trim().toLowerCase(),
+                        note: (note || '').trim()
+                    };
+                }
             }
-            cols.push(current.trim());
-            return cols;
+
+            var count = Object.keys(sheetPrices).length;
+            statusEl.textContent = '✅ Prices loaded: ' + count + ' items';
+            statusEl.className = 'price-status success';
+            renderAllCards();
+        })
+        .catch(function(err) {
+            console.warn('Google Sheet load failed, using defaults:', err.message);
+            statusEl.textContent = '⚠️ Using default prices (sheet unavailable)';
+            statusEl.className = 'price-status error';
+            sheetPrices = {};
+            renderAllCards();
         });
-
-        // rows[0] is header: filename, price, status, note
-        for (let i = 1; i < rows.length; i++) {
-            const [filename, price, status, note] = rows[i];
-            if (filename && price) {
-                sheetPrices[filename.trim()] = {
-                    price: price.trim(),
-                    status: (status || 'instock').trim().toLowerCase(),
-                    note: (note || '').trim()
-                };
-            }
-        }
-
-        const count = Object.keys(sheetPrices).length;
-        statusEl.textContent = `✅ Prices loaded: ${count} items`;
-        statusEl.className = 'price-status success';
-        renderAllCards();
-    } catch (err) {
-        console.warn('Google Sheet load failed, using defaults:', err.message);
-        statusEl.textContent = '⚠️ Using default prices (sheet unavailable)';
-        statusEl.className = 'price-status error';
-        sheetPrices = {};
-        renderAllCards();
-    }
 }
 
 function getPrice(filename) {
@@ -953,27 +962,38 @@ document.getElementById('sheetLink').href = GOOGLE_SHEET_CSV_URL;
 renderAllCards();
 // Then try loading live prices
 loadPrices();
-     // ── Back to Top Button ──
-const backToTopBtn = document.getElementById('backToTop');
+// ── Back to Top Button (CSP-safe — no inline handlers) ──
+(function() {
+    var backToTopBtn = document.getElementById('backToTop');
+    if (!backToTopBtn) return;
 
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 500) {
-        backToTopBtn.classList.add('visible');
-    } else {
-        backToTopBtn.classList.remove('visible');
+    function onScroll() {
+        if (window.scrollY > 500) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
     }
-});
 
-backToTopBtn.addEventListener('click', () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-});
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.addEventListener('scroll', onScroll);
+    backToTopBtn.addEventListener('click', scrollToTop);
+})();
+ // ── Refresh Button (CSP-safe) ──
+(function() {
+    var btnRefresh = document.getElementById('btnRefresh');
+    if (btnRefresh) {
+        btnRefresh.addEventListener('click', loadPrices);
+    }
+})();   
 </script>
-<!-- Back to Top Button -->
+<!-- Back to Top Button (CSP-safe) -->
 <button class="back-to-top" id="backToTop" title="Back to top" aria-label="Back to top">
     ↑
 </button>
+    
 </body>
 </html>
