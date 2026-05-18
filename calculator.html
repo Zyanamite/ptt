@@ -6,171 +6,118 @@
     <title>ပန်းသတင်း Landscaping Services - Calculator</title>
     <style>
         :root {
-            --primary: #2d5a27;
-            --secondary: #8B4513;
-            --accent: #D2691E;
-            --light: #f8f9e9;
-            --cream: #FFF8DC;
-            --gold: #DAA520;
-            --text: #333;
-            --border: #b8d4b0;
+            --primary: #2d5a27; --secondary: #8B4513; --accent: #D2691E;
+            --light: #f8f9e9; --cream: #FFF8DC; --gold: #DAA520;
+            --text: #333; --border: #b8d4b0;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Noto Sans Myanmar', 'Segoe UI', system-ui, sans-serif;
-            background: linear-gradient(135deg, #f5f0e8 0%, #e8f5e9 100%);
-            color: var(--text);
-            line-height: 1.6;
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            font-family:'Noto Sans Myanmar','Segoe UI',system-ui,sans-serif;
+            background:linear-gradient(135deg,#f5f0e8 0%,#e8f5e9 100%);
+            color:var(--text);line-height:1.6;
         }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-
-        .nav {
-            background: var(--cream);
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky; top: 0; z-index: 1000;
-            border-bottom: 3px solid var(--primary);
+        .container{max-width:1200px;margin:0 auto;padding:0 20px}
+        .nav{
+            background:var(--cream);padding:15px 0;box-shadow:0 2px 10px rgba(0,0,0,0.1);
+            position:sticky;top:0;z-index:1000;border-bottom:3px solid var(--primary);
         }
-        .nav .container {
-            display: flex; justify-content: space-between;
-            align-items: center; flex-wrap: wrap; gap: 15px;
+        .nav .container{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
+        .nav-brand{font-size:1.3em;font-weight:bold;color:var(--primary)}
+        .nav-links{display:flex;gap:15px;list-style:none;flex-wrap:wrap}
+        .nav-links a{
+            color:var(--primary);text-decoration:none;font-weight:500;
+            padding:8px 15px;border-radius:20px;transition:all 0.3s;border:2px solid transparent;
         }
-        .nav-brand { font-size: 1.3em; font-weight: bold; color: var(--primary); }
-        .nav-links { display: flex; gap: 15px; list-style: none; flex-wrap: wrap; }
-        .nav-links a {
-            color: var(--primary); text-decoration: none; font-weight: 500;
-            padding: 8px 15px; border-radius: 20px; transition: all 0.3s;
-            border: 2px solid transparent;
+        .nav-links a:hover,.nav-links a.active{background:var(--primary);color:white}
+        .header{
+            background:linear-gradient(rgba(45,90,39,0.9),rgba(45,90,39,0.8));
+            color:white;padding:60px 20px 50px;text-align:center;
         }
-        .nav-links a:hover, .nav-links a.active {
-            background: var(--primary); color: white;
+        .header h1{font-size:2.5em;margin-bottom:10px}
+        .header p{font-size:1.2em;opacity:0.9}
+        .section{margin:50px 0}
+        .calculator-container{
+            background:white;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.1);overflow:hidden;
         }
-
-        .header {
-            background: linear-gradient(rgba(45,90,39,0.9), rgba(45,90,39,0.8));
-            color: white; padding: 60px 20px 50px; text-align: center;
+        .calc-header{
+            background:linear-gradient(135deg,var(--primary),#1a3a18);
+            color:white;padding:20px 30px;text-align:center;
         }
-        .header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-        .header p { font-size: 1.2em; opacity: 0.9; }
-
-        .section { margin: 50px 0; }
-        .section-title { text-align: center; color: var(--primary); font-size: 2.2em; margin-bottom: 10px; }
-        .section-subtitle { text-align: center; color: #666; font-size: 1.1em; margin-bottom: 35px; font-style: italic; }
-
-        .calculator-container {
-            background: white; border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden;
+        .calc-header h2{margin-bottom:15px}
+        .calc-tabs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+        .calc-tab-btn{
+            background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.3);
+            color:white;padding:10px 20px;border-radius:25px;cursor:pointer;font-size:0.95em;transition:all 0.3s;
         }
-        .calc-header {
-            background: linear-gradient(135deg, var(--primary), #1a3a18);
-            color: white; padding: 20px 30px; text-align: center;
+        .calc-tab-btn.active{background:white;color:var(--primary);border-color:white}
+        .calc-body{padding:30px}
+        .calc-panel{display:none}
+        .calc-panel.active{display:block}
+        .plant-selector{
+            display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+            gap:15px;background:var(--light);padding:25px;border-radius:15px;margin-bottom:25px;
         }
-        .calc-header h2 { margin-bottom: 15px; }
-        .calc-tabs { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-        .calc-tab-btn {
-            background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3);
-            color: white; padding: 10px 20px; border-radius: 25px; cursor: pointer;
-            font-size: 0.95em; transition: all 0.3s;
+        .form-group{display:flex;flex-direction:column}
+        .form-group label{font-weight:600;color:var(--primary);margin-bottom:5px}
+        .form-group select,.form-group input{
+            padding:10px;border:2px solid var(--border);border-radius:8px;font-size:16px;
         }
-        .calc-tab-btn.active { background: white; color: var(--primary); border-color: white; }
-        .calc-body { padding: 30px; }
-        .calc-panel { display: none; }
-        .calc-panel.active { display: block; }
-
-        .plant-selector {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px; background: var(--light); padding: 25px; border-radius: 15px; margin-bottom: 25px;
+        .btn-add{
+            background:var(--primary);color:white;border:none;
+            padding:12px 25px;border-radius:8px;font-weight:600;cursor:pointer;align-self:end;transition:background 0.3s;
         }
-        .form-group { display: flex; flex-direction: column; }
-        .form-group label { font-weight: 600; color: var(--primary); margin-bottom: 5px; }
-        .form-group select, .form-group input {
-            padding: 10px; border: 2px solid var(--border); border-radius: 8px; font-size: 16px;
+        .btn-add:hover{background:#3a7a35}
+        .service-cards{
+            display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;margin-bottom:25px;
         }
-        .btn-add {
-            background: var(--primary); color: white; border: none;
-            padding: 12px 25px; border-radius: 8px; font-weight: 600;
-            cursor: pointer; align-self: end; transition: background 0.3s;
+        .service-card{
+            background:white;border:2px solid #e0e0e0;border-radius:15px;
+            padding:25px 15px;text-align:center;cursor:pointer;transition:all 0.3s;
         }
-        .btn-add:hover { background: #3a7a35; }
-
-        .service-cards {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px; margin-bottom: 25px;
+        .service-card:hover,.service-card.selected{
+            border-color:var(--primary);background:var(--light);transform:translateY(-3px);box-shadow:0 5px 15px rgba(0,0,0,0.1);
         }
-        .service-card {
-            background: white; border: 2px solid #e0e0e0; border-radius: 15px;
-            padding: 25px 15px; text-align: center; cursor: pointer; transition: all 0.3s;
+        .service-card .icon{font-size:2.5em;margin-bottom:10px}
+        .service-card h3{color:var(--primary);font-size:1.1em;margin-bottom:5px}
+        .service-card p{color:#666;font-size:0.9em}
+        .service-options{background:var(--light);padding:25px;border-radius:15px;margin-bottom:25px;display:none}
+        .service-options h3{color:var(--primary);margin-bottom:15px}
+        .option-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px}
+        .option-card{background:white;padding:20px;border-radius:10px;border-left:4px solid var(--primary)}
+        .option-card h4{color:var(--primary);margin-bottom:5px}
+        .option-price{color:var(--secondary);font-weight:bold;margin-bottom:10px}
+        .btn-service-add{background:var(--primary);color:white;border:none;padding:8px 20px;border-radius:5px;cursor:pointer}
+        .items-list{background:white;border-radius:15px;padding:25px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin-bottom:25px}
+        .items-list h3{color:var(--primary);margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+        .list-item{
+            display:flex;justify-content:space-between;align-items:center;
+            padding:10px 0;border-bottom:1px solid #f0f0f0;flex-wrap:wrap;gap:10px;
         }
-        .service-card:hover, .service-card.selected {
-            border-color: var(--primary); background: var(--light);
-            transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .service-card .icon { font-size: 2.5em; margin-bottom: 10px; }
-        .service-card h3 { color: var(--primary); font-size: 1.1em; margin-bottom: 5px; }
-        .service-card p { color: #666; font-size: 0.9em; }
-
-        .service-options { background: var(--light); padding: 25px; border-radius: 15px; margin-bottom: 25px; }
-        .service-options h3 { color: var(--primary); margin-bottom: 15px; }
-        .option-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
-        .option-card {
-            background: white; padding: 20px; border-radius: 10px;
-            border-left: 4px solid var(--primary);
-        }
-        .option-card h4 { color: var(--primary); margin-bottom: 5px; }
-        .option-price { color: var(--secondary); font-weight: bold; margin-bottom: 10px; }
-        .btn-service-add {
-            background: var(--primary); color: white; border: none;
-            padding: 8px 20px; border-radius: 5px; cursor: pointer;
-        }
-
-        .items-list {
-            background: white; border-radius: 15px; padding: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 25px;
-        }
-        .items-list h3 { color: var(--primary); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
-        .list-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 0; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap; gap: 10px;
-        }
-        .list-item:last-child { border-bottom: none; }
-        .item-detail { flex: 1; min-width: 200px; }
-        .item-title { font-weight: 600; color: var(--primary); }
-        .item-sub { color: #666; font-size: 0.9em; }
-        .item-cost { font-weight: bold; color: var(--secondary); }
-        .btn-remove {
-            background: #ff6b6b; color: white; border: none;
-            width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px;
-        }
-
-        .summary-block {
-            background: white; border-radius: 15px; padding: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px;
-        }
-        .summary-block h3 { color: var(--primary); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
-        .subtotal { display: flex; justify-content: space-between; padding: 10px 0; font-weight: bold; font-size: 1.1em; }
-        .total-section {
-            background: linear-gradient(135deg, var(--primary), #1a3a18);
-            color: white; padding: 30px; border-radius: 15px; text-align: center;
-        }
-        .discount-tag {
-            background: var(--gold); color: #333; padding: 8px 20px;
-            border-radius: 20px; display: inline-block; margin-bottom: 20px; font-weight: 600;
-        }
-        .total-section h2 { font-size: 2em; margin-bottom: 10px; }
-        .total-section .note { opacity: 0.8; margin: 15px 0; }
-        .action-btns { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
-        .btn-action { padding: 12px 25px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; transition: all 0.3s; }
-        .btn-action.gold { background: var(--gold); color: #333; }
-        .btn-action.white { background: white; color: var(--primary); }
-        .btn-action:hover { transform: translateY(-2px); }
-        .empty-text { text-align: center; color: #999; padding: 20px; }
-        .loading-text { text-align: center; color: #999; padding: 20px; font-style: italic; }
-
-        @media (max-width: 768px) {
-            .header h1 { font-size: 2em; }
-            .plant-selector { grid-template-columns: 1fr; }
-            .service-cards { grid-template-columns: repeat(2, 1fr); }
-            .nav .container { flex-direction: column; }
+        .list-item:last-child{border-bottom:none}
+        .item-detail{flex:1;min-width:200px}
+        .item-title{font-weight:600;color:var(--primary)}
+        .item-sub{color:#666;font-size:0.9em}
+        .item-cost{font-weight:bold;color:var(--secondary)}
+        .btn-remove{background:#ff6b6b;color:white;border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px}
+        .summary-block{background:white;border-radius:15px;padding:25px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin-bottom:20px}
+        .summary-block h3{color:var(--primary);margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+        .subtotal{display:flex;justify-content:space-between;padding:10px 0;font-weight:bold;font-size:1.1em}
+        .total-section{background:linear-gradient(135deg,var(--primary),#1a3a18);color:white;padding:30px;border-radius:15px;text-align:center}
+        .discount-tag{background:var(--gold);color:#333;padding:8px 20px;border-radius:20px;display:inline-block;margin-bottom:20px;font-weight:600}
+        .total-section h2{font-size:2em;margin-bottom:10px}
+        .total-section .note{opacity:0.8;margin:15px 0}
+        .action-btns{display:flex;gap:15px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+        .btn-action{padding:12px 25px;border-radius:10px;font-weight:600;cursor:pointer;border:none;transition:all 0.3s}
+        .btn-action.gold{background:var(--gold);color:#333}
+        .btn-action.white{background:white;color:var(--primary)}
+        .btn-action:hover{transform:translateY(-2px)}
+        .empty-text{text-align:center;color:#999;padding:20px}
+        .error-text{color:#d32f2f;text-align:center;padding:20px}
+        @media(max-width:768px){
+            .header h1{font-size:2em}
+            .plant-selector{grid-template-columns:1fr}
+            .service-cards{grid-template-columns:repeat(2,1fr)}
+            .nav .container{flex-direction:column}
         }
     </style>
 </head>
@@ -233,7 +180,7 @@
                             </div>
                             <button class="btn-add" onclick="addPlantItem()">➕ Add Plant</button>
                         </div>
-                        <div id="plant-price-hint" style="color: var(--primary); font-weight: 500; margin-bottom: 15px;"></div>
+                        <div id="plant-price-hint" style="color:var(--primary);font-weight:500;margin-bottom:15px"></div>
                         <div class="items-list">
                             <h3>🌱 Selected Plants</h3>
                             <div id="plant-items"><p class="loading-text">Loading plant catalog...</p></div>
@@ -242,11 +189,11 @@
 
                     <!-- Services Panel -->
                     <div class="calc-panel" id="panel-services">
-                        <p style="margin-bottom: 20px; color: #666;">Select a service category to see available options:</p>
+                        <p style="margin-bottom:20px;color:#666">Select a service category to see available options:</p>
                         <div class="service-cards" id="service-cards">
                             <p class="loading-text">Loading services catalog...</p>
                         </div>
-                        <div class="service-options" id="service-opts" style="display:none;">
+                        <div class="service-options" id="service-opts">
                             <h3 id="service-opts-title"></h3>
                             <div class="option-grid" id="service-opts-grid"></div>
                         </div>
@@ -290,85 +237,103 @@
     </main>
 
     <script>
-        // Data stores
-        let priceCatalog = {};       // { category: { plantName: { lo, hi } } }
-        let serviceCatalog = {};     // { categoryTitle: { icon, items: [{name, priceLo, priceHi}] } }
-        let servicePackages = [];    // [{ name, price, features[] }]
-        let plantList = [];          // { cat, name, size, qty, unit, total }
-        let serviceList = [];        // { type, name, price }
+        let priceCatalog = {};
+        let serviceCatalog = {};
+        let servicePackages = [];
+        let plantList = [];
+        let serviceList = [];
 
-        // ===================== FETCH PLANT PRICES (FIXED) =====================
+        // ============ ROBUST PLANT PARSER ============
         function fetchPlantPrices() {
             return fetch('plant-catalogs.html')
                 .then(r => r.text())
                 .then(html => {
                     const d = new DOMParser().parseFromString(html, 'text/html');
                     
-                    // Get all H2 headings – robust, works even inside wrapper divs
-                    const h2s = d.querySelectorAll('h2');
-                    h2s.forEach(h2 => {
-                        const category = h2.textContent.trim();
-                        
-                        // Find the next .grid element after this H2 (sibling or further)
-                        let grid = h2.nextElementSibling;
-                        while (grid && !grid.classList.contains('grid')) {
-                            grid = grid.nextElementSibling;
+                    // Find all plant cards using the class we know is present
+                    const cards = d.querySelectorAll('.plant-card');
+                    console.log('🌱 Found', cards.length, 'plant cards total');
+                    
+                    if (cards.length === 0) {
+                        console.error('❌ No elements with class "plant-card" found in plant-catalogs.html');
+                        document.getElementById('plant-items').innerHTML =
+                            '<p class="error-text">❌ Could not find any plant cards in the catalog.</p>';
+                        return;
+                    }
+
+                    // Group cards by their nearest preceding H2
+                    cards.forEach(card => {
+                        const h3 = card.querySelector('h3');
+                        const priceSpan = card.querySelector('.price');
+                        if (!h3 || !priceSpan) return;
+
+                        const plantName = h3.textContent.trim();
+                        const priceText = priceSpan.textContent.trim();
+                        const match = priceText.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
+                        if (!match) return;
+
+                        // Find category by looking for the nearest previous H2 in the DOM
+                        let category = 'Uncategorized';
+                        let current = card.previousElementSibling;
+                        while (current) {
+                            if (current.tagName === 'H2') {
+                                category = current.textContent.trim();
+                                break;
+                            }
+                            current = current.previousElementSibling;
                         }
-                        
-                        if (grid && grid.classList.contains('grid')) {
-                            const cards = grid.querySelectorAll('.plant-card');
-                            cards.forEach(card => {
-                                const h3 = card.querySelector('h3');
-                                const priceSpan = card.querySelector('.price');
-                                if (h3 && priceSpan) {
-                                    const plantName = h3.textContent.trim();
-                                    const priceText = priceSpan.textContent.trim();
-                                    const match = priceText.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
-                                    if (match) {
-                                        if (!priceCatalog[category]) priceCatalog[category] = {};
-                                        priceCatalog[category][plantName] = {
-                                            lo: parseInt(match[1].replace(/,/g, '')),
-                                            hi: parseInt(match[2].replace(/,/g, ''))
-                                        };
-                                    }
+                        // If not found in siblings, look upwards
+                        if (category === 'Uncategorized') {
+                            let parent = card.parentElement;
+                            while (parent && parent !== d.body) {
+                                const prevH2 = parent.querySelector('h2');
+                                if (prevH2) {
+                                    category = prevH2.textContent.trim();
+                                    break;
                                 }
-                            });
+                                parent = parent.parentElement;
+                            }
                         }
+
+                        if (!priceCatalog[category]) priceCatalog[category] = {};
+                        priceCatalog[category][plantName] = {
+                            lo: parseInt(match[1].replace(/,/g, '')),
+                            hi: parseInt(match[2].replace(/,/g, ''))
+                        };
                     });
 
+                    console.log('📋 Parsed categories:', Object.keys(priceCatalog));
                     fillPlantCategories();
-                    document.getElementById('plant-items').innerHTML = '<p class="empty-text">No plants selected yet.</p>';
                 })
-                .catch(() => {
-                    // Fallback if fetch fails
+                .catch(err => {
+                    console.error('Fetch plants failed:', err);
+                    // Fallback
                     priceCatalog = {
                         '🍋 Fruit Plants': {
                             'Mango (grafted)': { lo: 12000, hi: 30000 },
                             'Jackfruit': { lo: 10000, hi: 20000 }
                         },
-                        '🌸 Orchids': {
-                            'Dendrobium': { lo: 8000, hi: 18000 }
-                        }
+                        '🌸 Orchids': { 'Dendrobium': { lo: 8000, hi: 18000 } }
                     };
                     fillPlantCategories();
-                    document.getElementById('plant-items').innerHTML = '<p class="empty-text">No plants selected yet. (Using offline catalog)</p>';
                 });
         }
 
         function fillPlantCategories() {
             const s = document.getElementById('plant-cat');
-            s.innerHTML = '<option value="">Select Category...</option>';
             const cats = Object.keys(priceCatalog).sort();
             if (cats.length === 0) {
                 s.innerHTML = '<option value="">No categories found</option>';
+                console.error('❌ priceCatalog is empty after parsing');
+                document.getElementById('plant-items').innerHTML =
+                    '<p class="error-text">❌ No plant categories loaded. Check console for details.</p>';
                 return;
             }
+            s.innerHTML = '<option value="">Select Category...</option>';
             cats.forEach(c => {
-                const o = document.createElement('option');
-                o.value = c;
-                o.textContent = c;
-                s.appendChild(o);
+                s.innerHTML += `<option value="${c}">${c}</option>`;
             });
+            document.getElementById('plant-items').innerHTML = '<p class="empty-text">No plants selected yet.</p>';
         }
 
         function loadPlants() {
@@ -377,10 +342,7 @@
             s.innerHTML = '<option value="">Select plant...</option>';
             if (c && priceCatalog[c]) {
                 Object.keys(priceCatalog[c]).sort().forEach(p => {
-                    const o = document.createElement('option');
-                    o.value = p;
-                    o.textContent = p;
-                    s.appendChild(o);
+                    s.innerHTML += `<option value="${p}">${p}</option>`;
                 });
             }
             updatePlantPrice();
@@ -392,20 +354,10 @@
             const sz = document.getElementById('plant-size').value;
             const qty = parseInt(document.getElementById('plant-qty').value) || 1;
             const hint = document.getElementById('plant-price-hint');
-
-            if (!c || !n || !priceCatalog[c] || !priceCatalog[c][n]) {
-                hint.textContent = '';
-                return;
-            }
-
+            if (!c || !n || !priceCatalog[c]?.[n]) { hint.textContent = ''; return; }
             const pr = priceCatalog[c][n];
-            let unit;
-            if (sz === 'small') unit = pr.lo;
-            else if (sz === 'large') unit = pr.hi;
-            else unit = Math.round((pr.lo + pr.hi) / 2);
-
-            hint.innerHTML = `<strong>Unit:</strong> ${unit.toLocaleString()} Ks &nbsp;|&nbsp;
-                <strong>Line total:</strong> ${(unit * qty).toLocaleString()} Ks`;
+            let unit = sz === 'small' ? pr.lo : sz === 'large' ? pr.hi : Math.round((pr.lo + pr.hi) / 2);
+            hint.innerHTML = `<strong>Unit:</strong> ${unit.toLocaleString()} Ks | <strong>Line:</strong> ${(unit*qty).toLocaleString()} Ks`;
         }
 
         function addPlantItem() {
@@ -413,128 +365,117 @@
             const n = document.getElementById('plant-name').value;
             const sz = document.getElementById('plant-size').value;
             const qty = parseInt(document.getElementById('plant-qty').value);
-            if (!c || !n) { alert('Please select a category and plant.'); return; }
-
+            if (!c || !n) return alert('Please select category and plant.');
             const pr = priceCatalog[c][n];
-            let unit;
-            if (sz === 'small') unit = pr.lo;
-            else if (sz === 'large') unit = pr.hi;
-            else unit = Math.round((pr.lo + pr.hi) / 2);
-
-            plantList.push({ cat: c, name: n, size: sz, qty: qty, unit: unit, total: unit * qty });
+            let unit = sz === 'small' ? pr.lo : sz === 'large' ? pr.hi : Math.round((pr.lo + pr.hi) / 2);
+            plantList.push({ cat:c, name:n, size:sz, qty, unit, total:unit*qty });
             document.getElementById('plant-name').value = '';
             document.getElementById('plant-qty').value = '1';
             document.getElementById('plant-price-hint').textContent = '';
             refreshAll();
         }
 
-        // ===================== FETCH SERVICE PRICES =====================
+        // ============ ROBUST SERVICE PARSER ============
         function fetchServicePrices() {
             return fetch('services.html')
                 .then(r => r.text())
                 .then(html => {
                     const d = new DOMParser().parseFromString(html, 'text/html');
+                    console.log('🛠️ Services HTML parsed successfully');
 
-                    // Parse service categories from .category-section
-                    const sections = d.querySelectorAll('.category-section');
-                    sections.forEach(section => {
-                        const header = section.querySelector('.category-header');
-                        if (!header) return;
+                    // Try multiple selectors for service items
+                    const serviceItems = d.querySelectorAll('.service-item');
+                    console.log('   Found', serviceItems.length, '.service-item elements');
 
-                        const title = header.textContent.trim();
-                        const iconEl = header.querySelector('.category-icon');
-                        const icon = iconEl ? iconEl.textContent.trim() : '🛠️';
+                    if (serviceItems.length === 0) {
+                        console.warn('⚠️ No .service-item found. Checking for alternative structures...');
+                        // maybe it's a different class, fallback: look for any div containing a price span
+                        const allSpans = d.querySelectorAll('span.price-range');
+                        console.log('   Found', allSpans.length, 'span.price-range elements');
+                    }
 
-                        const items = [];
-                        const serviceItems = section.querySelectorAll('.service-item');
-                        serviceItems.forEach(item => {
-                            const nameEl = item.querySelector('.service-name');
-                            const priceEl = item.querySelector('.price-range');
-                            if (!nameEl || !priceEl) return;
+                    // Find all category headers (try common class names)
+                    const headers = d.querySelectorAll('.category-header, .service-category, .section-header');
+                    console.log('   Found', headers.length, 'category headers (.category-header, .service-category, .section-header)');
 
-                            const name = nameEl.textContent.trim();
-                            const priceText = priceEl.textContent.trim();
-
-                            // Try "50,000 – 150,000 Ks"
-                            let rangeMatch = priceText.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
-                            if (rangeMatch) {
-                                items.push({
-                                    name: name,
-                                    priceLo: parseInt(rangeMatch[1].replace(/,/g, '')),
-                                    priceHi: parseInt(rangeMatch[2].replace(/,/g, '')),
-                                    isRange: true
+                    if (headers.length === 0) {
+                        console.warn('⚠️ No category headers found, trying H2 elements...');
+                        const h2s = d.querySelectorAll('h2');
+                        console.log('   Found', h2s.length, 'H2 elements');
+                        h2s.forEach(h2 => {
+                            const title = h2.textContent.trim();
+                            const items = [];
+                            let next = h2.nextElementSibling;
+                            while (next && next.tagName !== 'H2') {
+                                const servItems = next.querySelectorAll('.service-item');
+                                servItems.forEach(si => {
+                                    const name = si.querySelector('.service-name')?.textContent.trim();
+                                    const price = si.querySelector('.price-range')?.textContent.trim();
+                                    if (name && price) items.push({name, price});
                                 });
-                            } else {
-                                // Try "20,000 Ks"
-                                let singleMatch = priceText.match(/([\d,]+)\s*Ks/);
-                                if (singleMatch) {
-                                    const price = parseInt(singleMatch[1].replace(/,/g, ''));
-                                    items.push({
-                                        name: name,
-                                        priceLo: price,
-                                        priceHi: price,
-                                        isRange: false
-                                    });
-                                }
+                                next = next.nextElementSibling;
+                            }
+                            if (items.length > 0) {
+                                serviceCatalog[title] = { icon: '🛠️', items: parseServiceItems(items) };
                             }
                         });
+                    } else {
+                        // Use category headers
+                        headers.forEach(header => {
+                            const title = header.textContent.trim();
+                            const icon = header.querySelector('.category-icon')?.textContent.trim() || '🛠️';
+                            const items = [];
+                            let next = header.nextElementSibling;
+                            while (next && !next.matches('.category-header, .service-category, .section-header')) {
+                                const servItems = next.querySelectorAll('.service-item');
+                                servItems.forEach(si => {
+                                    const name = si.querySelector('.service-name')?.textContent.trim();
+                                    const price = si.querySelector('.price-range')?.textContent.trim();
+                                    if (name && price) items.push({name, price});
+                                });
+                                next = next.nextElementSibling;
+                            }
+                            if (items.length > 0) {
+                                serviceCatalog[title] = { icon, items: parseServiceItems(items) };
+                            }
+                        });
+                    }
 
-                        if (items.length > 0) {
-                            serviceCatalog[title] = { icon, items };
-                        }
-                    });
-
-                    // Parse packages
-                    const packageCards = d.querySelectorAll('.package-card');
-                    packageCards.forEach(card => {
-                        const nameEl = card.querySelector('.package-name');
-                        const priceEl = card.querySelector('.package-price');
-                        if (!nameEl || !priceEl) return;
-
-                        const name = nameEl.textContent.trim();
-                        const priceText = priceEl.textContent.trim();
-                        const priceMatch = priceText.match(/([\d,]+)/);
-                        const price = priceMatch ? parseInt(priceMatch[1].replace(/,/g, '')) : 0;
-
-                        const features = [];
-                        const featureEls = card.querySelectorAll('.package-features li');
-                        featureEls.forEach(li => features.push(li.textContent.trim()));
-
-                        servicePackages.push({ name, price, features });
+                    // Also parse packages
+                    const packages = d.querySelectorAll('.package-card');
+                    packages.forEach(pkg => {
+                        const name = pkg.querySelector('.package-name')?.textContent.trim();
+                        const priceText = pkg.querySelector('.package-price')?.textContent.trim();
+                        if (!name || !priceText) return;
+                        const price = parseInt(priceText.replace(/[^0-9]/g, ''));
+                        const features = Array.from(pkg.querySelectorAll('.package-features li')).map(li => li.textContent.trim());
+                        servicePackages.push({name, price, features});
                     });
 
                     if (servicePackages.length > 0) {
-                        const pkgItems = servicePackages.map(p => ({
-                            name: p.name + (p.features.length ? ' (' + p.features.length + ' features)' : ''),
-                            priceLo: p.price,
-                            priceHi: p.price,
-                            isRange: false,
-                            features: p.features
-                        }));
-                        serviceCatalog['🎯 Service Packages'] = { icon: '📦', items: pkgItems };
+                        serviceCatalog['🎯 Service Packages'] = {
+                            icon: '📦',
+                            items: servicePackages.map(p => ({
+                                name: p.name,
+                                priceLo: p.price,
+                                priceHi: p.price,
+                                isRange: false,
+                                features: p.features
+                            }))
+                        };
                     }
 
+                    console.log('📋 Service categories:', Object.keys(serviceCatalog));
                     renderServiceCards();
                 })
-                .catch(() => {
-                    // Fallback services
+                .catch(err => {
+                    console.error('Fetch services failed:', err);
                     serviceCatalog = {
                         '🏡 Outdoor Landscaping': {
                             icon: '🏡',
                             items: [
-                                { name: 'Garden Design & Planning', priceLo: 50000, priceHi: 150000, isRange: true },
-                                { name: 'Soil Preparation & Grading', priceLo: 30000, priceHi: 80000, isRange: true },
-                                { name: 'Plant Installation (per 10)', priceLo: 15000, priceHi: 30000, isRange: true },
-                                { name: 'Irrigation System', priceLo: 80000, priceHi: 250000, isRange: true }
-                            ]
-                        },
-                        '🏢 Indoor Greenery': {
-                            icon: '🏢',
-                            items: [
-                                { name: 'Indoor Plant Consultation', priceLo: 20000, priceHi: 20000, isRange: false },
-                                { name: 'Office Plant Setup (5 plants)', priceLo: 50000, priceHi: 100000, isRange: true },
-                                { name: 'Living Wall / Vertical Garden', priceLo: 120000, priceHi: 350000, isRange: true },
-                                { name: 'Monthly Maintenance', priceLo: 15000, priceHi: 30000, isRange: true }
+                                {name:'Garden Design',priceLo:50000,priceHi:150000,isRange:true},
+                                {name:'Soil Prep',priceLo:30000,priceHi:80000,isRange:true}
                             ]
                         }
                     };
@@ -542,50 +483,58 @@
                 });
         }
 
+        function parseServiceItems(rawItems) {
+            return rawItems.map(item => {
+                const match = item.price.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
+                if (match) {
+                    return {
+                        name: item.name,
+                        priceLo: parseInt(match[1].replace(/,/g, '')),
+                        priceHi: parseInt(match[2].replace(/,/g, '')),
+                        isRange: true
+                    };
+                } else {
+                    const single = item.price.match(/([\d,]+)\s*Ks/);
+                    const price = single ? parseInt(single[1].replace(/,/g, '')) : 0;
+                    return { name: item.name, priceLo: price, priceHi: price, isRange: false };
+                }
+            });
+        }
+
         function renderServiceCards() {
             const container = document.getElementById('service-cards');
-            let html = '';
             const keys = Object.keys(serviceCatalog);
             if (keys.length === 0) {
-                container.innerHTML = '<p class="empty-text">No services found.</p>';
+                container.innerHTML = '<p class="error-text">❌ No services found. Check console.</p>';
                 return;
             }
-            keys.forEach(key => {
+            container.innerHTML = keys.map(key => {
                 const svc = serviceCatalog[key];
-                html += `
-                    <div class="service-card" onclick="pickService('${key.replace(/'/g, "\\'")}', this)" data-key="${key.replace(/'/g, "\\'")}">
-                        <div class="icon">${svc.icon}</div>
-                        <h3>${key}</h3>
-                        <p>${svc.items.length} service(s)</p>
-                    </div>`;
-            });
-            container.innerHTML = html;
+                return `<div class="service-card" onclick="pickService('${key.replace(/'/g, "\\'")}', this)">
+                    <div class="icon">${svc.icon}</div>
+                    <h3>${key}</h3>
+                    <p>${svc.items.length} service(s)</p>
+                </div>`;
+            }).join('');
         }
 
         function pickService(type, card) {
             document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
-            const d = serviceCatalog[type];
+            const opts = document.getElementById('service-opts');
+            opts.style.display = 'block';
             document.getElementById('service-opts-title').textContent = type;
-            let html = '';
-            d.items.forEach(i => {
-                const priceDisplay = i.isRange ?
-                    `${i.priceLo.toLocaleString()} – ${i.priceHi.toLocaleString()} Ks` :
-                    `${i.priceLo.toLocaleString()} Ks`;
-                const featHtml = i.features ?
-                    '<div style="font-size:0.8em;color:#666;margin-top:5px;">' +
-                    i.features.map(f => '🌿 ' + f).join('<br>') + '</div>' : '';
-
-                html += `
-                    <div class="option-card">
-                        <h4>${i.name}</h4>
-                        <div class="option-price">${priceDisplay}</div>
-                        ${featHtml}
-                        <button class="btn-service-add" onclick="addServiceItem('${type.replace(/'/g, "\\'")}', '${i.name.replace(/'/g, "\\'")}', ${i.priceLo}, ${i.priceHi}, ${i.isRange})">+ Add Service</button>
-                    </div>`;
-            });
-            document.getElementById('service-opts-grid').innerHTML = html;
-            document.getElementById('service-opts').style.display = 'block';
+            const d = serviceCatalog[type];
+            document.getElementById('service-opts-grid').innerHTML = d.items.map(i => {
+                const priceDisplay = i.isRange ? `${i.priceLo.toLocaleString()} – ${i.priceHi.toLocaleString()} Ks` : `${i.priceLo.toLocaleString()} Ks`;
+                const featHtml = i.features ? `<div style="font-size:0.8em;color:#666;margin-top:5px">${i.features.map(f => '🌿 '+f).join('<br>')}</div>` : '';
+                return `<div class="option-card">
+                    <h4>${i.name}</h4>
+                    <div class="option-price">${priceDisplay}</div>
+                    ${featHtml}
+                    <button class="btn-service-add" onclick="addServiceItem('${type.replace(/'/g, "\\'")}', '${i.name.replace(/'/g, "\\'")}', ${i.priceLo}, ${i.priceHi}, ${i.isRange})">+ Add</button>
+                </div>`;
+            }).join('');
         }
 
         function addServiceItem(type, name, priceLo, priceHi, isRange) {
@@ -594,77 +543,44 @@
             refreshAll();
         }
 
-        // ===================== COMMON FUNCTIONS =====================
+        // ============ COMMON ============
         function delPlant(i) { plantList.splice(i, 1); refreshAll(); }
         function delService(i) { serviceList.splice(i, 1); refreshAll(); }
 
         function refreshAll() {
-            // Plant list
-            let ph = '';
-            plantList.forEach((p, i) => {
-                ph += `<div class="list-item">
-                    <div class="item-detail">
-                        <div class="item-title">${p.name}</div>
-                        <div class="item-sub">${p.size} | Qty: ${p.qty} | ${p.unit.toLocaleString()} Ks each</div>
-                    </div>
+            // Plants list
+            document.getElementById('plant-items').innerHTML = plantList.length === 0 ?
+                '<p class="empty-text">No plants selected yet.</p>' :
+                plantList.map((p,i) => `<div class="list-item">
+                    <div class="item-detail"><div class="item-title">${p.name}</div><div class="item-sub">${p.size} | Qty:${p.qty} | ${p.unit.toLocaleString()} Ks</div></div>
                     <div class="item-cost">${p.total.toLocaleString()} Ks</div>
                     <button class="btn-remove" onclick="delPlant(${i})">×</button>
-                </div>`;
-            });
-            document.getElementById('plant-items').innerHTML = ph || '<p class="empty-text">No plants selected yet.</p>';
+                </div>`).join('');
 
-            // Service list
-            let sh = '';
-            serviceList.forEach((s, i) => {
-                const priceDisplay = s.isRange ?
-                    `${s.priceLo.toLocaleString()} – ${s.priceHi.toLocaleString()} Ks` :
-                    `${s.price.toLocaleString()} Ks`;
-                sh += `<div class="list-item">
-                    <div class="item-detail">
-                        <div class="item-title">${s.name}</div>
-                        <div class="item-sub">${s.type}</div>
-                    </div>
-                    <div class="item-cost">${priceDisplay}</div>
+            // Services list
+            document.getElementById('service-items').innerHTML = serviceList.length === 0 ?
+                '<p class="empty-text">No services selected yet.</p>' :
+                serviceList.map((s,i) => `<div class="list-item">
+                    <div class="item-detail"><div class="item-title">${s.name}</div><div class="item-sub">${s.type}</div></div>
+                    <div class="item-cost">${s.isRange ? `${s.priceLo.toLocaleString()}–${s.priceHi.toLocaleString()}` : s.price.toLocaleString()} Ks</div>
                     <button class="btn-remove" onclick="delService(${i})">×</button>
-                </div>`;
-            });
-            document.getElementById('service-items').innerHTML = sh || '<p class="empty-text">No services selected yet.</p>';
+                </div>`).join('');
 
             // Summary
-            let sp = '', pt = 0;
-            plantList.forEach((p, i) => {
-                sp += `<div class="list-item">
-                    <span>${p.name} (${p.size}) × ${p.qty}</span>
-                    <span>${p.total.toLocaleString()} Ks</span>
-                    <button class="btn-remove" onclick="delPlant(${i})">×</button>
-                </div>`;
-                pt += p.total;
-            });
-            document.getElementById('sum-plants').innerHTML = sp || '<p class="empty-text">No plants selected</p>';
+            let pt = plantList.reduce((s,p)=>s+p.total,0);
+            let st = serviceList.reduce((s,sv)=>s+sv.price,0);
+            document.getElementById('sum-plants').innerHTML = plantList.length === 0 ? '<p class="empty-text">No plants</p>' :
+                plantList.map((p,i)=>`<div class="list-item"><span>${p.name} (${p.size}) ×${p.qty}</span><span>${p.total.toLocaleString()} Ks</span><button class="btn-remove" onclick="delPlant(${i})">×</button></div>`).join('');
+            document.getElementById('sum-services').innerHTML = serviceList.length === 0 ? '<p class="empty-text">No services</p>' :
+                serviceList.map((s,i)=>`<div class="list-item"><span>${s.name}</span><span>${s.price.toLocaleString()} Ks</span><button class="btn-remove" onclick="delService(${i})">×</button></div>`).join('');
             document.getElementById('plants-total').textContent = pt.toLocaleString() + ' Ks';
-
-            let ss = '', st = 0;
-            serviceList.forEach((s, i) => {
-                ss += `<div class="list-item">
-                    <span>${s.name}</span>
-                    <span>${s.price.toLocaleString()} Ks</span>
-                    <button class="btn-remove" onclick="delService(${i})">×</button>
-                </div>`;
-                st += s.price;
-            });
-            document.getElementById('sum-services').innerHTML = ss || '<p class="empty-text">No services selected</p>';
             document.getElementById('services-total').textContent = st.toLocaleString() + ' Ks';
 
-            // Grand total with discounts
             const tot = pt + st;
-            let disc = 0, msg = '';
-            if (tot > 500000) { disc = 0.10; msg = '🎉 10% discount on orders over 500,000 Ks!'; }
-            else if (tot > 200000) { disc = 0.05; msg = '🎉 5% discount on orders over 200,000 Ks!'; }
+            let disc = tot > 500000 ? 0.10 : tot > 200000 ? 0.05 : 0;
             const da = Math.round(tot * disc);
-            const gt = tot - da;
-            document.getElementById('discount-msg').innerHTML = msg ?
-                `<div class="discount-tag">${msg} (Save ${da.toLocaleString()} Ks)</div>` : '';
-            document.getElementById('grand-total').textContent = gt.toLocaleString() + ' Ks';
+            document.getElementById('discount-msg').innerHTML = disc ? `<div class="discount-tag">🎉 ${disc*100}% discount! (Save ${da.toLocaleString()} Ks)</div>` : '';
+            document.getElementById('grand-total').textContent = (tot - da).toLocaleString() + ' Ks';
         }
 
         function showPanel(p) {
@@ -679,46 +595,28 @@
             let text = 'ESTIMATE FROM ပန်းသတင်း LANDSCAPE\n' + '='.repeat(40) + '\n\n';
             if (plantList.length) {
                 text += '🌱 PLANTS:\n';
-                plantList.forEach(p => {
-                    text += `  - ${p.name} (${p.size}) × ${p.qty} = ${p.total.toLocaleString()} Ks\n`;
-                });
-                text += '\n';
+                plantList.forEach(p => text += `  - ${p.name} (${p.size}) ×${p.qty} = ${p.total.toLocaleString()} Ks\n`);
             }
             if (serviceList.length) {
-                text += '🛠️ SERVICES:\n';
-                serviceList.forEach(s => {
-                    text += `  - ${s.name}: ${s.price.toLocaleString()} Ks\n`;
-                });
-                text += '\n';
+                text += '\n🛠️ SERVICES:\n';
+                serviceList.forEach(s => text += `  - ${s.name}: ${s.price.toLocaleString()} Ks\n`);
             }
-            const pt = plantList.reduce((sum, p) => sum + p.total, 0);
-            const st = serviceList.reduce((sum, s) => sum + s.price, 0);
-            const tot = pt + st;
-            let disc = 0;
-            if (tot > 500000) disc = 0.10;
-            else if (tot > 200000) disc = 0.05;
-            const da = Math.round(tot * disc);
-            const gt = tot - da;
-            text += `Plants Subtotal: ${pt.toLocaleString()} Ks\n`;
-            text += `Services Subtotal: ${st.toLocaleString()} Ks\n`;
-            if (disc > 0) text += `Discount (${(disc*100)}%): -${da.toLocaleString()} Ks\n`;
-            text += `\n💰 GRAND TOTAL: ${gt.toLocaleString()} Ks\n\n`;
-            text += '* Final price may vary based on site survey.\n';
-            text += 'Contact us: +95 9xxx xxxxxx\n';
-
-            const subject = encodeURIComponent('Landscape Estimate - ပန်းသတင်း');
-            const body = encodeURIComponent(text);
-            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+            const pt = plantList.reduce((s,p)=>s+p.total,0);
+            const st = serviceList.reduce((s,sv)=>s+sv.price,0);
+            const tot = pt+st;
+            let disc = tot>500000?0.10:tot>200000?0.05:0;
+            const da = Math.round(tot*disc);
+            text += `\nPlants Subtotal: ${pt.toLocaleString()} Ks\nServices Subtotal: ${st.toLocaleString()} Ks`;
+            if(disc) text += `\nDiscount: -${da.toLocaleString()} Ks`;
+            text += `\n\n💰 GRAND TOTAL: ${(tot-da).toLocaleString()} Ks\n\n*Final price may vary. Contact: +95 9xxx xxxxxx`;
+            window.location.href = `mailto:?subject=${encodeURIComponent('Landscape Estimate')}&body=${encodeURIComponent(text)}`;
         }
 
-        // Initialize
+        // Initialize with promises
         window.addEventListener('DOMContentLoaded', () => {
             Promise.all([fetchPlantPrices(), fetchServicePrices()])
-                .then(() => {
-                    console.log('✅ Calculator ready - Plants:', Object.keys(priceCatalog).length,
-                        'categories, Services:', Object.keys(serviceCatalog).length, 'categories');
-                })
-                .catch(err => console.error('Error loading data:', err));
+                .then(() => console.log('✅ Calculator fully loaded'))
+                .catch(err => console.error('Init error:', err));
         });
     </script>
 </body>
