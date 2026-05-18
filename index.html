@@ -2364,6 +2364,34 @@ function resetEstimate() {
 window.addEventListener('DOMContentLoaded', function() {
     loadPlantPrices();
 });
+    // Simple tab switching for the calculator
+  function switchCalcTab(tab) {
+    // Hide all tab contents
+    document.querySelectorAll('.calc-content').forEach(el => el.classList.remove('active'));
+    // Show the selected tab
+    const tabId = tab === 'plants' ? 'calc-plants' : tab === 'services' ? 'calc-services' : 'calc-summary';
+    document.getElementById(tabId).classList.add('active');
+    
+    // Update active button style
+    document.querySelectorAll('.calc-tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`.calc-tab-btn[onclick="switchCalcTab('${tab}')"]`).classList.add('active');
+  }
+
+  // Basic function to update plant names (example - you can expand this)
+  function updatePlantNames() {
+    // This would populate the second dropdown based on the first
+    console.log('Plant category changed');
+  }
+
+  // Basic function to add a plant to the estimate (example)
+  function addPlantToEstimate() {
+    alert('Plant added to estimate! You can expand this function to calculate totals.');
+  }
+
+  // Basic function for service options (example)
+  function showServiceOptions(service) {
+    alert('Service option selected: ' + service);
+  }
 </script>
 </body>
 </html>
