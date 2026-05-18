@@ -144,10 +144,10 @@
             <div class="calculator-container">
                 <div class="calc-header">
                     <h2>Price Estimator</h2>
-                    <div class="calc-tabs">
-                        <button class="calc-tab-btn active" onclick="showPanel('plants')">🌱 Plants</button>
-                        <button class="calc-tab-btn" onclick="showPanel('services')">🛠️ Services</button>
-                        <button class="calc-tab-btn" onclick="showPanel('summary')">📋 Summary</button>
+                    <div class="calc-tabs" id="tab-buttons">
+                        <button class="calc-tab-btn active" data-panel="plants">🌱 Plants</button>
+                        <button class="calc-tab-btn" data-panel="services">🛠️ Services</button>
+                        <button class="calc-tab-btn" data-panel="summary">📋 Summary</button>
                     </div>
                 </div>
                 <div class="calc-body">
@@ -155,30 +155,30 @@
                     <div class="calc-panel active" id="panel-plants">
                         <div class="plant-selector">
                             <div class="form-group">
-                                <label>Category</label>
-                                <select id="plant-cat" onchange="loadPlants()">
+                                <label for="plant-cat">Category</label>
+                                <select id="plant-cat">
                                     <option value="">Loading categories...</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Plant</label>
-                                <select id="plant-name" onchange="updatePlantPrice()">
+                                <label for="plant-name">Plant</label>
+                                <select id="plant-name">
                                     <option value="">Select plant...</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Size</label>
-                                <select id="plant-size" onchange="updatePlantPrice()">
+                                <label for="plant-size">Size</label>
+                                <select id="plant-size">
                                     <option value="small">🌱 Small</option>
                                     <option value="medium">🪴 Medium</option>
                                     <option value="large">🌳 Large</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Quantity</label>
-                                <input type="number" id="plant-qty" value="1" min="1" onchange="updatePlantPrice()">
+                                <label for="plant-qty">Quantity</label>
+                                <input type="number" id="plant-qty" value="1" min="1">
                             </div>
-                            <button class="btn-add" onclick="addPlantItem()">➕ Add Plant</button>
+                            <button class="btn-add" id="btn-add-plant">➕ Add Plant</button>
                         </div>
                         <div id="plant-price-hint" style="color:var(--primary);font-weight:500;margin-bottom:15px"></div>
                         <div class="items-list">
@@ -226,8 +226,8 @@
                             <h2>💰 Total Estimate: <span id="grand-total">0 Ks</span></h2>
                             <p class="note">* Final price may vary based on site survey</p>
                             <div class="action-btns">
-                                <button class="btn-action gold" onclick="emailEstimate()">📧 Email Estimate</button>
-                                <button class="btn-action white" onclick="window.print()">🖨 Print</button>
+                                <button class="btn-action gold" id="btn-email">📧 Email Estimate</button>
+                                <button class="btn-action white" id="btn-print">🖨 Print</button>
                             </div>
                         </div>
                     </div>
@@ -237,171 +237,186 @@
     </main>
 
     <script>
-        let priceCatalog = {};
-        let serviceCatalog = {};
-        let servicePackages = [];
-        let plantList = [];
-        let serviceList = [];
+    (function() {
+        // =========== DATA STORES ===========
+        let priceCatalog = {};       // { category: { plantName: { lo, hi } } }
+        let serviceCatalog = {};     // { categoryTitle: { icon, items: [{name, priceLo, priceHi, isRange, features?}] } }
+        let servicePackages = [];    // [{ name, price, features[] }]
+        let plantList = [];          // { cat, name, size, qty, unit, total }
+        let serviceList = [];        // { type, name, price, priceLo, priceHi, isRange }
 
-        // ============ ROBUST PLANT PARSER ============
+        // =========== DOM REFERENCES ===========
+        const plantCat       = document.getElementById('plant-cat');
+        const plantName      = document.getElementById('plant-name');
+        const plantSize      = document.getElementById('plant-size');
+        const plantQty       = document.getElementById('plant-qty');
+        const plantPriceHint = document.getElementById('plant-price-hint');
+        const plantItems     = document.getElementById('plant-items');
+        const btnAddPlant    = document.getElementById('btn-add-plant');
+        const serviceCards   = document.getElementById('service-cards');
+        const serviceOpts    = document.getElementById('service-opts');
+        const serviceOptsTitle = document.getElementById('service-opts-title');
+        const serviceOptsGrid = document.getElementById('service-opts-grid');
+        const serviceItems   = document.getElementById('service-items');
+        const sumPlants      = document.getElementById('sum-plants');
+        const plantsTotal    = document.getElementById('plants-total');
+        const sumServices    = document.getElementById('sum-services');
+        const servicesTotal  = document.getElementById('services-total');
+        const discountMsg    = document.getElementById('discount-msg');
+        const grandTotal     = document.getElementById('grand-total');
+        const tabButtons     = document.querySelectorAll('.calc-tab-btn');
+        const panels         = document.querySelectorAll('.calc-panel');
+
+        // =========== CSP-SAFE EVENT BINDING ===========
+        // Tab switching
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const panelId = this.dataset.panel;
+                showPanel(panelId);
+            });
+        });
+
+        // Plant selectors
+        plantCat.addEventListener('change', loadPlants);
+        plantName.addEventListener('change', updatePlantPrice);
+        plantSize.addEventListener('change', updatePlantPrice);
+        plantQty.addEventListener('input', updatePlantPrice);
+        btnAddPlant.addEventListener('click', addPlantItem);
+
+        // Print and email
+        document.getElementById('btn-print').addEventListener('click', () => window.print());
+        document.getElementById('btn-email').addEventListener('click', emailEstimate);
+
+        // =========== PLANT PARSER ===========
         function fetchPlantPrices() {
             return fetch('plant-catalogs.html')
                 .then(r => r.text())
                 .then(html => {
                     const d = new DOMParser().parseFromString(html, 'text/html');
-                    
-                    // Find all plant cards using the class we know is present
                     const cards = d.querySelectorAll('.plant-card');
-                    console.log('🌱 Found', cards.length, 'plant cards total');
-                    
+                    console.log('🌱 Found', cards.length, 'plant cards');
+
                     if (cards.length === 0) {
-                        console.error('❌ No elements with class "plant-card" found in plant-catalogs.html');
-                        document.getElementById('plant-items').innerHTML =
-                            '<p class="error-text">❌ Could not find any plant cards in the catalog.</p>';
+                        plantItems.innerHTML = '<p class="error-text">❌ No plant cards found.</p>';
                         return;
                     }
 
-                    // Group cards by their nearest preceding H2
                     cards.forEach(card => {
                         const h3 = card.querySelector('h3');
                         const priceSpan = card.querySelector('.price');
                         if (!h3 || !priceSpan) return;
 
-                        const plantName = h3.textContent.trim();
+                        const name = h3.textContent.trim();
                         const priceText = priceSpan.textContent.trim();
                         const match = priceText.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
                         if (!match) return;
 
-                        // Find category by looking for the nearest previous H2 in the DOM
-                        let category = 'Uncategorized';
-                        let current = card.previousElementSibling;
-                        while (current) {
-                            if (current.tagName === 'H2') {
-                                category = current.textContent.trim();
+                        // Determine category by nearest preceding h2
+                        let cat = 'Uncategorized';
+                        let el = card.previousElementSibling;
+                        while (el) {
+                            if (el.tagName === 'H2') {
+                                cat = el.textContent.trim();
                                 break;
                             }
-                            current = current.previousElementSibling;
+                            el = el.previousElementSibling;
                         }
-                        // If not found in siblings, look upwards
-                        if (category === 'Uncategorized') {
-                            let parent = card.parentElement;
-                            while (parent && parent !== d.body) {
-                                const prevH2 = parent.querySelector('h2');
-                                if (prevH2) {
-                                    category = prevH2.textContent.trim();
-                                    break;
-                                }
-                                parent = parent.parentElement;
+                        if (cat === 'Uncategorized') {
+                            let p = card.parentElement;
+                            while (p && p !== d.body) {
+                                const h2 = p.querySelector('h2');
+                                if (h2) { cat = h2.textContent.trim(); break; }
+                                p = p.parentElement;
                             }
                         }
 
-                        if (!priceCatalog[category]) priceCatalog[category] = {};
-                        priceCatalog[category][plantName] = {
+                        if (!priceCatalog[cat]) priceCatalog[cat] = {};
+                        priceCatalog[cat][name] = {
                             lo: parseInt(match[1].replace(/,/g, '')),
                             hi: parseInt(match[2].replace(/,/g, ''))
                         };
                     });
 
-                    console.log('📋 Parsed categories:', Object.keys(priceCatalog));
+                    console.log('📋 Plant categories:', Object.keys(priceCatalog));
                     fillPlantCategories();
                 })
                 .catch(err => {
-                    console.error('Fetch plants failed:', err);
+                    console.error('Plant fetch error:', err);
                     // Fallback
                     priceCatalog = {
-                        '🍋 Fruit Plants': {
-                            'Mango (grafted)': { lo: 12000, hi: 30000 },
-                            'Jackfruit': { lo: 10000, hi: 20000 }
-                        },
-                        '🌸 Orchids': { 'Dendrobium': { lo: 8000, hi: 18000 } }
+                        '🍋 Fruit Plants': { 'Mango (grafted)': { lo:12000, hi:30000 }, 'Jackfruit': { lo:10000, hi:20000 } },
+                        '🌸 Orchids': { 'Dendrobium': { lo:8000, hi:18000 } }
                     };
                     fillPlantCategories();
                 });
         }
 
         function fillPlantCategories() {
-            const s = document.getElementById('plant-cat');
             const cats = Object.keys(priceCatalog).sort();
             if (cats.length === 0) {
-                s.innerHTML = '<option value="">No categories found</option>';
-                console.error('❌ priceCatalog is empty after parsing');
-                document.getElementById('plant-items').innerHTML =
-                    '<p class="error-text">❌ No plant categories loaded. Check console for details.</p>';
+                plantCat.innerHTML = '<option value="">No categories found</option>';
+                plantItems.innerHTML = '<p class="error-text">❌ No categories loaded. Check console.</p>';
                 return;
             }
-            s.innerHTML = '<option value="">Select Category...</option>';
-            cats.forEach(c => {
-                s.innerHTML += `<option value="${c}">${c}</option>`;
-            });
-            document.getElementById('plant-items').innerHTML = '<p class="empty-text">No plants selected yet.</p>';
+            plantCat.innerHTML = '<option value="">Select Category...</option>' +
+                cats.map(c => `<option value="${c}">${c}</option>`).join('');
+            plantItems.innerHTML = '<p class="empty-text">No plants selected yet.</p>';
         }
 
         function loadPlants() {
-            const c = document.getElementById('plant-cat').value;
-            const s = document.getElementById('plant-name');
-            s.innerHTML = '<option value="">Select plant...</option>';
-            if (c && priceCatalog[c]) {
-                Object.keys(priceCatalog[c]).sort().forEach(p => {
-                    s.innerHTML += `<option value="${p}">${p}</option>`;
-                });
+            const cat = plantCat.value;
+            plantName.innerHTML = '<option value="">Select plant...</option>';
+            if (cat && priceCatalog[cat]) {
+                plantName.innerHTML += Object.keys(priceCatalog[cat]).sort()
+                    .map(p => `<option value="${p}">${p}</option>`).join('');
             }
             updatePlantPrice();
         }
 
         function updatePlantPrice() {
-            const c = document.getElementById('plant-cat').value;
-            const n = document.getElementById('plant-name').value;
-            const sz = document.getElementById('plant-size').value;
-            const qty = parseInt(document.getElementById('plant-qty').value) || 1;
-            const hint = document.getElementById('plant-price-hint');
-            if (!c || !n || !priceCatalog[c]?.[n]) { hint.textContent = ''; return; }
-            const pr = priceCatalog[c][n];
-            let unit = sz === 'small' ? pr.lo : sz === 'large' ? pr.hi : Math.round((pr.lo + pr.hi) / 2);
-            hint.innerHTML = `<strong>Unit:</strong> ${unit.toLocaleString()} Ks | <strong>Line:</strong> ${(unit*qty).toLocaleString()} Ks`;
+            const cat = plantCat.value;
+            const name = plantName.value;
+            const size = plantSize.value;
+            const qty = parseInt(plantQty.value) || 1;
+            if (!cat || !name || !priceCatalog[cat]?.[name]) {
+                plantPriceHint.textContent = '';
+                return;
+            }
+            const pr = priceCatalog[cat][name];
+            let unit = size === 'small' ? pr.lo : size === 'large' ? pr.hi : Math.round((pr.lo + pr.hi) / 2);
+            plantPriceHint.innerHTML = `<strong>Unit:</strong> ${unit.toLocaleString()} Ks | <strong>Line:</strong> ${(unit*qty).toLocaleString()} Ks`;
         }
 
         function addPlantItem() {
-            const c = document.getElementById('plant-cat').value;
-            const n = document.getElementById('plant-name').value;
-            const sz = document.getElementById('plant-size').value;
-            const qty = parseInt(document.getElementById('plant-qty').value);
-            if (!c || !n) return alert('Please select category and plant.');
-            const pr = priceCatalog[c][n];
-            let unit = sz === 'small' ? pr.lo : sz === 'large' ? pr.hi : Math.round((pr.lo + pr.hi) / 2);
-            plantList.push({ cat:c, name:n, size:sz, qty, unit, total:unit*qty });
-            document.getElementById('plant-name').value = '';
-            document.getElementById('plant-qty').value = '1';
-            document.getElementById('plant-price-hint').textContent = '';
+            const cat = plantCat.value;
+            const name = plantName.value;
+            const size = plantSize.value;
+            const qty = parseInt(plantQty.value);
+            if (!cat || !name) { alert('Please select category and plant.'); return; }
+            const pr = priceCatalog[cat][name];
+            let unit = size === 'small' ? pr.lo : size === 'large' ? pr.hi : Math.round((pr.lo + pr.hi) / 2);
+            plantList.push({ cat, name, size, qty, unit, total: unit*qty });
+            plantName.value = '';
+            plantQty.value = '1';
+            plantPriceHint.textContent = '';
             refreshAll();
         }
 
-        // ============ ROBUST SERVICE PARSER ============
+        // =========== SERVICE PARSER ===========
         function fetchServicePrices() {
             return fetch('services.html')
                 .then(r => r.text())
                 .then(html => {
                     const d = new DOMParser().parseFromString(html, 'text/html');
-                    console.log('🛠️ Services HTML parsed successfully');
+                    console.log('🛠️ Service HTML parsed');
 
-                    // Try multiple selectors for service items
-                    const serviceItems = d.querySelectorAll('.service-item');
-                    console.log('   Found', serviceItems.length, '.service-item elements');
-
-                    if (serviceItems.length === 0) {
-                        console.warn('⚠️ No .service-item found. Checking for alternative structures...');
-                        // maybe it's a different class, fallback: look for any div containing a price span
-                        const allSpans = d.querySelectorAll('span.price-range');
-                        console.log('   Found', allSpans.length, 'span.price-range elements');
-                    }
-
-                    // Find all category headers (try common class names)
+                    // Try multiple header selectors
                     const headers = d.querySelectorAll('.category-header, .service-category, .section-header');
-                    console.log('   Found', headers.length, 'category headers (.category-header, .service-category, .section-header)');
-
+                    console.log('   Found', headers.length, 'service category headers');
                     if (headers.length === 0) {
-                        console.warn('⚠️ No category headers found, trying H2 elements...');
+                        // Fallback to h2
                         const h2s = d.querySelectorAll('h2');
-                        console.log('   Found', h2s.length, 'H2 elements');
+                        console.log('   Trying', h2s.length, 'h2 elements');
                         h2s.forEach(h2 => {
                             const title = h2.textContent.trim();
                             const items = [];
@@ -409,9 +424,9 @@
                             while (next && next.tagName !== 'H2') {
                                 const servItems = next.querySelectorAll('.service-item');
                                 servItems.forEach(si => {
-                                    const name = si.querySelector('.service-name')?.textContent.trim();
-                                    const price = si.querySelector('.price-range')?.textContent.trim();
-                                    if (name && price) items.push({name, price});
+                                    const nameEl = si.querySelector('.service-name');
+                                    const priceEl = si.querySelector('.price-range');
+                                    if (nameEl && priceEl) items.push({ name: nameEl.textContent.trim(), price: priceEl.textContent.trim() });
                                 });
                                 next = next.nextElementSibling;
                             }
@@ -420,7 +435,6 @@
                             }
                         });
                     } else {
-                        // Use category headers
                         headers.forEach(header => {
                             const title = header.textContent.trim();
                             const icon = header.querySelector('.category-icon')?.textContent.trim() || '🛠️';
@@ -429,9 +443,9 @@
                             while (next && !next.matches('.category-header, .service-category, .section-header')) {
                                 const servItems = next.querySelectorAll('.service-item');
                                 servItems.forEach(si => {
-                                    const name = si.querySelector('.service-name')?.textContent.trim();
-                                    const price = si.querySelector('.price-range')?.textContent.trim();
-                                    if (name && price) items.push({name, price});
+                                    const nameEl = si.querySelector('.service-name');
+                                    const priceEl = si.querySelector('.price-range');
+                                    if (nameEl && priceEl) items.push({ name: nameEl.textContent.trim(), price: priceEl.textContent.trim() });
                                 });
                                 next = next.nextElementSibling;
                             }
@@ -441,17 +455,16 @@
                         });
                     }
 
-                    // Also parse packages
-                    const packages = d.querySelectorAll('.package-card');
-                    packages.forEach(pkg => {
+                    // Packages
+                    const packageCards = d.querySelectorAll('.package-card');
+                    packageCards.forEach(pkg => {
                         const name = pkg.querySelector('.package-name')?.textContent.trim();
                         const priceText = pkg.querySelector('.package-price')?.textContent.trim();
                         if (!name || !priceText) return;
                         const price = parseInt(priceText.replace(/[^0-9]/g, ''));
                         const features = Array.from(pkg.querySelectorAll('.package-features li')).map(li => li.textContent.trim());
-                        servicePackages.push({name, price, features});
+                        servicePackages.push({ name, price, features });
                     });
-
                     if (servicePackages.length > 0) {
                         serviceCatalog['🎯 Service Packages'] = {
                             icon: '📦',
@@ -469,7 +482,7 @@
                     renderServiceCards();
                 })
                 .catch(err => {
-                    console.error('Fetch services failed:', err);
+                    console.error('Service fetch error:', err);
                     serviceCatalog = {
                         '🏡 Outdoor Landscaping': {
                             icon: '🏡',
@@ -483,8 +496,8 @@
                 });
         }
 
-        function parseServiceItems(rawItems) {
-            return rawItems.map(item => {
+        function parseServiceItems(raw) {
+            return raw.map(item => {
                 const match = item.price.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
                 if (match) {
                     return {
@@ -502,39 +515,60 @@
         }
 
         function renderServiceCards() {
-            const container = document.getElementById('service-cards');
             const keys = Object.keys(serviceCatalog);
             if (keys.length === 0) {
-                container.innerHTML = '<p class="error-text">❌ No services found. Check console.</p>';
+                serviceCards.innerHTML = '<p class="error-text">❌ No services found. Check console.</p>';
                 return;
             }
-            container.innerHTML = keys.map(key => {
+            serviceCards.innerHTML = keys.map(key => {
                 const svc = serviceCatalog[key];
-                return `<div class="service-card" onclick="pickService('${key.replace(/'/g, "\\'")}', this)">
+                return `<div class="service-card" data-category="${key}">
                     <div class="icon">${svc.icon}</div>
                     <h3>${key}</h3>
                     <p>${svc.items.length} service(s)</p>
                 </div>`;
             }).join('');
+
+            // Attach click handlers (CSP safe, no inline onclick)
+            serviceCards.querySelectorAll('.service-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const type = this.dataset.category;
+                    pickService(type, this);
+                });
+            });
         }
 
-        function pickService(type, card) {
-            document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
-            const opts = document.getElementById('service-opts');
-            opts.style.display = 'block';
-            document.getElementById('service-opts-title').textContent = type;
+        function pickService(type, cardElement) {
+            serviceCards.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+            cardElement.classList.add('selected');
             const d = serviceCatalog[type];
-            document.getElementById('service-opts-grid').innerHTML = d.items.map(i => {
-                const priceDisplay = i.isRange ? `${i.priceLo.toLocaleString()} – ${i.priceHi.toLocaleString()} Ks` : `${i.priceLo.toLocaleString()} Ks`;
-                const featHtml = i.features ? `<div style="font-size:0.8em;color:#666;margin-top:5px">${i.features.map(f => '🌿 '+f).join('<br>')}</div>` : '';
+            serviceOpts.style.display = 'block';
+            serviceOptsTitle.textContent = type;
+            serviceOptsGrid.innerHTML = d.items.map((item, idx) => {
+                const priceDisplay = item.isRange ?
+                    `${item.priceLo.toLocaleString()} – ${item.priceHi.toLocaleString()} Ks` :
+                    `${item.priceLo.toLocaleString()} Ks`;
+                const featHtml = item.features ?
+                    `<div style="font-size:0.8em;color:#666;margin-top:5px">${item.features.map(f => '🌿 '+f).join('<br>')}</div>` : '';
                 return `<div class="option-card">
-                    <h4>${i.name}</h4>
+                    <h4>${item.name}</h4>
                     <div class="option-price">${priceDisplay}</div>
                     ${featHtml}
-                    <button class="btn-service-add" onclick="addServiceItem('${type.replace(/'/g, "\\'")}', '${i.name.replace(/'/g, "\\'")}', ${i.priceLo}, ${i.priceHi}, ${i.isRange})">+ Add</button>
+                    <button class="btn-service-add" data-type="${type}" data-name="${item.name}" data-lo="${item.priceLo}" data-hi="${item.priceHi}" data-range="${item.isRange}">+ Add</button>
                 </div>`;
             }).join('');
+
+            // Attach listeners to new add buttons
+            serviceOptsGrid.querySelectorAll('.btn-service-add').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const type = this.dataset.type;
+                    const name = this.dataset.name;
+                    const lo = parseInt(this.dataset.lo);
+                    const hi = parseInt(this.dataset.hi);
+                    const isRange = this.dataset.range === 'true';
+                    addServiceItem(type, name, lo, hi, isRange);
+                });
+            });
         }
 
         function addServiceItem(type, name, priceLo, priceHi, isRange) {
@@ -543,52 +577,83 @@
             refreshAll();
         }
 
-        // ============ COMMON ============
+        // =========== COMMON ===========
         function delPlant(i) { plantList.splice(i, 1); refreshAll(); }
         function delService(i) { serviceList.splice(i, 1); refreshAll(); }
 
         function refreshAll() {
             // Plants list
-            document.getElementById('plant-items').innerHTML = plantList.length === 0 ?
+            plantItems.innerHTML = plantList.length === 0 ?
                 '<p class="empty-text">No plants selected yet.</p>' :
                 plantList.map((p,i) => `<div class="list-item">
                     <div class="item-detail"><div class="item-title">${p.name}</div><div class="item-sub">${p.size} | Qty:${p.qty} | ${p.unit.toLocaleString()} Ks</div></div>
                     <div class="item-cost">${p.total.toLocaleString()} Ks</div>
-                    <button class="btn-remove" onclick="delPlant(${i})">×</button>
+                    <button class="btn-remove" data-plant-index="${i}">×</button>
                 </div>`).join('');
+            // Attach remove handlers to plants
+            plantItems.querySelectorAll('.btn-remove').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.plantIndex);
+                    delPlant(idx);
+                });
+            });
 
             // Services list
-            document.getElementById('service-items').innerHTML = serviceList.length === 0 ?
+            serviceItems.innerHTML = serviceList.length === 0 ?
                 '<p class="empty-text">No services selected yet.</p>' :
                 serviceList.map((s,i) => `<div class="list-item">
                     <div class="item-detail"><div class="item-title">${s.name}</div><div class="item-sub">${s.type}</div></div>
                     <div class="item-cost">${s.isRange ? `${s.priceLo.toLocaleString()}–${s.priceHi.toLocaleString()}` : s.price.toLocaleString()} Ks</div>
-                    <button class="btn-remove" onclick="delService(${i})">×</button>
+                    <button class="btn-remove" data-service-index="${i}">×</button>
                 </div>`).join('');
+            serviceItems.querySelectorAll('.btn-remove').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.serviceIndex);
+                    delService(idx);
+                });
+            });
 
-            // Summary
-            let pt = plantList.reduce((s,p)=>s+p.total,0);
-            let st = serviceList.reduce((s,sv)=>s+sv.price,0);
-            document.getElementById('sum-plants').innerHTML = plantList.length === 0 ? '<p class="empty-text">No plants</p>' :
-                plantList.map((p,i)=>`<div class="list-item"><span>${p.name} (${p.size}) ×${p.qty}</span><span>${p.total.toLocaleString()} Ks</span><button class="btn-remove" onclick="delPlant(${i})">×</button></div>`).join('');
-            document.getElementById('sum-services').innerHTML = serviceList.length === 0 ? '<p class="empty-text">No services</p>' :
-                serviceList.map((s,i)=>`<div class="list-item"><span>${s.name}</span><span>${s.price.toLocaleString()} Ks</span><button class="btn-remove" onclick="delService(${i})">×</button></div>`).join('');
-            document.getElementById('plants-total').textContent = pt.toLocaleString() + ' Ks';
-            document.getElementById('services-total').textContent = st.toLocaleString() + ' Ks';
+            // Summary panels
+            const pt = plantList.reduce((s,p) => s + p.total, 0);
+            const st = serviceList.reduce((s,sv) => s + sv.price, 0);
+
+            sumPlants.innerHTML = plantList.length === 0 ?
+                '<p class="empty-text">No plants</p>' :
+                plantList.map((p,i) => `<div class="list-item"><span>${p.name} (${p.size}) ×${p.qty}</span><span>${p.total.toLocaleString()} Ks</span><button class="btn-remove" data-sum-plant-index="${i}">×</button></div>`).join('');
+            sumPlants.querySelectorAll('.btn-remove').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.sumPlantIndex);
+                    delPlant(idx);
+                });
+            });
+
+            sumServices.innerHTML = serviceList.length === 0 ?
+                '<p class="empty-text">No services</p>' :
+                serviceList.map((s,i) => `<div class="list-item"><span>${s.name}</span><span>${s.price.toLocaleString()} Ks</span><button class="btn-remove" data-sum-service-index="${i}">×</button></div>`).join('');
+            sumServices.querySelectorAll('.btn-remove').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.sumServiceIndex);
+                    delService(idx);
+                });
+            });
+
+            plantsTotal.textContent = pt.toLocaleString() + ' Ks';
+            servicesTotal.textContent = st.toLocaleString() + ' Ks';
 
             const tot = pt + st;
             let disc = tot > 500000 ? 0.10 : tot > 200000 ? 0.05 : 0;
             const da = Math.round(tot * disc);
-            document.getElementById('discount-msg').innerHTML = disc ? `<div class="discount-tag">🎉 ${disc*100}% discount! (Save ${da.toLocaleString()} Ks)</div>` : '';
-            document.getElementById('grand-total').textContent = (tot - da).toLocaleString() + ' Ks';
+            discountMsg.innerHTML = disc ?
+                `<div class="discount-tag">🎉 ${disc*100}% discount! (Save ${da.toLocaleString()} Ks)</div>` : '';
+            grandTotal.textContent = (tot - da).toLocaleString() + ' Ks';
         }
 
-        function showPanel(p) {
-            document.querySelectorAll('.calc-panel').forEach(x => x.classList.remove('active'));
-            document.querySelectorAll('.calc-tab-btn').forEach(x => x.classList.remove('active'));
-            document.getElementById('panel-' + p).classList.add('active');
-            event.target.classList.add('active');
-            if (p === 'summary') refreshAll();
+        function showPanel(panelId) {
+            panels.forEach(p => p.classList.remove('active'));
+            document.getElementById('panel-' + panelId).classList.add('active');
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.calc-tab-btn[data-panel="${panelId}"]`).classList.add('active');
+            if (panelId === 'summary') refreshAll();
         }
 
         function emailEstimate() {
@@ -612,12 +677,13 @@
             window.location.href = `mailto:?subject=${encodeURIComponent('Landscape Estimate')}&body=${encodeURIComponent(text)}`;
         }
 
-        // Initialize with promises
+        // =========== INIT ===========
         window.addEventListener('DOMContentLoaded', () => {
             Promise.all([fetchPlantPrices(), fetchServicePrices()])
-                .then(() => console.log('✅ Calculator fully loaded'))
+                .then(() => console.log('✅ Calculator ready (CSP-safe)'))
                 .catch(err => console.error('Init error:', err));
         });
+    })();
     </script>
 </body>
 </html>
