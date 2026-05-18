@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ပန်းသတင်း Landscaping Services - Calculator</title>
+    <title>ပန်းသတင်း Landscaping - Calculator</title>
     <style>
         :root {
             --primary: #2d5a27; --secondary: #8B4513; --accent: #D2691E;
@@ -112,7 +112,6 @@
         .btn-action.white{background:white;color:var(--primary)}
         .btn-action:hover{transform:translateY(-2px)}
         .empty-text{text-align:center;color:#999;padding:20px}
-        .error-text{color:#d32f2f;text-align:center;padding:20px}
         @media(max-width:768px){
             .header h1{font-size:2em}
             .plant-selector{grid-template-columns:1fr}
@@ -156,15 +155,11 @@
                         <div class="plant-selector">
                             <div class="form-group">
                                 <label for="plant-cat">Category</label>
-                                <select id="plant-cat">
-                                    <option value="">Loading categories...</option>
-                                </select>
+                                <select id="plant-cat"><option value="">Loading categories...</option></select>
                             </div>
                             <div class="form-group">
                                 <label for="plant-name">Plant</label>
-                                <select id="plant-name">
-                                    <option value="">Select plant...</option>
-                                </select>
+                                <select id="plant-name"><option value="">Select plant...</option></select>
                             </div>
                             <div class="form-group">
                                 <label for="plant-size">Size</label>
@@ -189,10 +184,8 @@
 
                     <!-- Services Panel -->
                     <div class="calc-panel" id="panel-services">
-                        <p style="margin-bottom:20px;color:#666">Select a service category to see available options:</p>
-                        <div class="service-cards" id="service-cards">
-                            <p class="loading-text">Loading services catalog...</p>
-                        </div>
+                        <p style="margin-bottom:20px;color:#666">Select a service category:</p>
+                        <div class="service-cards" id="service-cards"><p class="loading-text">Loading services...</p></div>
                         <div class="service-options" id="service-opts">
                             <h3 id="service-opts-title"></h3>
                             <div class="option-grid" id="service-opts-grid"></div>
@@ -208,18 +201,12 @@
                         <div class="summary-block">
                             <h3>🌱 Selected Plants</h3>
                             <div id="sum-plants"><p class="empty-text">No plants selected</p></div>
-                            <div class="subtotal">
-                                <span>Plants Subtotal:</span>
-                                <span id="plants-total">0 Ks</span>
-                            </div>
+                            <div class="subtotal"><span>Plants Subtotal:</span><span id="plants-total">0 Ks</span></div>
                         </div>
                         <div class="summary-block">
                             <h3>🛠️ Selected Services</h3>
                             <div id="sum-services"><p class="empty-text">No services selected</p></div>
-                            <div class="subtotal">
-                                <span>Services Subtotal:</span>
-                                <span id="services-total">0 Ks</span>
-                            </div>
+                            <div class="subtotal"><span>Services Subtotal:</span><span id="services-total">0 Ks</span></div>
                         </div>
                         <div class="total-section">
                             <div id="discount-msg"></div>
@@ -238,478 +225,549 @@
 
     <script>
     (function() {
-        // =========== DATA STORES ===========
-        let priceCatalog = {};       // { category: { plantName: { lo, hi } } }
-        let serviceCatalog = {};     // { categoryTitle: { icon, items: [{name, priceLo, priceHi, isRange, features?}] } }
-        let servicePackages = [];    // [{ name, price, features[] }]
-        let plantList = [];          // { cat, name, size, qty, unit, total }
-        let serviceList = [];        // { type, name, price, priceLo, priceHi, isRange }
+        // ────────────────────────────── DATA ──────────────────────────────
+        // Google Sheet URL (same as catalog page)
+        const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQzthDCHJACnjbjtXCzlsPQY3brcqwU4K035F_KkTVpBCj6SNwdfEJZe3S6gQgNqHnlfP6lRT0-A9mP/pub?output=csv';
 
-        // =========== DOM REFERENCES ===========
-        const plantCat       = document.getElementById('plant-cat');
-        const plantName      = document.getElementById('plant-name');
-        const plantSize      = document.getElementById('plant-size');
-        const plantQty       = document.getElementById('plant-qty');
-        const plantPriceHint = document.getElementById('plant-price-hint');
-        const plantItems     = document.getElementById('plant-items');
-        const btnAddPlant    = document.getElementById('btn-add-plant');
-        const serviceCards   = document.getElementById('service-cards');
-        const serviceOpts    = document.getElementById('service-opts');
-        const serviceOptsTitle = document.getElementById('service-opts-title');
-        const serviceOptsGrid = document.getElementById('service-opts-grid');
-        const serviceItems   = document.getElementById('service-items');
-        const sumPlants      = document.getElementById('sum-plants');
-        const plantsTotal    = document.getElementById('plants-total');
-        const sumServices    = document.getElementById('sum-services');
-        const servicesTotal  = document.getElementById('services-total');
-        const discountMsg    = document.getElementById('discount-msg');
-        const grandTotal     = document.getElementById('grand-total');
-        const tabButtons     = document.querySelectorAll('.calc-tab-btn');
-        const panels         = document.querySelectorAll('.calc-panel');
+        // Plant catalog – built from the same data as plant-catalogs.html
+        // Each plant has: file, en (English name), mm (Burmese), category
+        const plantCatalog = [
+            // Fruits
+            { file:'mango-fruit.jpg', en:'Mango (grafted)', mm:'သရက်ပင်', cat:'🍋 Fruit Plants' },
+            { file:'jackfruit.jpg', en:'Jackfruit', mm:'ပိန္နဲပင်', cat:'🍋 Fruit Plants' },
+            { file:'durian.jpg', en:'Durian (grafted)', mm:'ဒူးရင်းပင်', cat:'🍋 Fruit Plants' },
+            { file:'papaya.jpg', en:'Papaya', mm:'သင်္ဘောပင်', cat:'🍋 Fruit Plants' },
+            { file:'guava.jpg', en:'Guava', mm:'မာလကာပင်', cat:'🍋 Fruit Plants' },
+            { file:'custard-apple.jpg', en:'Custard Apple', mm:'ဩဇာပင်', cat:'🍋 Fruit Plants' },
+            { file:'avocado.jpg', en:'Avocado (grafted)', mm:'ထောပတ်ပင်', cat:'🍋 Fruit Plants' },
+            { file:'banana.jpg', en:'Banana (Dwarf)', mm:'ငှက်ပျောပင်', cat:'🍋 Fruit Plants' },
+            { file:'pomelo.jpg', en:'Pomelo', mm:'ကျွဲကောပင်', cat:'🍋 Fruit Plants' },
+            { file:'lime.jpg', en:'Lime / Lemon', mm:'သံပုရာပင် / ရှောက်ပင်', cat:'🍋 Fruit Plants' },
+            { file:'starfruit.jpg', en:'Star Fruit', mm:'စောင်းလျားပင်', cat:'🍋 Fruit Plants' },
+            { file:'pomegranate.jpg', en:'Pomegranate', mm:'သလဲပင်', cat:'🍋 Fruit Plants' },
+            { file:'dragon-fruit.jpg', en:'Dragon Fruit', mm:'နဂါးမောက်သီး', cat:'🍋 Fruit Plants' },
+            { file:'soursop.jpg', en:'Soursop', mm:'ဒူးရင်းရိုင်း', cat:'🍋 Fruit Plants' },
+            { file:'sapodilla.jpg', en:'Sapodilla', mm:'သပွတ်ပင်', cat:'🍋 Fruit Plants' },
+            { file:'langsat.jpg', en:'Langsat / Duku', mm:'လန်းဆတ်ပင်', cat:'🍋 Fruit Plants' },
+            { file:'mangosteen.jpg', en:'Mangosteen', mm:'မင်းဂွတ်ပင်', cat:'🍋 Fruit Plants' },
+            { file:'rambutan.jpg', en:'Rambutan', mm:'ကြက်မောက်ပင်', cat:'🍋 Fruit Plants' },
+            { file:'lychee.jpg', en:'Lychee', mm:'လိုင်ချီးပင်', cat:'🍋 Fruit Plants' },
+            { file:'tamarind.jpg', en:'Tamarind (Sweet)', mm:'မန်ကျည်းပင်', cat:'🍋 Fruit Plants' },
+            { file:'jujube.jpg', en:'Jujube', mm:'ဆီးပင်', cat:'🍋 Fruit Plants' },
+            { file:'passion-fruit.jpg', en:'Passion Fruit', mm:'ပတ်ရှင်သီး', cat:'🍋 Fruit Plants' },
+            { file:'persimmon.jpg', en:'Persimmon', mm:'တည်ပင်', cat:'🍋 Fruit Plants' },
+            { file:'burmese-grape.jpg', en:'Burmese Grape', mm:'ကနစိုပင် / လီးသီး', cat:'🍋 Fruit Plants' },
+            { file:'mulberry.jpg', en:'Mulberry', mm:'ပိုးစာပင်', cat:'🍋 Fruit Plants' },
+            // Orchids
+            { file:'dendrobium-hybrid.jpg', en:'Dendrobium (Hybrid Mix)', mm:'ဒန်ဒရိုဘီယမ် သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'vanda.jpg', en:'Vanda (Blue/Purple)', mm:'ဗန်ဒါသစ်ခွ', cat:'🌸 Orchids' },
+            { file:'cymbidium.jpg', en:'Cymbidium (Boat Orchid)', mm:'စင်ဘီဒီယမ် သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'paphiopedilum.jpg', en:'Slipper Orchid', mm:'ဖိနပ်သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'rhynchostylis.jpg', en:'Foxtail Orchid', mm:'မြွေမြီးသစ်ခွ', cat:'🌸 Orchids' },
+            { file:'phalaenopsis.jpg', en:'Moth Orchid', mm:'ဖလေနော့ပ်စစ် သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'aerides.jpg', en:'Fox Brush Orchid', mm:'အေရီးဒီးစ် သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'bulbophyllum.jpg', en:'Bulbophyllum', mm:'ဘူလ်ဘိုဖီလမ် သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'coelogyne.jpg', en:'Coelogyne', mm:'စီလော်ဂျင်နီ သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'eria.jpg', en:'Eria', mm:'အီးရီးယား သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'phaius.jpg', en:'Phaius (Nun Orchid)', mm:'ဖေးယပ်စ် သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'thunia.jpg', en:'Thunia', mm:'ထူနီးယား သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'renanthera.jpg', en:'Renanthera', mm:'ရီနန်သီရာ သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'pleione.jpg', en:'Pleione', mm:'ပလီယိုနီ သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'cleisostoma.jpg', en:'Cleisostoma', mm:'ကလိုင်ဆိုစတိုမာ သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'acampe.jpg', en:'Acampe', mm:'အေကမ်ပီ သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'ascocentrum.jpg', en:'Ascocentrum', mm:'အက်စကိုစင်ထရမ် သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'pholidota.jpg', en:'Pholidota (Rattlesnake Orchid)', mm:'ဖိုလီဒိုတာ သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'nervilia.jpg', en:'Nervilia', mm:'နာဗီလီယာ သစ်ခွ', cat:'🌸 Orchids' },
+            { file:'blue-vanda.jpg', en:'Blue Vanda (Coerulea)', mm:'ဗန်ဒါအပြာ', cat:'🌸 Orchids' },
+            // Pots
+            { file:'pot-terracotta.jpg', en:'Terracotta Pot', mm:'မြေအိုး', cat:'🪴 Pots & Containers' },
+            { file:'pot-cement.jpg', en:'Cement Pot', mm:'ဘိလပ်မြေအိုး', cat:'🪴 Pots & Containers' },
+            { file:'pot-glazed.jpg', en:'Glazed Ceramic Pot', mm:'စဉ့်အိုး / ကြွေအိုး', cat:'🪴 Pots & Containers' },
+            { file:'pot-plastic.jpg', en:'Plastic Nursery Pot', mm:'ပလတ်စတစ်အိုး', cat:'🪴 Pots & Containers' },
+            { file:'pot-growbag.jpg', en:'Fabric Grow Bag', mm:'စိုက်အိတ်', cat:'🪴 Pots & Containers' },
+            { file:'pot-hanging.jpg', en:'Hanging Basket', mm:'ဆွဲအိုး', cat:'🪴 Pots & Containers' },
+            { file:'pot-selfwatering.jpg', en:'Self-Watering Pot', mm:'ရေလှောင်အိုး', cat:'🪴 Pots & Containers' },
+            { file:'pot-orchid.jpg', en:'Orchid Pot (Slotted)', mm:'သစ်ခွအိုး', cat:'🪴 Pots & Containers' },
+            // Shrubs
+            { file:'bougainvillea.jpg', en:'Bougainvillea', mm:'စက္ကူပန်း', cat:'🌺 Shrubs & Climbers' },
+            { file:'ixora.jpg', en:'Ixora', mm:'ပိန်းနဲပန်း', cat:'🌺 Shrubs & Climbers' },
+            { file:'hibiscus.jpg', en:'Hibiscus', mm:'ခေါင်ရန်းပန်း', cat:'🌺 Shrubs & Climbers' },
+            { file:'rangoon-creeper.jpg', en:'Rangoon Creeper', mm:'မြတ်လေးနွယ်', cat:'🌺 Shrubs & Climbers' },
+            { file:'bleeding-heart.jpg', en:'Bleeding Heart Vine', mm:'ဂုလ္လီပန်း', cat:'🌺 Shrubs & Climbers' },
+            { file:'muang.jpg', en:'Muang / Orange Trumpet', mm:'မောင်းပန်း', cat:'🌺 Shrubs & Climbers' },
+            { file:'king-jasmine.jpg', en:'King Jasmine', mm:'မြတ်လေးဘုရင်', cat:'🌺 Shrubs & Climbers' },
+            { file:'allamanda.jpg', en:'Allamanda', mm:'ရွှေကြက်ရင်း', cat:'🌺 Shrubs & Climbers' },
+            { file:'pagoda-flower.jpg', en:'Pagoda Flower', mm:'ပုဂံပန်း', cat:'🌺 Shrubs & Climbers' },
+            { file:'night-jasmine.jpg', en:'Night Jasmine', mm:'ညပန်း', cat:'🌺 Shrubs & Climbers' },
+            { file:'garlic-vine.jpg', en:'Garlic Vine', mm:'ကြက်သွန်နွယ်', cat:'🌺 Shrubs & Climbers' },
+            { file:'amherstia.jpg', en:'Pride of Myanmar', mm:'သိုက်ပန်း', cat:'🌺 Shrubs & Climbers' },
+            { file:'gardenia.jpg', en:'Gardenia', mm:'ဇီးဖြူပန်း', cat:'🌺 Shrubs & Climbers' },
+            { file:'butterfly-bush.jpg', en:'Butterfly Bush', mm:'လိပ်ပြာပန်း', cat:'🌺 Shrubs & Climbers' },
+            { file:'jungle-flame.jpg', en:'Jungle Flame', mm:'ပိန်းနဲပန်းအနီ', cat:'🌺 Shrubs & Climbers' },
+            // Trees
+            { file:'frangipani.jpg', en:'Frangipani', mm:'ဇီဇဝါပန်း', cat:'🌳 Trees & Palms' },
+            { file:'golden-shower.jpg', en:'Golden Shower Tree', mm:'ငုရွှေဝါပန်း', cat:'🌳 Trees & Palms' },
+            { file:'foxtail-palm.jpg', en:'Foxtail Palm', mm:'မြီးတောင်အုန်း', cat:'🌳 Trees & Palms' },
+            { file:'teak.jpg', en:'Teak', mm:'ကျွန်းပင်', cat:'🌳 Trees & Palms' },
+            { file:'neem.jpg', en:'Neem', mm:'တမာပင်', cat:'🌳 Trees & Palms' },
+            { file:'areca-palm.jpg', en:'Areca Palm', mm:'အုန်းချယ်ပင်', cat:'🌳 Trees & Palms' },
+            { file:'rain-tree.jpg', en:'Rain Tree', mm:'မိုးသစ်ပင်', cat:'🌳 Trees & Palms' },
+            { file:'mezali.jpg', en:'Mezali', mm:'မယ်ဇလီပင်', cat:'🌳 Trees & Palms' },
+            { file:'star-flower.jpg', en:'Star Flower Tree', mm:'ခရေပင်', cat:'🌳 Trees & Palms' },
+            { file:'mohur.jpg', en:'Mohur Tree / Flamboyant', mm:'စိန်ပန်းပင်', cat:'🌳 Trees & Palms' },
+            { file:'travellers-palm.jpg', en:'Travellers Palm', mm:'ခရီးသွားထန်း', cat:'🌳 Trees & Palms' },
+            { file:'fishtail-palm.jpg', en:'Fish Tail Palm', mm:'ငါးမြီးထန်း', cat:'🌳 Trees & Palms' },
+            // Indoor
+            { file:'snake-plant.jpg', en:'Snake Plant', mm:'မြွေလျှာပင်', cat:'🪴 Indoor & Shade Plants' },
+            { file:'peace-lily.jpg', en:'Peace Lily', mm:'ငြိမ်းချမ်းရေးလီလီ', cat:'🪴 Indoor & Shade Plants' },
+            { file:'pothos.jpg', en:'Money Plant / Pothos', mm:'ငွေပင်', cat:'🪴 Indoor & Shade Plants' },
+            { file:'croton.jpg', en:'Croton', mm:'ဇော်ဂျီပင်', cat:'🪴 Indoor & Shade Plants' },
+            { file:'chinese-evergreen.jpg', en:'Chinese Evergreen', mm:'အဂ်လော်နီးမား', cat:'🪴 Indoor & Shade Plants' },
+            { file:'monstera.jpg', en:'Swiss Cheese Plant', mm:'မွန်စတီရာ', cat:'🪴 Indoor & Shade Plants' },
+            { file:'boston-fern.jpg', en:'Boston Fern', mm:'ဒေါင်းမြီးပင်', cat:'🪴 Indoor & Shade Plants' },
+            { file:'zz-plant.jpg', en:'ZZ Plant', mm:'ဇီဇီပင်', cat:'🪴 Indoor & Shade Plants' },
+            { file:'dracaena.jpg', en:'Dracaena (Dragon Tree)', mm:'ဒရာစီနာ', cat:'🪴 Indoor & Shade Plants' },
+            { file:'spider-plant.jpg', en:'Spider Plant', mm:'ပင့်ကူပင်', cat:'🪴 Indoor & Shade Plants' },
+            { file:'rubber-plant.jpg', en:'Rubber Plant', mm:'ရာဘာပင်', cat:'🪴 Indoor & Shade Plants' },
+            { file:'calathea.jpg', en:'Calathea (Prayer Plant)', mm:'ကလာသီယာ', cat:'🪴 Indoor & Shade Plants' },
+            // Perennials
+            { file:'jasmine.jpg', en:'Arabian Jasmine', mm:'မြတ်လေးပန်း', cat:'🌸 Perennials & Groundcovers' },
+            { file:'mexican-petunia.jpg', en:'Mexican Petunia', mm:'ပုလဲပန်း', cat:'🌸 Perennials & Groundcovers' },
+            { file:'lantana.jpg', en:'Lantana', mm:'လန်တာနာ', cat:'🌸 Perennials & Groundcovers' },
+            { file:'coleus.jpg', en:'Coleus', mm:'ရောင်စုံဆေးပင်', cat:'🌸 Perennials & Groundcovers' },
+            { file:'marigold.jpg', en:'Marigold', mm:'ထပ်တစ်ရာပန်း', cat:'🌸 Perennials & Groundcovers' },
+            { file:'portulaca.jpg', en:'Moss Rose / 9 o\'clock', mm:'၉ နာရီပန်း', cat:'🌸 Perennials & Groundcovers' },
+            { file:'canna.jpg', en:'Canna Lily', mm:'ငှက်ပျောပန်းနီ', cat:'🌸 Perennials & Groundcovers' },
+            { file:'heliconia.jpg', en:'Heliconia', mm:'ဟယ်လီကိုနီယာ', cat:'🌸 Perennials & Groundcovers' },
+            { file:'barleria.jpg', en:'Barleria', mm:'ဖြူခက်ပြာ', cat:'🌸 Perennials & Groundcovers' },
+            { file:'plumbago.jpg', en:'Plumbago', mm:'ပလမ်ဘာဂို', cat:'🌸 Perennials & Groundcovers' },
+            { file:'pentas.jpg', en:'Pentas (Star Cluster)', mm:'ကြယ်စုပန်း', cat:'🌸 Perennials & Groundcovers' },
+            { file:'euphorbia.jpg', en:'Euphorbia (Crown of Thorns)', mm:'သရဖူဆူးပင်', cat:'🌸 Perennials & Groundcovers' },
+            // Fence
+            { file:'bamboo.jpg', en:'Dwarf Bamboo (Clumping)', mm:'ဝါးပုပင်', cat:'🌿 Fence & Balcony Specials' },
+            { file:'thunbergia.jpg', en:'Clock Vine', mm:'ဆေးဒန်းနွယ်', cat:'🌿 Fence & Balcony Specials' },
+            { file:'morning-glory.jpg', en:'Morning Glory', mm:'ကြက်မောက်နွယ်', cat:'🌿 Fence & Balcony Specials' },
+            { file:'clematis.jpg', en:'Clematis', mm:'ကလီမက်တစ်', cat:'🌿 Fence & Balcony Specials' },
+            { file:'asparagus.jpg', en:'Asparagus Fern', mm:'ကညွတ်အတိုင်ပင်', cat:'🌿 Fence & Balcony Specials' },
+            { file:'snake-jasmine.jpg', en:'Snake Jasmine', mm:'မြွေမြတ်လေး', cat:'🌿 Fence & Balcony Specials' },
+            { file:'vinca.jpg', en:'Vinca (Periwinkle)', mm:'သင်္ဘောမန်ကျည်း', cat:'🌿 Fence & Balcony Specials' },
+            { file:'clitoria.jpg', en:'Butterfly Pea', mm:'ပဲပုပ်ပန်း', cat:'🌿 Fence & Balcony Specials' },
+            { file:'caladium.jpg', en:'Caladium', mm:'ကလေဒီယမ်', cat:'🌿 Fence & Balcony Specials' },
+            { file:'ruellia.jpg', en:'Ruellia (Wild Petunia)', mm:'ရူးလီးယား', cat:'🌿 Fence & Balcony Specials' }
+        ];
 
-        // =========== CSP-SAFE EVENT BINDING ===========
-        // Tab switching
-        tabButtons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const panelId = this.dataset.panel;
-                showPanel(panelId);
-            });
-        });
+        // Default prices (fallback)
+        const DEFAULT_PRICES = {
+            'mango-fruit.jpg': '12,000 – 30,000 Ks', 'jackfruit.jpg': '10,000 – 20,000 Ks',
+            'durian.jpg': '15,000 – 45,000 Ks', 'papaya.jpg': '3,000 – 8,000 Ks',
+            'guava.jpg': '5,000 – 12,000 Ks', 'custard-apple.jpg': '6,000 – 15,000 Ks',
+            'avocado.jpg': '10,000 – 25,000 Ks', 'banana.jpg': '2,500 – 6,000 Ks',
+            'pomelo.jpg': '8,000 – 18,000 Ks', 'lime.jpg': '4,000 – 10,000 Ks',
+            'starfruit.jpg': '7,000 – 15,000 Ks', 'pomegranate.jpg': '6,000 – 14,000 Ks',
+            'dragon-fruit.jpg': '3,000 – 8,000 Ks', 'soursop.jpg': '8,000 – 18,000 Ks',
+            'sapodilla.jpg': '6,000 – 14,000 Ks', 'langsat.jpg': '12,000 – 25,000 Ks',
+            'mangosteen.jpg': '15,000 – 35,000 Ks', 'rambutan.jpg': '10,000 – 22,000 Ks',
+            'lychee.jpg': '10,000 – 22,000 Ks', 'tamarind.jpg': '5,000 – 12,000 Ks',
+            'jujube.jpg': '4,000 – 10,000 Ks', 'passion-fruit.jpg': '3,000 – 7,000 Ks',
+            'persimmon.jpg': '10,000 – 25,000 Ks', 'burmese-grape.jpg': '8,000 – 18,000 Ks',
+            'mulberry.jpg': '4,000 – 8,000 Ks', 'dendrobium-hybrid.jpg': '8,000 – 18,000 Ks',
+            'vanda.jpg': '15,000 – 35,000 Ks', 'cymbidium.jpg': '12,000 – 25,000 Ks',
+            'paphiopedilum.jpg': '20,000 – 50,000 Ks', 'rhynchostylis.jpg': '10,000 – 22,000 Ks',
+            'phalaenopsis.jpg': '10,000 – 20,000 Ks', 'aerides.jpg': '9,000 – 18,000 Ks',
+            'bulbophyllum.jpg': '8,000 – 18,000 Ks', 'coelogyne.jpg': '10,000 – 22,000 Ks',
+            'eria.jpg': '7,000 – 15,000 Ks', 'phaius.jpg': '12,000 – 25,000 Ks',
+            'thunia.jpg': '10,000 – 20,000 Ks', 'renanthera.jpg': '15,000 – 35,000 Ks',
+            'pleione.jpg': '12,000 – 25,000 Ks', 'cleisostoma.jpg': '8,000 – 16,000 Ks',
+            'acampe.jpg': '7,000 – 15,000 Ks', 'ascocentrum.jpg': '10,000 – 20,000 Ks',
+            'pholidota.jpg': '8,000 – 18,000 Ks', 'nervilia.jpg': '6,000 – 12,000 Ks',
+            'blue-vanda.jpg': '25,000 – 60,000 Ks', 'pot-terracotta.jpg': '2,500 – 12,000 Ks',
+            'pot-cement.jpg': '5,000 – 25,000 Ks', 'pot-glazed.jpg': '8,000 – 35,000 Ks',
+            'pot-plastic.jpg': '500 – 4,000 Ks', 'pot-growbag.jpg': '1,500 – 6,000 Ks',
+            'pot-hanging.jpg': '4,000 – 10,000 Ks', 'pot-selfwatering.jpg': '7,000 – 18,000 Ks',
+            'pot-orchid.jpg': '3,000 – 8,000 Ks', 'bougainvillea.jpg': '8,000 – 15,000 Ks',
+            'ixora.jpg': '5,000 – 10,000 Ks', 'hibiscus.jpg': '6,000 – 12,000 Ks',
+            'rangoon-creeper.jpg': '5,000 – 10,000 Ks', 'bleeding-heart.jpg': '6,500 – 12,000 Ks',
+            'muang.jpg': '4,000 – 8,000 Ks', 'king-jasmine.jpg': '8,000 – 18,000 Ks',
+            'allamanda.jpg': '4,000 – 8,000 Ks', 'pagoda-flower.jpg': '6,000 – 12,000 Ks',
+            'night-jasmine.jpg': '4,000 – 8,000 Ks', 'garlic-vine.jpg': '5,000 – 10,000 Ks',
+            'amherstia.jpg': '20,000 – 50,000 Ks', 'gardenia.jpg': '6,000 – 14,000 Ks',
+            'butterfly-bush.jpg': '4,000 – 8,000 Ks', 'jungle-flame.jpg': '5,000 – 10,000 Ks',
+            'frangipani.jpg': '15,000 – 30,000 Ks', 'golden-shower.jpg': '20,000 – 45,000 Ks',
+            'foxtail-palm.jpg': '25,000 – 50,000 Ks', 'teak.jpg': '3,000 – 8,000 Ks',
+            'neem.jpg': '3,000 – 7,000 Ks', 'areca-palm.jpg': '8,000 – 18,000 Ks',
+            'rain-tree.jpg': '10,000 – 25,000 Ks', 'mezali.jpg': '5,000 – 12,000 Ks',
+            'star-flower.jpg': '8,000 – 18,000 Ks', 'mohur.jpg': '10,000 – 25,000 Ks',
+            'travellers-palm.jpg': '15,000 – 35,000 Ks', 'fishtail-palm.jpg': '12,000 – 28,000 Ks',
+            'snake-plant.jpg': '4,000 – 8,000 Ks', 'peace-lily.jpg': '7,000 – 12,000 Ks',
+            'pothos.jpg': '3,000 – 6,000 Ks', 'croton.jpg': '6,000 – 14,000 Ks',
+            'chinese-evergreen.jpg': '5,000 – 10,000 Ks', 'monstera.jpg': '8,000 – 18,000 Ks',
+            'boston-fern.jpg': '5,000 – 10,000 Ks', 'zz-plant.jpg': '5,000 – 12,000 Ks',
+            'dracaena.jpg': '6,000 – 15,000 Ks', 'spider-plant.jpg': '2,500 – 5,000 Ks',
+            'rubber-plant.jpg': '7,000 – 15,000 Ks', 'calathea.jpg': '6,000 – 12,000 Ks',
+            'jasmine.jpg': '4,000 – 9,000 Ks', 'mexican-petunia.jpg': '3,000 – 6,000 Ks',
+            'lantana.jpg': '3,500 – 7,000 Ks', 'coleus.jpg': '2,000 – 5,000 Ks',
+            'marigold.jpg': '1,500 – 3,000 Ks', 'portulaca.jpg': '1,000 – 2,500 Ks',
+            'canna.jpg': '3,000 – 6,000 Ks', 'heliconia.jpg': '5,000 – 12,000 Ks',
+            'barleria.jpg': '3,000 – 6,000 Ks', 'plumbago.jpg': '4,000 – 8,000 Ks',
+            'pentas.jpg': '2,000 – 4,000 Ks', 'euphorbia.jpg': '3,000 – 7,000 Ks',
+            'bamboo.jpg': '10,000 – 20,000 Ks', 'thunbergia.jpg': '4,000 – 8,000 Ks',
+            'morning-glory.jpg': '2,000 – 4,000 Ks', 'clematis.jpg': '5,000 – 12,000 Ks',
+            'asparagus.jpg': '3,000 – 6,000 Ks', 'snake-jasmine.jpg': '3,500 – 7,000 Ks',
+            'vinca.jpg': '1,500 – 3,000 Ks', 'clitoria.jpg': '2,000 – 4,000 Ks',
+            'caladium.jpg': '3,000 – 7,000 Ks', 'ruellia.jpg': '2,500 – 5,000 Ks'
+        };
 
-        // Plant selectors
-        plantCat.addEventListener('change', loadPlants);
-        plantName.addEventListener('change', updatePlantPrice);
-        plantSize.addEventListener('change', updatePlantPrice);
-        plantQty.addEventListener('input', updatePlantPrice);
-        btnAddPlant.addEventListener('click', addPlantItem);
+        // Live prices from Google Sheet (will be filled)
+        let sheetPrices = {}; // { filename: { price: "12,000 – 30,000 Ks", ... } }
+        let priceCatalog = {}; // { category: { plantName: { lo, hi } } }
 
-        // Print and email
-        document.getElementById('btn-print').addEventListener('click', () => window.print());
-        document.getElementById('btn-email').addEventListener('click', emailEstimate);
-
-        // =========== PLANT PARSER ===========
-function fetchPlantPrices() {
-    return fetch('plant-catalogs.html')
-        .then(r => r.text())
-        .then(html => {
-            const d = new DOMParser().parseFromString(html, 'text/html');
-            console.log('🌱 HTML fetched, length:', html.length);
-
-            // Find ALL h3 elements (plant names)
-            const allH3 = d.querySelectorAll('h3');
-            console.log('   Found', allH3.length, '<h3> elements');
-
-            if (allH3.length === 0) {
-                plantItems.innerHTML = '<p class="error-text">❌ No plant names (<h3>) found in catalog.</p>';
-                return;
-            }
-
-            const tempCatalog = {};
-
-            allH3.forEach(h3 => {
-                const plantName = h3.textContent.trim();
-                // Look for a price text near this h3.
-                // Strategy: go up to the nearest container that could hold both name and price
-                // (like .plant-card, .pot-card, or just the parent div), then find any element
-                // containing "Ks" with digits.
-                let container = h3.closest('.plant-card, .pot-card') || h3.parentElement;
-                if (!container) return;
-
-                // Find all text nodes or elements that contain a pattern like "12,000 – 30,000 Ks"
-                // Using a recursive text search inside the container
-                const allElements = container.querySelectorAll('*');
-                let priceText = '';
-                for (let el of allElements) {
-                    const txt = el.textContent.trim();
-                    // Check if this text looks like a price range
-                    if (/[\d,]+ ?[-–] ?[\d,]+ Ks/.test(txt)) {
-                        priceText = txt;
-                        break; // take the first matching
-                    }
-                }
-                if (!priceText) return; // no price found for this plant
-
-                const match = priceText.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
-                if (!match) return;
-
-                const lo = parseInt(match[1].replace(/,/g, ''));
-                const hi = parseInt(match[2].replace(/,/g, ''));
-
-                // Determine category: nearest <h2> above in the DOM
-                let category = 'Uncategorized';
-                let el = h3.previousElementSibling;
-                while (el) {
-                    if (el.tagName === 'H2') {
-                        category = el.textContent.trim();
-                        break;
-                    }
-                    el = el.previousElementSibling;
-                }
-                if (category === 'Uncategorized') {
-                    let parent = h3.parentElement;
-                    while (parent && parent !== d.body) {
-                        const h2 = parent.querySelector('h2');
-                        if (h2) {
-                            category = h2.textContent.trim();
-                            break;
+        // ──────────────── GOOGLE SHEET FETCH ────────────────
+        function fetchSheetPrices() {
+            return fetch(GOOGLE_SHEET_CSV_URL)
+                .then(function(response) {
+                    if (!response.ok) throw new Error('Sheet not accessible');
+                    return response.text();
+                })
+                .then(function(csvText) {
+                    var rows = csvText.trim().split('\n').map(function(row) {
+                        var cols = [];
+                        var current = '';
+                        var inQuotes = false;
+                        for (var i = 0; i < row.length; i++) {
+                            var char = row.charAt(i);
+                            if (char === '"') { inQuotes = !inQuotes; }
+                            else if (char === ',' && !inQuotes) { cols.push(current.trim()); current = ''; }
+                            else { current += char; }
                         }
-                        parent = parent.parentElement;
+                        cols.push(current.trim());
+                        return cols;
+                    });
+                    sheetPrices = {};
+                    for (var i = 1; i < rows.length; i++) {
+                        var filename = rows[i][0];
+                        var price = rows[i][1];
+                        if (filename && price) {
+                            sheetPrices[filename.trim()] = {
+                                price: price.trim(),
+                                status: (rows[i][2] || 'instock').trim().toLowerCase(),
+                                note: (rows[i][3] || '').trim()
+                            };
+                        }
                     }
+                    console.log('✅ Live prices loaded:', Object.keys(sheetPrices).length, 'items');
+                })
+                .catch(function(err) {
+                    console.warn('Using default prices:', err.message);
+                    sheetPrices = {};
+                });
+        }
+
+        // ──────────────── BUILD PRICE CATALOG ────────────────
+        function buildCatalog() {
+            priceCatalog = {};
+            plantCatalog.forEach(function(p) {
+                var priceText = '';
+                if (sheetPrices[p.file] && sheetPrices[p.file].price) {
+                    priceText = sheetPrices[p.file].price;
+                } else if (DEFAULT_PRICES[p.file]) {
+                    priceText = DEFAULT_PRICES[p.file];
+                } else {
+                    return; // skip if no price info
                 }
-
-                if (!tempCatalog[category]) tempCatalog[category] = {};
-                tempCatalog[category][plantName] = { lo, hi };
+                var match = priceText.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
+                if (!match) return;
+                var lo = parseInt(match[1].replace(/,/g, ''));
+                var hi = parseInt(match[2].replace(/,/g, ''));
+                if (!priceCatalog[p.cat]) priceCatalog[p.cat] = {};
+                priceCatalog[p.cat][p.en] = { lo: lo, hi: hi };
             });
-
-            priceCatalog = tempCatalog;
-            console.log('📋 Plant categories parsed:', Object.keys(priceCatalog));
+            console.log('📋 Plant categories:', Object.keys(priceCatalog));
             fillPlantCategories();
-        })
-        .catch(err => {
-            console.error('❌ Plant fetch error:', err);
-            // Fallback
-            priceCatalog = {
-                '🍋 Fruit Plants': {
-                    'Mango (grafted)': { lo: 12000, hi: 30000 },
-                    'Jackfruit': { lo: 10000, hi: 20000 }
-                },
-                '🌸 Orchids': { 'Dendrobium': { lo: 8000, hi: 18000 } }
-            };
-            fillPlantCategories();
-        });
-}
+        }
 
         function fillPlantCategories() {
-            const cats = Object.keys(priceCatalog).sort();
+            var s = document.getElementById('plant-cat');
+            var cats = Object.keys(priceCatalog).sort();
             if (cats.length === 0) {
-                plantCat.innerHTML = '<option value="">No categories found</option>';
-                plantItems.innerHTML = '<p class="error-text">❌ No categories loaded. Check console.</p>';
+                s.innerHTML = '<option value="">No categories found</option>';
                 return;
             }
-            plantCat.innerHTML = '<option value="">Select Category...</option>' +
-                cats.map(c => `<option value="${c}">${c}</option>`).join('');
-            plantItems.innerHTML = '<p class="empty-text">No plants selected yet.</p>';
+            s.innerHTML = '<option value="">Select Category...</option>';
+            cats.forEach(function(c) {
+                s.innerHTML += '<option value="' + c + '">' + c + '</option>';
+            });
+            document.getElementById('plant-items').innerHTML = '<p class="empty-text">No plants selected yet.</p>';
         }
 
         function loadPlants() {
-            const cat = plantCat.value;
-            plantName.innerHTML = '<option value="">Select plant...</option>';
+            var cat = document.getElementById('plant-cat').value;
+            var s = document.getElementById('plant-name');
+            s.innerHTML = '<option value="">Select plant...</option>';
             if (cat && priceCatalog[cat]) {
-                plantName.innerHTML += Object.keys(priceCatalog[cat]).sort()
-                    .map(p => `<option value="${p}">${p}</option>`).join('');
+                Object.keys(priceCatalog[cat]).sort().forEach(function(p) {
+                    s.innerHTML += '<option value="' + p + '">' + p + '</option>';
+                });
             }
             updatePlantPrice();
         }
 
         function updatePlantPrice() {
-            const cat = plantCat.value;
-            const name = plantName.value;
-            const size = plantSize.value;
-            const qty = parseInt(plantQty.value) || 1;
-            if (!cat || !name || !priceCatalog[cat]?.[name]) {
-                plantPriceHint.textContent = '';
+            var cat = document.getElementById('plant-cat').value;
+            var name = document.getElementById('plant-name').value;
+            var size = document.getElementById('plant-size').value;
+            var qty = parseInt(document.getElementById('plant-qty').value) || 1;
+            var hint = document.getElementById('plant-price-hint');
+            if (!cat || !name || !priceCatalog[cat] || !priceCatalog[cat][name]) {
+                hint.textContent = '';
                 return;
             }
-            const pr = priceCatalog[cat][name];
-            let unit = size === 'small' ? pr.lo : size === 'large' ? pr.hi : Math.round((pr.lo + pr.hi) / 2);
-            plantPriceHint.innerHTML = `<strong>Unit:</strong> ${unit.toLocaleString()} Ks | <strong>Line:</strong> ${(unit*qty).toLocaleString()} Ks`;
+            var pr = priceCatalog[cat][name];
+            var unit = size === 'small' ? pr.lo : size === 'large' ? pr.hi : Math.round((pr.lo + pr.hi) / 2);
+            hint.innerHTML = '<strong>Unit:</strong> ' + unit.toLocaleString() + ' Ks | <strong>Line:</strong> ' + (unit * qty).toLocaleString() + ' Ks';
         }
 
-        function addPlantItem() {
-            const cat = plantCat.value;
-            const name = plantName.value;
-            const size = plantSize.value;
-            const qty = parseInt(plantQty.value);
-            if (!cat || !name) { alert('Please select category and plant.'); return; }
-            const pr = priceCatalog[cat][name];
-            let unit = size === 'small' ? pr.lo : size === 'large' ? pr.hi : Math.round((pr.lo + pr.hi) / 2);
-            plantList.push({ cat, name, size, qty, unit, total: unit*qty });
-            plantName.value = '';
-            plantQty.value = '1';
-            plantPriceHint.textContent = '';
-            refreshAll();
-        }
+        // ──────────────── SERVICES (already working) ────────────────
+        let serviceCatalog = {};
+        let servicePackages = [];
+        let plantList = [];
+        let serviceList = [];
 
-        // =========== SERVICE PARSER ===========
         function fetchServicePrices() {
             return fetch('services.html')
-                .then(r => r.text())
-                .then(html => {
-                    const d = new DOMParser().parseFromString(html, 'text/html');
-                    console.log('🛠️ Service HTML parsed');
-
-                    // Try multiple header selectors
-                    const headers = d.querySelectorAll('.category-header, .service-category, .section-header');
-                    console.log('   Found', headers.length, 'service category headers');
+                .then(function(r) { return r.text(); })
+                .then(function(html) {
+                    var d = new DOMParser().parseFromString(html, 'text/html');
+                    var headers = d.querySelectorAll('.category-header');
                     if (headers.length === 0) {
-                        // Fallback to h2
-                        const h2s = d.querySelectorAll('h2');
-                        console.log('   Trying', h2s.length, 'h2 elements');
-                        h2s.forEach(h2 => {
-                            const title = h2.textContent.trim();
-                            const items = [];
-                            let next = h2.nextElementSibling;
+                        var h2s = d.querySelectorAll('h2');
+                        h2s.forEach(function(h2) {
+                            var title = h2.textContent.trim();
+                            var items = [];
+                            var next = h2.nextElementSibling;
                             while (next && next.tagName !== 'H2') {
-                                const servItems = next.querySelectorAll('.service-item');
-                                servItems.forEach(si => {
-                                    const nameEl = si.querySelector('.service-name');
-                                    const priceEl = si.querySelector('.price-range');
+                                var servItems = next.querySelectorAll('.service-item');
+                                servItems.forEach(function(si) {
+                                    var nameEl = si.querySelector('.service-name');
+                                    var priceEl = si.querySelector('.price-range');
                                     if (nameEl && priceEl) items.push({ name: nameEl.textContent.trim(), price: priceEl.textContent.trim() });
                                 });
                                 next = next.nextElementSibling;
                             }
-                            if (items.length > 0) {
-                                serviceCatalog[title] = { icon: '🛠️', items: parseServiceItems(items) };
-                            }
+                            if (items.length) serviceCatalog[title] = { icon: '🛠️', items: parseServiceItems(items) };
                         });
                     } else {
-                        headers.forEach(header => {
-                            const title = header.textContent.trim();
-                            const icon = header.querySelector('.category-icon')?.textContent.trim() || '🛠️';
-                            const items = [];
-                            let next = header.nextElementSibling;
-                            while (next && !next.matches('.category-header, .service-category, .section-header')) {
-                                const servItems = next.querySelectorAll('.service-item');
-                                servItems.forEach(si => {
-                                    const nameEl = si.querySelector('.service-name');
-                                    const priceEl = si.querySelector('.price-range');
+                        headers.forEach(function(header) {
+                            var title = header.textContent.trim();
+                            var icon = (header.querySelector('.category-icon') || {}).textContent || '🛠️';
+                            var items = [];
+                            var next = header.nextElementSibling;
+                            while (next && !next.matches('.category-header')) {
+                                var servItems = next.querySelectorAll('.service-item');
+                                servItems.forEach(function(si) {
+                                    var nameEl = si.querySelector('.service-name');
+                                    var priceEl = si.querySelector('.price-range');
                                     if (nameEl && priceEl) items.push({ name: nameEl.textContent.trim(), price: priceEl.textContent.trim() });
                                 });
                                 next = next.nextElementSibling;
                             }
-                            if (items.length > 0) {
-                                serviceCatalog[title] = { icon, items: parseServiceItems(items) };
-                            }
+                            if (items.length) serviceCatalog[title] = { icon: icon, items: parseServiceItems(items) };
                         });
                     }
-
                     // Packages
-                    const packageCards = d.querySelectorAll('.package-card');
-                    packageCards.forEach(pkg => {
-                        const name = pkg.querySelector('.package-name')?.textContent.trim();
-                        const priceText = pkg.querySelector('.package-price')?.textContent.trim();
-                        if (!name || !priceText) return;
-                        const price = parseInt(priceText.replace(/[^0-9]/g, ''));
-                        const features = Array.from(pkg.querySelectorAll('.package-features li')).map(li => li.textContent.trim());
-                        servicePackages.push({ name, price, features });
+                    d.querySelectorAll('.package-card').forEach(function(pkg) {
+                        var name = (pkg.querySelector('.package-name') || {}).textContent || '';
+                        var priceText = (pkg.querySelector('.package-price') || {}).textContent || '';
+                        if (name && priceText) {
+                            var price = parseInt(priceText.replace(/[^0-9]/g, ''));
+                            var features = Array.from(pkg.querySelectorAll('.package-features li')).map(function(li) { return li.textContent.trim(); });
+                            servicePackages.push({ name: name.trim(), price: price, features: features });
+                        }
                     });
-                    if (servicePackages.length > 0) {
+                    if (servicePackages.length) {
                         serviceCatalog['🎯 Service Packages'] = {
                             icon: '📦',
-                            items: servicePackages.map(p => ({
-                                name: p.name,
-                                priceLo: p.price,
-                                priceHi: p.price,
-                                isRange: false,
-                                features: p.features
-                            }))
+                            items: servicePackages.map(function(p) { return { name: p.name, priceLo: p.price, priceHi: p.price, isRange: false, features: p.features }; })
                         };
                     }
-
-                    console.log('📋 Service categories:', Object.keys(serviceCatalog));
                     renderServiceCards();
                 })
-                .catch(err => {
+                .catch(function(err) {
                     console.error('Service fetch error:', err);
                     serviceCatalog = {
-                        '🏡 Outdoor Landscaping': {
-                            icon: '🏡',
-                            items: [
-                                {name:'Garden Design',priceLo:50000,priceHi:150000,isRange:true},
-                                {name:'Soil Prep',priceLo:30000,priceHi:80000,isRange:true}
-                            ]
-                        }
+                        '🏡 Outdoor Landscaping': { icon:'🏡', items:[
+                            {name:'Garden Design',priceLo:50000,priceHi:150000,isRange:true},
+                            {name:'Soil Prep',priceLo:30000,priceHi:80000,isRange:true}
+                        ]}
                     };
                     renderServiceCards();
                 });
         }
 
         function parseServiceItems(raw) {
-            return raw.map(item => {
-                const match = item.price.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
+            return raw.map(function(item) {
+                var match = item.price.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
                 if (match) {
-                    return {
-                        name: item.name,
-                        priceLo: parseInt(match[1].replace(/,/g, '')),
-                        priceHi: parseInt(match[2].replace(/,/g, '')),
-                        isRange: true
-                    };
+                    return { name:item.name, priceLo:parseInt(match[1].replace(/,/g,'')), priceHi:parseInt(match[2].replace(/,/g,'')), isRange:true };
                 } else {
-                    const single = item.price.match(/([\d,]+)\s*Ks/);
-                    const price = single ? parseInt(single[1].replace(/,/g, '')) : 0;
-                    return { name: item.name, priceLo: price, priceHi: price, isRange: false };
+                    var single = item.price.match(/([\d,]+)\s*Ks/);
+                    var price = single ? parseInt(single[1].replace(/,/g,'')) : 0;
+                    return { name:item.name, priceLo:price, priceHi:price, isRange:false };
                 }
             });
         }
 
         function renderServiceCards() {
-            const keys = Object.keys(serviceCatalog);
+            var container = document.getElementById('service-cards');
+            var keys = Object.keys(serviceCatalog);
             if (keys.length === 0) {
-                serviceCards.innerHTML = '<p class="error-text">❌ No services found. Check console.</p>';
+                container.innerHTML = '<p class="empty-text">No services found.</p>';
                 return;
             }
-            serviceCards.innerHTML = keys.map(key => {
-                const svc = serviceCatalog[key];
-                return `<div class="service-card" data-category="${key}">
-                    <div class="icon">${svc.icon}</div>
-                    <h3>${key}</h3>
-                    <p>${svc.items.length} service(s)</p>
-                </div>`;
+            container.innerHTML = keys.map(function(key) {
+                var svc = serviceCatalog[key];
+                return '<div class="service-card" data-category="' + key + '"><div class="icon">' + svc.icon + '</div><h3>' + key + '</h3><p>' + svc.items.length + ' service(s)</p></div>';
             }).join('');
-
-            // Attach click handlers (CSP safe, no inline onclick)
-            serviceCards.querySelectorAll('.service-card').forEach(card => {
+            container.querySelectorAll('.service-card').forEach(function(card) {
                 card.addEventListener('click', function() {
-                    const type = this.dataset.category;
-                    pickService(type, this);
+                    pickService(this.dataset.category, this);
                 });
             });
         }
 
-        function pickService(type, cardElement) {
-            serviceCards.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
-            cardElement.classList.add('selected');
-            const d = serviceCatalog[type];
-            serviceOpts.style.display = 'block';
-            serviceOptsTitle.textContent = type;
-            serviceOptsGrid.innerHTML = d.items.map((item, idx) => {
-                const priceDisplay = item.isRange ?
-                    `${item.priceLo.toLocaleString()} – ${item.priceHi.toLocaleString()} Ks` :
-                    `${item.priceLo.toLocaleString()} Ks`;
-                const featHtml = item.features ?
-                    `<div style="font-size:0.8em;color:#666;margin-top:5px">${item.features.map(f => '🌿 '+f).join('<br>')}</div>` : '';
-                return `<div class="option-card">
-                    <h4>${item.name}</h4>
-                    <div class="option-price">${priceDisplay}</div>
-                    ${featHtml}
-                    <button class="btn-service-add" data-type="${type}" data-name="${item.name}" data-lo="${item.priceLo}" data-hi="${item.priceHi}" data-range="${item.isRange}">+ Add</button>
-                </div>`;
+        function pickService(type, cardEl) {
+            document.querySelectorAll('.service-card').forEach(function(c) { c.classList.remove('selected'); });
+            cardEl.classList.add('selected');
+            var opts = document.getElementById('service-opts');
+            opts.style.display = 'block';
+            document.getElementById('service-opts-title').textContent = type;
+            var d = serviceCatalog[type];
+            document.getElementById('service-opts-grid').innerHTML = d.items.map(function(item, idx) {
+                var priceDisplay = item.isRange ? item.priceLo.toLocaleString() + ' – ' + item.priceHi.toLocaleString() + ' Ks' : item.priceLo.toLocaleString() + ' Ks';
+                var featHtml = item.features ? '<div style="font-size:0.8em;color:#666;margin-top:5px">' + item.features.map(function(f) { return '🌿 ' + f; }).join('<br>') + '</div>' : '';
+                return '<div class="option-card"><h4>' + item.name + '</h4><div class="option-price">' + priceDisplay + '</div>' + featHtml +
+                    '<button class="btn-service-add" data-type="' + type + '" data-name="' + item.name + '" data-lo="' + item.priceLo + '" data-hi="' + item.priceHi + '" data-range="' + item.isRange + '">+ Add</button></div>';
             }).join('');
-
-            // Attach listeners to new add buttons
-            serviceOptsGrid.querySelectorAll('.btn-service-add').forEach(btn => {
+            document.getElementById('service-opts-grid').querySelectorAll('.btn-service-add').forEach(function(btn) {
                 btn.addEventListener('click', function() {
-                    const type = this.dataset.type;
-                    const name = this.dataset.name;
-                    const lo = parseInt(this.dataset.lo);
-                    const hi = parseInt(this.dataset.hi);
-                    const isRange = this.dataset.range === 'true';
+                    var type = this.dataset.type;
+                    var name = this.dataset.name;
+                    var lo = parseInt(this.dataset.lo);
+                    var hi = parseInt(this.dataset.hi);
+                    var isRange = this.dataset.range === 'true';
                     addServiceItem(type, name, lo, hi, isRange);
                 });
             });
         }
 
         function addServiceItem(type, name, priceLo, priceHi, isRange) {
-            const price = isRange ? Math.round((priceLo + priceHi) / 2) : priceLo;
-            serviceList.push({ type, name, price, priceLo, priceHi, isRange });
+            var price = isRange ? Math.round((priceLo + priceHi) / 2) : priceLo;
+            serviceList.push({ type:type, name:name, price:price, priceLo:priceLo, priceHi:priceHi, isRange:isRange });
             refreshAll();
         }
 
-        // =========== COMMON ===========
+        // ──────────────── COMMON ────────────────
         function delPlant(i) { plantList.splice(i, 1); refreshAll(); }
         function delService(i) { serviceList.splice(i, 1); refreshAll(); }
 
         function refreshAll() {
-            // Plants list
-            plantItems.innerHTML = plantList.length === 0 ?
-                '<p class="empty-text">No plants selected yet.</p>' :
-                plantList.map((p,i) => `<div class="list-item">
-                    <div class="item-detail"><div class="item-title">${p.name}</div><div class="item-sub">${p.size} | Qty:${p.qty} | ${p.unit.toLocaleString()} Ks</div></div>
-                    <div class="item-cost">${p.total.toLocaleString()} Ks</div>
-                    <button class="btn-remove" data-plant-index="${i}">×</button>
-                </div>`).join('');
-            // Attach remove handlers to plants
-            plantItems.querySelectorAll('.btn-remove').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const idx = parseInt(this.dataset.plantIndex);
-                    delPlant(idx);
-                });
+            // Plants
+            document.getElementById('plant-items').innerHTML = plantList.length === 0 ? '<p class="empty-text">No plants selected yet.</p>' :
+                plantList.map(function(p,i) {
+                    return '<div class="list-item"><div class="item-detail"><div class="item-title">' + p.name + '</div><div class="item-sub">' + p.size + ' | Qty:' + p.qty + ' | ' + p.unit.toLocaleString() + ' Ks</div></div><div class="item-cost">' + p.total.toLocaleString() + ' Ks</div><button class="btn-remove" data-plant-index="' + i + '">×</button></div>';
+                }).join('');
+            document.getElementById('plant-items').querySelectorAll('.btn-remove').forEach(function(btn) {
+                btn.addEventListener('click', function() { delPlant(parseInt(this.dataset.plantIndex)); });
             });
-
-            // Services list
-            serviceItems.innerHTML = serviceList.length === 0 ?
-                '<p class="empty-text">No services selected yet.</p>' :
-                serviceList.map((s,i) => `<div class="list-item">
-                    <div class="item-detail"><div class="item-title">${s.name}</div><div class="item-sub">${s.type}</div></div>
-                    <div class="item-cost">${s.isRange ? `${s.priceLo.toLocaleString()}–${s.priceHi.toLocaleString()}` : s.price.toLocaleString()} Ks</div>
-                    <button class="btn-remove" data-service-index="${i}">×</button>
-                </div>`).join('');
-            serviceItems.querySelectorAll('.btn-remove').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const idx = parseInt(this.dataset.serviceIndex);
-                    delService(idx);
-                });
+            // Services
+            document.getElementById('service-items').innerHTML = serviceList.length === 0 ? '<p class="empty-text">No services selected yet.</p>' :
+                serviceList.map(function(s,i) {
+                    var priceDisp = s.isRange ? s.priceLo.toLocaleString() + '–' + s.priceHi.toLocaleString() : s.price.toLocaleString();
+                    return '<div class="list-item"><div class="item-detail"><div class="item-title">' + s.name + '</div><div class="item-sub">' + s.type + '</div></div><div class="item-cost">' + priceDisp + ' Ks</div><button class="btn-remove" data-service-index="' + i + '">×</button></div>';
+                }).join('');
+            document.getElementById('service-items').querySelectorAll('.btn-remove').forEach(function(btn) {
+                btn.addEventListener('click', function() { delService(parseInt(this.dataset.serviceIndex)); });
             });
-
-            // Summary panels
-            const pt = plantList.reduce((s,p) => s + p.total, 0);
-            const st = serviceList.reduce((s,sv) => s + sv.price, 0);
-
-            sumPlants.innerHTML = plantList.length === 0 ?
-                '<p class="empty-text">No plants</p>' :
-                plantList.map((p,i) => `<div class="list-item"><span>${p.name} (${p.size}) ×${p.qty}</span><span>${p.total.toLocaleString()} Ks</span><button class="btn-remove" data-sum-plant-index="${i}">×</button></div>`).join('');
-            sumPlants.querySelectorAll('.btn-remove').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const idx = parseInt(this.dataset.sumPlantIndex);
-                    delPlant(idx);
-                });
+            // Summary
+            var pt = plantList.reduce(function(s,p) { return s + p.total; }, 0);
+            var st = serviceList.reduce(function(s,sv) { return s + sv.price; }, 0);
+            document.getElementById('sum-plants').innerHTML = plantList.length === 0 ? '<p class="empty-text">No plants</p>' :
+                plantList.map(function(p,i) { return '<div class="list-item"><span>' + p.name + ' (' + p.size + ') ×' + p.qty + '</span><span>' + p.total.toLocaleString() + ' Ks</span><button class="btn-remove" data-sum-plant-index="' + i + '">×</button></div>'; }).join('');
+            document.getElementById('sum-plants').querySelectorAll('.btn-remove').forEach(function(btn) {
+                btn.addEventListener('click', function() { delPlant(parseInt(this.dataset.sumPlantIndex)); });
             });
-
-            sumServices.innerHTML = serviceList.length === 0 ?
-                '<p class="empty-text">No services</p>' :
-                serviceList.map((s,i) => `<div class="list-item"><span>${s.name}</span><span>${s.price.toLocaleString()} Ks</span><button class="btn-remove" data-sum-service-index="${i}">×</button></div>`).join('');
-            sumServices.querySelectorAll('.btn-remove').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const idx = parseInt(this.dataset.sumServiceIndex);
-                    delService(idx);
-                });
+            document.getElementById('sum-services').innerHTML = serviceList.length === 0 ? '<p class="empty-text">No services</p>' :
+                serviceList.map(function(s,i) { return '<div class="list-item"><span>' + s.name + '</span><span>' + s.price.toLocaleString() + ' Ks</span><button class="btn-remove" data-sum-service-index="' + i + '">×</button></div>'; }).join('');
+            document.getElementById('sum-services').querySelectorAll('.btn-remove').forEach(function(btn) {
+                btn.addEventListener('click', function() { delService(parseInt(this.dataset.sumServiceIndex)); });
             });
+            document.getElementById('plants-total').textContent = pt.toLocaleString() + ' Ks';
+            document.getElementById('services-total').textContent = st.toLocaleString() + ' Ks';
+            var tot = pt + st;
+            var disc = tot > 500000 ? 0.10 : tot > 200000 ? 0.05 : 0;
+            var da = Math.round(tot * disc);
+            document.getElementById('discount-msg').innerHTML = disc ? '<div class="discount-tag">🎉 ' + (disc*100) + '% discount! (Save ' + da.toLocaleString() + ' Ks)</div>' : '';
+            document.getElementById('grand-total').textContent = (tot - da).toLocaleString() + ' Ks';
+        }
 
-            plantsTotal.textContent = pt.toLocaleString() + ' Ks';
-            servicesTotal.textContent = st.toLocaleString() + ' Ks';
-
-            const tot = pt + st;
-            let disc = tot > 500000 ? 0.10 : tot > 200000 ? 0.05 : 0;
-            const da = Math.round(tot * disc);
-            discountMsg.innerHTML = disc ?
-                `<div class="discount-tag">🎉 ${disc*100}% discount! (Save ${da.toLocaleString()} Ks)</div>` : '';
-            grandTotal.textContent = (tot - da).toLocaleString() + ' Ks';
+        function addPlantItem() {
+            var cat = document.getElementById('plant-cat').value;
+            var name = document.getElementById('plant-name').value;
+            var size = document.getElementById('plant-size').value;
+            var qty = parseInt(document.getElementById('plant-qty').value);
+            if (!cat || !name) { alert('Please select category and plant.'); return; }
+            var pr = priceCatalog[cat][name];
+            var unit = size === 'small' ? pr.lo : size === 'large' ? pr.hi : Math.round((pr.lo + pr.hi) / 2);
+            plantList.push({ cat:cat, name:name, size:size, qty:qty, unit:unit, total:unit*qty });
+            document.getElementById('plant-name').value = '';
+            document.getElementById('plant-qty').value = '1';
+            document.getElementById('plant-price-hint').textContent = '';
+            refreshAll();
         }
 
         function showPanel(panelId) {
-            panels.forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.calc-panel').forEach(function(p) { p.classList.remove('active'); });
+            document.querySelectorAll('.calc-tab-btn').forEach(function(b) { b.classList.remove('active'); });
             document.getElementById('panel-' + panelId).classList.add('active');
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.calc-tab-btn[data-panel="${panelId}"]`).classList.add('active');
+            document.querySelector('.calc-tab-btn[data-panel="' + panelId + '"]').classList.add('active');
             if (panelId === 'summary') refreshAll();
         }
 
+        // Email
         function emailEstimate() {
-            let text = 'ESTIMATE FROM ပန်းသတင်း LANDSCAPE\n' + '='.repeat(40) + '\n\n';
-            if (plantList.length) {
-                text += '🌱 PLANTS:\n';
-                plantList.forEach(p => text += `  - ${p.name} (${p.size}) ×${p.qty} = ${p.total.toLocaleString()} Ks\n`);
-            }
-            if (serviceList.length) {
-                text += '\n🛠️ SERVICES:\n';
-                serviceList.forEach(s => text += `  - ${s.name}: ${s.price.toLocaleString()} Ks\n`);
-            }
-            const pt = plantList.reduce((s,p)=>s+p.total,0);
-            const st = serviceList.reduce((s,sv)=>s+sv.price,0);
-            const tot = pt+st;
-            let disc = tot>500000?0.10:tot>200000?0.05:0;
-            const da = Math.round(tot*disc);
-            text += `\nPlants Subtotal: ${pt.toLocaleString()} Ks\nServices Subtotal: ${st.toLocaleString()} Ks`;
-            if(disc) text += `\nDiscount: -${da.toLocaleString()} Ks`;
-            text += `\n\n💰 GRAND TOTAL: ${(tot-da).toLocaleString()} Ks\n\n*Final price may vary. Contact: +95 9xxx xxxxxx`;
-            window.location.href = `mailto:?subject=${encodeURIComponent('Landscape Estimate')}&body=${encodeURIComponent(text)}`;
+            var text = 'ESTIMATE FROM ပန်းသတင်း LANDSCAPE\n' + '='.repeat(40) + '\n\n';
+            if (plantList.length) { text += '🌱 PLANTS:\n'; plantList.forEach(function(p) { text += '  - ' + p.name + ' (' + p.size + ') ×' + p.qty + ' = ' + p.total.toLocaleString() + ' Ks\n'; }); }
+            if (serviceList.length) { text += '\n🛠️ SERVICES:\n'; serviceList.forEach(function(s) { text += '  - ' + s.name + ': ' + s.price.toLocaleString() + ' Ks\n'; }); }
+            var pt = plantList.reduce(function(s,p) { return s + p.total; }, 0);
+            var st = serviceList.reduce(function(s,sv) { return s + sv.price; }, 0);
+            var tot = pt + st;
+            var disc = tot > 500000 ? 0.10 : tot > 200000 ? 0.05 : 0;
+            var da = Math.round(tot * disc);
+            text += '\nPlants Subtotal: ' + pt.toLocaleString() + ' Ks\nServices Subtotal: ' + st.toLocaleString() + ' Ks';
+            if (disc) text += '\nDiscount: -' + da.toLocaleString() + ' Ks';
+            text += '\n\n💰 GRAND TOTAL: ' + (tot - da).toLocaleString() + ' Ks\n\n*Final price may vary. Contact: +95 9xxx xxxxxx';
+            window.location.href = 'mailto:?subject=' + encodeURIComponent('Landscape Estimate') + '&body=' + encodeURIComponent(text);
         }
 
-        // =========== INIT ===========
-        window.addEventListener('DOMContentLoaded', () => {
-            Promise.all([fetchPlantPrices(), fetchServicePrices()])
-                .then(() => console.log('✅ Calculator ready (CSP-safe)'))
-                .catch(err => console.error('Init error:', err));
+        // Event binding (CSP-safe)
+        document.getElementById('btn-add-plant').addEventListener('click', addPlantItem);
+        document.getElementById('plant-cat').addEventListener('change', loadPlants);
+        document.getElementById('plant-name').addEventListener('change', updatePlantPrice);
+        document.getElementById('plant-size').addEventListener('change', updatePlantPrice);
+        document.getElementById('plant-qty').addEventListener('input', updatePlantPrice);
+        document.getElementById('btn-print').addEventListener('click', function() { window.print(); });
+        document.getElementById('btn-email').addEventListener('click', emailEstimate);
+        document.querySelectorAll('.calc-tab-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() { showPanel(this.dataset.panel); });
+        });
+
+        // Init
+        window.addEventListener('DOMContentLoaded', function() {
+            fetchSheetPrices().then(function() {
+                buildCatalog();
+            }).catch(function() {
+                buildCatalog(); // fallback with defaults
+            });
+            fetchServicePrices();
         });
     })();
     </script>
