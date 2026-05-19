@@ -4,218 +4,792 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ပန်းသတင်း Landscaping - Calculator</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js">
+    </script>
     <style>
         :root {
-            --primary: #2d5a27; --secondary: #8B4513; --accent: #D2691E;
-            --light: #f8f9e9; --cream: #FFF8DC; --gold: #DAA520;
-            --text: #333; --border: #b8d4b0;
+            --green-900: #1a3b2b;
+            --green-700: #2d5a3f;
+            --green-500: #4a7c59;
+            --green-100: #e8f5e9;
+            --green-50: #f4faf5;
+            --gold-600: #c78d20;
+            --gold-400: #daa520;
+            --gold-100: #fef7e8;
+            --gold-50: #fffcf5;
+            --brown-700: #8B4513;
+            --brown-500: #a0522d;
+            --gray-50: #fafbf9;
+            --gray-100: #f5f6f4;
+            --gray-200: #e8ebe7;
+            --gray-600: #6b7280;
+            --gray-800: #1e2e21;
+            --white: #ffffff;
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04);
+            --shadow-lg: 0 12px 32px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+            --shadow-xl: 0 20px 48px rgba(0,0,0,0.12);
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{
-            font-family:'Noto Sans Myanmar','Segoe UI',system-ui,sans-serif;
-            background:linear-gradient(135deg,#f5f0e8 0%,#e8f5e9 100%);
-            color:var(--text);line-height:1.6;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', 'Noto Sans Myanmar', 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(170deg, #f8faf7 0%, #eef5ed 30%, #f5f0e8 70%, #fafbf9 100%);
+            background-attachment: fixed;
+            color: var(--gray-800);
+            line-height: 1.6;
+            min-height: 100vh;
         }
-        .container{max-width:1200px;margin:0 auto;padding:0 20px}
-        .nav{
-            background:var(--cream);padding:15px 0;box-shadow:0 2px 10px rgba(0,0,0,0.1);
-            position:sticky;top:0;z-index:1000;border-bottom:3px solid var(--primary);
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+        /* ── Navigation ── */
+        .nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 14px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(45,90,39,0.1);
+            box-shadow: 0 1px 8px rgba(0,0,0,0.04);
         }
-        .nav .container{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
-        .nav-brand{font-size:1.3em;font-weight:bold;color:var(--primary)}
-        .nav-links{display:flex;gap:15px;list-style:none;flex-wrap:wrap}
-        .nav-links a{
-            color:var(--primary);text-decoration:none;font-weight:500;
-            padding:8px 15px;border-radius:20px;transition:all 0.3s;border:2px solid transparent;
+        .nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
         }
-        .nav-links a:hover,.nav-links a.active{background:var(--primary);color:white}
-        .header{
-            background:linear-gradient(rgba(45,90,39,0.9),rgba(45,90,39,0.8));
-            color:white;padding:60px 20px 50px;text-align:center;
+        .nav-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--green-700);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.3px;
         }
-        .header h1{font-size:2.5em;margin-bottom:10px}
-        .header p{font-size:1.2em;opacity:0.9}
-        .section{margin:50px 0}
-        .calculator-container{
-            background:white;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.1);overflow:hidden;
+        .nav-brand span {
+            font-size: 0.6rem;
+            font-weight: 500;
+            opacity: 0.55;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
         }
-        .calc-header{
-            background:linear-gradient(135deg,var(--primary),#1a3a18);
-            color:white;padding:20px 30px;text-align:center;
+        .nav-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .nav-links { display: flex; gap: 4px; list-style: none; }
+        .nav-links a {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 24px;
+            font-size: 0.875rem;
+            transition: var(--transition);
+            letter-spacing: -0.2px;
         }
-        .calc-header h2{margin-bottom:15px}
-        .calc-tabs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-        .calc-tab-btn{
-            background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.3);
-            color:white;padding:10px 20px;border-radius:25px;cursor:pointer;font-size:0.95em;transition:all 0.3s;
+        .nav-links a:hover { background: var(--green-100); color: var(--green-700); }
+        .nav-links a.active { background: var(--green-700); color: white; font-weight: 600; }
+
+        .lang-toggle {
+            display: flex;
+            background: var(--gray-100);
+            border-radius: 24px;
+            padding: 3px;
+            gap: 2px;
         }
-        .calc-tab-btn.active{background:white;color:var(--primary);border-color:white}
-        .calc-body{padding:30px}
-        .calc-panel{display:none}
-        .calc-panel.active{display:block}
-        .plant-selector{
-            display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-            gap:15px;background:var(--light);padding:25px;border-radius:15px;margin-bottom:25px;
+        .lang-btn {
+            padding: 7px 14px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            background: transparent;
+            color: var(--gray-600);
+            border-radius: 22px;
+            transition: var(--transition);
+            font-family: inherit;
+            letter-spacing: -0.2px;
         }
-        .form-group{display:flex;flex-direction:column}
-        .form-group label{font-weight:600;color:var(--primary);margin-bottom:5px}
-        .form-group select,.form-group input{
-            padding:10px;border:2px solid var(--border);border-radius:8px;font-size:16px;
+        .lang-btn.active {
+            background: white;
+            color: var(--green-700);
+            box-shadow: var(--shadow-sm);
         }
-        .btn-add{
-            background:var(--primary);color:white;border:none;
-            padding:12px 25px;border-radius:8px;font-weight:600;cursor:pointer;align-self:end;transition:background 0.3s;
+
+        /* ── Header ── */
+        .header {
+            background: linear-gradient(160deg, var(--green-900) 0%, #234d35 40%, var(--green-700) 100%);
+            color: white;
+            padding: 56px 24px 48px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        .btn-add:hover{background:#3a7a35}
-        .service-cards{
-            display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;margin-bottom:25px;
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(to top, rgba(0,0,0,0.08), transparent);
         }
-        .service-card{
-            background:white;border:2px solid #e0e0e0;border-radius:15px;
-            padding:25px 15px;text-align:center;cursor:pointer;transition:all 0.3s;
+        .header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
         }
-        .service-card:hover,.service-card.selected{
-            border-color:var(--primary);background:var(--light);transform:translateY(-3px);box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            position: relative;
+            z-index: 1;
+            font-weight: 400;
         }
-        .service-card .icon{font-size:2.5em;margin-bottom:10px}
-        .service-card h3{color:var(--primary);font-size:1.1em;margin-bottom:5px}
-        .service-card p{color:#666;font-size:0.9em}
-        .service-options{background:var(--light);padding:25px;border-radius:15px;margin-bottom:25px;display:none}
-        .service-options h3{color:var(--primary);margin-bottom:15px}
-        .option-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px}
-        .option-card{background:white;padding:20px;border-radius:10px;border-left:4px solid var(--primary)}
-        .option-card h4{color:var(--primary);margin-bottom:5px}
-        .option-price{color:var(--secondary);font-weight:bold;margin-bottom:10px}
-        .btn-service-add{background:var(--primary);color:white;border:none;padding:8px 20px;border-radius:5px;cursor:pointer}
-        .items-list{background:white;border-radius:15px;padding:25px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin-bottom:25px}
-        .items-list h3{color:var(--primary);margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid var(--border)}
-        .list-item{
-            display:flex;justify-content:space-between;align-items:center;
-            padding:10px 0;border-bottom:1px solid #f0f0f0;flex-wrap:wrap;gap:10px;
+
+        /* ── Calculator Container ── */
+        .section { margin: -20px 0 50px; position: relative; z-index: 2; }
+        .calculator-container {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            border: 1px solid var(--gray-200);
         }
-        .list-item:last-child{border-bottom:none}
-        .item-detail{flex:1;min-width:200px}
-        .item-title{font-weight:600;color:var(--primary)}
-        .item-sub{color:#666;font-size:0.9em}
-        .item-cost{font-weight:bold;color:var(--secondary)}
-        .btn-remove{background:#ff6b6b;color:white;border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px}
-        .summary-block{background:white;border-radius:15px;padding:25px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin-bottom:20px}
-        .summary-block h3{color:var(--primary);margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid var(--border)}
-        .subtotal{display:flex;justify-content:space-between;padding:10px 0;font-weight:bold;font-size:1.1em}
-        .total-section{background:linear-gradient(135deg,var(--primary),#1a3a18);color:white;padding:30px;border-radius:15px;text-align:center}
-        .discount-tag{background:var(--gold);color:#333;padding:8px 20px;border-radius:20px;display:inline-block;margin-bottom:20px;font-weight:600}
-        .total-section h2{font-size:2em;margin-bottom:10px}
-        .total-section .note{opacity:0.8;margin:15px 0}
-        .action-btns{display:flex;gap:15px;justify-content:center;flex-wrap:wrap;margin-top:20px}
-        .btn-action{padding:12px 25px;border-radius:10px;font-weight:600;cursor:pointer;border:none;transition:all 0.3s}
-        .btn-action.gold{background:var(--gold);color:#333}
-        .btn-action.white{background:white;color:var(--primary)}
-        .btn-action:hover{transform:translateY(-2px)}
-        .empty-text{text-align:center;color:#999;padding:20px}
-        @media(max-width:768px){
-            .header h1{font-size:2em}
-            .plant-selector{grid-template-columns:1fr}
-            .service-cards{grid-template-columns:repeat(2,1fr)}
-            .nav .container{flex-direction:column}
+
+        /* ── Tabs ── */
+        .calc-header {
+            background: var(--white);
+            padding: 16px 28px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+        .calc-header h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--green-900);
+            letter-spacing: -0.3px;
+        }
+        .calc-tabs { display: flex; gap: 6px; background: var(--gray-100); border-radius: 28px; padding: 4px; }
+        .calc-tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--gray-600);
+            padding: 10px 20px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: var(--transition);
+            font-family: inherit;
+            white-space: nowrap;
+            letter-spacing: -0.2px;
+        }
+        .calc-tab-btn.active {
+            background: white;
+            color: var(--green-700);
+            box-shadow: var(--shadow-sm);
+        }
+        .calc-tab-btn:hover:not(.active) { color: var(--green-700); }
+
+        .calc-body { padding: 28px; }
+        .calc-panel { display: none; animation: fadeIn 0.35s ease; }
+        .calc-panel.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ── Plant Selector ── */
+        .selector-card {
+            background: var(--green-50);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .selector-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+            align-items: end;
+        }
+        .field-group { display: flex; flex-direction: column; gap: 5px; }
+        .field-group label {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--green-700);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .field-group select, .field-group input {
+            padding: 11px 14px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            background: white;
+            transition: var(--transition);
+            font-family: inherit;
+            color: var(--gray-800);
+        }
+        .field-group select:focus, .field-group input:focus {
+            outline: none;
+            border-color: var(--green-500);
+            box-shadow: 0 0 0 4px rgba(74,124,89,0.08);
+        }
+        .btn-add-plant {
+            background: var(--green-700);
+            color: white;
+            border: none;
+            padding: 11px 22px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            height: 46px;
+        }
+        .btn-add-plant:hover {
+            background: var(--green-900);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(26,59,43,0.25);
+        }
+        #plant-price-hint {
+            margin-top: 14px;
+            font-size: 0.9rem;
+            color: var(--green-700);
+            font-weight: 500;
+            min-height: 22px;
+        }
+
+        /* ── Items List ── */
+        .list-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+        .list-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--green-900);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gray-200);
+            letter-spacing: -0.2px;
+        }
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+            gap: 12px;
+            animation: fadeIn 0.3s ease;
+        }
+        .list-item:last-child { border-bottom: none; }
+        .item-info { flex: 1; min-width: 160px; }
+        .item-name { font-weight: 600; color: var(--green-900); font-size: 0.95rem; }
+        .item-meta { font-size: 0.8rem; color: var(--gray-600); margin-top: 2px; }
+        .item-price { font-weight: 700; color: var(--brown-700); font-size: 0.95rem; white-space: nowrap; }
+        .btn-remove {
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 15px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .btn-remove:hover { background: #fecaca; transform: scale(1.08); }
+
+        /* ── Service Cards ── */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .service-card {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            padding: 20px 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .service-card:hover, .service-card.selected {
+            border-color: var(--green-500);
+            background: var(--green-50);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        .service-card .icon { font-size: 2.2rem; margin-bottom: 8px; display: block; }
+        .service-card h3 { font-size: 0.9rem; color: var(--green-900); margin-bottom: 3px; }
+        .service-card p { font-size: 0.75rem; color: var(--gray-600); }
+
+        .service-options {
+            background: var(--green-50);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 24px;
+            display: none;
+        }
+        .service-options h3 { font-size: 1rem; color: var(--green-900); margin-bottom: 16px; }
+        .option-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+        .option-card {
+            background: white;
+            padding: 18px;
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--green-500);
+            transition: var(--transition);
+        }
+        .option-card:hover { box-shadow: var(--shadow-md); }
+        .option-card h4 { font-size: 0.9rem; color: var(--green-900); margin-bottom: 4px; }
+        .option-price { font-weight: 700; color: var(--brown-700); font-size: 0.85rem; margin-bottom: 10px; }
+        .btn-service-add {
+            background: var(--green-700);
+            color: white;
+            border: none;
+            padding: 7px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .btn-service-add:hover { background: var(--green-900); }
+
+        /* ── Summary ── */
+        .summary-header-card {
+            background: linear-gradient(145deg, var(--green-900), var(--green-700));
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-top: 18px;
+        }
+        .stat-box {
+            background: rgba(255,255,255,0.1);
+            border-radius: var(--radius-sm);
+            padding: 16px 12px;
+            text-align: center;
+            backdrop-filter: blur(4px);
+        }
+        .stat-box .stat-num { font-size: 1.8rem; font-weight: 800; display: block; line-height: 1; }
+        .stat-box .stat-lbl { font-size: 0.75rem; opacity: 0.8; margin-top: 4px; display: block; }
+
+        .summary-list-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            margin-bottom: 16px;
+        }
+        .summary-list-card h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--green-900);
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .badge-pill {
+            background: var(--green-100);
+            color: var(--green-700);
+            padding: 3px 12px;
+            border-radius: 14px;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+        .subtotal-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--green-900);
+        }
+
+        .plant-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px dashed var(--gray-200);
+        }
+        .gallery-thumb {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 2px solid var(--gray-200);
+            background: var(--green-50);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            transition: var(--transition);
+            position: relative;
+        }
+        .gallery-thumb:hover { transform: scale(1.1); border-color: var(--green-500); z-index: 2; }
+        .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .gallery-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--green-700);
+            color: white;
+            font-size: 0.55rem;
+            padding: 1px 6px;
+            border-radius: 6px 0 0 0;
+            font-weight: 700;
+        }
+
+        /* ── Total Card ── */
+        .total-card {
+            background: linear-gradient(145deg, var(--green-900), #1e3d2c);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 28px;
+            text-align: center;
+        }
+        .discount-badge {
+            display: inline-block;
+            background: var(--gold-400);
+            color: #4a3000;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 18px;
+        }
+        .total-lines { margin: 16px 0; }
+        .total-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+        }
+        .total-line.grand {
+            font-size: 1.3rem;
+            font-weight: 800;
+            border-bottom: none;
+            padding-top: 14px;
+        }
+        .total-line.discount-line { color: var(--gold-400); }
+        .total-note { font-size: 0.8rem; opacity: 0.7; margin: 12px 0; }
+
+        .contact-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 18px 0;
+        }
+        .contact-mini {
+            background: rgba(255,255,255,0.08);
+            border-radius: var(--radius-sm);
+            padding: 14px 10px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .contact-mini:hover { background: rgba(255,255,255,0.15); }
+        .contact-mini .c-icon { font-size: 1.4rem; display: block; margin-bottom: 5px; }
+        .contact-mini strong { display: block; font-size: 0.8rem; }
+        .contact-mini p { font-size: 0.7rem; opacity: 0.7; margin: 3px 0 8px; }
+        .contact-mini a, .contact-mini button {
+            display: inline-block;
+            background: white;
+            color: var(--green-900);
+            padding: 4px 12px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-size: 0.72rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+        .contact-mini a:hover, .contact-mini button:hover { transform: scale(1.04); }
+
+        .btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+        .btn-main {
+            padding: 12px 22px;
+            border-radius: 28px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            font-size: 0.875rem;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .btn-main.gold { background: var(--gold-400); color: #4a3000; }
+        .btn-main.gold:hover { background: #e0a820; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(218,165,32,0.4); }
+        .btn-main.white { background: white; color: var(--green-900); }
+        .btn-main.white:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+
+        .share-row { margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.15); }
+        .share-row p { font-size: 0.8rem; margin-bottom: 8px; }
+        .share-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+        .share-btn {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 7px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.78rem;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .share-btn:hover { background: rgba(255,255,255,0.25); }
+
+        .cta-banner {
+            background: linear-gradient(135deg, var(--gold-400), #e8b830);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .cta-banner h3 { color: #4a3000; font-size: 1.05rem; margin-bottom: 3px; }
+        .cta-banner p { color: #6b4c10; font-size: 0.85rem; margin: 0; }
+        .cta-btn {
+            background: var(--green-900);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .cta-btn:hover { background: #122b1e; transform: translateY(-2px); }
+
+        .empty-text { text-align: center; color: #aaa; padding: 16px; font-style: italic; font-size: 0.9rem; }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e2e21;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 28px;
+            font-size: 0.85rem;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            box-shadow: var(--shadow-lg);
+        }
+        .toast.show { opacity: 1; }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.7rem; }
+            .summary-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .stat-box .stat-num { font-size: 1.3rem; }
+            .contact-row { grid-template-columns: repeat(2, 1fr); }
+            .calc-body { padding: 18px; }
+            .selector-grid { grid-template-columns: 1fr 1fr; }
+            .cta-banner { flex-direction: column; text-align: center; }
+        }
+        @media print {
+            body { background: white; }
+            .nav, .calc-header, .btn-add-plant, .btn-remove, .btn-row, .share-row, .cta-banner, .contact-row, .lang-toggle { display: none !important; }
+            .calculator-container { box-shadow: none; border: none; }
+            .total-card { background: #f5f5f5 !important; color: #333 !important; }
+            .total-card * { color: #333 !important; }
         }
     </style>
 </head>
 <body>
     <nav class="nav">
         <div class="container">
-            <div class="nav-brand">🌿 ပန်းသတင်း LANDSCAPE</div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="plant-catalogs.html">Plant Catalog</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="calculator.html" class="active">Calculator</a></li>
-            </ul>
+            <div class="nav-brand">🌿 ပန်းသတင်း <span>LANDSCAPE</span></div>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="plant-catalogs.html">Plant Catalog</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="calculator.html" class="active">Calculator</a></li>
+                </ul>
+                <div class="lang-toggle" id="lang-toggle">
+                    <button class="lang-btn active" data-lang="en">🇬🇧 EN</button>
+                    <button class="lang-btn" data-lang="mm">🇲🇲 မြန်မာ</button>
+                </div>
+            </div>
         </div>
     </nav>
 
     <header class="header">
-        <h1>🌿 Complete Project Estimator</h1>
-        <p>Calculate both plants & services for your dream garden</p>
+        <h1 data-en="🌿 Complete Project Estimator" data-mm="🌿 ပရောဂျက်ခန့်မှန်းတွက်ချက်မှု">🌿 Complete Project Estimator</h1>
+        <p data-en="Calculate plants & services for your dream garden" data-mm="သင့်အိမ်ဥယျာဉ်အတွက် အပင်နှင့်ဝန်ဆောင်မှုများ တွက်ချက်ပါ">Calculate plants & services for your dream garden</p>
     </header>
 
     <main class="container">
-        <section class="section" id="calculator">
+        <section class="section">
             <div class="calculator-container">
                 <div class="calc-header">
-                    <h2>Price Estimator</h2>
+                    <h2 data-en="Price Estimator" data-mm="ဈေးနှုန်းခန့်မှန်းတွက်ချက်ရန်">Price Estimator</h2>
                     <div class="calc-tabs" id="tab-buttons">
-                        <button class="calc-tab-btn active" data-panel="plants">🌱 Plants</button>
-                        <button class="calc-tab-btn" data-panel="services">🛠️ Services</button>
-                        <button class="calc-tab-btn" data-panel="summary">📋 Summary</button>
+                        <button class="calc-tab-btn active" data-panel="plants" data-en="🌱 Plants" data-mm="🌱 အပင်">🌱 Plants</button>
+                        <button class="calc-tab-btn" data-panel="services" data-en="🛠️ Services" data-mm="🛠️ ဝန်ဆောင်မှု">🛠️ Services</button>
+                        <button class="calc-tab-btn" data-panel="summary" data-en="📋 Summary" data-mm="📋 အကျဉ်းချုပ်">📋 Summary</button>
                     </div>
                 </div>
                 <div class="calc-body">
-                    <!-- Plants Panel -->
+                    <!-- ═════ PLANTS ═════ -->
                     <div class="calc-panel active" id="panel-plants">
-                        <div class="plant-selector">
-                            <div class="form-group">
-                                <label for="plant-cat">Category</label>
-                                <select id="plant-cat"><option value="">Loading categories...</option></select>
+                        <div class="selector-card">
+                            <div class="selector-grid">
+                                <div class="field-group">
+                                    <label for="plant-cat" data-en="Category" data-mm="အမျိုးအစား">Category</label>
+                                    <select id="plant-cat"><option value="" data-en="Loading..." data-mm="စောင့်ပါ...">Loading...</option></select>
+                                </div>
+                                <div class="field-group">
+                                    <label for="plant-name" data-en="Plant" data-mm="အပင်">Plant</label>
+                                    <select id="plant-name"><option value="" data-en="Select plant..." data-mm="အပင်ရွေးပါ...">Select plant...</option></select>
+                                </div>
+                                <div class="field-group">
+                                    <label for="plant-size" data-en="Size" data-mm="အရွယ်">Size</label>
+                                    <select id="plant-size">
+                                        <option value="small" data-en="🌱 Small" data-mm="🌱 သေး">🌱 Small</option>
+                                        <option value="medium" data-en="🪴 Medium" data-mm="🪴 လတ်">🪴 Medium</option>
+                                        <option value="large" data-en="🌳 Large" data-mm="🌳 ကြီး">🌳 Large</option>
+                                    </select>
+                                </div>
+                                <div class="field-group">
+                                    <label for="plant-qty" data-en="Quantity" data-mm="အရေအတွက်">Quantity</label>
+                                    <input type="number" id="plant-qty" value="1" min="1">
+                                </div>
+                                <button class="btn-add-plant" id="btn-add-plant" data-en="➕ Add Plant" data-mm="➕ အပင်ထည့်မည်">➕ Add Plant</button>
                             </div>
-                            <div class="form-group">
-                                <label for="plant-name">Plant</label>
-                                <select id="plant-name"><option value="">Select plant...</option></select>
-                            </div>
-                            <div class="form-group">
-                                <label for="plant-size">Size</label>
-                                <select id="plant-size">
-                                    <option value="small">🌱 Small</option>
-                                    <option value="medium">🪴 Medium</option>
-                                    <option value="large">🌳 Large</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="plant-qty">Quantity</label>
-                                <input type="number" id="plant-qty" value="1" min="1">
-                            </div>
-                            <button class="btn-add" id="btn-add-plant">➕ Add Plant</button>
+                            <div id="plant-price-hint"></div>
                         </div>
-                        <div id="plant-price-hint" style="color:var(--primary);font-weight:500;margin-bottom:15px"></div>
-                        <div class="items-list">
-                            <h3>🌱 Selected Plants</h3>
-                            <div id="plant-items"><p class="loading-text">Loading plant catalog...</p></div>
+                        <div class="list-card">
+                            <h3 data-en="🌱 Selected Plants" data-mm="🌱 ရွေးထားသောအပင်များ">🌱 Selected Plants</h3>
+                            <div id="plant-items"><p class="empty-text" data-en="Loading plant catalog..." data-mm="အပင်စာရင်းဖွင့်နေသည်...">Loading plant catalog...</p></div>
                         </div>
                     </div>
 
-                    <!-- Services Panel -->
+                    <!-- ═════ SERVICES ═════ -->
                     <div class="calc-panel" id="panel-services">
-                        <p style="margin-bottom:20px;color:#666">Select a service category:</p>
-                        <div class="service-cards" id="service-cards"><p class="loading-text">Loading services...</p></div>
-                        <div class="service-options" id="service-opts">
-                            <h3 id="service-opts-title"></h3>
-                            <div class="option-grid" id="service-opts-grid"></div>
-                        </div>
-                        <div class="items-list">
-                            <h3>🛠️ Selected Services</h3>
-                            <div id="service-items"><p class="empty-text">No services selected yet.</p></div>
+                        <p style="margin-bottom:16px;color:var(--gray-600);font-size:0.9rem" data-en="Select a service category:" data-mm="ဝန်ဆောင်မှုအမျိုးအစားရွေးပါ-">Select a service category:</p>
+                        <div class="service-grid" id="service-cards"><p class="empty-text" data-en="Loading services..." data-mm="ဝန်ဆောင်မှုများဖွင့်နေသည်...">Loading services...</p></div>
+                        <div class="service-options" id="service-opts"><h3 id="service-opts-title"></h3><div class="option-grid" id="service-opts-grid"></div></div>
+                        <div class="list-card">
+                            <h3 data-en="🛠️ Selected Services" data-mm="🛠️ ရွေးထားသောဝန်ဆောင်မှုများ">🛠️ Selected Services</h3>
+                            <div id="service-items"><p class="empty-text" data-en="No services selected yet." data-mm="ဝန်ဆောင်မှုမရွေးရသေးပါ။">No services selected yet.</p></div>
                         </div>
                     </div>
 
-                    <!-- Summary Panel -->
+                    <!-- ═════ SUMMARY ═════ -->
                     <div class="calc-panel" id="panel-summary">
-                        <div class="summary-block">
-                            <h3>🌱 Selected Plants</h3>
-                            <div id="sum-plants"><p class="empty-text">No plants selected</p></div>
-                            <div class="subtotal"><span>Plants Subtotal:</span><span id="plants-total">0 Ks</span></div>
-                        </div>
-                        <div class="summary-block">
-                            <h3>🛠️ Selected Services</h3>
-                            <div id="sum-services"><p class="empty-text">No services selected</p></div>
-                            <div class="subtotal"><span>Services Subtotal:</span><span id="services-total">0 Ks</span></div>
-                        </div>
-                        <div class="total-section">
-                            <div id="discount-msg"></div>
-                            <h2>💰 Total Estimate: <span id="grand-total">0 Ks</span></h2>
-                            <p class="note">* Final price may vary based on site survey</p>
-                            <div class="action-btns">
-                                <button class="btn-action gold" id="btn-email">📧 Email Estimate</button>
-                                <button class="btn-action white" id="btn-print">🖨 Print</button>
+                        <div class="summary-header-card">
+                            <div style="display:flex;align-items:center;gap:16px">
+                                <span style="font-size:2.8rem">🌿</span>
+                                <div>
+                                    <h3 style="color:white;margin:0;font-size:1.2rem" data-en="Your Dream Garden Project" data-mm="သင့်အိမ်ဥယျာဉ်ပရောဂျက်">Your Dream Garden Project</h3>
+                                    <p style="opacity:0.7;margin:3px 0 0;font-size:0.8rem" id="preview-date"></p>
+                                </div>
                             </div>
+                            <div class="summary-stats">
+                                <div class="stat-box"><span class="stat-num" id="stat-plants-count">0</span><span class="stat-lbl" data-en="Plants" data-mm="အပင်">Plants</span></div>
+                                <div class="stat-box"><span class="stat-num" id="stat-services-count">0</span><span class="stat-lbl" data-en="Services" data-mm="ဝန်ဆောင်မှု">Services</span></div>
+                                <div class="stat-box"><span class="stat-num" id="stat-categories">0</span><span class="stat-lbl" data-en="Categories" data-mm="အမျိုးအစား">Categories</span></div>
+                            </div>
+                        </div>
+
+                        <div class="summary-list-card">
+                            <h3><span data-en="🌱 Selected Plants" data-mm="🌱 ရွေးထားသောအပင်များ">🌱 Selected Plants</span><span class="badge-pill" id="plants-badge">0 items</span></h3>
+                            <div id="sum-plants"><p class="empty-text" data-en="No plants selected" data-mm="အပင်မရွေးရသေးပါ">No plants selected</p></div>
+                            <div class="subtotal-row"><span data-en="Plants Subtotal:" data-mm="အပင်စုစုပေါင်း-">Plants Subtotal:</span><span id="plants-total">0 Ks</span></div>
+                            <div class="plant-gallery" id="plant-gallery"></div>
+                        </div>
+
+                        <div class="summary-list-card">
+                            <h3><span data-en="🛠️ Selected Services" data-mm="🛠️ ရွေးထားသောဝန်ဆောင်မှုများ">🛠️ Selected Services</span><span class="badge-pill" id="services-badge">0 items</span></h3>
+                            <div id="sum-services"><p class="empty-text" data-en="No services selected" data-mm="ဝန်ဆောင်မှုမရွေးရသေးပါ">No services selected</p></div>
+                            <div class="subtotal-row"><span data-en="Services Subtotal:" data-mm="ဝန်ဆောင်မှုစုစုပေါင်း-">Services Subtotal:</span><span id="services-total">0 Ks</span></div>
+                        </div>
+
+                        <div class="total-card" id="total-card">
+                            <div id="discount-msg"></div>
+                            <div class="total-lines">
+                                <div class="total-line"><span data-en="Plants" data-mm="အပင်">Plants</span><span id="total-plants-line">0 Ks</span></div>
+                                <div class="total-line"><span data-en="Services" data-mm="ဝန်ဆောင်မှု">Services</span><span id="total-services-line">0 Ks</span></div>
+                                <div class="total-line discount-line" id="discount-line" style="display:none"><span data-en="Discount" data-mm="လျှော့စျေး">Discount</span><span id="discount-amount">-0 Ks</span></div>
+                                <div class="total-line grand"><span data-en="💰 Grand Total" data-mm="💰 စုစုပေါင်း">💰 Grand Total</span><span id="grand-total">0 Ks</span></div>
+                            </div>
+                            <p class="total-note" data-en="* Final price may vary based on site survey" data-mm="* နောက်ဆုံးစျေးနှုန်းမှာ နေရာကြည့်ရှုမှုပေါ်မူတည်၍ အနည်းငယ်ကွဲပြားနိုင်သည်">* Final price may vary based on site survey</p>
+
+                            <div class="contact-row">
+                                <div class="contact-mini"><span class="c-icon">📞</span><strong data-en="Call Us" data-mm="ဖုန်းဆက်ရန်">Call Us</strong><p>09-XXX-XXX-XXX</p><a href="tel:+959XXXXXXXXX" data-en="Call →" data-mm="ခေါ်မည် →">Call →</a></div>
+                                <div class="contact-mini"><span class="c-icon">📧</span><strong data-en="Email" data-mm="အီးမေးလ်">Email</strong><p>pttlandscapeservices@ gmail.com</p><button id="btn-email-summary" data-en="Send →" data-mm="ပို့မည် →">Send →</button></div>
+                                <div class="contact-mini"><span class="c-icon">💬</span><strong data-en="Messenger" data-mm="မက်ဆင်ဂျာ">Messenger</strong><p data-en="Quick chat" data-mm="စာပို့ရန်">Quick chat</p><a href="https://m.me/yourpage" target="_blank" rel="noopener" data-en="Chat →" data-mm="စာပို့မည် →">Chat →</a></div>
+                                <div class="contact-mini"><span class="c-icon">📍</span><strong data-en="Visit" data-mm="လာရောက်ရန်">Visit</strong><p data-en="Myanmar" data-mm="မြန်မာ">Myanmar</p><a href="https://maps.google.com" target="_blank" rel="noopener" data-en="Map →" data-mm="မြေပုံ →">Map →</a></div>
+                            </div>
+
+                            <div class="btn-row">
+                                <button class="btn-main gold" id="btn-email" data-en="📧 Email Estimate" data-mm="📧 အီးမေးလ်ပို့မည်">📧 Email Estimate</button>
+                                <button class="btn-main white" id="btn-save-img" data-en="🖼 Save as Image" data-mm="🖼 ပုံသိမ်းမည်">🖼 Save as Image</button>
+                                <button class="btn-main white" id="btn-print" data-en="🖨 Print" data-mm="🖨 ပရင့်ထုတ်မည်">🖨 Print</button>
+                            </div>
+                            <div class="share-row">
+                                <p data-en="Share your estimate:" data-mm="ခန့်မှန်းခြေကိုမျှဝေပါ-">Share your estimate:</p>
+                                <div class="share-btns">
+                                    <button class="share-btn" id="share-wa" data-en="📱 WhatsApp" data-mm="📱 WhatsApp">📱 WhatsApp</button>
+                                    <button class="share-btn" id="share-copy" data-en="📋 Copy Text" data-mm="📋 စာသားကူးမည်">📋 Copy Text</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cta-banner">
+                            <div><h3 data-en="✨ Ready to Start?" data-mm="✨ စတင်ရန်အဆင်သင့်ဖြစ်ပြီလား။">✨ Ready to Start?</h3><p data-en="Get a detailed site survey & final quote within 48 hours." data-mm="၄၈ နာရီအတွင်း အသေးစိတ်နေရာကြည့်ရှုပြီး နောက်ဆုံးစျေးနှုန်းရယူပါ။">Get a detailed site survey & final quote within 48 hours.</p></div>
+                            <button class="cta-btn" id="btn-book" data-en="📅 Book Free Consultation" data-mm="📅 အခမဲ့တိုင်ပင်ဆွေးနွေးမည်">📅 Book Free Consultation</button>
                         </div>
                     </div>
                 </div>
@@ -224,551 +798,240 @@
     </main>
 
     <script>
-    (function() {
-        // ────────────────────────────── DATA ──────────────────────────────
-        // Google Sheet URL (same as catalog page)
-        const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQzthDCHJACnjbjtXCzlsPQY3brcqwU4K035F_KkTVpBCj6SNwdfEJZe3S6gQgNqHnlfP6lRT0-A9mP/pub?output=csv';
+    (function(){
+        var currentLang='en';
+        function setLang(lang){
+            currentLang=lang;
+            document.querySelectorAll('[data-lang]').forEach(function(b){b.classList.toggle('active',b.dataset.lang===lang);});
+            document.querySelectorAll('[data-en][data-mm]').forEach(function(el){
+                var t=el.dataset[lang];
+                if(t!==undefined){
+                    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA')el.placeholder=t;
+                    else if(el.tagName==='OPTION')el.textContent=t;
+                    else{
+                        el.childNodes.forEach(function(n){if(n.nodeType===3)n.textContent=t;});
+                        if(!el.childNodes.length||el.childNodes[0].nodeType!==3)el.textContent=t;
+                    }
+                }
+            });
+            document.documentElement.lang=lang==='mm'?'my':'en';
+            fillPlantCategories();loadPlants();updatePlantPrice();
+            if(Object.keys(serviceCatalog).length)renderServiceCards();
+            refreshAll();
+        }
+        document.getElementById('lang-toggle').querySelectorAll('.lang-btn').forEach(function(b){b.addEventListener('click',function(){setLang(this.dataset.lang);});});
 
-        // Plant catalog – built from the same data as plant-catalogs.html
-        // Each plant has: file, en (English name), mm (Burmese), category
-        const plantCatalog = [
-            // Fruits
-            { file:'mango-fruit.jpg', en:'Mango (grafted)', mm:'သရက်ပင်', cat:'🍋 Fruit Plants' },
-            { file:'jackfruit.jpg', en:'Jackfruit', mm:'ပိန္နဲပင်', cat:'🍋 Fruit Plants' },
-            { file:'durian.jpg', en:'Durian (grafted)', mm:'ဒူးရင်းပင်', cat:'🍋 Fruit Plants' },
-            { file:'papaya.jpg', en:'Papaya', mm:'သင်္ဘောပင်', cat:'🍋 Fruit Plants' },
-            { file:'guava.jpg', en:'Guava', mm:'မာလကာပင်', cat:'🍋 Fruit Plants' },
-            { file:'custard-apple.jpg', en:'Custard Apple', mm:'ဩဇာပင်', cat:'🍋 Fruit Plants' },
-            { file:'avocado.jpg', en:'Avocado (grafted)', mm:'ထောပတ်ပင်', cat:'🍋 Fruit Plants' },
-            { file:'banana.jpg', en:'Banana (Dwarf)', mm:'ငှက်ပျောပင်', cat:'🍋 Fruit Plants' },
-            { file:'pomelo.jpg', en:'Pomelo', mm:'ကျွဲကောပင်', cat:'🍋 Fruit Plants' },
-            { file:'lime.jpg', en:'Lime / Lemon', mm:'သံပုရာပင် / ရှောက်ပင်', cat:'🍋 Fruit Plants' },
-            { file:'starfruit.jpg', en:'Star Fruit', mm:'စောင်းလျားပင်', cat:'🍋 Fruit Plants' },
-            { file:'pomegranate.jpg', en:'Pomegranate', mm:'သလဲပင်', cat:'🍋 Fruit Plants' },
-            { file:'dragon-fruit.jpg', en:'Dragon Fruit', mm:'နဂါးမောက်သီး', cat:'🍋 Fruit Plants' },
-            { file:'soursop.jpg', en:'Soursop', mm:'ဒူးရင်းရိုင်း', cat:'🍋 Fruit Plants' },
-            { file:'sapodilla.jpg', en:'Sapodilla', mm:'သပွတ်ပင်', cat:'🍋 Fruit Plants' },
-            { file:'langsat.jpg', en:'Langsat / Duku', mm:'လန်းဆတ်ပင်', cat:'🍋 Fruit Plants' },
-            { file:'mangosteen.jpg', en:'Mangosteen', mm:'မင်းဂွတ်ပင်', cat:'🍋 Fruit Plants' },
-            { file:'rambutan.jpg', en:'Rambutan', mm:'ကြက်မောက်ပင်', cat:'🍋 Fruit Plants' },
-            { file:'lychee.jpg', en:'Lychee', mm:'လိုင်ချီးပင်', cat:'🍋 Fruit Plants' },
-            { file:'tamarind.jpg', en:'Tamarind (Sweet)', mm:'မန်ကျည်းပင်', cat:'🍋 Fruit Plants' },
-            { file:'jujube.jpg', en:'Jujube', mm:'ဆီးပင်', cat:'🍋 Fruit Plants' },
-            { file:'passion-fruit.jpg', en:'Passion Fruit', mm:'ပတ်ရှင်သီး', cat:'🍋 Fruit Plants' },
-            { file:'persimmon.jpg', en:'Persimmon', mm:'တည်ပင်', cat:'🍋 Fruit Plants' },
-            { file:'burmese-grape.jpg', en:'Burmese Grape', mm:'ကနစိုပင် / လီးသီး', cat:'🍋 Fruit Plants' },
-            { file:'mulberry.jpg', en:'Mulberry', mm:'ပိုးစာပင်', cat:'🍋 Fruit Plants' },
-            // Orchids
-            { file:'dendrobium-hybrid.jpg', en:'Dendrobium (Hybrid Mix)', mm:'ဒန်ဒရိုဘီယမ် သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'vanda.jpg', en:'Vanda (Blue/Purple)', mm:'ဗန်ဒါသစ်ခွ', cat:'🌸 Orchids' },
-            { file:'cymbidium.jpg', en:'Cymbidium (Boat Orchid)', mm:'စင်ဘီဒီယမ် သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'paphiopedilum.jpg', en:'Slipper Orchid', mm:'ဖိနပ်သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'rhynchostylis.jpg', en:'Foxtail Orchid', mm:'မြွေမြီးသစ်ခွ', cat:'🌸 Orchids' },
-            { file:'phalaenopsis.jpg', en:'Moth Orchid', mm:'ဖလေနော့ပ်စစ် သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'aerides.jpg', en:'Fox Brush Orchid', mm:'အေရီးဒီးစ် သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'bulbophyllum.jpg', en:'Bulbophyllum', mm:'ဘူလ်ဘိုဖီလမ် သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'coelogyne.jpg', en:'Coelogyne', mm:'စီလော်ဂျင်နီ သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'eria.jpg', en:'Eria', mm:'အီးရီးယား သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'phaius.jpg', en:'Phaius (Nun Orchid)', mm:'ဖေးယပ်စ် သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'thunia.jpg', en:'Thunia', mm:'ထူနီးယား သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'renanthera.jpg', en:'Renanthera', mm:'ရီနန်သီရာ သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'pleione.jpg', en:'Pleione', mm:'ပလီယိုနီ သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'cleisostoma.jpg', en:'Cleisostoma', mm:'ကလိုင်ဆိုစတိုမာ သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'acampe.jpg', en:'Acampe', mm:'အေကမ်ပီ သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'ascocentrum.jpg', en:'Ascocentrum', mm:'အက်စကိုစင်ထရမ် သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'pholidota.jpg', en:'Pholidota (Rattlesnake Orchid)', mm:'ဖိုလီဒိုတာ သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'nervilia.jpg', en:'Nervilia', mm:'နာဗီလီယာ သစ်ခွ', cat:'🌸 Orchids' },
-            { file:'blue-vanda.jpg', en:'Blue Vanda (Coerulea)', mm:'ဗန်ဒါအပြာ', cat:'🌸 Orchids' },
-            // Pots
-            { file:'pot-terracotta.jpg', en:'Terracotta Pot', mm:'မြေအိုး', cat:'🪴 Pots & Containers' },
-            { file:'pot-cement.jpg', en:'Cement Pot', mm:'ဘိလပ်မြေအိုး', cat:'🪴 Pots & Containers' },
-            { file:'pot-glazed.jpg', en:'Glazed Ceramic Pot', mm:'စဉ့်အိုး / ကြွေအိုး', cat:'🪴 Pots & Containers' },
-            { file:'pot-plastic.jpg', en:'Plastic Nursery Pot', mm:'ပလတ်စတစ်အိုး', cat:'🪴 Pots & Containers' },
-            { file:'pot-growbag.jpg', en:'Fabric Grow Bag', mm:'စိုက်အိတ်', cat:'🪴 Pots & Containers' },
-            { file:'pot-hanging.jpg', en:'Hanging Basket', mm:'ဆွဲအိုး', cat:'🪴 Pots & Containers' },
-            { file:'pot-selfwatering.jpg', en:'Self-Watering Pot', mm:'ရေလှောင်အိုး', cat:'🪴 Pots & Containers' },
-            { file:'pot-orchid.jpg', en:'Orchid Pot (Slotted)', mm:'သစ်ခွအိုး', cat:'🪴 Pots & Containers' },
-            // Shrubs
-            { file:'bougainvillea.jpg', en:'Bougainvillea', mm:'စက္ကူပန်း', cat:'🌺 Shrubs & Climbers' },
-            { file:'ixora.jpg', en:'Ixora', mm:'ပိန်းနဲပန်း', cat:'🌺 Shrubs & Climbers' },
-            { file:'hibiscus.jpg', en:'Hibiscus', mm:'ခေါင်ရန်းပန်း', cat:'🌺 Shrubs & Climbers' },
-            { file:'rangoon-creeper.jpg', en:'Rangoon Creeper', mm:'မြတ်လေးနွယ်', cat:'🌺 Shrubs & Climbers' },
-            { file:'bleeding-heart.jpg', en:'Bleeding Heart Vine', mm:'ဂုလ္လီပန်း', cat:'🌺 Shrubs & Climbers' },
-            { file:'muang.jpg', en:'Muang / Orange Trumpet', mm:'မောင်းပန်း', cat:'🌺 Shrubs & Climbers' },
-            { file:'king-jasmine.jpg', en:'King Jasmine', mm:'မြတ်လေးဘုရင်', cat:'🌺 Shrubs & Climbers' },
-            { file:'allamanda.jpg', en:'Allamanda', mm:'ရွှေကြက်ရင်း', cat:'🌺 Shrubs & Climbers' },
-            { file:'pagoda-flower.jpg', en:'Pagoda Flower', mm:'ပုဂံပန်း', cat:'🌺 Shrubs & Climbers' },
-            { file:'night-jasmine.jpg', en:'Night Jasmine', mm:'ညပန်း', cat:'🌺 Shrubs & Climbers' },
-            { file:'garlic-vine.jpg', en:'Garlic Vine', mm:'ကြက်သွန်နွယ်', cat:'🌺 Shrubs & Climbers' },
-            { file:'amherstia.jpg', en:'Pride of Myanmar', mm:'သိုက်ပန်း', cat:'🌺 Shrubs & Climbers' },
-            { file:'gardenia.jpg', en:'Gardenia', mm:'ဇီးဖြူပန်း', cat:'🌺 Shrubs & Climbers' },
-            { file:'butterfly-bush.jpg', en:'Butterfly Bush', mm:'လိပ်ပြာပန်း', cat:'🌺 Shrubs & Climbers' },
-            { file:'jungle-flame.jpg', en:'Jungle Flame', mm:'ပိန်းနဲပန်းအနီ', cat:'🌺 Shrubs & Climbers' },
-            // Trees
-            { file:'frangipani.jpg', en:'Frangipani', mm:'ဇီဇဝါပန်း', cat:'🌳 Trees & Palms' },
-            { file:'golden-shower.jpg', en:'Golden Shower Tree', mm:'ငုရွှေဝါပန်း', cat:'🌳 Trees & Palms' },
-            { file:'foxtail-palm.jpg', en:'Foxtail Palm', mm:'မြီးတောင်အုန်း', cat:'🌳 Trees & Palms' },
-            { file:'teak.jpg', en:'Teak', mm:'ကျွန်းပင်', cat:'🌳 Trees & Palms' },
-            { file:'neem.jpg', en:'Neem', mm:'တမာပင်', cat:'🌳 Trees & Palms' },
-            { file:'areca-palm.jpg', en:'Areca Palm', mm:'အုန်းချယ်ပင်', cat:'🌳 Trees & Palms' },
-            { file:'rain-tree.jpg', en:'Rain Tree', mm:'မိုးသစ်ပင်', cat:'🌳 Trees & Palms' },
-            { file:'mezali.jpg', en:'Mezali', mm:'မယ်ဇလီပင်', cat:'🌳 Trees & Palms' },
-            { file:'star-flower.jpg', en:'Star Flower Tree', mm:'ခရေပင်', cat:'🌳 Trees & Palms' },
-            { file:'mohur.jpg', en:'Mohur Tree / Flamboyant', mm:'စိန်ပန်းပင်', cat:'🌳 Trees & Palms' },
-            { file:'travellers-palm.jpg', en:'Travellers Palm', mm:'ခရီးသွားထန်း', cat:'🌳 Trees & Palms' },
-            { file:'fishtail-palm.jpg', en:'Fish Tail Palm', mm:'ငါးမြီးထန်း', cat:'🌳 Trees & Palms' },
-            // Indoor
-            { file:'snake-plant.jpg', en:'Snake Plant', mm:'မြွေလျှာပင်', cat:'🪴 Indoor & Shade Plants' },
-            { file:'peace-lily.jpg', en:'Peace Lily', mm:'ငြိမ်းချမ်းရေးလီလီ', cat:'🪴 Indoor & Shade Plants' },
-            { file:'pothos.jpg', en:'Money Plant / Pothos', mm:'ငွေပင်', cat:'🪴 Indoor & Shade Plants' },
-            { file:'croton.jpg', en:'Croton', mm:'ဇော်ဂျီပင်', cat:'🪴 Indoor & Shade Plants' },
-            { file:'chinese-evergreen.jpg', en:'Chinese Evergreen', mm:'အဂ်လော်နီးမား', cat:'🪴 Indoor & Shade Plants' },
-            { file:'monstera.jpg', en:'Swiss Cheese Plant', mm:'မွန်စတီရာ', cat:'🪴 Indoor & Shade Plants' },
-            { file:'boston-fern.jpg', en:'Boston Fern', mm:'ဒေါင်းမြီးပင်', cat:'🪴 Indoor & Shade Plants' },
-            { file:'zz-plant.jpg', en:'ZZ Plant', mm:'ဇီဇီပင်', cat:'🪴 Indoor & Shade Plants' },
-            { file:'dracaena.jpg', en:'Dracaena (Dragon Tree)', mm:'ဒရာစီနာ', cat:'🪴 Indoor & Shade Plants' },
-            { file:'spider-plant.jpg', en:'Spider Plant', mm:'ပင့်ကူပင်', cat:'🪴 Indoor & Shade Plants' },
-            { file:'rubber-plant.jpg', en:'Rubber Plant', mm:'ရာဘာပင်', cat:'🪴 Indoor & Shade Plants' },
-            { file:'calathea.jpg', en:'Calathea (Prayer Plant)', mm:'ကလာသီယာ', cat:'🪴 Indoor & Shade Plants' },
-            // Perennials
-            { file:'jasmine.jpg', en:'Arabian Jasmine', mm:'မြတ်လေးပန်း', cat:'🌸 Perennials & Groundcovers' },
-            { file:'mexican-petunia.jpg', en:'Mexican Petunia', mm:'ပုလဲပန်း', cat:'🌸 Perennials & Groundcovers' },
-            { file:'lantana.jpg', en:'Lantana', mm:'လန်တာနာ', cat:'🌸 Perennials & Groundcovers' },
-            { file:'coleus.jpg', en:'Coleus', mm:'ရောင်စုံဆေးပင်', cat:'🌸 Perennials & Groundcovers' },
-            { file:'marigold.jpg', en:'Marigold', mm:'ထပ်တစ်ရာပန်း', cat:'🌸 Perennials & Groundcovers' },
-            { file:'portulaca.jpg', en:'Moss Rose / 9 o\'clock', mm:'၉ နာရီပန်း', cat:'🌸 Perennials & Groundcovers' },
-            { file:'canna.jpg', en:'Canna Lily', mm:'ငှက်ပျောပန်းနီ', cat:'🌸 Perennials & Groundcovers' },
-            { file:'heliconia.jpg', en:'Heliconia', mm:'ဟယ်လီကိုနီယာ', cat:'🌸 Perennials & Groundcovers' },
-            { file:'barleria.jpg', en:'Barleria', mm:'ဖြူခက်ပြာ', cat:'🌸 Perennials & Groundcovers' },
-            { file:'plumbago.jpg', en:'Plumbago', mm:'ပလမ်ဘာဂို', cat:'🌸 Perennials & Groundcovers' },
-            { file:'pentas.jpg', en:'Pentas (Star Cluster)', mm:'ကြယ်စုပန်း', cat:'🌸 Perennials & Groundcovers' },
-            { file:'euphorbia.jpg', en:'Euphorbia (Crown of Thorns)', mm:'သရဖူဆူးပင်', cat:'🌸 Perennials & Groundcovers' },
-            // Fence
-            { file:'bamboo.jpg', en:'Dwarf Bamboo (Clumping)', mm:'ဝါးပုပင်', cat:'🌿 Fence & Balcony Specials' },
-            { file:'thunbergia.jpg', en:'Clock Vine', mm:'ဆေးဒန်းနွယ်', cat:'🌿 Fence & Balcony Specials' },
-            { file:'morning-glory.jpg', en:'Morning Glory', mm:'ကြက်မောက်နွယ်', cat:'🌿 Fence & Balcony Specials' },
-            { file:'clematis.jpg', en:'Clematis', mm:'ကလီမက်တစ်', cat:'🌿 Fence & Balcony Specials' },
-            { file:'asparagus.jpg', en:'Asparagus Fern', mm:'ကညွတ်အတိုင်ပင်', cat:'🌿 Fence & Balcony Specials' },
-            { file:'snake-jasmine.jpg', en:'Snake Jasmine', mm:'မြွေမြတ်လေး', cat:'🌿 Fence & Balcony Specials' },
-            { file:'vinca.jpg', en:'Vinca (Periwinkle)', mm:'သင်္ဘောမန်ကျည်း', cat:'🌿 Fence & Balcony Specials' },
-            { file:'clitoria.jpg', en:'Butterfly Pea', mm:'ပဲပုပ်ပန်း', cat:'🌿 Fence & Balcony Specials' },
-            { file:'caladium.jpg', en:'Caladium', mm:'ကလေဒီယမ်', cat:'🌿 Fence & Balcony Specials' },
-            { file:'ruellia.jpg', en:'Ruellia (Wild Petunia)', mm:'ရူးလီးယား', cat:'🌿 Fence & Balcony Specials' }
+        var GOOGLE_SHEET_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQzthDCHJACnjbjtXCzlsPQY3brcqwU4K035F_KkTVpBCj6SNwdfEJZe3S6gQgNqHnlfP6lRT0-A9mP/pub?output=csv';
+
+        var plantCatalog=[
+            {file:'mango-fruit.jpg',en:'Mango (grafted)',mm:'သရက်ပင် (ကိုင်းဆက်)',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'jackfruit.jpg',en:'Jackfruit',mm:'ပိန္နဲပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'durian.jpg',en:'Durian (grafted)',mm:'ဒူးရင်းပင် (ကိုင်းဆက်)',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'papaya.jpg',en:'Papaya',mm:'သင်္ဘောပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'guava.jpg',en:'Guava',mm:'မာလကာပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'custard-apple.jpg',en:'Custard Apple',mm:'ဩဇာပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'avocado.jpg',en:'Avocado (grafted)',mm:'ထောပတ်ပင် (ကိုင်းဆက်)',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'banana.jpg',en:'Banana (Dwarf)',mm:'ငှက်ပျောပင် (ထောင့်)',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'pomelo.jpg',en:'Pomelo',mm:'ကျွဲကောပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'lime.jpg',en:'Lime / Lemon',mm:'သံပုရာပင် / ရှောက်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'starfruit.jpg',en:'Star Fruit',mm:'စောင်းလျားပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'pomegranate.jpg',en:'Pomegranate',mm:'သလဲပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'dragon-fruit.jpg',en:'Dragon Fruit',mm:'နဂါးမောက်သီး',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'soursop.jpg',en:'Soursop',mm:'ဒူးရင်းရိုင်း',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'sapodilla.jpg',en:'Sapodilla',mm:'သပွတ်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'langsat.jpg',en:'Langsat / Duku',mm:'လန်းဆတ်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'mangosteen.jpg',en:'Mangosteen',mm:'မင်းဂွတ်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'rambutan.jpg',en:'Rambutan',mm:'ကြက်မောက်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'lychee.jpg',en:'Lychee',mm:'လိုင်ချီးပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'tamarind.jpg',en:'Tamarind (Sweet)',mm:'မန်ကျည်းပင် (အချို)',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'jujube.jpg',en:'Jujube',mm:'ဆီးပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'passion-fruit.jpg',en:'Passion Fruit',mm:'ပတ်ရှင်သီး',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'persimmon.jpg',en:'Persimmon',mm:'တည်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'burmese-grape.jpg',en:'Burmese Grape',mm:'ကနစိုပင် / လီးသီး',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'mulberry.jpg',en:'Mulberry',mm:'ပိုးစာပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
+            {file:'dendrobium-hybrid.jpg',en:'Dendrobium (Hybrid Mix)',mm:'ဒန်ဒရိုဘီယမ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'vanda.jpg',en:'Vanda (Blue/Purple)',mm:'ဗန်ဒါသစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'cymbidium.jpg',en:'Cymbidium (Boat Orchid)',mm:'စင်ဘီဒီယမ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'paphiopedilum.jpg',en:'Slipper Orchid',mm:'ဖိနပ်သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'rhynchostylis.jpg',en:'Foxtail Orchid',mm:'မြွေမြီးသစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'phalaenopsis.jpg',en:'Moth Orchid',mm:'ဖလေနော့ပ်စစ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'aerides.jpg',en:'Fox Brush Orchid',mm:'အေရီးဒီးစ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'bulbophyllum.jpg',en:'Bulbophyllum',mm:'ဘူလ်ဘိုဖီလမ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'coelogyne.jpg',en:'Coelogyne',mm:'စီလော်ဂျင်နီ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'eria.jpg',en:'Eria',mm:'အီးရီးယား သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'phaius.jpg',en:'Phaius (Nun Orchid)',mm:'ဖေးယပ်စ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'thunia.jpg',en:'Thunia',mm:'ထူနီးယား သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'renanthera.jpg',en:'Renanthera',mm:'ရီနန်သီရာ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'pleione.jpg',en:'Pleione',mm:'ပလီယိုနီ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'cleisostoma.jpg',en:'Cleisostoma',mm:'ကလိုင်ဆိုစတိုမာ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'acampe.jpg',en:'Acampe',mm:'အေကမ်ပီ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'ascocentrum.jpg',en:'Ascocentrum',mm:'အက်စကိုစင်ထရမ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'pholidota.jpg',en:'Pholidota (Rattlesnake Orchid)',mm:'ဖိုလီဒိုတာ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'nervilia.jpg',en:'Nervilia',mm:'နာဗီလီယာ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'blue-vanda.jpg',en:'Blue Vanda (Coerulea)',mm:'ဗန်ဒါအပြာ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
+            {file:'pot-terracotta.jpg',en:'Terracotta Pot',mm:'မြေအိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},
+            {file:'pot-cement.jpg',en:'Cement Pot',mm:'ဘိလပ်မြေအိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},
+            {file:'pot-glazed.jpg',en:'Glazed Ceramic Pot',mm:'စဉ့်အိုး / ကြွေအိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},
+            {file:'pot-plastic.jpg',en:'Plastic Nursery Pot',mm:'ပလတ်စတစ်အိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},
+            {file:'pot-growbag.jpg',en:'Fabric Grow Bag',mm:'စိုက်အိတ်',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},
+            {file:'pot-hanging.jpg',en:'Hanging Basket',mm:'ဆွဲအိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},
+            {file:'pot-selfwatering.jpg',en:'Self-Watering Pot',mm:'ရေလှောင်အိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},
+            {file:'pot-orchid.jpg',en:'Orchid Pot (Slotted)',mm:'သစ်ခွအိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},
+            {file:'bougainvillea.jpg',en:'Bougainvillea',mm:'စက္ကူပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
+            {file:'ixora.jpg',en:'Ixora',mm:'ပိန်းနဲပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
+            {file:'hibiscus.jpg',en:'Hibiscus',mm:'ခေါင်ရန်းပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
+            {file:'rangoon-creeper.jpg',en:'Rangoon Creeper',mm:'မြတ်လေးနွယ်',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
+            {file:'bleeding-heart.jpg',en:'Bleeding Heart Vine',mm:'ဂုလ္လီပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
+            {file:'muang.jpg',en:'Muang / Orange Trumpet',mm:'မောင်းပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
+            {file:'king-jasmine.jpg',en:'King Jasmine',mm:'မြတ်လေးဘုရင်',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
+            {file:'allamanda.jpg',en:'Allamanda',mm:'ရွှေကြက်ရင်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
+            {file:'pagoda-flower.jpg',en:'Pagoda Flower',mm:'ပုဂံပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
+            {file:'night-jasmine.jpg',en:'Night Jasmine',mm:'ညပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
+            {file:'garlic-vine.jpg',en:'Garlic Vine',mm:'ကြက်သွန်နွယ်',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
+            {file:'amherstia.jpg',en:'Pride of Myanmar',mm:'သိုက်ပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
+            {file:'gardenia.jpg',en:'Gardenia',mm:'ဇီးဖြူပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
+            {file:'butterfly-bush.jpg',en:'Butterfly Bush',mm:'လိပ်ပြာပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
+            {file:'jungle-flame.jpg',en:'Jungle Flame',mm:'ပိန်းနဲပန်းအနီ',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
+            {file:'frangipani.jpg',en:'Frangipani',mm:'ဇီဇဝါပန်း',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
+            {file:'golden-shower.jpg',en:'Golden Shower Tree',mm:'ငုရွှေဝါပန်း',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
+            {file:'foxtail-palm.jpg',en:'Foxtail Palm',mm:'မြီးတောင်အုန်း',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
+            {file:'teak.jpg',en:'Teak',mm:'ကျွန်းပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
+            {file:'neem.jpg',en:'Neem',mm:'တမာပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
+            {file:'areca-palm.jpg',en:'Areca Palm',mm:'အုန်းချယ်ပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
+            {file:'rain-tree.jpg',en:'Rain Tree',mm:'မိုးသစ်ပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
+            {file:'mezali.jpg',en:'Mezali',mm:'မယ်ဇလီပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
+            {file:'star-flower.jpg',en:'Star Flower Tree',mm:'ခရေပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
+            {file:'mohur.jpg',en:'Mohur Tree / Flamboyant',mm:'စိန်ပန်းပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
+            {file:'travellers-palm.jpg',en:'Travellers Palm',mm:'ခရီးသွားထန်း',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
+            {file:'fishtail-palm.jpg',en:'Fish Tail Palm',mm:'ငါးမြီးထန်း',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
+            {file:'snake-plant.jpg',en:'Snake Plant',mm:'မြွေလျှာပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
+            {file:'peace-lily.jpg',en:'Peace Lily',mm:'ငြိမ်းချမ်းရေးလီလီ',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
+            {file:'pothos.jpg',en:'Money Plant / Pothos',mm:'ငွေပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
+            {file:'croton.jpg',en:'Croton',mm:'ဇော်ဂျီပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
+            {file:'chinese-evergreen.jpg',en:'Chinese Evergreen',mm:'အဂ်လော်နီးမား',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
+            {file:'monstera.jpg',en:'Swiss Cheese Plant',mm:'မွန်စတီရာ',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
+            {file:'boston-fern.jpg',en:'Boston Fern',mm:'ဒေါင်းမြီးပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
+            {file:'zz-plant.jpg',en:'ZZ Plant',mm:'ဇီဇီပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
+            {file:'dracaena.jpg',en:'Dracaena (Dragon Tree)',mm:'ဒရာစီနာ',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
+            {file:'spider-plant.jpg',en:'Spider Plant',mm:'ပင့်ကူပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
+            {file:'rubber-plant.jpg',en:'Rubber Plant',mm:'ရာဘာပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
+            {file:'calathea.jpg',en:'Calathea (Prayer Plant)',mm:'ကလာသီယာ',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
+            {file:'jasmine.jpg',en:'Arabian Jasmine',mm:'မြတ်လေးပန်း',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
+            {file:'mexican-petunia.jpg',en:'Mexican Petunia',mm:'ပုလဲပန်း',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
+            {file:'lantana.jpg',en:'Lantana',mm:'လန်တာနာ',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
+            {file:'coleus.jpg',en:'Coleus',mm:'ရောင်စုံဆေးပင်',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
+            {file:'marigold.jpg',en:'Marigold',mm:'ထပ်တစ်ရာပန်း',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
+            {file:'portulaca.jpg',en:"Moss Rose / 9 o'clock",mm:'၉ နာရီပန်း',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
+            {file:'canna.jpg',en:'Canna Lily',mm:'ငှက်ပျောပန်းနီ',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
+            {file:'heliconia.jpg',en:'Heliconia',mm:'ဟယ်လီကိုနီယာ',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
+            {file:'barleria.jpg',en:'Barleria',mm:'ဖြူခက်ပြာ',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
+            {file:'plumbago.jpg',en:'Plumbago',mm:'ပလမ်ဘာဂို',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
+            {file:'pentas.jpg',en:'Pentas (Star Cluster)',mm:'ကြယ်စုပန်း',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
+            {file:'euphorbia.jpg',en:'Euphorbia (Crown of Thorns)',mm:'သရဖူဆူးပင်',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
+            {file:'bamboo.jpg',en:'Dwarf Bamboo (Clumping)',mm:'ဝါးပုပင်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
+            {file:'thunbergia.jpg',en:'Clock Vine',mm:'ဆေးဒန်းနွယ်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
+            {file:'morning-glory.jpg',en:'Morning Glory',mm:'ကြက်မောက်နွယ်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
+            {file:'clematis.jpg',en:'Clematis',mm:'ကလီမက်တစ်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
+            {file:'asparagus.jpg',en:'Asparagus Fern',mm:'ကညွတ်အတိုင်ပင်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
+            {file:'snake-jasmine.jpg',en:'Snake Jasmine',mm:'မြွေမြတ်လေး',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
+            {file:'vinca.jpg',en:'Vinca (Periwinkle)',mm:'သင်္ဘောမန်ကျည်း',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
+            {file:'clitoria.jpg',en:'Butterfly Pea',mm:'ပဲပုပ်ပန်း',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
+            {file:'caladium.jpg',en:'Caladium',mm:'ကလေဒီယမ်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
+            {file:'ruellia.jpg',en:'Ruellia (Wild Petunia)',mm:'ရူးလီးယား',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'}
         ];
 
-        // Default prices (fallback)
-        const DEFAULT_PRICES = {
-            'mango-fruit.jpg': '12,000 – 30,000 Ks', 'jackfruit.jpg': '10,000 – 20,000 Ks',
-            'durian.jpg': '15,000 – 45,000 Ks', 'papaya.jpg': '3,000 – 8,000 Ks',
-            'guava.jpg': '5,000 – 12,000 Ks', 'custard-apple.jpg': '6,000 – 15,000 Ks',
-            'avocado.jpg': '10,000 – 25,000 Ks', 'banana.jpg': '2,500 – 6,000 Ks',
-            'pomelo.jpg': '8,000 – 18,000 Ks', 'lime.jpg': '4,000 – 10,000 Ks',
-            'starfruit.jpg': '7,000 – 15,000 Ks', 'pomegranate.jpg': '6,000 – 14,000 Ks',
-            'dragon-fruit.jpg': '3,000 – 8,000 Ks', 'soursop.jpg': '8,000 – 18,000 Ks',
-            'sapodilla.jpg': '6,000 – 14,000 Ks', 'langsat.jpg': '12,000 – 25,000 Ks',
-            'mangosteen.jpg': '15,000 – 35,000 Ks', 'rambutan.jpg': '10,000 – 22,000 Ks',
-            'lychee.jpg': '10,000 – 22,000 Ks', 'tamarind.jpg': '5,000 – 12,000 Ks',
-            'jujube.jpg': '4,000 – 10,000 Ks', 'passion-fruit.jpg': '3,000 – 7,000 Ks',
-            'persimmon.jpg': '10,000 – 25,000 Ks', 'burmese-grape.jpg': '8,000 – 18,000 Ks',
-            'mulberry.jpg': '4,000 – 8,000 Ks', 'dendrobium-hybrid.jpg': '8,000 – 18,000 Ks',
-            'vanda.jpg': '15,000 – 35,000 Ks', 'cymbidium.jpg': '12,000 – 25,000 Ks',
-            'paphiopedilum.jpg': '20,000 – 50,000 Ks', 'rhynchostylis.jpg': '10,000 – 22,000 Ks',
-            'phalaenopsis.jpg': '10,000 – 20,000 Ks', 'aerides.jpg': '9,000 – 18,000 Ks',
-            'bulbophyllum.jpg': '8,000 – 18,000 Ks', 'coelogyne.jpg': '10,000 – 22,000 Ks',
-            'eria.jpg': '7,000 – 15,000 Ks', 'phaius.jpg': '12,000 – 25,000 Ks',
-            'thunia.jpg': '10,000 – 20,000 Ks', 'renanthera.jpg': '15,000 – 35,000 Ks',
-            'pleione.jpg': '12,000 – 25,000 Ks', 'cleisostoma.jpg': '8,000 – 16,000 Ks',
-            'acampe.jpg': '7,000 – 15,000 Ks', 'ascocentrum.jpg': '10,000 – 20,000 Ks',
-            'pholidota.jpg': '8,000 – 18,000 Ks', 'nervilia.jpg': '6,000 – 12,000 Ks',
-            'blue-vanda.jpg': '25,000 – 60,000 Ks', 'pot-terracotta.jpg': '2,500 – 12,000 Ks',
-            'pot-cement.jpg': '5,000 – 25,000 Ks', 'pot-glazed.jpg': '8,000 – 35,000 Ks',
-            'pot-plastic.jpg': '500 – 4,000 Ks', 'pot-growbag.jpg': '1,500 – 6,000 Ks',
-            'pot-hanging.jpg': '4,000 – 10,000 Ks', 'pot-selfwatering.jpg': '7,000 – 18,000 Ks',
-            'pot-orchid.jpg': '3,000 – 8,000 Ks', 'bougainvillea.jpg': '8,000 – 15,000 Ks',
-            'ixora.jpg': '5,000 – 10,000 Ks', 'hibiscus.jpg': '6,000 – 12,000 Ks',
-            'rangoon-creeper.jpg': '5,000 – 10,000 Ks', 'bleeding-heart.jpg': '6,500 – 12,000 Ks',
-            'muang.jpg': '4,000 – 8,000 Ks', 'king-jasmine.jpg': '8,000 – 18,000 Ks',
-            'allamanda.jpg': '4,000 – 8,000 Ks', 'pagoda-flower.jpg': '6,000 – 12,000 Ks',
-            'night-jasmine.jpg': '4,000 – 8,000 Ks', 'garlic-vine.jpg': '5,000 – 10,000 Ks',
-            'amherstia.jpg': '20,000 – 50,000 Ks', 'gardenia.jpg': '6,000 – 14,000 Ks',
-            'butterfly-bush.jpg': '4,000 – 8,000 Ks', 'jungle-flame.jpg': '5,000 – 10,000 Ks',
-            'frangipani.jpg': '15,000 – 30,000 Ks', 'golden-shower.jpg': '20,000 – 45,000 Ks',
-            'foxtail-palm.jpg': '25,000 – 50,000 Ks', 'teak.jpg': '3,000 – 8,000 Ks',
-            'neem.jpg': '3,000 – 7,000 Ks', 'areca-palm.jpg': '8,000 – 18,000 Ks',
-            'rain-tree.jpg': '10,000 – 25,000 Ks', 'mezali.jpg': '5,000 – 12,000 Ks',
-            'star-flower.jpg': '8,000 – 18,000 Ks', 'mohur.jpg': '10,000 – 25,000 Ks',
-            'travellers-palm.jpg': '15,000 – 35,000 Ks', 'fishtail-palm.jpg': '12,000 – 28,000 Ks',
-            'snake-plant.jpg': '4,000 – 8,000 Ks', 'peace-lily.jpg': '7,000 – 12,000 Ks',
-            'pothos.jpg': '3,000 – 6,000 Ks', 'croton.jpg': '6,000 – 14,000 Ks',
-            'chinese-evergreen.jpg': '5,000 – 10,000 Ks', 'monstera.jpg': '8,000 – 18,000 Ks',
-            'boston-fern.jpg': '5,000 – 10,000 Ks', 'zz-plant.jpg': '5,000 – 12,000 Ks',
-            'dracaena.jpg': '6,000 – 15,000 Ks', 'spider-plant.jpg': '2,500 – 5,000 Ks',
-            'rubber-plant.jpg': '7,000 – 15,000 Ks', 'calathea.jpg': '6,000 – 12,000 Ks',
-            'jasmine.jpg': '4,000 – 9,000 Ks', 'mexican-petunia.jpg': '3,000 – 6,000 Ks',
-            'lantana.jpg': '3,500 – 7,000 Ks', 'coleus.jpg': '2,000 – 5,000 Ks',
-            'marigold.jpg': '1,500 – 3,000 Ks', 'portulaca.jpg': '1,000 – 2,500 Ks',
-            'canna.jpg': '3,000 – 6,000 Ks', 'heliconia.jpg': '5,000 – 12,000 Ks',
-            'barleria.jpg': '3,000 – 6,000 Ks', 'plumbago.jpg': '4,000 – 8,000 Ks',
-            'pentas.jpg': '2,000 – 4,000 Ks', 'euphorbia.jpg': '3,000 – 7,000 Ks',
-            'bamboo.jpg': '10,000 – 20,000 Ks', 'thunbergia.jpg': '4,000 – 8,000 Ks',
-            'morning-glory.jpg': '2,000 – 4,000 Ks', 'clematis.jpg': '5,000 – 12,000 Ks',
-            'asparagus.jpg': '3,000 – 6,000 Ks', 'snake-jasmine.jpg': '3,500 – 7,000 Ks',
-            'vinca.jpg': '1,500 – 3,000 Ks', 'clitoria.jpg': '2,000 – 4,000 Ks',
-            'caladium.jpg': '3,000 – 7,000 Ks', 'ruellia.jpg': '2,500 – 5,000 Ks'
-        };
+        var DEFAULT_PRICES={'mango-fruit.jpg':'12,000 – 30,000 Ks','jackfruit.jpg':'10,000 – 20,000 Ks','durian.jpg':'15,000 – 45,000 Ks','papaya.jpg':'3,000 – 8,000 Ks','guava.jpg':'5,000 – 12,000 Ks','custard-apple.jpg':'6,000 – 15,000 Ks','avocado.jpg':'10,000 – 25,000 Ks','banana.jpg':'2,500 – 6,000 Ks','pomelo.jpg':'8,000 – 18,000 Ks','lime.jpg':'4,000 – 10,000 Ks','starfruit.jpg':'7,000 – 15,000 Ks','pomegranate.jpg':'6,000 – 14,000 Ks','dragon-fruit.jpg':'3,000 – 8,000 Ks','soursop.jpg':'8,000 – 18,000 Ks','sapodilla.jpg':'6,000 – 14,000 Ks','langsat.jpg':'12,000 – 25,000 Ks','mangosteen.jpg':'15,000 – 35,000 Ks','rambutan.jpg':'10,000 – 22,000 Ks','lychee.jpg':'10,000 – 22,000 Ks','tamarind.jpg':'5,000 – 12,000 Ks','jujube.jpg':'4,000 – 10,000 Ks','passion-fruit.jpg':'3,000 – 7,000 Ks','persimmon.jpg':'10,000 – 25,000 Ks','burmese-grape.jpg':'8,000 – 18,000 Ks','mulberry.jpg':'4,000 – 8,000 Ks','dendrobium-hybrid.jpg':'8,000 – 18,000 Ks','vanda.jpg':'15,000 – 35,000 Ks','cymbidium.jpg':'12,000 – 25,000 Ks','paphiopedilum.jpg':'20,000 – 50,000 Ks','rhynchostylis.jpg':'10,000 – 22,000 Ks','phalaenopsis.jpg':'10,000 – 20,000 Ks','aerides.jpg':'9,000 – 18,000 Ks','bulbophyllum.jpg':'8,000 – 18,000 Ks','coelogyne.jpg':'10,000 – 22,000 Ks','eria.jpg':'7,000 – 15,000 Ks','phaius.jpg':'12,000 – 25,000 Ks','thunia.jpg':'10,000 – 20,000 Ks','renanthera.jpg':'15,000 – 35,000 Ks','pleione.jpg':'12,000 – 25,000 Ks','cleisostoma.jpg':'8,000 – 16,000 Ks','acampe.jpg':'7,000 – 15,000 Ks','ascocentrum.jpg':'10,000 – 20,000 Ks','pholidota.jpg':'8,000 – 18,000 Ks','nervilia.jpg':'6,000 – 12,000 Ks','blue-vanda.jpg':'25,000 – 60,000 Ks','pot-terracotta.jpg':'2,500 – 12,000 Ks','pot-cement.jpg':'5,000 – 25,000 Ks','pot-glazed.jpg':'8,000 – 35,000 Ks','pot-plastic.jpg':'500 – 4,000 Ks','pot-growbag.jpg':'1,500 – 6,000 Ks','pot-hanging.jpg':'4,000 – 10,000 Ks','pot-selfwatering.jpg':'7,000 – 18,000 Ks','pot-orchid.jpg':'3,000 – 8,000 Ks','bougainvillea.jpg':'8,000 – 15,000 Ks','ixora.jpg':'5,000 – 10,000 Ks','hibiscus.jpg':'6,000 – 12,000 Ks','rangoon-creeper.jpg':'5,000 – 10,000 Ks','bleeding-heart.jpg':'6,500 – 12,000 Ks','muang.jpg':'4,000 – 8,000 Ks','king-jasmine.jpg':'8,000 – 18,000 Ks','allamanda.jpg':'4,000 – 8,000 Ks','pagoda-flower.jpg':'6,000 – 12,000 Ks','night-jasmine.jpg':'4,000 – 8,000 Ks','garlic-vine.jpg':'5,000 – 10,000 Ks','amherstia.jpg':'20,000 – 50,000 Ks','gardenia.jpg':'6,000 – 14,000 Ks','butterfly-bush.jpg':'4,000 – 8,000 Ks','jungle-flame.jpg':'5,000 – 10,000 Ks','frangipani.jpg':'15,000 – 30,000 Ks','golden-shower.jpg':'20,000 – 45,000 Ks','foxtail-palm.jpg':'25,000 – 50,000 Ks','teak.jpg':'3,000 – 8,000 Ks','neem.jpg':'3,000 – 7,000 Ks','areca-palm.jpg':'8,000 – 18,000 Ks','rain-tree.jpg':'10,000 – 25,000 Ks','mezali.jpg':'5,000 – 12,000 Ks','star-flower.jpg':'8,000 – 18,000 Ks','mohur.jpg':'10,000 – 25,000 Ks','travellers-palm.jpg':'15,000 – 35,000 Ks','fishtail-palm.jpg':'12,000 – 28,000 Ks','snake-plant.jpg':'4,000 – 8,000 Ks','peace-lily.jpg':'7,000 – 12,000 Ks','pothos.jpg':'3,000 – 6,000 Ks','croton.jpg':'6,000 – 14,000 Ks','chinese-evergreen.jpg':'5,000 – 10,000 Ks','monstera.jpg':'8,000 – 18,000 Ks','boston-fern.jpg':'5,000 – 10,000 Ks','zz-plant.jpg':'5,000 – 12,000 Ks','dracaena.jpg':'6,000 – 15,000 Ks','spider-plant.jpg':'2,500 – 5,000 Ks','rubber-plant.jpg':'7,000 – 15,000 Ks','calathea.jpg':'6,000 – 12,000 Ks','jasmine.jpg':'4,000 – 9,000 Ks','mexican-petunia.jpg':'3,000 – 6,000 Ks','lantana.jpg':'3,500 – 7,000 Ks','coleus.jpg':'2,000 – 5,000 Ks','marigold.jpg':'1,500 – 3,000 Ks','portulaca.jpg':'1,000 – 2,500 Ks','canna.jpg':'3,000 – 6,000 Ks','heliconia.jpg':'5,000 – 12,000 Ks','barleria.jpg':'3,000 – 6,000 Ks','plumbago.jpg':'4,000 – 8,000 Ks','pentas.jpg':'2,000 – 4,000 Ks','euphorbia.jpg':'3,000 – 7,000 Ks','bamboo.jpg':'10,000 – 20,000 Ks','thunbergia.jpg':'4,000 – 8,000 Ks','morning-glory.jpg':'2,000 – 4,000 Ks','clematis.jpg':'5,000 – 12,000 Ks','asparagus.jpg':'3,000 – 6,000 Ks','snake-jasmine.jpg':'3,500 – 7,000 Ks','vinca.jpg':'1,500 – 3,000 Ks','clitoria.jpg':'2,000 – 4,000 Ks','caladium.jpg':'3,000 – 7,000 Ks','ruellia.jpg':'2,500 – 5,000 Ks'};
 
-        // Live prices from Google Sheet (will be filled)
-        let sheetPrices = {}; // { filename: { price: "12,000 – 30,000 Ks", ... } }
-        let priceCatalog = {}; // { category: { plantName: { lo, hi } } }
+        var sheetPrices={},priceCatalog={},serviceCatalog={},servicePackages=[],plantList=[],serviceList=[];
 
-        // ──────────────── GOOGLE SHEET FETCH ────────────────
-        function fetchSheetPrices() {
-            return fetch(GOOGLE_SHEET_CSV_URL)
-                .then(function(response) {
-                    if (!response.ok) throw new Error('Sheet not accessible');
-                    return response.text();
-                })
-                .then(function(csvText) {
-                    var rows = csvText.trim().split('\n').map(function(row) {
-                        var cols = [];
-                        var current = '';
-                        var inQuotes = false;
-                        for (var i = 0; i < row.length; i++) {
-                            var char = row.charAt(i);
-                            if (char === '"') { inQuotes = !inQuotes; }
-                            else if (char === ',' && !inQuotes) { cols.push(current.trim()); current = ''; }
-                            else { current += char; }
-                        }
-                        cols.push(current.trim());
-                        return cols;
-                    });
-                    sheetPrices = {};
-                    for (var i = 1; i < rows.length; i++) {
-                        var filename = rows[i][0];
-                        var price = rows[i][1];
-                        if (filename && price) {
-                            sheetPrices[filename.trim()] = {
-                                price: price.trim(),
-                                status: (rows[i][2] || 'instock').trim().toLowerCase(),
-                                note: (rows[i][3] || '').trim()
-                            };
-                        }
-                    }
-                    console.log('✅ Live prices loaded:', Object.keys(sheetPrices).length, 'items');
-                })
-                .catch(function(err) {
-                    console.warn('Using default prices:', err.message);
-                    sheetPrices = {};
-                });
+        function fetchSheetPrices(){return fetch(GOOGLE_SHEET_CSV_URL).then(function(r){if(!r.ok)throw new Error('Sheet failed');return r.text();}).then(function(csv){var rows=csv.trim().split('\n').map(function(row){var cols=[],cur='',inQ=false;for(var i=0;i<row.length;i++){var c=row.charAt(i);if(c==='"')inQ=!inQ;else if(c===','&&!inQ){cols.push(cur.trim());cur='';}else cur+=c;}cols.push(cur.trim());return cols;});sheetPrices={};for(var i=1;i<rows.length;i++){if(rows[i][0]&&rows[i][1])sheetPrices[rows[i][0].trim()]={price:rows[i][1].trim(),status:(rows[i][2]||'instock').trim().toLowerCase(),note:(rows[i][3]||'').trim()};}}).catch(function(){sheetPrices={};});}
+
+        function buildCatalog(){priceCatalog={};plantCatalog.forEach(function(p){var cat=currentLang==='mm'?p.catMm:p.catEn;var txt=(sheetPrices[p.file]&&sheetPrices[p.file].price)?sheetPrices[p.file].price:(DEFAULT_PRICES[p.file]||'');var m=txt.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);if(!m)return;if(!priceCatalog[cat])priceCatalog[cat]={};priceCatalog[cat][currentLang==='mm'?p.mm:p.en]={lo:parseInt(m[1].replace(/,/g,'')),hi:parseInt(m[2].replace(/,/g,'')),en:p.en,mm:p.mm};});fillPlantCategories();}
+
+        function fillPlantCategories(){var s=document.getElementById('plant-cat');var cats=Object.keys(priceCatalog).sort();s.innerHTML=cats.length?'<option value="">'+(currentLang==='mm'?'အမျိုးအစားရွေးပါ...':'Select Category...')+'</option>'+cats.map(function(c){return'<option value="'+c+'">'+c+'</option>';}).join(''):'<option value="">'+(currentLang==='mm'?'အမျိုးအစားမရှိပါ':'No categories found')+'</option>';document.getElementById('plant-items').innerHTML='<p class="empty-text">'+(currentLang==='mm'?'အပင်မရွေးရသေးပါ။':'No plants selected yet.')+'</p>';}
+
+        function loadPlants(){var cat=document.getElementById('plant-cat').value;var s=document.getElementById('plant-name');s.innerHTML='<option value="">'+(currentLang==='mm'?'အပင်ရွေးပါ...':'Select plant...')+'</option>';if(cat&&priceCatalog[cat]){Object.keys(priceCatalog[cat]).sort().forEach(function(p){s.innerHTML+='<option value="'+p+'">'+p+'</option>';});}updatePlantPrice();}
+
+        function updatePlantPrice(){var cat=document.getElementById('plant-cat').value,name=document.getElementById('plant-name').value,size=document.getElementById('plant-size').value,qty=parseInt(document.getElementById('plant-qty').value)||1,hint=document.getElementById('plant-price-hint');if(!cat||!name||!priceCatalog[cat]||!priceCatalog[cat][name]){hint.textContent='';return;}var pr=priceCatalog[cat][name],unit=size==='small'?pr.lo:size==='large'?pr.hi:Math.round((pr.lo+pr.hi)/2);hint.innerHTML='<strong>'+(currentLang==='mm'?'တစ်ပင်စျေး':'Unit')+':</strong> '+unit.toLocaleString()+' Ks | <strong>'+(currentLang==='mm'?'စုစုပေါင်း':'Line')+':</strong> '+(unit*qty).toLocaleString()+' Ks';}
+
+        function addPlantItem(){var cat=document.getElementById('plant-cat').value,name=document.getElementById('plant-name').value,size=document.getElementById('plant-size').value,qty=parseInt(document.getElementById('plant-qty').value);if(!cat||!name){alert(currentLang==='mm'?'ကျေးဇူးပြု၍ အမျိုးအစားနှင့်အပင်ရွေးပါ။':'Please select category and plant.');return;}var pr=priceCatalog[cat][name],unit=size==='small'?pr.lo:size==='large'?pr.hi:Math.round((pr.lo+pr.hi)/2);plantList.push({cat:cat,name:name,size:size,qty:qty,unit:unit,total:unit*qty,en:pr.en,mm:pr.mm});document.getElementById('plant-name').value='';document.getElementById('plant-qty').value='1';document.getElementById('plant-price-hint').textContent='';refreshAll();}
+
+        function fetchServicePrices(){return fetch('services.html').then(function(r){return r.text();}).then(function(html){var d=new DOMParser().parseFromString(html,'text/html');var headers=d.querySelectorAll('.category-header');if(!headers.length){d.querySelectorAll('h2').forEach(function(h2){var title=h2.textContent.trim(),items=[],next=h2.nextElementSibling;while(next&&next.tagName!=='H2'){next.querySelectorAll('.service-item').forEach(function(si){var n=si.querySelector('.service-name'),p=si.querySelector('.price-range');if(n&&p)items.push({name:n.textContent.trim(),price:p.textContent.trim()});});next=next.nextElementSibling;}if(items.length)serviceCatalog[title]={icon:'🛠️',items:parseServiceItems(items)};});}else{headers.forEach(function(h){var title=h.textContent.trim(),icon=(h.querySelector('.category-icon')||{}).textContent||'🛠️',items=[],next=h.nextElementSibling;while(next&&!next.matches('.category-header')){next.querySelectorAll('.service-item').forEach(function(si){var n=si.querySelector('.service-name'),p=si.querySelector('.price-range');if(n&&p)items.push({name:n.textContent.trim(),price:p.textContent.trim()});});next=next.nextElementSibling;}if(items.length)serviceCatalog[title]={icon:icon,items:parseServiceItems(items)};});}d.querySelectorAll('.package-card').forEach(function(pkg){var n=(pkg.querySelector('.package-name')||{}).textContent||'',pt=(pkg.querySelector('.package-price')||{}).textContent||'';if(n&&pt){var pr=parseInt(pt.replace(/[^0-9]/g,'')),feat=Array.from(pkg.querySelectorAll('.package-features li')).map(function(li){return li.textContent.trim();});servicePackages.push({name:n.trim(),price:pr,features:feat});}});if(servicePackages.length)serviceCatalog['🎯 Service Packages']={icon:'📦',items:servicePackages.map(function(p){return{name:p.name,priceLo:p.price,priceHi:p.price,isRange:false,features:p.features};})};renderServiceCards();}).catch(function(){serviceCatalog={'🏡 Outdoor Landscaping':{icon:'🏡',items:[{name:'Garden Design',priceLo:50000,priceHi:150000,isRange:true},{name:'Soil Prep',priceLo:30000,priceHi:80000,isRange:true}]}};renderServiceCards();});}
+
+        function parseServiceItems(raw){return raw.map(function(item){var m=item.price.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);if(m)return{name:item.name,priceLo:parseInt(m[1].replace(/,/g,'')),priceHi:parseInt(m[2].replace(/,/g,'')),isRange:true};var s=item.price.match(/([\d,]+)\s*Ks/);var p=s?parseInt(s[1].replace(/,/g,'')):0;return{name:item.name,priceLo:p,priceHi:p,isRange:false};});}
+
+        function renderServiceCards(){var c=document.getElementById('service-cards'),keys=Object.keys(serviceCatalog);c.innerHTML=keys.length?keys.map(function(k){var svc=serviceCatalog[k];return'<div class="service-card" data-category="'+k+'"><span class="icon">'+svc.icon+'</span><h3>'+k+'</h3><p>'+svc.items.length+' '+(currentLang==='mm'?'ခု':'service(s)')+'</p></div>';}).join(''):'<p class="empty-text">'+(currentLang==='mm'?'ဝန်ဆောင်မှုမရှိပါ။':'No services found.')+'</p>';c.querySelectorAll('.service-card').forEach(function(card){card.addEventListener('click',function(){pickService(this.dataset.category,this);});});}
+
+        function pickService(type,cardEl){document.querySelectorAll('.service-card').forEach(function(c){c.classList.remove('selected');});cardEl.classList.add('selected');var opts=document.getElementById('service-opts');opts.style.display='block';document.getElementById('service-opts-title').textContent=type;var d=serviceCatalog[type];document.getElementById('service-opts-grid').innerHTML=d.items.map(function(item){var pd=item.isRange?item.priceLo.toLocaleString()+' – '+item.priceHi.toLocaleString()+' Ks':item.priceLo.toLocaleString()+' Ks';var fh=item.features?'<div style="font-size:0.8em;color:var(--gray-600);margin-top:5px">'+item.features.map(function(f){return'🌿 '+f;}).join('<br>')+'</div>':'';return'<div class="option-card"><h4>'+item.name+'</h4><div class="option-price">'+pd+'</div>'+fh+'<button class="btn-service-add" data-type="'+type+'" data-name="'+item.name+'" data-lo="'+item.priceLo+'" data-hi="'+item.priceHi+'" data-range="'+item.isRange+'">'+(currentLang==='mm'?'+ ထည့်မည်':'+ Add')+'</button></div>';}).join('');document.getElementById('service-opts-grid').querySelectorAll('.btn-service-add').forEach(function(btn){btn.addEventListener('click',function(){addServiceItem(this.dataset.type,this.dataset.name,parseInt(this.dataset.lo),parseInt(this.dataset.hi),this.dataset.range==='true');});});}
+
+        function addServiceItem(type,name,lo,hi,isRange){var p=isRange?Math.round((lo+hi)/2):lo;serviceList.push({type:type,name:name,price:p,priceLo:lo,priceHi:hi,isRange:isRange});refreshAll();}
+
+        function delPlant(i){plantList.splice(i,1);refreshAll();}
+        function delService(i){serviceList.splice(i,1);refreshAll();}
+
+        function refreshAll(){
+            var pt=plantList.reduce(function(s,p){return s+p.total;},0),st=serviceList.reduce(function(s,sv){return s+sv.price;},0);
+            var sizeLabels={small:{en:'Small',mm:'သေး'},medium:{en:'Medium',mm:'လတ်'},large:{en:'Large',mm:'ကြီး'}};
+            document.getElementById('plant-items').innerHTML=plantList.length?plantList.map(function(p,i){var displayName=currentLang==='mm'?(p.mm||p.name):(p.en||p.name);return'<div class="list-item"><div class="item-info"><div class="item-name">'+displayName+'</div><div class="item-meta">'+sizeLabels[p.size][currentLang]+' | '+(currentLang==='mm'?'အရေအတွက်':'Qty')+':'+p.qty+' | '+p.unit.toLocaleString()+' Ks</div></div><div class="item-price">'+p.total.toLocaleString()+' Ks</div><button class="btn-remove" data-plant-index="'+i+'">×</button></div>';}).join(''):'<p class="empty-text">'+(currentLang==='mm'?'အပင်မရွေးရသေးပါ။':'No plants selected yet.')+'</p>';
+            document.getElementById('plant-items').querySelectorAll('.btn-remove').forEach(function(b){b.addEventListener('click',function(){delPlant(parseInt(this.dataset.plantIndex));});});
+            document.getElementById('service-items').innerHTML=serviceList.length?serviceList.map(function(s,i){var pd=s.isRange?s.priceLo.toLocaleString()+'–'+s.priceHi.toLocaleString():s.price.toLocaleString();return'<div class="list-item"><div class="item-info"><div class="item-name">'+s.name+'</div><div class="item-meta">'+s.type+'</div></div><div class="item-price">'+pd+' Ks</div><button class="btn-remove" data-service-index="'+i+'">×</button></div>';}).join(''):'<p class="empty-text">'+(currentLang==='mm'?'ဝန်ဆောင်မှုမရွေးရသေးပါ။':'No services selected yet.')+'</p>';
+            document.getElementById('service-items').querySelectorAll('.btn-remove').forEach(function(b){b.addEventListener('click',function(){delService(parseInt(this.dataset.serviceIndex));});});
+            document.getElementById('sum-plants').innerHTML=plantList.length?plantList.map(function(p,i){var displayName=currentLang==='mm'?(p.mm||p.name):(p.en||p.name);return'<div class="list-item"><span>'+displayName+' ('+sizeLabels[p.size][currentLang]+') ×'+p.qty+'</span><span>'+p.total.toLocaleString()+' Ks</span><button class="btn-remove" data-sum-plant-index="'+i+'">×</button></div>';}).join(''):'<p class="empty-text">'+(currentLang==='mm'?'အပင်မရွေးရသေးပါ':'No plants selected')+'</p>';
+            document.getElementById('sum-plants').querySelectorAll('.btn-remove').forEach(function(b){b.addEventListener('click',function(){delPlant(parseInt(this.dataset.sumPlantIndex));});});
+            document.getElementById('sum-services').innerHTML=serviceList.length?serviceList.map(function(s,i){return'<div class="list-item"><span>'+s.name+'</span><span>'+s.price.toLocaleString()+' Ks</span><button class="btn-remove" data-sum-service-index="'+i+'">×</button></div>';}).join(''):'<p class="empty-text">'+(currentLang==='mm'?'ဝန်ဆောင်မှုမရွေးရသေးပါ':'No services selected')+'</p>';
+            document.getElementById('sum-services').querySelectorAll('.btn-remove').forEach(function(b){b.addEventListener('click',function(){delService(parseInt(this.dataset.sumServiceIndex));});});
+            document.getElementById('plants-total').textContent=pt.toLocaleString()+' Ks';
+            document.getElementById('services-total').textContent=st.toLocaleString()+' Ks';
+            document.getElementById('stat-plants-count').textContent=plantList.length;
+            document.getElementById('stat-services-count').textContent=serviceList.length;
+            var cats={};plantList.forEach(function(p){cats[p.cat]=true;});serviceList.forEach(function(s){cats[s.type]=true;});
+            document.getElementById('stat-categories').textContent=Object.keys(cats).length;
+            document.getElementById('plants-badge').textContent=plantList.length+' '+(currentLang==='mm'?'ပစ္စည်း':'items');
+            document.getElementById('services-badge').textContent=serviceList.length+' '+(currentLang==='mm'?'ပစ္စည်း':'items');
+            document.getElementById('preview-date').textContent=(currentLang==='mm'?'ခန့်မှန်းခြေပြုလုပ်သည့်ရက်- ':'Estimate created: ')+new Date().toLocaleDateString(currentLang==='mm'?'my-MM':'en-US',{year:'numeric',month:'long',day:'numeric'});
+            var gal=document.getElementById('plant-gallery'),gHTML='';
+            plantList.forEach(function(p){var img='images/'+((plantCatalog.find(function(pc){return pc.en===p.en;})||{}).file||'');if(img&&img!=='images/'){gHTML+='<div class="gallery-thumb" title="'+(currentLang==='mm'?p.mm:p.en)+'"><img src="'+img+'" alt="" onerror="this.style.display=\'none\'" loading="lazy"><span class="gallery-badge">×'+p.qty+'</span></div>';}else{gHTML+='<div class="gallery-thumb" title="'+(currentLang==='mm'?p.mm:p.en)+'">🌱<span class="gallery-badge">×'+p.qty+'</span></div>';}});
+            gal.innerHTML=gHTML;gal.style.display=gHTML?'flex':'none';
+            document.getElementById('total-plants-line').textContent=pt.toLocaleString()+' Ks';
+            document.getElementById('total-services-line').textContent=st.toLocaleString()+' Ks';
+            var tot=pt+st,disc=tot>500000?0.10:tot>200000?0.05:0,da=Math.round(tot*disc);
+            document.getElementById('discount-msg').innerHTML=disc?'<div class="discount-badge">🎉 '+(disc*100)+'% '+(currentLang==='mm'?'လျှော့စျေး! (':'discount! (Save ')+da.toLocaleString()+' Ks)</div>':'';
+            document.getElementById('discount-line').style.display=disc?'flex':'none';
+            document.getElementById('discount-amount').textContent='-'+da.toLocaleString()+' Ks';
+            document.getElementById('grand-total').textContent=(tot-da).toLocaleString()+' Ks';
         }
 
-        // ──────────────── BUILD PRICE CATALOG ────────────────
-        function buildCatalog() {
-            priceCatalog = {};
-            plantCatalog.forEach(function(p) {
-                var priceText = '';
-                if (sheetPrices[p.file] && sheetPrices[p.file].price) {
-                    priceText = sheetPrices[p.file].price;
-                } else if (DEFAULT_PRICES[p.file]) {
-                    priceText = DEFAULT_PRICES[p.file];
-                } else {
-                    return; // skip if no price info
-                }
-                var match = priceText.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
-                if (!match) return;
-                var lo = parseInt(match[1].replace(/,/g, ''));
-                var hi = parseInt(match[2].replace(/,/g, ''));
-                if (!priceCatalog[p.cat]) priceCatalog[p.cat] = {};
-                priceCatalog[p.cat][p.en] = { lo: lo, hi: hi };
-            });
-            console.log('📋 Plant categories:', Object.keys(priceCatalog));
-            fillPlantCategories();
-        }
+        function showPanel(id){document.querySelectorAll('.calc-panel').forEach(function(p){p.classList.remove('active');});document.querySelectorAll('.calc-tab-btn').forEach(function(b){b.classList.remove('active');});document.getElementById('panel-'+id).classList.add('active');document.querySelector('.calc-tab-btn[data-panel="'+id+'"]').classList.add('active');if(id==='summary')refreshAll();}
 
-        function fillPlantCategories() {
-            var s = document.getElementById('plant-cat');
-            var cats = Object.keys(priceCatalog).sort();
-            if (cats.length === 0) {
-                s.innerHTML = '<option value="">No categories found</option>';
-                return;
-            }
-            s.innerHTML = '<option value="">Select Category...</option>';
-            cats.forEach(function(c) {
-                s.innerHTML += '<option value="' + c + '">' + c + '</option>';
-            });
-            document.getElementById('plant-items').innerHTML = '<p class="empty-text">No plants selected yet.</p>';
-        }
+        function emailEstimate(){var pt=plantList.reduce(function(s,p){return s+p.total;},0),st=serviceList.reduce(function(s,sv){return s+sv.price;},0),tot=pt+st,disc=tot>500000?0.10:tot>200000?0.05:0,da=Math.round(tot*disc);var text=(currentLang==='mm'?'ပန်းသတင်း LANDSCAPE မှ ခန့်မှန်းခြေ':'ESTIMATE FROM ပန်းသတင်း LANDSCAPE')+'\n'+'='.repeat(40)+'\n\n';if(plantList.length){text+=(currentLang==='mm'?'🌱 အပင်:\n':'🌱 PLANTS:\n');plantList.forEach(function(p){text+='  - '+(currentLang==='mm'?p.mm:p.en)+' ('+p.size+') ×'+p.qty+' = '+p.total.toLocaleString()+' Ks\n';});}if(serviceList.length){text+='\n'+(currentLang==='mm'?'🛠️ ဝန်ဆောင်မှု:\n':'🛠️ SERVICES:\n');serviceList.forEach(function(s){text+='  - '+s.name+': '+s.price.toLocaleString()+' Ks\n';});}text+='\n'+(currentLang==='mm'?'အပင်စုစုပေါင်း':'Plants Subtotal')+': '+pt.toLocaleString()+' Ks\n'+(currentLang==='mm'?'ဝန်ဆောင်မှုစုစုပေါင်း':'Services Subtotal')+': '+st.toLocaleString()+' Ks';if(disc)text+='\n'+(currentLang==='mm'?'လျှော့စျေး':'Discount')+': -'+da.toLocaleString()+' Ks';text+='\n\n💰 '+(currentLang==='mm'?'စုစုပေါင်း':'GRAND TOTAL')+': '+(tot-da).toLocaleString()+' Ks\n\n'+(currentLang==='mm'?'* နောက်ဆုံးစျေးနှုန်းမှာ နေရာကြည့်ရှုမှုပေါ်မူတည်၍ အနည်းငယ်ကွဲပြားနိုင်သည်။ ဆက်သွယ်ရန်- +95 9xxx xxxxxx':'* Final price may vary. Contact: +95 9xxx xxxxxx');window.location.href='mailto:?subject='+encodeURIComponent(currentLang==='mm'?'ဥယျာဉ်ခန့်မှန်းခြေ':'Landscape Estimate')+'&body='+encodeURIComponent(text);}
 
-        function loadPlants() {
-            var cat = document.getElementById('plant-cat').value;
-            var s = document.getElementById('plant-name');
-            s.innerHTML = '<option value="">Select plant...</option>';
-            if (cat && priceCatalog[cat]) {
-                Object.keys(priceCatalog[cat]).sort().forEach(function(p) {
-                    s.innerHTML += '<option value="' + p + '">' + p + '</option>';
-                });
-            }
-            updatePlantPrice();
-        }
+        function showToast(msg){var t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.classList.add('show');},100);setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove();},300);},2500);}
 
-        function updatePlantPrice() {
-            var cat = document.getElementById('plant-cat').value;
-            var name = document.getElementById('plant-name').value;
-            var size = document.getElementById('plant-size').value;
-            var qty = parseInt(document.getElementById('plant-qty').value) || 1;
-            var hint = document.getElementById('plant-price-hint');
-            if (!cat || !name || !priceCatalog[cat] || !priceCatalog[cat][name]) {
-                hint.textContent = '';
-                return;
-            }
-            var pr = priceCatalog[cat][name];
-            var unit = size === 'small' ? pr.lo : size === 'large' ? pr.hi : Math.round((pr.lo + pr.hi) / 2);
-            hint.innerHTML = '<strong>Unit:</strong> ' + unit.toLocaleString() + ' Ks | <strong>Line:</strong> ' + (unit * qty).toLocaleString() + ' Ks';
-        }
+        // Event binding
+        document.getElementById('btn-add-plant').addEventListener('click',addPlantItem);
+        document.getElementById('plant-cat').addEventListener('change',loadPlants);
+        document.getElementById('plant-name').addEventListener('change',updatePlantPrice);
+        document.getElementById('plant-size').addEventListener('change',updatePlantPrice);
+        document.getElementById('plant-qty').addEventListener('input',updatePlantPrice);
+        document.getElementById('btn-print').addEventListener('click',function(){window.print();});
+        document.getElementById('btn-email').addEventListener('click',emailEstimate);
+        document.getElementById('btn-email-summary').addEventListener('click',emailEstimate);
+        document.querySelectorAll('.calc-tab-btn').forEach(function(b){b.addEventListener('click',function(){showPanel(this.dataset.panel);});});
 
-        // ──────────────── SERVICES (already working) ────────────────
-        let serviceCatalog = {};
-        let servicePackages = [];
-        let plantList = [];
-        let serviceList = [];
-
-        function fetchServicePrices() {
-            return fetch('services.html')
-                .then(function(r) { return r.text(); })
-                .then(function(html) {
-                    var d = new DOMParser().parseFromString(html, 'text/html');
-                    var headers = d.querySelectorAll('.category-header');
-                    if (headers.length === 0) {
-                        var h2s = d.querySelectorAll('h2');
-                        h2s.forEach(function(h2) {
-                            var title = h2.textContent.trim();
-                            var items = [];
-                            var next = h2.nextElementSibling;
-                            while (next && next.tagName !== 'H2') {
-                                var servItems = next.querySelectorAll('.service-item');
-                                servItems.forEach(function(si) {
-                                    var nameEl = si.querySelector('.service-name');
-                                    var priceEl = si.querySelector('.price-range');
-                                    if (nameEl && priceEl) items.push({ name: nameEl.textContent.trim(), price: priceEl.textContent.trim() });
-                                });
-                                next = next.nextElementSibling;
-                            }
-                            if (items.length) serviceCatalog[title] = { icon: '🛠️', items: parseServiceItems(items) };
-                        });
-                    } else {
-                        headers.forEach(function(header) {
-                            var title = header.textContent.trim();
-                            var icon = (header.querySelector('.category-icon') || {}).textContent || '🛠️';
-                            var items = [];
-                            var next = header.nextElementSibling;
-                            while (next && !next.matches('.category-header')) {
-                                var servItems = next.querySelectorAll('.service-item');
-                                servItems.forEach(function(si) {
-                                    var nameEl = si.querySelector('.service-name');
-                                    var priceEl = si.querySelector('.price-range');
-                                    if (nameEl && priceEl) items.push({ name: nameEl.textContent.trim(), price: priceEl.textContent.trim() });
-                                });
-                                next = next.nextElementSibling;
-                            }
-                            if (items.length) serviceCatalog[title] = { icon: icon, items: parseServiceItems(items) };
-                        });
-                    }
-                    // Packages
-                    d.querySelectorAll('.package-card').forEach(function(pkg) {
-                        var name = (pkg.querySelector('.package-name') || {}).textContent || '';
-                        var priceText = (pkg.querySelector('.package-price') || {}).textContent || '';
-                        if (name && priceText) {
-                            var price = parseInt(priceText.replace(/[^0-9]/g, ''));
-                            var features = Array.from(pkg.querySelectorAll('.package-features li')).map(function(li) { return li.textContent.trim(); });
-                            servicePackages.push({ name: name.trim(), price: price, features: features });
-                        }
-                    });
-                    if (servicePackages.length) {
-                        serviceCatalog['🎯 Service Packages'] = {
-                            icon: '📦',
-                            items: servicePackages.map(function(p) { return { name: p.name, priceLo: p.price, priceHi: p.price, isRange: false, features: p.features }; })
-                        };
-                    }
-                    renderServiceCards();
-                })
-                .catch(function(err) {
-                    console.error('Service fetch error:', err);
-                    serviceCatalog = {
-                        '🏡 Outdoor Landscaping': { icon:'🏡', items:[
-                            {name:'Garden Design',priceLo:50000,priceHi:150000,isRange:true},
-                            {name:'Soil Prep',priceLo:30000,priceHi:80000,isRange:true}
-                        ]}
-                    };
-                    renderServiceCards();
-                });
-        }
-
-        function parseServiceItems(raw) {
-            return raw.map(function(item) {
-                var match = item.price.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
-                if (match) {
-                    return { name:item.name, priceLo:parseInt(match[1].replace(/,/g,'')), priceHi:parseInt(match[2].replace(/,/g,'')), isRange:true };
-                } else {
-                    var single = item.price.match(/([\d,]+)\s*Ks/);
-                    var price = single ? parseInt(single[1].replace(/,/g,'')) : 0;
-                    return { name:item.name, priceLo:price, priceHi:price, isRange:false };
-                }
-            });
-        }
-
-        function renderServiceCards() {
-            var container = document.getElementById('service-cards');
-            var keys = Object.keys(serviceCatalog);
-            if (keys.length === 0) {
-                container.innerHTML = '<p class="empty-text">No services found.</p>';
-                return;
-            }
-            container.innerHTML = keys.map(function(key) {
-                var svc = serviceCatalog[key];
-                return '<div class="service-card" data-category="' + key + '"><div class="icon">' + svc.icon + '</div><h3>' + key + '</h3><p>' + svc.items.length + ' service(s)</p></div>';
-            }).join('');
-            container.querySelectorAll('.service-card').forEach(function(card) {
-                card.addEventListener('click', function() {
-                    pickService(this.dataset.category, this);
-                });
-            });
-        }
-
-        function pickService(type, cardEl) {
-            document.querySelectorAll('.service-card').forEach(function(c) { c.classList.remove('selected'); });
-            cardEl.classList.add('selected');
-            var opts = document.getElementById('service-opts');
-            opts.style.display = 'block';
-            document.getElementById('service-opts-title').textContent = type;
-            var d = serviceCatalog[type];
-            document.getElementById('service-opts-grid').innerHTML = d.items.map(function(item, idx) {
-                var priceDisplay = item.isRange ? item.priceLo.toLocaleString() + ' – ' + item.priceHi.toLocaleString() + ' Ks' : item.priceLo.toLocaleString() + ' Ks';
-                var featHtml = item.features ? '<div style="font-size:0.8em;color:#666;margin-top:5px">' + item.features.map(function(f) { return '🌿 ' + f; }).join('<br>') + '</div>' : '';
-                return '<div class="option-card"><h4>' + item.name + '</h4><div class="option-price">' + priceDisplay + '</div>' + featHtml +
-                    '<button class="btn-service-add" data-type="' + type + '" data-name="' + item.name + '" data-lo="' + item.priceLo + '" data-hi="' + item.priceHi + '" data-range="' + item.isRange + '">+ Add</button></div>';
-            }).join('');
-            document.getElementById('service-opts-grid').querySelectorAll('.btn-service-add').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    var type = this.dataset.type;
-                    var name = this.dataset.name;
-                    var lo = parseInt(this.dataset.lo);
-                    var hi = parseInt(this.dataset.hi);
-                    var isRange = this.dataset.range === 'true';
-                    addServiceItem(type, name, lo, hi, isRange);
-                });
-            });
-        }
-
-        function addServiceItem(type, name, priceLo, priceHi, isRange) {
-            var price = isRange ? Math.round((priceLo + priceHi) / 2) : priceLo;
-            serviceList.push({ type:type, name:name, price:price, priceLo:priceLo, priceHi:priceHi, isRange:isRange });
-            refreshAll();
-        }
-
-        // ──────────────── COMMON ────────────────
-        function delPlant(i) { plantList.splice(i, 1); refreshAll(); }
-        function delService(i) { serviceList.splice(i, 1); refreshAll(); }
-
-        function refreshAll() {
-            // Plants
-            document.getElementById('plant-items').innerHTML = plantList.length === 0 ? '<p class="empty-text">No plants selected yet.</p>' :
-                plantList.map(function(p,i) {
-                    return '<div class="list-item"><div class="item-detail"><div class="item-title">' + p.name + '</div><div class="item-sub">' + p.size + ' | Qty:' + p.qty + ' | ' + p.unit.toLocaleString() + ' Ks</div></div><div class="item-cost">' + p.total.toLocaleString() + ' Ks</div><button class="btn-remove" data-plant-index="' + i + '">×</button></div>';
-                }).join('');
-            document.getElementById('plant-items').querySelectorAll('.btn-remove').forEach(function(btn) {
-                btn.addEventListener('click', function() { delPlant(parseInt(this.dataset.plantIndex)); });
-            });
-            // Services
-            document.getElementById('service-items').innerHTML = serviceList.length === 0 ? '<p class="empty-text">No services selected yet.</p>' :
-                serviceList.map(function(s,i) {
-                    var priceDisp = s.isRange ? s.priceLo.toLocaleString() + '–' + s.priceHi.toLocaleString() : s.price.toLocaleString();
-                    return '<div class="list-item"><div class="item-detail"><div class="item-title">' + s.name + '</div><div class="item-sub">' + s.type + '</div></div><div class="item-cost">' + priceDisp + ' Ks</div><button class="btn-remove" data-service-index="' + i + '">×</button></div>';
-                }).join('');
-            document.getElementById('service-items').querySelectorAll('.btn-remove').forEach(function(btn) {
-                btn.addEventListener('click', function() { delService(parseInt(this.dataset.serviceIndex)); });
-            });
-            // Summary
-            var pt = plantList.reduce(function(s,p) { return s + p.total; }, 0);
-            var st = serviceList.reduce(function(s,sv) { return s + sv.price; }, 0);
-            document.getElementById('sum-plants').innerHTML = plantList.length === 0 ? '<p class="empty-text">No plants</p>' :
-                plantList.map(function(p,i) { return '<div class="list-item"><span>' + p.name + ' (' + p.size + ') ×' + p.qty + '</span><span>' + p.total.toLocaleString() + ' Ks</span><button class="btn-remove" data-sum-plant-index="' + i + '">×</button></div>'; }).join('');
-            document.getElementById('sum-plants').querySelectorAll('.btn-remove').forEach(function(btn) {
-                btn.addEventListener('click', function() { delPlant(parseInt(this.dataset.sumPlantIndex)); });
-            });
-            document.getElementById('sum-services').innerHTML = serviceList.length === 0 ? '<p class="empty-text">No services</p>' :
-                serviceList.map(function(s,i) { return '<div class="list-item"><span>' + s.name + '</span><span>' + s.price.toLocaleString() + ' Ks</span><button class="btn-remove" data-sum-service-index="' + i + '">×</button></div>'; }).join('');
-            document.getElementById('sum-services').querySelectorAll('.btn-remove').forEach(function(btn) {
-                btn.addEventListener('click', function() { delService(parseInt(this.dataset.sumServiceIndex)); });
-            });
-            document.getElementById('plants-total').textContent = pt.toLocaleString() + ' Ks';
-            document.getElementById('services-total').textContent = st.toLocaleString() + ' Ks';
-            var tot = pt + st;
-            var disc = tot > 500000 ? 0.10 : tot > 200000 ? 0.05 : 0;
-            var da = Math.round(tot * disc);
-            document.getElementById('discount-msg').innerHTML = disc ? '<div class="discount-tag">🎉 ' + (disc*100) + '% discount! (Save ' + da.toLocaleString() + ' Ks)</div>' : '';
-            document.getElementById('grand-total').textContent = (tot - da).toLocaleString() + ' Ks';
-        }
-
-        function addPlantItem() {
-            var cat = document.getElementById('plant-cat').value;
-            var name = document.getElementById('plant-name').value;
-            var size = document.getElementById('plant-size').value;
-            var qty = parseInt(document.getElementById('plant-qty').value);
-            if (!cat || !name) { alert('Please select category and plant.'); return; }
-            var pr = priceCatalog[cat][name];
-            var unit = size === 'small' ? pr.lo : size === 'large' ? pr.hi : Math.round((pr.lo + pr.hi) / 2);
-            plantList.push({ cat:cat, name:name, size:size, qty:qty, unit:unit, total:unit*qty });
-            document.getElementById('plant-name').value = '';
-            document.getElementById('plant-qty').value = '1';
-            document.getElementById('plant-price-hint').textContent = '';
-            refreshAll();
-        }
-
-        function showPanel(panelId) {
-            document.querySelectorAll('.calc-panel').forEach(function(p) { p.classList.remove('active'); });
-            document.querySelectorAll('.calc-tab-btn').forEach(function(b) { b.classList.remove('active'); });
-            document.getElementById('panel-' + panelId).classList.add('active');
-            document.querySelector('.calc-tab-btn[data-panel="' + panelId + '"]').classList.add('active');
-            if (panelId === 'summary') refreshAll();
-        }
-
-        // Email
-        function emailEstimate() {
-            var text = 'ESTIMATE FROM ပန်းသတင်း LANDSCAPE\n' + '='.repeat(40) + '\n\n';
-            if (plantList.length) { text += '🌱 PLANTS:\n'; plantList.forEach(function(p) { text += '  - ' + p.name + ' (' + p.size + ') ×' + p.qty + ' = ' + p.total.toLocaleString() + ' Ks\n'; }); }
-            if (serviceList.length) { text += '\n🛠️ SERVICES:\n'; serviceList.forEach(function(s) { text += '  - ' + s.name + ': ' + s.price.toLocaleString() + ' Ks\n'; }); }
-            var pt = plantList.reduce(function(s,p) { return s + p.total; }, 0);
-            var st = serviceList.reduce(function(s,sv) { return s + sv.price; }, 0);
-            var tot = pt + st;
-            var disc = tot > 500000 ? 0.10 : tot > 200000 ? 0.05 : 0;
-            var da = Math.round(tot * disc);
-            text += '\nPlants Subtotal: ' + pt.toLocaleString() + ' Ks\nServices Subtotal: ' + st.toLocaleString() + ' Ks';
-            if (disc) text += '\nDiscount: -' + da.toLocaleString() + ' Ks';
-            text += '\n\n💰 GRAND TOTAL: ' + (tot - da).toLocaleString() + ' Ks\n\n*Final price may vary. Contact: +95 9xxx xxxxxx';
-            window.location.href = 'mailto:?subject=' + encodeURIComponent('Landscape Estimate') + '&body=' + encodeURIComponent(text);
-        }
-
-        // Event binding (CSP-safe)
-        document.getElementById('btn-add-plant').addEventListener('click', addPlantItem);
-        document.getElementById('plant-cat').addEventListener('change', loadPlants);
-        document.getElementById('plant-name').addEventListener('change', updatePlantPrice);
-        document.getElementById('plant-size').addEventListener('change', updatePlantPrice);
-        document.getElementById('plant-qty').addEventListener('input', updatePlantPrice);
-        document.getElementById('btn-print').addEventListener('click', function() { window.print(); });
-        document.getElementById('btn-email').addEventListener('click', emailEstimate);
-        document.querySelectorAll('.calc-tab-btn').forEach(function(btn) {
-            btn.addEventListener('click', function() { showPanel(this.dataset.panel); });
+        // Save as Image
+        document.getElementById('btn-save-img').addEventListener('click',function(){
+            var el=document.getElementById('panel-summary');
+            html2canvas(el,{scale:2,backgroundColor:'#ffffff',allowTaint:true,useCORS:true}).then(function(canvas){
+                var link=document.createElement('a');link.download='plant-estimate-'+new Date().toISOString().slice(0,10)+'.png';link.href=canvas.toDataURL('image/png');link.click();showToast(currentLang==='mm'?'✅ ပုံသိမ်းပြီးပါပြီ။':'✅ Image saved!');
+            }).catch(function(){showToast(currentLang==='mm'?'⚠️ ပုံမသိမ်းနိုင်ပါ':'⚠️ Could not save image');});
         });
 
-        // Init
-        window.addEventListener('DOMContentLoaded', function() {
-            fetchSheetPrices().then(function() {
-                buildCatalog();
-            }).catch(function() {
-                buildCatalog(); // fallback with defaults
-            });
-            fetchServicePrices();
-        });
+        // Share
+        document.getElementById('share-wa').addEventListener('click',function(){var pt=plantList.reduce(function(s,p){return s+p.total;},0),st=serviceList.reduce(function(s,sv){return s+sv.price;},0),tot=pt+st;var t=(currentLang==='mm'?'🌿 *ပန်းသတင်း Landscape မှ ခန့်မှန်းခြေ* 🌿\n\n':'🌿 *Estimate from ပန်းသတင်း Landscape* 🌿\n\n');t+=(currentLang==='mm'?'အပင်: ':'Plants: ')+pt.toLocaleString()+' Ks\n'+(currentLang==='mm'?'ဝန်ဆောင်မှု: ':'Services: ')+st.toLocaleString()+' Ks\n*'+(currentLang==='mm'?'စုစုပေါင်း: ':'Total: ')+tot.toLocaleString()+' Ks*\n\n'+window.location.href;window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank');});
+        document.getElementById('share-copy').addEventListener('click',function(){var pt=plantList.reduce(function(s,p){return s+p.total;},0),st=serviceList.reduce(function(s,sv){return s+sv.price;},0),tot=pt+st;var t=(currentLang==='mm'?'🌿 ပန်းသတင်း Landscape မှ ခန့်မှန်းခြေ\n\n':'🌿 Estimate from ပန်းသတင်း Landscape\n\n');plantList.forEach(function(p){t+=(currentLang==='mm'?p.mm:p.en)+' ('+p.size+') ×'+p.qty+' = '+p.total.toLocaleString()+' Ks\n';});serviceList.forEach(function(s){t+=s.name+': '+s.price.toLocaleString()+' Ks\n';});t+='\n'+(currentLang==='mm'?'စုစုပေါင်း: ':'Total: ')+tot.toLocaleString()+' Ks\n'+window.location.href;navigator.clipboard.writeText(t).then(function(){showToast(currentLang==='mm'?'📋 ကူးယူပြီးပါပြီ။':'📋 Copied!');}).catch(function(){showToast('⚠️ Could not copy');});});
+        document.getElementById('btn-book').addEventListener('click',function(){var pt=plantList.reduce(function(s,p){return s+p.total;},0),st=serviceList.reduce(function(s,sv){return s+sv.price;},0),tot=pt+st;window.location.href='mailto:pttlandscapeservices@gmail.com?subject='+encodeURIComponent((currentLang==='mm'?'တိုင်ပင်ဆွေးနွေးရန် - ':'Consultation - ')+tot.toLocaleString()+' Ks')+'&body='+encodeURIComponent((currentLang==='mm'?'အခမဲ့တိုင်ပင်ဆွေးနွေးလိုပါသည်။ ခန့်မှန်းခြေ- ':'Free consultation request. Estimate: ')+tot.toLocaleString()+' Ks');});
+
+        window.addEventListener('DOMContentLoaded',function(){fetchSheetPrices().then(function(){buildCatalog();}).catch(function(){buildCatalog();});fetchServicePrices();});
     })();
     </script>
 </body>
