@@ -11,8 +11,9 @@
             --green-100: #e8f5e9; --green-50: #f4faf5; --gold-600: #c78d20;
             --gold-400: #daa520; --gold-100: #fef7e8; --brown-700: #8B4513;
             --brown-500: #a0522d; --gray-50: #fafbf9; --gray-100: #f5f6f4;
-            --gray-200: #e8ebe7; --gray-600: #6b7280; --gray-800: #1e2e21;
-            --white: #ffffff; --red-100: #fee2e2; --red-500: #dc2626;
+            --gray-200: #e8ebe7; --gray-300: #d1d5db; --gray-600: #6b7280;
+            --gray-800: #1e2e21; --white: #ffffff;
+            --red-100: #fee2e2; --red-500: #dc2626;
             --radius-sm: 10px; --radius-md: 16px; --radius-lg: 24px;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
             --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
@@ -28,6 +29,7 @@
         }
         .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
+        /* ── Navigation ── */
         .nav {
             background: rgba(255,255,255,0.85); backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px); padding: 14px 0; position: sticky; top: 0;
@@ -38,13 +40,14 @@
         .nav-brand span { font-size: 0.6rem; font-weight: 500; opacity: 0.55; letter-spacing: 1.5px; text-transform: uppercase; }
         .nav-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
         .nav-links { display: flex; gap: 4px; list-style: none; }
-        .nav-links a { color: var(--gray-600); text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 24px; font-size: 0.875rem; transition: var(--transition); letter-spacing: -0.2px; }
+        .nav-links a { color: var(--gray-600); text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 24px; font-size: 0.875rem; transition: var(--transition); }
         .nav-links a:hover { background: var(--green-100); color: var(--green-700); }
         .nav-links a.active { background: var(--green-700); color: white; font-weight: 600; }
         .lang-toggle { display: flex; background: var(--gray-100); border-radius: 24px; padding: 3px; gap: 2px; }
         .lang-btn { padding: 7px 14px; border: none; cursor: pointer; font-weight: 600; font-size: 0.8rem; background: transparent; color: var(--gray-600); border-radius: 22px; transition: var(--transition); font-family: inherit; }
         .lang-btn.active { background: white; color: var(--green-700); box-shadow: var(--shadow-sm); }
 
+        /* ── Cart Import Banner ── */
         .cart-import-banner {
             background: linear-gradient(135deg, var(--gold-100), #fff8e1); border: 2px solid var(--gold-400);
             border-radius: var(--radius-md); padding: 16px 20px; margin-bottom: 20px; display: none;
@@ -60,6 +63,7 @@
         .btn-dismiss { background: transparent; border: 1px solid #ccc; color: #888; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; font-family: inherit; }
         .btn-dismiss:hover { background: #f5f5f5; }
 
+        /* ── Header ── */
         .header {
             background: linear-gradient(160deg, var(--green-900) 0%, #234d35 40%, var(--green-700) 100%);
             color: white; padding: 56px 24px 48px; text-align: center; position: relative; overflow: hidden;
@@ -67,10 +71,38 @@
         .header h1 { font-size: 2.4rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; position: relative; z-index: 1; }
         .header p { font-size: 1.1rem; opacity: 0.85; position: relative; z-index: 1; font-weight: 400; }
 
+        /* ── Step Indicator ── */
+        .step-indicator {
+            display: flex; justify-content: center; gap: 0; margin-bottom: 24px; flex-wrap: wrap;
+        }
+        .step-dot {
+            display: flex; align-items: center; gap: 0;
+        }
+        .step-circle {
+            width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-weight: 700; font-size: 0.85rem;
+            background: var(--gray-200); color: var(--gray-600); transition: var(--transition);
+            border: 2px solid var(--gray-200);
+        }
+        .step-circle.active { background: var(--green-700); color: white; border-color: var(--green-700); }
+        .step-circle.done { background: var(--green-500); color: white; border-color: var(--green-500); }
+        .step-line {
+            width: 40px; height: 3px; background: var(--gray-200); margin: 0 4px; transition: var(--transition);
+        }
+        .step-line.done { background: var(--green-500); }
+        .step-label-row {
+            display: flex; justify-content: center; gap: 0; margin-top: 8px; flex-wrap: wrap;
+        }
+        .step-label {
+            font-size: 0.7rem; font-weight: 600; color: var(--gray-600); text-align: center;
+            width: 80px; transition: var(--transition);
+        }
+        .step-label.active { color: var(--green-700); }
+
         .section { margin: -20px 0 50px; position: relative; z-index: 2; }
         .calculator-container { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); overflow: hidden; border: 1px solid var(--gray-200); }
         .calc-header { background: var(--white); padding: 16px 28px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
-        .calc-header h2 { font-size: 1.15rem; font-weight: 700; color: var(--green-900); letter-spacing: -0.3px; }
+        .calc-header h2 { font-size: 1.15rem; font-weight: 700; color: var(--green-900); }
         .calc-tabs { display: flex; gap: 6px; background: var(--gray-100); border-radius: 28px; padding: 4px; }
         .calc-tab-btn { background: transparent; border: none; color: var(--gray-600); padding: 10px 20px; border-radius: 24px; cursor: pointer; font-size: 0.875rem; font-weight: 600; transition: var(--transition); font-family: inherit; white-space: nowrap; }
         .calc-tab-btn.active { background: white; color: var(--green-700); box-shadow: var(--shadow-sm); }
@@ -91,7 +123,7 @@
         #plant-price-hint { margin-top: 14px; font-size: 0.9rem; color: var(--green-700); font-weight: 500; min-height: 22px; }
 
         .list-card { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 20px 24px; margin-bottom: 24px; }
-        .list-card h3 { font-size: 1rem; font-weight: 700; color: var(--green-900); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--gray-200); letter-spacing: -0.2px; }
+        .list-card h3 { font-size: 1rem; font-weight: 700; color: var(--green-900); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--gray-200); }
         .list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--gray-100); gap: 12px; animation: fadeIn 0.3s ease; }
         .list-item:last-child { border-bottom: none; }
         .item-info { flex: 1; min-width: 160px; }
@@ -120,13 +152,30 @@
         /* ── Delivery Card ── */
         .delivery-card { background: linear-gradient(135deg, #fef7e8, #fffcf5); border: 2px solid var(--gold-400); border-radius: var(--radius-md); padding: 24px; margin-bottom: 24px; }
         .delivery-card h3 { color: var(--green-900); margin-bottom: 16px; font-size: 1rem; }
-        .delivery-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+        .delivery-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
         .delivery-option { background: white; border: 2px solid var(--gray-200); border-radius: var(--radius-sm); padding: 16px; text-align: center; cursor: pointer; transition: var(--transition); }
         .delivery-option:hover, .delivery-option.selected { border-color: var(--gold-400); background: var(--gold-50); box-shadow: var(--shadow-md); }
         .delivery-option .d-icon { font-size: 2rem; display: block; margin-bottom: 6px; }
-        .delivery-option strong { display: block; color: var(--green-900); font-size: 0.9rem; }
+        .delivery-option strong { display: block; color: var(--green-900); font-size: 0.85rem; }
         .delivery-option .d-price { font-weight: 700; color: var(--gold-600); font-size: 1.1rem; margin: 4px 0; }
-        .delivery-option .d-desc { font-size: 0.75rem; color: var(--gray-600); }
+        .delivery-option .d-desc { font-size: 0.7rem; color: var(--gray-600); }
+        #delivery-selected-msg { margin-top: 14px; font-weight: 600; color: var(--green-700); text-align: center; min-height: 22px; }
+
+        /* ── Navigation Buttons ── */
+        .nav-buttons {
+            display: flex; justify-content: space-between; gap: 12px; margin-top: 24px; flex-wrap: wrap;
+        }
+        .btn-nav {
+            padding: 12px 28px; border-radius: 28px; font-weight: 700; cursor: pointer;
+            font-size: 0.9rem; transition: var(--transition); font-family: inherit; border: none;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .btn-nav.back { background: white; color: var(--green-700); border: 2px solid var(--gray-200); }
+        .btn-nav.back:hover { border-color: var(--green-500); background: var(--green-50); }
+        .btn-nav.next { background: var(--green-700); color: white; margin-left: auto; }
+        .btn-nav.next:hover { background: var(--green-900); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(26,59,43,0.3); }
+        .btn-nav.finish { background: var(--gold-400); color: #4a3000; margin-left: auto; }
+        .btn-nav.finish:hover { background: #e0a820; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(218,165,32,0.4); }
 
         /* ── Summary ── */
         .summary-header-card { background: linear-gradient(145deg, var(--green-900), var(--green-700)); color: white; border-radius: var(--radius-md); padding: 24px; margin-bottom: 20px; }
@@ -188,10 +237,12 @@
             .selector-grid { grid-template-columns: 1fr 1fr; }
             .cta-banner { flex-direction: column; text-align: center; }
             .delivery-options { grid-template-columns: 1fr 1fr; }
+            .step-line { width: 20px; }
+            .step-label { width: 60px; font-size: 0.65rem; }
         }
         @media print {
             body { background: white; }
-            .nav, .calc-header, .btn-add-plant, .btn-remove, .btn-row, .share-row, .cta-banner, .contact-row, .lang-toggle, .cart-import-banner { display: none !important; }
+            .nav, .calc-header, .btn-add-plant, .btn-remove, .btn-row, .share-row, .cta-banner, .contact-row, .lang-toggle, .cart-import-banner, .nav-buttons, .step-indicator, .step-label-row { display: none !important; }
             .calculator-container { box-shadow: none; border: none; }
             .total-card { background: #f5f5f5 !important; color: #333 !important; }
             .total-card * { color: #333 !important; }
@@ -219,11 +270,10 @@
 
     <header class="header">
         <h1 data-en="🌿 Complete Project Estimator" data-mm="🌿 ပရောဂျက်ခန့်မှန်းတွက်ချက်မှု">🌿 Complete Project Estimator</h1>
-        <p data-en="Calculate plants, services & delivery for your dream garden" data-mm="သင့်အိမ်ဥယျာဉ်အတွက် အပင်၊ ဝန်ဆောင်မှုနှင့် ပို့ဆောင်ခ တွက်ချက်ပါ">Calculate plants, services & delivery for your dream garden</p>
+        <p data-en="Step-by-step estimate for plants, services & delivery" data-mm="အပင်၊ ဝန်ဆောင်မှုနှင့် ပို့ဆောင်ခ အတွက် အဆင့်ဆင့်တွက်ချက်ပါ">Step-by-step estimate for plants, services & delivery</p>
     </header>
 
     <main class="container">
-        <!-- Cart Import Banner -->
         <div class="cart-import-banner" id="cartImportBanner">
             <div class="import-info">
                 <span class="import-icon">🛒</span>
@@ -247,6 +297,32 @@
                         <button class="calc-tab-btn" data-panel="services" data-en="🛠️ Services" data-mm="🛠️ ဝန်ဆောင်မှု">🛠️ Services</button>
                         <button class="calc-tab-btn" data-panel="delivery" data-en="🚚 Delivery" data-mm="🚚 ပို့ဆောင်ခ">🚚 Delivery</button>
                         <button class="calc-tab-btn" data-panel="summary" data-en="📋 Summary" data-mm="📋 အကျဉ်းချုပ်">📋 Summary</button>
+                    </div>
+                </div>
+                <!-- Step Indicator -->
+                <div style="padding:20px 28px 0">
+                    <div class="step-indicator" id="stepIndicator">
+                        <div class="step-dot">
+                            <span class="step-circle active" data-step="1">1</span>
+                            <span class="step-line" data-line="1"></span>
+                        </div>
+                        <div class="step-dot">
+                            <span class="step-circle" data-step="2">2</span>
+                            <span class="step-line" data-line="2"></span>
+                        </div>
+                        <div class="step-dot">
+                            <span class="step-circle" data-step="3">3</span>
+                            <span class="step-line" data-line="3"></span>
+                        </div>
+                        <div class="step-dot">
+                            <span class="step-circle" data-step="4">4</span>
+                        </div>
+                    </div>
+                    <div class="step-label-row">
+                        <span class="step-label active" data-steplbl="1" data-en="Plants" data-mm="အပင်">Plants</span>
+                        <span class="step-label" data-steplbl="2" data-en="Services" data-mm="ဝန်ဆောင်မှု">Services</span>
+                        <span class="step-label" data-steplbl="3" data-en="Delivery" data-mm="ပို့ဆောင်ခ">Delivery</span>
+                        <span class="step-label" data-steplbl="4" data-en="Summary" data-mm="အကျဉ်းချုပ်">Summary</span>
                     </div>
                 </div>
                 <div class="calc-body">
@@ -282,6 +358,10 @@
                             <h3 data-en="🌱 Selected Plants" data-mm="🌱 ရွေးထားသောအပင်များ">🌱 Selected Plants</h3>
                             <div id="plant-items"><p class="empty-text" data-en="Loading plant catalog..." data-mm="အပင်စာရင်းဖွင့်နေသည်...">Loading plant catalog...</p></div>
                         </div>
+                        <div class="nav-buttons">
+                            <button class="btn-nav back" disabled data-en="← Back" data-mm="← နောက်သို့">← Back</button>
+                            <button class="btn-nav next" id="btn-next-services" data-en="Next: Services →" data-mm="ရှေ့သို့: ဝန်ဆောင်မှု →">Next: Services →</button>
+                        </div>
                     </div>
 
                     <!-- ═════ SERVICES ═════ -->
@@ -293,13 +373,17 @@
                             <h3 data-en="🛠️ Selected Services" data-mm="🛠️ ရွေးထားသောဝန်ဆောင်မှုများ">🛠️ Selected Services</h3>
                             <div id="service-items"><p class="empty-text" data-en="No services selected yet." data-mm="ဝန်ဆောင်မှုမရွေးရသေးပါ။">No services selected yet.</p></div>
                         </div>
+                        <div class="nav-buttons">
+                            <button class="btn-nav back" id="btn-back-plants" data-en="← Back: Plants" data-mm="← နောက်သို့: အပင်">← Back: Plants</button>
+                            <button class="btn-nav next" id="btn-next-delivery" data-en="Next: Delivery →" data-mm="ရှေ့သို့: ပို့ဆောင်ခ →">Next: Delivery →</button>
+                        </div>
                     </div>
 
                     <!-- ═════ DELIVERY ═════ -->
                     <div class="calc-panel" id="panel-delivery">
                         <div class="delivery-card">
                             <h3 data-en="🚚 Delivery & Transport" data-mm="🚚 ပို့ဆောင်ခ">🚚 Delivery & Transport</h3>
-                            <p style="color:var(--gray-600);font-size:0.85rem;margin-bottom:16px" data-en="Select your distance for delivery charges:" data-mm="ပို့ဆောင်မည့်အကွားအဝေးကိုရွေးပါ-">Select your distance for delivery charges:</p>
+                            <p style="color:var(--gray-600);font-size:0.85rem;margin-bottom:16px" data-en="Select your distance for delivery charges:" data-mm="ပို့ဆောင်မည့်အကွာအဝေးကိုရွေးပါ-">Select your distance for delivery charges:</p>
                             <div class="delivery-options" id="delivery-options">
                                 <div class="delivery-option" data-distance="pickup" data-fee="0">
                                     <span class="d-icon">🏪</span>
@@ -332,11 +416,15 @@
                                     <div class="d-desc" data-en="30+ km - Contact for quote" data-mm="၃၀+ ကီလို - ဆက်သွယ်မေးမြန်းပါ">30+ km - Contact for quote</div>
                                 </div>
                             </div>
-                            <div id="delivery-selected-msg" style="margin-top:14px;font-weight:600;color:var(--green-700);text-align:center;min-height:22px"></div>
+                            <div id="delivery-selected-msg"></div>
                         </div>
                         <div class="list-card">
                             <h3 data-en="🚚 Delivery Summary" data-mm="🚚 ပို့ဆောင်ခအကျဉ်းချုပ်">🚚 Delivery Summary</h3>
                             <div id="delivery-summary"><p class="empty-text" data-en="No delivery option selected yet." data-mm="ပို့ဆောင်မှုမရွေးရသေးပါ။">No delivery option selected yet.</p></div>
+                        </div>
+                        <div class="nav-buttons">
+                            <button class="btn-nav back" id="btn-back-services" data-en="← Back: Services" data-mm="← နောက်သို့: ဝန်ဆောင်မှု">← Back: Services</button>
+                            <button class="btn-nav finish" id="btn-finish-summary" data-en="✨ Finish & See Summary" data-mm="✨ ပြီးဆုံး၍ အကျဉ်းချုပ်ကြည့်မည်">✨ Finish & See Summary</button>
                         </div>
                     </div>
 
@@ -407,6 +495,10 @@
                             <div><h3 data-en="✨ Ready to Start?" data-mm="✨ စတင်ရန်အဆင်သင့်ဖြစ်ပြီလား။">✨ Ready to Start?</h3><p data-en="Get a detailed site survey & final quote within 48 hours." data-mm="၄၈ နာရီအတွင်း အသေးစိတ်နေရာကြည့်ရှုပြီး နောက်ဆုံးစျေးနှုန်းရယူပါ။">Get a detailed site survey & final quote within 48 hours.</p></div>
                             <button class="cta-btn" id="btn-book" data-en="📅 Book Free Consultation" data-mm="📅 အခမဲ့တိုင်ပင်ဆွေးနွေးမည်">📅 Book Free Consultation</button>
                         </div>
+                        <div class="nav-buttons">
+                            <button class="btn-nav back" id="btn-back-delivery" data-en="← Back: Delivery" data-mm="← နောက်သို့: ပို့ဆောင်ခ">← Back: Delivery</button>
+                            <button class="btn-nav next" id="btn-back-to-plants" data-en="🔄 Start Over" data-mm="🔄 အစမှစမည်">🔄 Start Over</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -416,6 +508,9 @@
     <script>
     (function(){
         var currentLang='en';
+        var currentStep=1;
+        var panelOrder=['plants','services','delivery','summary'];
+
         function setLang(lang){
             currentLang=lang;
             document.querySelectorAll('[data-lang]').forEach(function(b){b.classList.toggle('active',b.dataset.lang===lang);});
@@ -433,309 +528,109 @@
             document.documentElement.lang=lang==='mm'?'my':'en';
             fillPlantCategories();loadPlants();updatePlantPrice();
             if(Object.keys(serviceCatalog).length)renderServiceCards();
-            updateDeliveryUI();
+            updateDeliveryUI();updateStepIndicator();
             refreshAll();
         }
         document.getElementById('lang-toggle').querySelectorAll('.lang-btn').forEach(function(b){b.addEventListener('click',function(){setLang(this.dataset.lang);});});
 
         var GOOGLE_SHEET_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQzthDCHJACnjbjtXCzlsPQY3brcqwU4K035F_KkTVpBCj6SNwdfEJZe3S6gQgNqHnlfP6lRT0-A9mP/pub?output=csv';
 
-        var plantCatalog=[
-            {file:'mango-fruit.jpg',en:'Mango (grafted)',mm:'သရက်ပင် (ကိုင်းဆက်)',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'jackfruit.jpg',en:'Jackfruit',mm:'ပိန္နဲပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'durian.jpg',en:'Durian (grafted)',mm:'ဒူးရင်းပင် (ကိုင်းဆက်)',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'papaya.jpg',en:'Papaya',mm:'သင်္ဘောပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'guava.jpg',en:'Guava',mm:'မာလကာပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'custard-apple.jpg',en:'Custard Apple',mm:'ဩဇာပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'avocado.jpg',en:'Avocado (grafted)',mm:'ထောပတ်ပင် (ကိုင်းဆက်)',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'banana.jpg',en:'Banana (Dwarf)',mm:'ငှက်ပျောပင် (ထောင့်)',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'pomelo.jpg',en:'Pomelo',mm:'ကျွဲကောပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'lime.jpg',en:'Lime / Lemon',mm:'သံပုရာပင် / ရှောက်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'starfruit.jpg',en:'Star Fruit',mm:'စောင်းလျားပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'pomegranate.jpg',en:'Pomegranate',mm:'သလဲပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'dragon-fruit.jpg',en:'Dragon Fruit',mm:'နဂါးမောက်သီး',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'soursop.jpg',en:'Soursop',mm:'ဒူးရင်းရိုင်း',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'sapodilla.jpg',en:'Sapodilla',mm:'သပွတ်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'langsat.jpg',en:'Langsat / Duku',mm:'လန်းဆတ်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'mangosteen.jpg',en:'Mangosteen',mm:'မင်းဂွတ်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'rambutan.jpg',en:'Rambutan',mm:'ကြက်မောက်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'lychee.jpg',en:'Lychee',mm:'လိုင်ချီးပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'tamarind.jpg',en:'Tamarind (Sweet)',mm:'မန်ကျည်းပင် (အချို)',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'jujube.jpg',en:'Jujube',mm:'ဆီးပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'passion-fruit.jpg',en:'Passion Fruit',mm:'ပတ်ရှင်သီး',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'persimmon.jpg',en:'Persimmon',mm:'တည်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'burmese-grape.jpg',en:'Burmese Grape',mm:'ကနစိုပင် / လီးသီး',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'mulberry.jpg',en:'Mulberry',mm:'ပိုးစာပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},
-            {file:'dendrobium-hybrid.jpg',en:'Dendrobium (Hybrid Mix)',mm:'ဒန်ဒရိုဘီယမ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'vanda.jpg',en:'Vanda (Blue/Purple)',mm:'ဗန်ဒါသစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'cymbidium.jpg',en:'Cymbidium (Boat Orchid)',mm:'စင်ဘီဒီယမ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'paphiopedilum.jpg',en:'Slipper Orchid',mm:'ဖိနပ်သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'rhynchostylis.jpg',en:'Foxtail Orchid',mm:'မြွေမြီးသစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'phalaenopsis.jpg',en:'Moth Orchid',mm:'ဖလေနော့ပ်စစ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'aerides.jpg',en:'Fox Brush Orchid',mm:'အေရီးဒီးစ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'bulbophyllum.jpg',en:'Bulbophyllum',mm:'ဘူလ်ဘိုဖီလမ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'coelogyne.jpg',en:'Coelogyne',mm:'စီလော်ဂျင်နီ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'eria.jpg',en:'Eria',mm:'အီးရီးယား သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'phaius.jpg',en:'Phaius (Nun Orchid)',mm:'ဖေးယပ်စ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'thunia.jpg',en:'Thunia',mm:'ထူနီးယား သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'renanthera.jpg',en:'Renanthera',mm:'ရီနန်သီရာ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'pleione.jpg',en:'Pleione',mm:'ပလီယိုနီ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'cleisostoma.jpg',en:'Cleisostoma',mm:'ကလိုင်ဆိုစတိုမာ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'acampe.jpg',en:'Acampe',mm:'အေကမ်ပီ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'ascocentrum.jpg',en:'Ascocentrum',mm:'အက်စကိုစင်ထရမ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'pholidota.jpg',en:'Pholidota (Rattlesnake Orchid)',mm:'ဖိုလီဒိုတာ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'nervilia.jpg',en:'Nervilia',mm:'နာဗီလီယာ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'blue-vanda.jpg',en:'Blue Vanda (Coerulea)',mm:'ဗန်ဒါအပြာ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},
-            {file:'pot-terracotta.jpg',en:'Terracotta Pot',mm:'မြေအိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},
-            {file:'pot-cement.jpg',en:'Cement Pot',mm:'ဘိလပ်မြေအိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},
-            {file:'pot-glazed.jpg',en:'Glazed Ceramic Pot',mm:'စဉ့်အိုး / ကြွေအိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},
-            {file:'pot-plastic.jpg',en:'Plastic Nursery Pot',mm:'ပလတ်စတစ်အိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},
-            {file:'pot-growbag.jpg',en:'Fabric Grow Bag',mm:'စိုက်အိတ်',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},
-            {file:'pot-hanging.jpg',en:'Hanging Basket',mm:'ဆွဲအိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},
-            {file:'pot-selfwatering.jpg',en:'Self-Watering Pot',mm:'ရေလှောင်အိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},
-            {file:'pot-orchid.jpg',en:'Orchid Pot (Slotted)',mm:'သစ်ခွအိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},
-            {file:'bougainvillea.jpg',en:'Bougainvillea',mm:'စက္ကူပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
-            {file:'ixora.jpg',en:'Ixora',mm:'ပိန်းနဲပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
-            {file:'hibiscus.jpg',en:'Hibiscus',mm:'ခေါင်ရန်းပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
-            {file:'rangoon-creeper.jpg',en:'Rangoon Creeper',mm:'မြတ်လေးနွယ်',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
-            {file:'bleeding-heart.jpg',en:'Bleeding Heart Vine',mm:'ဂုလ္လီပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
-            {file:'muang.jpg',en:'Muang / Orange Trumpet',mm:'မောင်းပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
-            {file:'king-jasmine.jpg',en:'King Jasmine',mm:'မြတ်လေးဘုရင်',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
-            {file:'allamanda.jpg',en:'Allamanda',mm:'ရွှေကြက်ရင်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
-            {file:'pagoda-flower.jpg',en:'Pagoda Flower',mm:'ပုဂံပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
-            {file:'night-jasmine.jpg',en:'Night Jasmine',mm:'ညပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
-            {file:'garlic-vine.jpg',en:'Garlic Vine',mm:'ကြက်သွန်နွယ်',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
-            {file:'amherstia.jpg',en:'Pride of Myanmar',mm:'သိုက်ပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
-            {file:'gardenia.jpg',en:'Gardenia',mm:'ဇီးဖြူပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
-            {file:'butterfly-bush.jpg',en:'Butterfly Bush',mm:'လိပ်ပြာပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
-            {file:'jungle-flame.jpg',en:'Jungle Flame',mm:'ပိန်းနဲပန်းအနီ',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},
-            {file:'frangipani.jpg',en:'Frangipani',mm:'ဇီဇဝါပန်း',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
-            {file:'golden-shower.jpg',en:'Golden Shower Tree',mm:'ငုရွှေဝါပန်း',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
-            {file:'foxtail-palm.jpg',en:'Foxtail Palm',mm:'မြီးတောင်အုန်း',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
-            {file:'teak.jpg',en:'Teak',mm:'ကျွန်းပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
-            {file:'neem.jpg',en:'Neem',mm:'တမာပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
-            {file:'areca-palm.jpg',en:'Areca Palm',mm:'အုန်းချယ်ပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
-            {file:'rain-tree.jpg',en:'Rain Tree',mm:'မိုးသစ်ပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
-            {file:'mezali.jpg',en:'Mezali',mm:'မယ်ဇလီပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
-            {file:'star-flower.jpg',en:'Star Flower Tree',mm:'ခရေပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
-            {file:'mohur.jpg',en:'Mohur Tree / Flamboyant',mm:'စိန်ပန်းပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
-            {file:'travellers-palm.jpg',en:'Travellers Palm',mm:'ခရီးသွားထန်း',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
-            {file:'fishtail-palm.jpg',en:'Fish Tail Palm',mm:'ငါးမြီးထန်း',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},
-            {file:'snake-plant.jpg',en:'Snake Plant',mm:'မြွေလျှာပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
-            {file:'peace-lily.jpg',en:'Peace Lily',mm:'ငြိမ်းချမ်းရေးလီလီ',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
-            {file:'pothos.jpg',en:'Money Plant / Pothos',mm:'ငွေပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
-            {file:'croton.jpg',en:'Croton',mm:'ဇော်ဂျီပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
-            {file:'chinese-evergreen.jpg',en:'Chinese Evergreen',mm:'အဂ်လော်နီးမား',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
-            {file:'monstera.jpg',en:'Swiss Cheese Plant',mm:'မွန်စတီရာ',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
-            {file:'boston-fern.jpg',en:'Boston Fern',mm:'ဒေါင်းမြီးပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
-            {file:'zz-plant.jpg',en:'ZZ Plant',mm:'ဇီဇီပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
-            {file:'dracaena.jpg',en:'Dracaena (Dragon Tree)',mm:'ဒရာစီနာ',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
-            {file:'spider-plant.jpg',en:'Spider Plant',mm:'ပင့်ကူပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
-            {file:'rubber-plant.jpg',en:'Rubber Plant',mm:'ရာဘာပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
-            {file:'calathea.jpg',en:'Calathea (Prayer Plant)',mm:'ကလာသီယာ',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},
-            {file:'jasmine.jpg',en:'Arabian Jasmine',mm:'မြတ်လေးပန်း',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
-            {file:'mexican-petunia.jpg',en:'Mexican Petunia',mm:'ပုလဲပန်း',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
-            {file:'lantana.jpg',en:'Lantana',mm:'လန်တာနာ',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
-            {file:'coleus.jpg',en:'Coleus',mm:'ရောင်စုံဆေးပင်',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
-            {file:'marigold.jpg',en:'Marigold',mm:'ထပ်တစ်ရာပန်း',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
-            {file:'portulaca.jpg',en:"Moss Rose / 9 o'clock",mm:'၉ နာရီပန်း',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
-            {file:'canna.jpg',en:'Canna Lily',mm:'ငှက်ပျောပန်းနီ',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
-            {file:'heliconia.jpg',en:'Heliconia',mm:'ဟယ်လီကိုနီယာ',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
-            {file:'barleria.jpg',en:'Barleria',mm:'ဖြူခက်ပြာ',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
-            {file:'plumbago.jpg',en:'Plumbago',mm:'ပလမ်ဘာဂို',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
-            {file:'pentas.jpg',en:'Pentas (Star Cluster)',mm:'ကြယ်စုပန်း',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
-            {file:'euphorbia.jpg',en:'Euphorbia (Crown of Thorns)',mm:'သရဖူဆူးပင်',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},
-            {file:'bamboo.jpg',en:'Dwarf Bamboo (Clumping)',mm:'ဝါးပုပင်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
-            {file:'thunbergia.jpg',en:'Clock Vine',mm:'ဆေးဒန်းနွယ်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
-            {file:'morning-glory.jpg',en:'Morning Glory',mm:'ကြက်မောက်နွယ်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
-            {file:'clematis.jpg',en:'Clematis',mm:'ကလီမက်တစ်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
-            {file:'asparagus.jpg',en:'Asparagus Fern',mm:'ကညွတ်အတိုင်ပင်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
-            {file:'snake-jasmine.jpg',en:'Snake Jasmine',mm:'မြွေမြတ်လေး',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
-            {file:'vinca.jpg',en:'Vinca (Periwinkle)',mm:'သင်္ဘောမန်ကျည်း',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
-            {file:'clitoria.jpg',en:'Butterfly Pea',mm:'ပဲပုပ်ပန်း',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
-            {file:'caladium.jpg',en:'Caladium',mm:'ကလေဒီယမ်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},
-            {file:'ruellia.jpg',en:'Ruellia (Wild Petunia)',mm:'ရူးလီးယား',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'}
-        ];
-
+        var plantCatalog=[{file:'mango-fruit.jpg',en:'Mango (grafted)',mm:'သရက်ပင် (ကိုင်းဆက်)',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'jackfruit.jpg',en:'Jackfruit',mm:'ပိန္နဲပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'durian.jpg',en:'Durian (grafted)',mm:'ဒူးရင်းပင် (ကိုင်းဆက်)',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'papaya.jpg',en:'Papaya',mm:'သင်္ဘောပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'guava.jpg',en:'Guava',mm:'မာလကာပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'custard-apple.jpg',en:'Custard Apple',mm:'ဩဇာပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'avocado.jpg',en:'Avocado (grafted)',mm:'ထောပတ်ပင် (ကိုင်းဆက်)',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'banana.jpg',en:'Banana (Dwarf)',mm:'ငှက်ပျောပင် (ထောင့်)',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'pomelo.jpg',en:'Pomelo',mm:'ကျွဲကောပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'lime.jpg',en:'Lime / Lemon',mm:'သံပုရာပင် / ရှောက်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'starfruit.jpg',en:'Star Fruit',mm:'စောင်းလျားပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'pomegranate.jpg',en:'Pomegranate',mm:'သလဲပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'dragon-fruit.jpg',en:'Dragon Fruit',mm:'နဂါးမောက်သီး',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'soursop.jpg',en:'Soursop',mm:'ဒူးရင်းရိုင်း',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'sapodilla.jpg',en:'Sapodilla',mm:'သပွတ်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'langsat.jpg',en:'Langsat / Duku',mm:'လန်းဆတ်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'mangosteen.jpg',en:'Mangosteen',mm:'မင်းဂွတ်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'rambutan.jpg',en:'Rambutan',mm:'ကြက်မောက်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'lychee.jpg',en:'Lychee',mm:'လိုင်ချီးပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'tamarind.jpg',en:'Tamarind (Sweet)',mm:'မန်ကျည်းပင် (အချို)',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'jujube.jpg',en:'Jujube',mm:'ဆီးပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'passion-fruit.jpg',en:'Passion Fruit',mm:'ပတ်ရှင်သီး',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'persimmon.jpg',en:'Persimmon',mm:'တည်ပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'burmese-grape.jpg',en:'Burmese Grape',mm:'ကနစိုပင် / လီးသီး',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'mulberry.jpg',en:'Mulberry',mm:'ပိုးစာပင်',catEn:'🍋 Fruit Plants',catMm:'🍋 သစ်သီးပင်'},{file:'dendrobium-hybrid.jpg',en:'Dendrobium (Hybrid Mix)',mm:'ဒန်ဒရိုဘီယမ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'vanda.jpg',en:'Vanda (Blue/Purple)',mm:'ဗန်ဒါသစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'cymbidium.jpg',en:'Cymbidium (Boat Orchid)',mm:'စင်ဘီဒီယမ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'paphiopedilum.jpg',en:'Slipper Orchid',mm:'ဖိနပ်သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'rhynchostylis.jpg',en:'Foxtail Orchid',mm:'မြွေမြီးသစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'phalaenopsis.jpg',en:'Moth Orchid',mm:'ဖလေနော့ပ်စစ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'aerides.jpg',en:'Fox Brush Orchid',mm:'အေရီးဒီးစ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'bulbophyllum.jpg',en:'Bulbophyllum',mm:'ဘူလ်ဘိုဖီလမ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'coelogyne.jpg',en:'Coelogyne',mm:'စီလော်ဂျင်နီ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'eria.jpg',en:'Eria',mm:'အီးရီးယား သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'phaius.jpg',en:'Phaius (Nun Orchid)',mm:'ဖေးယပ်စ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'thunia.jpg',en:'Thunia',mm:'ထူနီးယား သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'renanthera.jpg',en:'Renanthera',mm:'ရီနန်သီရာ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'pleione.jpg',en:'Pleione',mm:'ပလီယိုနီ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'cleisostoma.jpg',en:'Cleisostoma',mm:'ကလိုင်ဆိုစတိုမာ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'acampe.jpg',en:'Acampe',mm:'အေကမ်ပီ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'ascocentrum.jpg',en:'Ascocentrum',mm:'အက်စကိုစင်ထရမ် သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'pholidota.jpg',en:'Pholidota (Rattlesnake Orchid)',mm:'ဖိုလီဒိုတာ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'nervilia.jpg',en:'Nervilia',mm:'နာဗီလီယာ သစ်ခွ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'blue-vanda.jpg',en:'Blue Vanda (Coerulea)',mm:'ဗန်ဒါအပြာ',catEn:'🌸 Orchids',catMm:'🌸 သစ်ခွ'},{file:'pot-terracotta.jpg',en:'Terracotta Pot',mm:'မြေအိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},{file:'pot-cement.jpg',en:'Cement Pot',mm:'ဘိလပ်မြေအိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},{file:'pot-glazed.jpg',en:'Glazed Ceramic Pot',mm:'စဉ့်အိုး / ကြွေအိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},{file:'pot-plastic.jpg',en:'Plastic Nursery Pot',mm:'ပလတ်စတစ်အိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},{file:'pot-growbag.jpg',en:'Fabric Grow Bag',mm:'စိုက်အိတ်',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},{file:'pot-hanging.jpg',en:'Hanging Basket',mm:'ဆွဲအိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},{file:'pot-selfwatering.jpg',en:'Self-Watering Pot',mm:'ရေလှောင်အိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},{file:'pot-orchid.jpg',en:'Orchid Pot (Slotted)',mm:'သစ်ခွအိုး',catEn:'🪴 Pots & Containers',catMm:'🪴 အိုးများ'},{file:'bougainvillea.jpg',en:'Bougainvillea',mm:'စက္ကူပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},{file:'ixora.jpg',en:'Ixora',mm:'ပိန်းနဲပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},{file:'hibiscus.jpg',en:'Hibiscus',mm:'ခေါင်ရန်းပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},{file:'rangoon-creeper.jpg',en:'Rangoon Creeper',mm:'မြတ်လေးနွယ်',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},{file:'bleeding-heart.jpg',en:'Bleeding Heart Vine',mm:'ဂုလ္လီပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},{file:'muang.jpg',en:'Muang / Orange Trumpet',mm:'မောင်းပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},{file:'king-jasmine.jpg',en:'King Jasmine',mm:'မြတ်လေးဘုရင်',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},{file:'allamanda.jpg',en:'Allamanda',mm:'ရွှေကြက်ရင်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},{file:'pagoda-flower.jpg',en:'Pagoda Flower',mm:'ပုဂံပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},{file:'night-jasmine.jpg',en:'Night Jasmine',mm:'ညပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},{file:'garlic-vine.jpg',en:'Garlic Vine',mm:'ကြက်သွန်နွယ်',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},{file:'amherstia.jpg',en:'Pride of Myanmar',mm:'သိုက်ပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},{file:'gardenia.jpg',en:'Gardenia',mm:'ဇီးဖြူပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},{file:'butterfly-bush.jpg',en:'Butterfly Bush',mm:'လိပ်ပြာပန်း',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},{file:'jungle-flame.jpg',en:'Jungle Flame',mm:'ပိန်းနဲပန်းအနီ',catEn:'🌺 Shrubs & Climbers',catMm:'🌺 ချုံပင်နှင့်နွယ်ပင်'},{file:'frangipani.jpg',en:'Frangipani',mm:'ဇီဇဝါပန်း',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},{file:'golden-shower.jpg',en:'Golden Shower Tree',mm:'ငုရွှေဝါပန်း',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},{file:'foxtail-palm.jpg',en:'Foxtail Palm',mm:'မြီးတောင်အုန်း',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},{file:'teak.jpg',en:'Teak',mm:'ကျွန်းပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},{file:'neem.jpg',en:'Neem',mm:'တမာပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},{file:'areca-palm.jpg',en:'Areca Palm',mm:'အုန်းချယ်ပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},{file:'rain-tree.jpg',en:'Rain Tree',mm:'မိုးသစ်ပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},{file:'mezali.jpg',en:'Mezali',mm:'မယ်ဇလီပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},{file:'star-flower.jpg',en:'Star Flower Tree',mm:'ခရေပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},{file:'mohur.jpg',en:'Mohur Tree / Flamboyant',mm:'စိန်ပန်းပင်',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},{file:'travellers-palm.jpg',en:'Travellers Palm',mm:'ခရီးသွားထန်း',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},{file:'fishtail-palm.jpg',en:'Fish Tail Palm',mm:'ငါးမြီးထန်း',catEn:'🌳 Trees & Palms',catMm:'🌳 သစ်ပင်နှင့်ထန်းပင်'},{file:'snake-plant.jpg',en:'Snake Plant',mm:'မြွေလျှာပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},{file:'peace-lily.jpg',en:'Peace Lily',mm:'ငြိမ်းချမ်းရေးလီလီ',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},{file:'pothos.jpg',en:'Money Plant / Pothos',mm:'ငွေပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},{file:'croton.jpg',en:'Croton',mm:'ဇော်ဂျီပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},{file:'chinese-evergreen.jpg',en:'Chinese Evergreen',mm:'အဂ်လော်နီးမား',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},{file:'monstera.jpg',en:'Swiss Cheese Plant',mm:'မွန်စတီရာ',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},{file:'boston-fern.jpg',en:'Boston Fern',mm:'ဒေါင်းမြီးပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},{file:'zz-plant.jpg',en:'ZZ Plant',mm:'ဇီဇီပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},{file:'dracaena.jpg',en:'Dracaena (Dragon Tree)',mm:'ဒရာစီနာ',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},{file:'spider-plant.jpg',en:'Spider Plant',mm:'ပင့်ကူပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},{file:'rubber-plant.jpg',en:'Rubber Plant',mm:'ရာဘာပင်',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},{file:'calathea.jpg',en:'Calathea (Prayer Plant)',mm:'ကလာသီယာ',catEn:'🪴 Indoor & Shade Plants',catMm:'🪴 အိမ်တွင်းနှင့်အရိပ်ပင်'},{file:'jasmine.jpg',en:'Arabian Jasmine',mm:'မြတ်လေးပန်း',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},{file:'mexican-petunia.jpg',en:'Mexican Petunia',mm:'ပုလဲပန်း',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},{file:'lantana.jpg',en:'Lantana',mm:'လန်တာနာ',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},{file:'coleus.jpg',en:'Coleus',mm:'ရောင်စုံဆေးပင်',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},{file:'marigold.jpg',en:'Marigold',mm:'ထပ်တစ်ရာပန်း',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},{file:'portulaca.jpg',en:"Moss Rose / 9 o'clock",mm:'၉ နာရီပန်း',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},{file:'canna.jpg',en:'Canna Lily',mm:'ငှက်ပျောပန်းနီ',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},{file:'heliconia.jpg',en:'Heliconia',mm:'ဟယ်လီကိုနီယာ',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},{file:'barleria.jpg',en:'Barleria',mm:'ဖြူခက်ပြာ',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},{file:'plumbago.jpg',en:'Plumbago',mm:'ပလမ်ဘာဂို',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},{file:'pentas.jpg',en:'Pentas (Star Cluster)',mm:'ကြယ်စုပန်း',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},{file:'euphorbia.jpg',en:'Euphorbia (Crown of Thorns)',mm:'သရဖူဆူးပင်',catEn:'🌸 Perennials & Groundcovers',catMm:'🌸 နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင်'},{file:'bamboo.jpg',en:'Dwarf Bamboo (Clumping)',mm:'ဝါးပုပင်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},{file:'thunbergia.jpg',en:'Clock Vine',mm:'ဆေးဒန်းနွယ်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},{file:'morning-glory.jpg',en:'Morning Glory',mm:'ကြက်မောက်နွယ်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},{file:'clematis.jpg',en:'Clematis',mm:'ကလီမက်တစ်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},{file:'asparagus.jpg',en:'Asparagus Fern',mm:'ကညွတ်အတိုင်ပင်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},{file:'snake-jasmine.jpg',en:'Snake Jasmine',mm:'မြွေမြတ်လေး',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},{file:'vinca.jpg',en:'Vinca (Periwinkle)',mm:'သင်္ဘောမန်ကျည်း',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},{file:'clitoria.jpg',en:'Butterfly Pea',mm:'ပဲပုပ်ပန်း',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},{file:'caladium.jpg',en:'Caladium',mm:'ကလေဒီယမ်',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'},{file:'ruellia.jpg',en:'Ruellia (Wild Petunia)',mm:'ရူးလီးယား',catEn:'🌿 Fence & Balcony Specials',catMm:'🌿 ခြံစည်းရိုးနှင့်လသာဆောင်အထူး'}];
         var DEFAULT_PRICES={'mango-fruit.jpg':'12,000 – 30,000 Ks','jackfruit.jpg':'10,000 – 20,000 Ks','durian.jpg':'15,000 – 45,000 Ks','papaya.jpg':'3,000 – 8,000 Ks','guava.jpg':'5,000 – 12,000 Ks','custard-apple.jpg':'6,000 – 15,000 Ks','avocado.jpg':'10,000 – 25,000 Ks','banana.jpg':'2,500 – 6,000 Ks','pomelo.jpg':'8,000 – 18,000 Ks','lime.jpg':'4,000 – 10,000 Ks','starfruit.jpg':'7,000 – 15,000 Ks','pomegranate.jpg':'6,000 – 14,000 Ks','dragon-fruit.jpg':'3,000 – 8,000 Ks','soursop.jpg':'8,000 – 18,000 Ks','sapodilla.jpg':'6,000 – 14,000 Ks','langsat.jpg':'12,000 – 25,000 Ks','mangosteen.jpg':'15,000 – 35,000 Ks','rambutan.jpg':'10,000 – 22,000 Ks','lychee.jpg':'10,000 – 22,000 Ks','tamarind.jpg':'5,000 – 12,000 Ks','jujube.jpg':'4,000 – 10,000 Ks','passion-fruit.jpg':'3,000 – 7,000 Ks','persimmon.jpg':'10,000 – 25,000 Ks','burmese-grape.jpg':'8,000 – 18,000 Ks','mulberry.jpg':'4,000 – 8,000 Ks','dendrobium-hybrid.jpg':'8,000 – 18,000 Ks','vanda.jpg':'15,000 – 35,000 Ks','cymbidium.jpg':'12,000 – 25,000 Ks','paphiopedilum.jpg':'20,000 – 50,000 Ks','rhynchostylis.jpg':'10,000 – 22,000 Ks','phalaenopsis.jpg':'10,000 – 20,000 Ks','aerides.jpg':'9,000 – 18,000 Ks','bulbophyllum.jpg':'8,000 – 18,000 Ks','coelogyne.jpg':'10,000 – 22,000 Ks','eria.jpg':'7,000 – 15,000 Ks','phaius.jpg':'12,000 – 25,000 Ks','thunia.jpg':'10,000 – 20,000 Ks','renanthera.jpg':'15,000 – 35,000 Ks','pleione.jpg':'12,000 – 25,000 Ks','cleisostoma.jpg':'8,000 – 16,000 Ks','acampe.jpg':'7,000 – 15,000 Ks','ascocentrum.jpg':'10,000 – 20,000 Ks','pholidota.jpg':'8,000 – 18,000 Ks','nervilia.jpg':'6,000 – 12,000 Ks','blue-vanda.jpg':'25,000 – 60,000 Ks','pot-terracotta.jpg':'2,500 – 12,000 Ks','pot-cement.jpg':'5,000 – 25,000 Ks','pot-glazed.jpg':'8,000 – 35,000 Ks','pot-plastic.jpg':'500 – 4,000 Ks','pot-growbag.jpg':'1,500 – 6,000 Ks','pot-hanging.jpg':'4,000 – 10,000 Ks','pot-selfwatering.jpg':'7,000 – 18,000 Ks','pot-orchid.jpg':'3,000 – 8,000 Ks','bougainvillea.jpg':'8,000 – 15,000 Ks','ixora.jpg':'5,000 – 10,000 Ks','hibiscus.jpg':'6,000 – 12,000 Ks','rangoon-creeper.jpg':'5,000 – 10,000 Ks','bleeding-heart.jpg':'6,500 – 12,000 Ks','muang.jpg':'4,000 – 8,000 Ks','king-jasmine.jpg':'8,000 – 18,000 Ks','allamanda.jpg':'4,000 – 8,000 Ks','pagoda-flower.jpg':'6,000 – 12,000 Ks','night-jasmine.jpg':'4,000 – 8,000 Ks','garlic-vine.jpg':'5,000 – 10,000 Ks','amherstia.jpg':'20,000 – 50,000 Ks','gardenia.jpg':'6,000 – 14,000 Ks','butterfly-bush.jpg':'4,000 – 8,000 Ks','jungle-flame.jpg':'5,000 – 10,000 Ks','frangipani.jpg':'15,000 – 30,000 Ks','golden-shower.jpg':'20,000 – 45,000 Ks','foxtail-palm.jpg':'25,000 – 50,000 Ks','teak.jpg':'3,000 – 8,000 Ks','neem.jpg':'3,000 – 7,000 Ks','areca-palm.jpg':'8,000 – 18,000 Ks','rain-tree.jpg':'10,000 – 25,000 Ks','mezali.jpg':'5,000 – 12,000 Ks','star-flower.jpg':'8,000 – 18,000 Ks','mohur.jpg':'10,000 – 25,000 Ks','travellers-palm.jpg':'15,000 – 35,000 Ks','fishtail-palm.jpg':'12,000 – 28,000 Ks','snake-plant.jpg':'4,000 – 8,000 Ks','peace-lily.jpg':'7,000 – 12,000 Ks','pothos.jpg':'3,000 – 6,000 Ks','croton.jpg':'6,000 – 14,000 Ks','chinese-evergreen.jpg':'5,000 – 10,000 Ks','monstera.jpg':'8,000 – 18,000 Ks','boston-fern.jpg':'5,000 – 10,000 Ks','zz-plant.jpg':'5,000 – 12,000 Ks','dracaena.jpg':'6,000 – 15,000 Ks','spider-plant.jpg':'2,500 – 5,000 Ks','rubber-plant.jpg':'7,000 – 15,000 Ks','calathea.jpg':'6,000 – 12,000 Ks','jasmine.jpg':'4,000 – 9,000 Ks','mexican-petunia.jpg':'3,000 – 6,000 Ks','lantana.jpg':'3,500 – 7,000 Ks','coleus.jpg':'2,000 – 5,000 Ks','marigold.jpg':'1,500 – 3,000 Ks','portulaca.jpg':'1,000 – 2,500 Ks','canna.jpg':'3,000 – 6,000 Ks','heliconia.jpg':'5,000 – 12,000 Ks','barleria.jpg':'3,000 – 6,000 Ks','plumbago.jpg':'4,000 – 8,000 Ks','pentas.jpg':'2,000 – 4,000 Ks','euphorbia.jpg':'3,000 – 7,000 Ks','bamboo.jpg':'10,000 – 20,000 Ks','thunbergia.jpg':'4,000 – 8,000 Ks','morning-glory.jpg':'2,000 – 4,000 Ks','clematis.jpg':'5,000 – 12,000 Ks','asparagus.jpg':'3,000 – 6,000 Ks','snake-jasmine.jpg':'3,500 – 7,000 Ks','vinca.jpg':'1,500 – 3,000 Ks','clitoria.jpg':'2,000 – 4,000 Ks','caladium.jpg':'3,000 – 7,000 Ks','ruellia.jpg':'2,500 – 5,000 Ks'};
-
         var sheetPrices={},priceCatalog={},serviceCatalog={},servicePackages=[],plantList=[],serviceList=[];
-        var selectedDelivery = { distance: 'pickup', fee: 0, labelEn: 'Self Pickup', labelMm: 'ကိုယ်တိုင်လာယူမည်' };
+        var selectedDelivery={distance:'pickup',fee:0,labelEn:'Self Pickup',labelMm:'ကိုယ်တိုင်လာယူမည်'};
+
+        function updateStepIndicator(){
+            document.querySelectorAll('.step-circle').forEach(function(c){c.classList.remove('active','done');});
+            document.querySelectorAll('.step-line').forEach(function(l){l.classList.remove('done');});
+            document.querySelectorAll('.step-label').forEach(function(l){l.classList.remove('active');});
+            for(var i=1;i<=4;i++){
+                var circle=document.querySelector('.step-circle[data-step="'+i+'"]');
+                var label=document.querySelector('.step-label[data-steplbl="'+i+'"]');
+                if(i<currentStep){if(circle)circle.classList.add('done');if(label)label.classList.add('active');}
+                if(i===currentStep){if(circle)circle.classList.add('active');if(label)label.classList.add('active');}
+                if(i<currentStep){var line=document.querySelector('.step-line[data-line="'+i+'"]');if(line)line.classList.add('done');}
+            }
+        }
+
+        function navigateTo(panelName){
+            document.querySelectorAll('.calc-panel').forEach(function(p){p.classList.remove('active');});
+            document.getElementById('panel-'+panelName).classList.add('active');
+            document.querySelectorAll('.calc-tab-btn').forEach(function(b){b.classList.remove('active');});
+            var tab=document.querySelector('.calc-tab-btn[data-panel="'+panelName+'"]');
+            if(tab)tab.classList.add('active');
+            currentStep=panelOrder.indexOf(panelName)+1;
+            updateStepIndicator();
+            if(panelName==='summary')refreshAll();
+            if(panelName==='delivery')updateDeliveryUI();
+        }
+
+        function showPanel(id){navigateTo(id);}
 
         function fetchSheetPrices(){return fetch(GOOGLE_SHEET_CSV_URL).then(function(r){if(!r.ok)throw new Error('Sheet failed');return r.text();}).then(function(csv){var rows=csv.trim().split('\n').map(function(row){var cols=[],cur='',inQ=false;for(var i=0;i<row.length;i++){var c=row.charAt(i);if(c==='"')inQ=!inQ;else if(c===','&&!inQ){cols.push(cur.trim());cur='';}else cur+=c;}cols.push(cur.trim());return cols;});sheetPrices={};for(var i=1;i<rows.length;i++){if(rows[i][0]&&rows[i][1])sheetPrices[rows[i][0].trim()]={price:rows[i][1].trim(),status:(rows[i][2]||'instock').trim().toLowerCase(),note:(rows[i][3]||'').trim()};}}).catch(function(){sheetPrices={};});}
-
         function buildCatalog(){priceCatalog={};plantCatalog.forEach(function(p){var cat=currentLang==='mm'?p.catMm:p.catEn;var txt=(sheetPrices[p.file]&&sheetPrices[p.file].price)?sheetPrices[p.file].price:(DEFAULT_PRICES[p.file]||'');var m=txt.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);if(!m)return;if(!priceCatalog[cat])priceCatalog[cat]={};priceCatalog[cat][currentLang==='mm'?p.mm:p.en]={lo:parseInt(m[1].replace(/,/g,'')),hi:parseInt(m[2].replace(/,/g,'')),en:p.en,mm:p.mm,file:p.file};});fillPlantCategories();}
-
         function fillPlantCategories(){var s=document.getElementById('plant-cat');var cats=Object.keys(priceCatalog).sort();s.innerHTML=cats.length?'<option value="">'+(currentLang==='mm'?'အမျိုးအစားရွေးပါ...':'Select Category...')+'</option>'+cats.map(function(c){return'<option value="'+c+'">'+c+'</option>';}).join(''):'<option value="">'+(currentLang==='mm'?'အမျိုးအစားမရှိပါ':'No categories found')+'</option>';document.getElementById('plant-items').innerHTML='<p class="empty-text">'+(currentLang==='mm'?'အပင်မရွေးရသေးပါ။':'No plants selected yet.')+'</p>';}
-
         function loadPlants(){var cat=document.getElementById('plant-cat').value;var s=document.getElementById('plant-name');s.innerHTML='<option value="">'+(currentLang==='mm'?'အပင်ရွေးပါ...':'Select plant...')+'</option>';if(cat&&priceCatalog[cat]){Object.keys(priceCatalog[cat]).sort().forEach(function(p){s.innerHTML+='<option value="'+p+'">'+p+'</option>';});}updatePlantPrice();}
-
         function updatePlantPrice(){var cat=document.getElementById('plant-cat').value,name=document.getElementById('plant-name').value,size=document.getElementById('plant-size').value,qty=parseInt(document.getElementById('plant-qty').value)||1,hint=document.getElementById('plant-price-hint');if(!cat||!name||!priceCatalog[cat]||!priceCatalog[cat][name]){hint.textContent='';return;}var pr=priceCatalog[cat][name],unit=size==='small'?pr.lo:size==='large'?pr.hi:Math.round((pr.lo+pr.hi)/2);hint.innerHTML='<strong>'+(currentLang==='mm'?'တစ်ပင်စျေး':'Unit')+':</strong> '+unit.toLocaleString()+' Ks | <strong>'+(currentLang==='mm'?'စုစုပေါင်း':'Line')+':</strong> '+(unit*qty).toLocaleString()+' Ks';}
-
         function addPlantItem(){var cat=document.getElementById('plant-cat').value,name=document.getElementById('plant-name').value,size=document.getElementById('plant-size').value,qty=parseInt(document.getElementById('plant-qty').value);if(!cat||!name){alert(currentLang==='mm'?'ကျေးဇူးပြု၍ အမျိုးအစားနှင့်အပင်ရွေးပါ။':'Please select category and plant.');return;}var pr=priceCatalog[cat][name],unit=size==='small'?pr.lo:size==='large'?pr.hi:Math.round((pr.lo+pr.hi)/2);plantList.push({cat:cat,name:name,size:size,qty:qty,unit:unit,total:unit*qty,en:pr.en,mm:pr.mm,file:pr.file});document.getElementById('plant-name').value='';document.getElementById('plant-qty').value='1';document.getElementById('plant-price-hint').textContent='';refreshAll();}
-
         function fetchServicePrices(){return fetch('services.html').then(function(r){return r.text();}).then(function(html){var d=new DOMParser().parseFromString(html,'text/html');var headers=d.querySelectorAll('.category-header');if(!headers.length){d.querySelectorAll('h2').forEach(function(h2){var title=h2.textContent.trim(),items=[],next=h2.nextElementSibling;while(next&&next.tagName!=='H2'){next.querySelectorAll('.service-item').forEach(function(si){var n=si.querySelector('.service-name'),p=si.querySelector('.price-range');if(n&&p)items.push({name:n.textContent.trim(),price:p.textContent.trim()});});next=next.nextElementSibling;}if(items.length)serviceCatalog[title]={icon:'🛠️',items:parseServiceItems(items)};});}else{headers.forEach(function(h){var title=h.textContent.trim(),icon=(h.querySelector('.category-icon')||{}).textContent||'🛠️',items=[],next=h.nextElementSibling;while(next&&!next.matches('.category-header')){next.querySelectorAll('.service-item').forEach(function(si){var n=si.querySelector('.service-name'),p=si.querySelector('.price-range');if(n&&p)items.push({name:n.textContent.trim(),price:p.textContent.trim()});});next=next.nextElementSibling;}if(items.length)serviceCatalog[title]={icon:icon,items:parseServiceItems(items)};});}d.querySelectorAll('.package-card').forEach(function(pkg){var n=(pkg.querySelector('.package-name')||{}).textContent||'',pt=(pkg.querySelector('.package-price')||{}).textContent||'';if(n&&pt){var pr=parseInt(pt.replace(/[^0-9]/g,'')),feat=Array.from(pkg.querySelectorAll('.package-features li')).map(function(li){return li.textContent.trim();});servicePackages.push({name:n.trim(),price:pr,features:feat});}});if(servicePackages.length)serviceCatalog['🎯 Service Packages']={icon:'📦',items:servicePackages.map(function(p){return{name:p.name,priceLo:p.price,priceHi:p.price,isRange:false,features:p.features};})};renderServiceCards();}).catch(function(){serviceCatalog={'🏡 Outdoor Landscaping':{icon:'🏡',items:[{name:'Garden Design',priceLo:50000,priceHi:150000,isRange:true},{name:'Soil Prep',priceLo:30000,priceHi:80000,isRange:true}]}};renderServiceCards();});}
-
         function parseServiceItems(raw){return raw.map(function(item){var m=item.price.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);if(m)return{name:item.name,priceLo:parseInt(m[1].replace(/,/g,'')),priceHi:parseInt(m[2].replace(/,/g,'')),isRange:true};var s=item.price.match(/([\d,]+)\s*Ks/);var p=s?parseInt(s[1].replace(/,/g,'')):0;return{name:item.name,priceLo:p,priceHi:p,isRange:false};});}
-
         function renderServiceCards(){var c=document.getElementById('service-cards'),keys=Object.keys(serviceCatalog);c.innerHTML=keys.length?keys.map(function(k){var svc=serviceCatalog[k];return'<div class="service-card" data-category="'+k+'"><span class="icon">'+svc.icon+'</span><h3>'+k+'</h3><p>'+svc.items.length+' '+(currentLang==='mm'?'ခု':'service(s)')+'</p></div>';}).join(''):'<p class="empty-text">'+(currentLang==='mm'?'ဝန်ဆောင်မှုမရှိပါ။':'No services found.')+'</p>';c.querySelectorAll('.service-card').forEach(function(card){card.addEventListener('click',function(){pickService(this.dataset.category,this);});});}
-
         function pickService(type,cardEl){document.querySelectorAll('.service-card').forEach(function(c){c.classList.remove('selected');});cardEl.classList.add('selected');var opts=document.getElementById('service-opts');opts.style.display='block';document.getElementById('service-opts-title').textContent=type;var d=serviceCatalog[type];document.getElementById('service-opts-grid').innerHTML=d.items.map(function(item){var pd=item.isRange?item.priceLo.toLocaleString()+' – '+item.priceHi.toLocaleString()+' Ks':item.priceLo.toLocaleString()+' Ks';var fh=item.features?'<div style="font-size:0.8em;color:var(--gray-600);margin-top:5px">'+item.features.map(function(f){return'🌿 '+f;}).join('<br>')+'</div>':'';return'<div class="option-card"><h4>'+item.name+'</h4><div class="option-price">'+pd+'</div>'+fh+'<button class="btn-service-add" data-type="'+type+'" data-name="'+item.name+'" data-lo="'+item.priceLo+'" data-hi="'+item.priceHi+'" data-range="'+item.isRange+'">'+(currentLang==='mm'?'+ ထည့်မည်':'+ Add')+'</button></div>';}).join('');document.getElementById('service-opts-grid').querySelectorAll('.btn-service-add').forEach(function(btn){btn.addEventListener('click',function(){addServiceItem(this.dataset.type,this.dataset.name,parseInt(this.dataset.lo),parseInt(this.dataset.hi),this.dataset.range==='true');});});}
-
         function addServiceItem(type,name,lo,hi,isRange){var p=isRange?Math.round((lo+hi)/2):lo;serviceList.push({type:type,name:name,price:p,priceLo:lo,priceHi:hi,isRange:isRange});refreshAll();}
-
         function delPlant(i){plantList.splice(i,1);refreshAll();}
         function delService(i){serviceList.splice(i,1);refreshAll();}
 
-        // ═══════════ DELIVERY ═══════════
-        function selectDelivery(distance, fee, labelEn, labelMm) {
-            selectedDelivery = { distance: distance, fee: fee, labelEn: labelEn, labelMm: labelMm };
-            updateDeliveryUI();
-            refreshAll();
+        function selectDelivery(distance,fee,labelEn,labelMm){selectedDelivery={distance:distance,fee:fee,labelEn:labelEn,labelMm:labelMm};updateDeliveryUI();refreshAll();}
+        function updateDeliveryUI(){
+            document.querySelectorAll('.delivery-option').forEach(function(opt){opt.classList.toggle('selected',opt.dataset.distance===selectedDelivery.distance);});
+            var msg=document.getElementById('delivery-selected-msg');
+            var label=currentLang==='mm'?selectedDelivery.labelMm:selectedDelivery.labelEn;
+            msg.textContent=selectedDelivery.fee===0?'✅ '+label+' - '+(currentLang==='mm'?'အခမဲ့':'Free'):'✅ '+label+' - '+selectedDelivery.fee.toLocaleString()+' Ks';
+            var summary=document.getElementById('delivery-summary');
+            summary.innerHTML=selectedDelivery.fee===0?'<div class="list-item"><div class="item-info"><div class="item-name">'+(currentLang==='mm'?'ကိုယ်တိုင်လာယူမည်':'Self Pickup')+'</div><div class="item-meta">'+(currentLang==='mm'?'ပျိုးဥယျာဉ်မှလာယူပါ':'Pick up from nursery')+'</div></div><div class="item-price" style="color:var(--green-500)">'+(currentLang==='mm'?'အခမဲ့':'Free')+'</div></div>':'<div class="list-item"><div class="item-info"><div class="item-name">'+label+'</div><div class="item-meta">'+(currentLang==='mm'?'ပို့ဆောင်ခ':'Delivery charge')+'</div></div><div class="item-price">'+selectedDelivery.fee.toLocaleString()+' Ks</div></div>';
+            document.getElementById('stat-delivery').textContent=selectedDelivery.fee===0?(currentLang==='mm'?'အခမဲ့':'Free'):selectedDelivery.fee.toLocaleString()+' Ks';
         }
 
-        function updateDeliveryUI() {
-            document.querySelectorAll('.delivery-option').forEach(function(opt) {
-                opt.classList.toggle('selected', opt.dataset.distance === selectedDelivery.distance);
-            });
-            var msg = document.getElementById('delivery-selected-msg');
-            var label = currentLang === 'mm' ? selectedDelivery.labelMm : selectedDelivery.labelEn;
-            if (selectedDelivery.fee === 0) {
-                msg.textContent = '✅ ' + label + ' - ' + (currentLang === 'mm' ? 'အခမဲ့' : 'Free');
-            } else {
-                msg.textContent = '✅ ' + label + ' - ' + selectedDelivery.fee.toLocaleString() + ' Ks';
-            }
-            // Delivery summary
-            var summary = document.getElementById('delivery-summary');
-            if (selectedDelivery.fee === 0) {
-                summary.innerHTML = '<div class="list-item"><div class="item-info"><div class="item-name">' + (currentLang === 'mm' ? 'ကိုယ်တိုင်လာယူမည်' : 'Self Pickup') + '</div><div class="item-meta">' + (currentLang === 'mm' ? 'ပျိုးဥယျာဉ်မှလာယူပါ' : 'Pick up from nursery') + '</div></div><div class="item-price" style="color:var(--green-500)">' + (currentLang === 'mm' ? 'အခမဲ့' : 'Free') + '</div></div>';
-            } else {
-                summary.innerHTML = '<div class="list-item"><div class="item-info"><div class="item-name">' + label + '</div><div class="item-meta">' + (currentLang === 'mm' ? 'ပို့ဆောင်ခ' : 'Delivery charge') + '</div></div><div class="item-price">' + selectedDelivery.fee.toLocaleString() + ' Ks</div></div>';
-            }
-            document.getElementById('stat-delivery').textContent = selectedDelivery.fee === 0 ? (currentLang === 'mm' ? 'အခမဲ့' : 'Free') : selectedDelivery.fee.toLocaleString() + ' Ks';
+        document.querySelectorAll('.delivery-option').forEach(function(opt){opt.addEventListener('click',function(){selectDelivery(this.dataset.distance,parseInt(this.dataset.fee),this.querySelector('strong').textContent,this.querySelector('strong').getAttribute('data-mm')||this.querySelector('strong').textContent);});});
+
+        function checkCartImport(){
+            var cartData=localStorage.getItem('ptt_cart');if(!cartData)return;
+            try{var cart=JSON.parse(cartData);if(!cart.length)return;var totalItems=cart.reduce(function(s,i){return s+i.qty;},0);document.getElementById('cartImportMsg').textContent=totalItems+' '+(currentLang==='mm'?'ပစ္စည်း ဈေးခြင်းထဲတွင်ရှိသည်':'items in your cart');document.getElementById('cartImportBanner').classList.add('show');}catch(e){}
         }
-
-        // Bind delivery option clicks
-        document.querySelectorAll('.delivery-option').forEach(function(opt) {
-            opt.addEventListener('click', function() {
-                var distance = this.dataset.distance;
-                var fee = parseInt(this.dataset.fee);
-                var labelEn = this.querySelector('strong').textContent;
-                var labelMm = this.querySelector('strong').getAttribute('data-mm') || labelEn;
-                selectDelivery(distance, fee, labelEn, labelMm);
-                showPanel('summary');
-            });
-        });
-
-        // ═══════════ CART IMPORT ═══════════
-        function checkCartImport() {
-            var cartData = localStorage.getItem('ptt_cart');
-            if (!cartData) return;
-            try {
-                var cart = JSON.parse(cartData);
-                if (!cart.length) return;
-                var totalItems = cart.reduce(function(s, i) { return s + i.qty; }, 0);
-                document.getElementById('cartImportMsg').textContent = totalItems + ' ' + (currentLang === 'mm' ? 'ပစ္စည်း ဈေးခြင်းထဲတွင်ရှိသည်' : 'items in your cart');
-                document.getElementById('cartImportBanner').classList.add('show');
-            } catch(e) {}
+        function importCart(){
+            var cartData=localStorage.getItem('ptt_cart');if(!cartData)return;
+            try{var cart=JSON.parse(cartData);if(!cart.length)return;if(!Object.keys(priceCatalog).length)buildCatalog();
+                cart.forEach(function(item){var found=null;Object.keys(priceCatalog).forEach(function(cat){Object.keys(priceCatalog[cat]).forEach(function(name){var p=priceCatalog[cat][name];if(p.file===item.file)found={cat:cat,name:name,pr:p};});});if(found){var unit=item.unitPrice||Math.round((found.pr.lo+found.pr.hi)/2);plantList.push({cat:found.cat,name:found.name,size:item.size||'medium',qty:item.qty,unit:unit,total:unit*item.qty,en:found.pr.en,mm:found.pr.mm,file:found.pr.file});}});
+                refreshAll();document.getElementById('cartImportBanner').classList.remove('show');localStorage.removeItem('ptt_cart');showToast(currentLang==='mm'?'✅ ဈေးခြင်းမှ ပစ္စည်းများထည့်ပြီးပါပြီ။':'✅ Cart items imported!');}catch(e){showToast('⚠️ Could not import cart');}
         }
-
-        function importCart() {
-            var cartData = localStorage.getItem('ptt_cart');
-            if (!cartData) return;
-            try {
-                var cart = JSON.parse(cartData);
-                if (!cart.length) return;
-                // Build price catalog first if not ready
-                if (!Object.keys(priceCatalog).length) {
-                    buildCatalog();
-                }
-                cart.forEach(function(item) {
-                    // Find the plant in the catalog
-                    var found = null;
-                    Object.keys(priceCatalog).forEach(function(cat) {
-                        Object.keys(priceCatalog[cat]).forEach(function(name) {
-                            var p = priceCatalog[cat][name];
-                            if (p.file === item.file) {
-                                found = { cat: cat, name: name, pr: p };
-                            }
-                        });
-                    });
-                    if (found) {
-                        var unit = item.unitPrice || Math.round((found.pr.lo + found.pr.hi) / 2);
-                        plantList.push({
-                            cat: found.cat,
-                            name: found.name,
-                            size: item.size || 'medium',
-                            qty: item.qty,
-                            unit: unit,
-                            total: unit * item.qty,
-                            en: found.pr.en,
-                            mm: found.pr.mm,
-                            file: found.pr.file
-                        });
-                    }
-                });
-                refreshAll();
-                document.getElementById('cartImportBanner').classList.remove('show');
-                // Clear cart after import
-                localStorage.removeItem('ptt_cart');
-                showToast(currentLang === 'mm' ? '✅ ဈေးခြင်းမှ ပစ္စည်းများထည့်ပြီးပါပြီ။' : '✅ Cart items imported!');
-            } catch(e) {
-                showToast('⚠️ Could not import cart');
-            }
-        }
-
-        document.getElementById('btnImportCart').addEventListener('click', importCart);
-        document.getElementById('btnDismissCart').addEventListener('click', function() {
-            document.getElementById('cartImportBanner').classList.remove('show');
-            if (confirm(currentLang === 'mm' ? 'ဈေးခြင်းကိုဖျက်မည်လား။' : 'Clear cart as well?')) {
-                localStorage.removeItem('ptt_cart');
-            }
-        });
+        document.getElementById('btnImportCart').addEventListener('click',importCart);
+        document.getElementById('btnDismissCart').addEventListener('click',function(){document.getElementById('cartImportBanner').classList.remove('show');if(confirm(currentLang==='mm'?'ဈေးခြင်းကိုဖျက်မည်လား။':'Clear cart as well?'))localStorage.removeItem('ptt_cart');});
 
         function refreshAll(){
             var pt=plantList.reduce(function(s,p){return s+p.total;},0),st=serviceList.reduce(function(s,sv){return s+sv.price;},0),dt=selectedDelivery.fee;
             var sizeLabels={small:{en:'Small',mm:'သေး'},medium:{en:'Medium',mm:'လတ်'},large:{en:'Large',mm:'ကြီး'}};
-            document.getElementById('plant-items').innerHTML=plantList.length?plantList.map(function(p,i){var displayName=currentLang==='mm'?(p.mm||p.name):(p.en||p.name);return'<div class="list-item"><div class="item-info"><div class="item-name">'+displayName+'</div><div class="item-meta">'+sizeLabels[p.size][currentLang]+' | '+(currentLang==='mm'?'အရေအတွက်':'Qty')+':'+p.qty+' | '+p.unit.toLocaleString()+' Ks</div></div><div class="item-price">'+p.total.toLocaleString()+' Ks</div><button class="btn-remove" data-plant-index="'+i+'">×</button></div>';}).join(''):'<p class="empty-text">'+(currentLang==='mm'?'အပင်မရွေးရသေးပါ။':'No plants selected yet.')+'</p>';
+            document.getElementById('plant-items').innerHTML=plantList.length?plantList.map(function(p,i){var dn=currentLang==='mm'?(p.mm||p.name):(p.en||p.name);return'<div class="list-item"><div class="item-info"><div class="item-name">'+dn+'</div><div class="item-meta">'+sizeLabels[p.size][currentLang]+' | '+(currentLang==='mm'?'အရေအတွက်':'Qty')+':'+p.qty+' | '+p.unit.toLocaleString()+' Ks</div></div><div class="item-price">'+p.total.toLocaleString()+' Ks</div><button class="btn-remove" data-plant-index="'+i+'">×</button></div>';}).join(''):'<p class="empty-text">'+(currentLang==='mm'?'အပင်မရွေးရသေးပါ။':'No plants selected yet.')+'</p>';
             document.getElementById('plant-items').querySelectorAll('.btn-remove').forEach(function(b){b.addEventListener('click',function(){delPlant(parseInt(this.dataset.plantIndex));});});
             document.getElementById('service-items').innerHTML=serviceList.length?serviceList.map(function(s,i){var pd=s.isRange?s.priceLo.toLocaleString()+'–'+s.priceHi.toLocaleString():s.price.toLocaleString();return'<div class="list-item"><div class="item-info"><div class="item-name">'+s.name+'</div><div class="item-meta">'+s.type+'</div></div><div class="item-price">'+pd+' Ks</div><button class="btn-remove" data-service-index="'+i+'">×</button></div>';}).join(''):'<p class="empty-text">'+(currentLang==='mm'?'ဝန်ဆောင်မှုမရွေးရသေးပါ။':'No services selected yet.')+'</p>';
             document.getElementById('service-items').querySelectorAll('.btn-remove').forEach(function(b){b.addEventListener('click',function(){delService(parseInt(this.dataset.serviceIndex));});});
-            document.getElementById('sum-plants').innerHTML=plantList.length?plantList.map(function(p,i){var displayName=currentLang==='mm'?(p.mm||p.name):(p.en||p.name);return'<div class="list-item"><span>'+displayName+' ('+sizeLabels[p.size][currentLang]+') ×'+p.qty+'</span><span>'+p.total.toLocaleString()+' Ks</span><button class="btn-remove" data-sum-plant-index="'+i+'">×</button></div>';}).join(''):'<p class="empty-text">'+(currentLang==='mm'?'အပင်မရွေးရသေးပါ':'No plants selected')+'</p>';
+            document.getElementById('sum-plants').innerHTML=plantList.length?plantList.map(function(p,i){var dn=currentLang==='mm'?(p.mm||p.name):(p.en||p.name);return'<div class="list-item"><span>'+dn+' ('+sizeLabels[p.size][currentLang]+') ×'+p.qty+'</span><span>'+p.total.toLocaleString()+' Ks</span><button class="btn-remove" data-sum-plant-index="'+i+'">×</button></div>';}).join(''):'<p class="empty-text">'+(currentLang==='mm'?'အပင်မရွေးရသေးပါ':'No plants selected')+'</p>';
             document.getElementById('sum-plants').querySelectorAll('.btn-remove').forEach(function(b){b.addEventListener('click',function(){delPlant(parseInt(this.dataset.sumPlantIndex));});});
             document.getElementById('sum-services').innerHTML=serviceList.length?serviceList.map(function(s,i){return'<div class="list-item"><span>'+s.name+'</span><span>'+s.price.toLocaleString()+' Ks</span><button class="btn-remove" data-sum-service-index="'+i+'">×</button></div>';}).join(''):'<p class="empty-text">'+(currentLang==='mm'?'ဝန်ဆောင်မှုမရွေးရသေးပါ':'No services selected')+'</p>';
             document.getElementById('sum-services').querySelectorAll('.btn-remove').forEach(function(b){b.addEventListener('click',function(){delService(parseInt(this.dataset.sumServiceIndex));});});
-            document.getElementById('plants-total').textContent=pt.toLocaleString()+' Ks';
-            document.getElementById('services-total').textContent=st.toLocaleString()+' Ks';
-            document.getElementById('stat-plants-count').textContent=plantList.length;
-            document.getElementById('stat-services-count').textContent=serviceList.length;
-            var cats={};plantList.forEach(function(p){cats[p.cat]=true;});serviceList.forEach(function(s){cats[s.type]=true;});
-            document.getElementById('stat-categories').textContent=Object.keys(cats).length;
-            document.getElementById('plants-badge').textContent=plantList.length+' '+(currentLang==='mm'?'ပစ္စည်း':'items');
-            document.getElementById('services-badge').textContent=serviceList.length+' '+(currentLang==='mm'?'ပစ္စည်း':'items');
+            document.getElementById('plants-total').textContent=pt.toLocaleString()+' Ks';document.getElementById('services-total').textContent=st.toLocaleString()+' Ks';
+            document.getElementById('stat-plants-count').textContent=plantList.length;document.getElementById('stat-services-count').textContent=serviceList.length;
+            var cats={};plantList.forEach(function(p){cats[p.cat]=true;});serviceList.forEach(function(s){cats[s.type]=true;});document.getElementById('stat-categories').textContent=Object.keys(cats).length;
+            document.getElementById('plants-badge').textContent=plantList.length+' '+(currentLang==='mm'?'ပစ္စည်း':'items');document.getElementById('services-badge').textContent=serviceList.length+' '+(currentLang==='mm'?'ပစ္စည်း':'items');
             document.getElementById('preview-date').textContent=(currentLang==='mm'?'ခန့်မှန်းခြေပြုလုပ်သည့်ရက်- ':'Estimate created: ')+new Date().toLocaleDateString(currentLang==='mm'?'my-MM':'en-US',{year:'numeric',month:'long',day:'numeric'});
-            var gal=document.getElementById('plant-gallery'),gHTML='';
-            plantList.forEach(function(p){var img='images/'+(p.file||'');if(img&&img!=='images/'){gHTML+='<div class="gallery-thumb" title="'+(currentLang==='mm'?p.mm:p.en)+'"><img src="'+img+'" alt="" onerror="this.style.display=\'none\'" loading="lazy"><span class="gallery-badge">×'+p.qty+'</span></div>';}else{gHTML+='<div class="gallery-thumb" title="'+(currentLang==='mm'?p.mm:p.en)+'">🌱<span class="gallery-badge">×'+p.qty+'</span></div>';}});
-            gal.innerHTML=gHTML;gal.style.display=gHTML?'flex':'none';
-            document.getElementById('total-plants-line').textContent=pt.toLocaleString()+' Ks';
-            document.getElementById('total-services-line').textContent=st.toLocaleString()+' Ks';
+            var gal=document.getElementById('plant-gallery'),gHTML='';plantList.forEach(function(p){var img='images/'+(p.file||'');if(img&&img!=='images/'){gHTML+='<div class="gallery-thumb" title="'+(currentLang==='mm'?p.mm:p.en)+'"><img src="'+img+'" alt="" onerror="this.style.display=\'none\'" loading="lazy"><span class="gallery-badge">×'+p.qty+'</span></div>';}else{gHTML+='<div class="gallery-thumb" title="'+(currentLang==='mm'?p.mm:p.en)+'">🌱<span class="gallery-badge">×'+p.qty+'</span></div>';}});gal.innerHTML=gHTML;gal.style.display=gHTML?'flex':'none';
+            document.getElementById('total-plants-line').textContent=pt.toLocaleString()+' Ks';document.getElementById('total-services-line').textContent=st.toLocaleString()+' Ks';
             document.getElementById('total-delivery-line').textContent=dt===0?(currentLang==='mm'?'အခမဲ့':'Free'):dt.toLocaleString()+' Ks';
             document.getElementById('stat-delivery').textContent=dt===0?(currentLang==='mm'?'အခမဲ့':'Free'):dt.toLocaleString()+' Ks';
             var tot=pt+st+dt,disc=tot>500000?0.10:tot>200000?0.05:0,da=Math.round(tot*disc);
             document.getElementById('discount-msg').innerHTML=disc?'<div class="discount-badge">🎉 '+(disc*100)+'% '+(currentLang==='mm'?'လျှော့စျေး! (':'discount! (Save ')+da.toLocaleString()+' Ks)</div>':'';
-            document.getElementById('discount-line').style.display=disc?'flex':'none';
-            document.getElementById('discount-amount').textContent='-'+da.toLocaleString()+' Ks';
-            document.getElementById('grand-total').textContent=(tot-da).toLocaleString()+' Ks';
-            updateDeliveryUI();
-        }
-
-        function showPanel(id){
-            document.querySelectorAll('.calc-panel').forEach(function(p){p.classList.remove('active');});
-            document.querySelectorAll('.calc-tab-btn').forEach(function(b){b.classList.remove('active');});
-            document.getElementById('panel-'+id).classList.add('active');
-            document.querySelector('.calc-tab-btn[data-panel="'+id+'"]').classList.add('active');
-            if(id==='summary')refreshAll();
-            if(id==='delivery')updateDeliveryUI();
+            document.getElementById('discount-line').style.display=disc?'flex':'none';document.getElementById('discount-amount').textContent='-'+da.toLocaleString()+' Ks';
+            document.getElementById('grand-total').textContent=(tot-da).toLocaleString()+' Ks';updateDeliveryUI();
         }
 
         function emailEstimate(){
@@ -761,16 +656,24 @@
         document.getElementById('btn-print').addEventListener('click',function(){window.print();});
         document.getElementById('btn-email').addEventListener('click',emailEstimate);
         document.getElementById('btn-email-summary').addEventListener('click',emailEstimate);
-        document.querySelectorAll('.calc-tab-btn').forEach(function(b){b.addEventListener('click',function(){showPanel(this.dataset.panel);});});
+        document.querySelectorAll('.calc-tab-btn').forEach(function(b){b.addEventListener('click',function(){navigateTo(this.dataset.panel);});});
         document.getElementById('btn-save-img').addEventListener('click',function(){var el=document.getElementById('panel-summary');html2canvas(el,{scale:2,backgroundColor:'#ffffff',allowTaint:true,useCORS:true}).then(function(canvas){var link=document.createElement('a');link.download='plant-estimate-'+new Date().toISOString().slice(0,10)+'.png';link.href=canvas.toDataURL('image/png');link.click();showToast(currentLang==='mm'?'✅ ပုံသိမ်းပြီးပါပြီ။':'✅ Image saved!');}).catch(function(){showToast(currentLang==='mm'?'⚠️ ပုံမသိမ်းနိုင်ပါ':'⚠️ Could not save image');});});
         document.getElementById('share-wa').addEventListener('click',function(){var pt=plantList.reduce(function(s,p){return s+p.total;},0),st=serviceList.reduce(function(s,sv){return s+sv.price;},0),dt=selectedDelivery.fee,tot=pt+st+dt;var t=(currentLang==='mm'?'🌿 *ပန်းသတင်း Landscape မှ ခန့်မှန်းခြေ* 🌿\n\n':'🌿 *Estimate from ပန်းသတင်း Landscape* 🌿\n\n');t+=(currentLang==='mm'?'အပင်: ':'Plants: ')+pt.toLocaleString()+' Ks\n'+(currentLang==='mm'?'ဝန်ဆောင်မှု: ':'Services: ')+st.toLocaleString()+' Ks\n'+(currentLang==='mm'?'ပို့ဆောင်ခ: ':'Delivery: ')+(dt===0?(currentLang==='mm'?'အခမဲ့':'Free'):dt.toLocaleString()+' Ks')+'\n*'+(currentLang==='mm'?'စုစုပေါင်း: ':'Total: ')+tot.toLocaleString()+' Ks*\n\n'+window.location.href;window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank');});
         document.getElementById('share-copy').addEventListener('click',function(){var pt=plantList.reduce(function(s,p){return s+p.total;},0),st=serviceList.reduce(function(s,sv){return s+sv.price;},0),dt=selectedDelivery.fee,tot=pt+st+dt;var t=(currentLang==='mm'?'🌿 ပန်းသတင်း Landscape မှ ခန့်မှန်းခြေ\n\n':'🌿 Estimate from ပန်းသတင်း Landscape\n\n');plantList.forEach(function(p){t+=(currentLang==='mm'?p.mm:p.en)+' ('+p.size+') ×'+p.qty+' = '+p.total.toLocaleString()+' Ks\n';});serviceList.forEach(function(s){t+=s.name+': '+s.price.toLocaleString()+' Ks\n';});t+='\n'+(currentLang==='mm'?'ပို့ဆောင်ခ: ':'Delivery: ')+(dt===0?(currentLang==='mm'?'အခမဲ့':'Free'):dt.toLocaleString()+' Ks')+'\n'+(currentLang==='mm'?'စုစုပေါင်း: ':'Total: ')+tot.toLocaleString()+' Ks\n'+window.location.href;navigator.clipboard.writeText(t).then(function(){showToast(currentLang==='mm'?'📋 ကူးယူပြီးပါပြီ။':'📋 Copied!');}).catch(function(){showToast('⚠️ Could not copy');});});
         document.getElementById('btn-book').addEventListener('click',function(){var pt=plantList.reduce(function(s,p){return s+p.total;},0),st=serviceList.reduce(function(s,sv){return s+sv.price;},0),dt=selectedDelivery.fee,tot=pt+st+dt;window.location.href='mailto:pttlandscapeservices@gmail.com?subject='+encodeURIComponent((currentLang==='mm'?'တိုင်ပင်ဆွေးနွေးရန် - ':'Consultation - ')+tot.toLocaleString()+' Ks')+'&body='+encodeURIComponent((currentLang==='mm'?'အခမဲ့တိုင်ပင်ဆွေးနွေးလိုပါသည်။ ခန့်မှန်းခြေ- ':'Free consultation request. Estimate: ')+tot.toLocaleString()+' Ks');});
 
+        // Next/Back navigation buttons
+        document.getElementById('btn-next-services').addEventListener('click',function(){navigateTo('services');});
+        document.getElementById('btn-back-plants').addEventListener('click',function(){navigateTo('plants');});
+        document.getElementById('btn-next-delivery').addEventListener('click',function(){navigateTo('delivery');});
+        document.getElementById('btn-back-services').addEventListener('click',function(){navigateTo('services');});
+        document.getElementById('btn-finish-summary').addEventListener('click',function(){navigateTo('summary');});
+        document.getElementById('btn-back-delivery').addEventListener('click',function(){navigateTo('delivery');});
+        document.getElementById('btn-back-to-plants').addEventListener('click',function(){plantList=[];serviceList=[];selectedDelivery={distance:'pickup',fee:0,labelEn:'Self Pickup',labelMm:'ကိုယ်တိုင်လာယူမည်'};updateDeliveryUI();refreshAll();navigateTo('plants');});
+
         window.addEventListener('DOMContentLoaded',function(){
             fetchSheetPrices().then(function(){buildCatalog();checkCartImport();}).catch(function(){buildCatalog();checkCartImport();});
-            fetchServicePrices();
-            updateDeliveryUI();
+            fetchServicePrices();updateDeliveryUI();updateStepIndicator();
         });
     })();
     </script>
