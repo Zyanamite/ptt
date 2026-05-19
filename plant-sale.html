@@ -1,185 +1,894 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Plant Sale | ပန်းသတင်း Landscaping Services</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Catalog & Price Guide | ပန်းသတင်း Landscape</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary: #1a3b2e;
-            --primary-light: #2d6a4f;
-            --accent: #74c69d;
-            --accent-glow: #52b788;
-            --bg-light: #f8faf8;
-            --bg-glass: rgba(255, 255, 255, 0.75);
-            --text-dark: #1e2a23;
-            --text-soft: #3a4d41;
-            --white: #ffffff;
-            --shadow-sm: 0 10px 30px -10px rgba(0, 20, 10, 0.1);
-            --shadow-md: 0 20px 40px -15px rgba(0, 30, 10, 0.15);
-            --shadow-glow: 0 0 20px rgba(82, 183, 136, 0.3);
-            --border-radius-card: 28px;
-            --border-radius-btn: 60px;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --green-dark: #1a3b2b; --green-mid: #2d5a3f; --green-light: #e8f5e9;
+            --gold: #c78d20; --gold-light: #fef7e8; --bg: #fafbf9;
+            --card-bg: #ffffff; --text: #1e2e21; --text-light: #556b5c;
+            --shadow: 0 4px 20px rgba(0,0,0,0.05); --shadow-hover: 0 12px 32px rgba(0,0,0,0.1);
+            --radius: 18px; --border-subtle: 1px solid #e0e8e1;
+            --cart-bg: #fffdf5; --cart-accent: #c78d20;
         }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Plus Jakarta Sans', 'Padauk', sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            line-height: 1.6;
-            overflow-x: hidden;
+            font-family: 'Segoe UI', 'Noto Sans Myanmar', 'Padauk', system-ui, sans-serif;
+            background: var(--bg); color: var(--text); line-height: 1.6;
         }
-        body::before {
-            content: '';
-            position: fixed;
-            top: -10%;
-            right: -10%;
-            width: 60%;
-            height: 60%;
-            background: radial-gradient(circle at 70% 30%, rgba(116, 198, 157, 0.15), transparent 70%);
-            z-index: -1;
-            pointer-events: none;
+
+        /* ── Top Bar ── */
+        .top-bar {
+            background: var(--green-dark); color: white; padding: 10px 20px;
+            display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 12px rgba(0,0,0,0.2); gap: 12px;
         }
-        body::after {
-            content: '';
-            position: fixed;
-            bottom: -10%;
-            left: -5%;
-            width: 50%;
-            height: 50%;
-            background: radial-gradient(circle at 20% 80%, rgba(45, 106, 79, 0.1), transparent 70%);
-            z-index: -1;
-            pointer-events: none;
+        .top-bar .brand { font-weight: 700; font-size: 1.3rem; letter-spacing: 1px; }
+        .top-bar .brand small { font-weight: 400; font-size: 0.7rem; opacity: 0.8; display: block; letter-spacing: 0; }
+        .top-bar-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .btn-checkout {
+            background: var(--gold); color: #fff; padding: 10px 22px; border-radius: 30px;
+            text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.2s;
+            display: inline-flex; align-items: center; gap: 6px;
+            box-shadow: 0 2px 8px rgba(199,141,32,0.3); white-space: nowrap;
+            border: none; cursor: pointer; font-family: inherit;
         }
-        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-        h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.02em; }
-        .section-title { text-align: center; margin-bottom: 60px; }
-        .section-title h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 16px; }
-        .lang-switcher { display: flex; gap: 8px; margin-left: 20px; }
-        .lang-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: var(--text-dark); padding: 8px 16px; border-radius: 40px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: var(--transition); backdrop-filter: blur(5px); background: rgba(255,255,255,0.4); }
-        .lang-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .lang-btn:hover { background: var(--primary-light); color: white; }
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 32px; border-radius: var(--border-radius-btn); font-weight: 600; text-decoration: none; transition: var(--transition); border: none; cursor: pointer; font-size: 1rem; backdrop-filter: blur(5px); }
-        .btn-primary { background: var(--primary); color: white; box-shadow: var(--shadow-sm); }
-        .btn-primary:hover { background: var(--primary-light); transform: translateY(-3px); box-shadow: var(--shadow-md), var(--shadow-glow); }
-        .btn-outline { background: transparent; border: 1.5px solid var(--primary); color: var(--primary); }
-        .btn-outline:hover { background: var(--primary); color: white; }
-        header { position: sticky; top: 0; z-index: 1000; padding: 16px 0; backdrop-filter: blur(12px); background: rgba(255, 255, 255, 0.7); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); border-bottom: 1px solid rgba(255,255,255,0.5); }
-        .header-content { display: flex; justify-content: space-between; align-items: center; }
-        .logo h1 { font-size: 1.9rem; font-weight: 700; color: var(--primary); line-height: 1.2; }
-        .logo span { font-size: 0.8rem; opacity: 0.8; font-weight: 500; letter-spacing: 1px; color: var(--text-soft); }
-        .header-right { display: flex; align-items: center; gap: 20px; }
-        nav ul { display: flex; list-style: none; gap: 36px; }
-        nav a { color: var(--text-dark); text-decoration: none; font-weight: 600; font-size: 1rem; transition: var(--transition); padding: 8px 0; border-bottom: 2px solid transparent; }
-        nav a:hover { color: var(--primary); border-bottom-color: var(--accent); }
-        .menu-toggle { display: none; font-size: 1.8rem; cursor: pointer; color: var(--primary); }
-        .page-header { padding: 80px 0 60px; text-align: center; }
-        .page-header h1 { font-size: 3.5rem; color: var(--primary); margin-bottom: 20px; }
-        .page-header .breadcrumb { color: var(--text-soft); }
-        .page-header .breadcrumb a { color: var(--primary); text-decoration: none; }
-        .service-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; margin: 40px 0; }
-        .service-hero-image { background: url('https://raw.githubusercontent.com/Zyanamite/ptt/main/assets/plant-salehero.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') center/cover; border-radius: 40px; min-height: 400px; box-shadow: var(--shadow-md); border: 4px solid rgba(255,255,255,0.8); }
-        .plant-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 25px; margin: 50px 0; }
-        .plant-card { background: var(--bg-glass); backdrop-filter: blur(8px); padding: 25px; border-radius: var(--border-radius-card); box-shadow: var(--shadow-sm); border: 1px solid rgba(255,255,255,0.6); text-align: center; }
-        .plant-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
-        .plant-card .plant-price { font-size: 1.5rem; color: var(--primary); font-weight: 700; margin: 10px 0; }
-        .pricing-card { background: var(--bg-glass); backdrop-filter: blur(8px); padding: 40px; border-radius: var(--border-radius-card); box-shadow: var(--shadow-md); border: 1px solid rgba(255,255,255,0.6); text-align: center; max-width: 500px; margin: 40px auto; }
-        footer { margin-top: 80px; padding: 40px 0; text-align: center; border-top: 1px solid rgba(0,0,0,0.05); color: var(--text-soft); }
-        @media (max-width: 992px) { .service-hero { grid-template-columns: 1fr; } .page-header h1 { font-size: 2.5rem; } }
+        .btn-checkout:hover { background: #b07a1a; transform: translateY(-1px); }
+        .btn-refresh {
+            background: #fff; color: var(--green-dark); padding: 8px 16px;
+            border-radius: 20px; border: none; cursor: pointer; font-weight: 600;
+            font-size: 0.85rem; white-space: nowrap; transition: 0.2s; font-family: inherit;
+        }
+        .btn-refresh:hover { background: #e8f5e9; }
+        .price-status {
+            background: #fff3e0; color: #5c4710; padding: 6px 14px;
+            border-radius: 20px; font-size: 0.8rem; white-space: nowrap;
+        }
+        .price-status.loading { background: #e3f2fd; color: #1565c0; }
+        .price-status.success { background: #e8f5e9; color: #2e7d32; }
+        .price-status.error { background: #ffebee; color: #c62828; }
+
+        /* ── Cart Icon ── */
+        .cart-icon-wrap { position: relative; cursor: pointer; }
+        .cart-icon-btn {
+            background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.4);
+            color: white; padding: 8px 14px; border-radius: 24px; cursor: pointer;
+            font-size: 1.1rem; transition: 0.2s; font-family: inherit; position: relative;
+        }
+        .cart-icon-btn:hover { background: rgba(255,255,255,0.25); }
+        .cart-count {
+            position: absolute; top: -6px; right: -6px;
+            background: var(--gold); color: white; font-size: 0.7rem;
+            width: 22px; height: 22px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-weight: 700;
+            transition: transform 0.3s;
+        }
+        .cart-count.bump { transform: scale(1.4); }
+
+        /* ── Cart Panel ── */
+        .cart-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4);
+            z-index: 999; display: none; justify-content: flex-end;
+        }
+        .cart-overlay.open { display: flex; }
+        .cart-panel {
+            background: white; width: 100%; max-width: 420px; height: 100%;
+            overflow-y: auto; padding: 24px; box-shadow: -4px 0 24px rgba(0,0,0,0.15);
+            animation: slideIn 0.3s ease; display: flex; flex-direction: column;
+        }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        .cart-panel h3 { color: var(--green-dark); margin-bottom: 16px; font-size: 1.2rem; display: flex; justify-content: space-between; align-items: center; }
+        .cart-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; }
+        .cart-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 0; border-bottom: 1px solid #f0f0f0; gap: 10px;
+        }
+        .cart-item-info { flex: 1; min-width: 0; }
+        .cart-item-name { font-weight: 600; color: var(--green-dark); font-size: 0.9rem; }
+        .cart-item-meta { font-size: 0.75rem; color: #999; }
+        .cart-item-price { font-weight: 700; color: var(--green-dark); white-space: nowrap; }
+        .cart-item-remove {
+            background: #fee2e2; color: #dc2626; border: none; width: 24px; height: 24px;
+            border-radius: 50%; cursor: pointer; font-size: 12px; flex-shrink: 0;
+        }
+        .cart-empty { text-align: center; color: #aaa; padding: 40px 0; flex: 1; }
+        .cart-footer {
+            border-top: 2px solid #e0e8e1; padding-top: 16px; margin-top: auto;
+        }
+        .cart-total { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700; color: var(--green-dark); margin-bottom: 12px; }
+        .cart-total span:last-child { color: var(--gold); }
+        .btn-cart-checkout {
+            display: block; width: 100%; background: var(--green-dark); color: white;
+            padding: 14px; border-radius: 12px; text-align: center; text-decoration: none;
+            font-weight: 700; font-size: 1rem; border: none; cursor: pointer; font-family: inherit;
+            transition: 0.2s;
+        }
+        .btn-cart-checkout:hover { background: #2d5a3f; }
+        .btn-cart-clear { display: block; width: 100%; background: none; border: 1px solid #e0e0e0; color: #999; padding: 10px; border-radius: 10px; margin-top: 8px; cursor: pointer; font-family: inherit; font-size: 0.85rem; }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #1e2e21; color: white; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; z-index: 9999; opacity: 0; transition: opacity 0.3s;
+            pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
+        .toast.show { opacity: 1; }
+
+        /* ── Add to Cart Button ── */
+        .btn-add-cart {
+            background: var(--green-dark); color: white; border: none;
+            padding: 8px 16px; border-radius: 20px; cursor: pointer;
+            font-weight: 600; font-size: 0.8rem; transition: 0.2s; font-family: inherit;
+            margin-top: 8px; width: 100%;
+        }
+        .btn-add-cart:hover { background: #2d5a3f; }
+        .btn-add-cart.added { background: var(--gold); }
+        .qty-selector {
+            display: flex; align-items: center; gap: 6px; margin-top: 6px;
+        }
+        .qty-selector button {
+            width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--green-dark);
+            background: white; color: var(--green-dark); font-weight: 700; cursor: pointer;
+            font-size: 1rem; display: flex; align-items: center; justify-content: center;
+        }
+        .qty-selector .qty-num { font-weight: 700; min-width: 20px; text-align: center; }
+
+        /* ── Container ── */
+        .container { max-width: 1360px; margin: 0 auto; padding: 24px 20px; }
+        header { text-align: center; margin: 10px 0 20px; }
+        header h1 { font-size: 2.6rem; color: var(--green-dark); margin-bottom: 4px; }
+        header .subtitle { font-size: 1.1rem; color: var(--text-light); margin-bottom: 6px; }
+        .price-note {
+            background: var(--gold-light); display: inline-block; padding: 10px 28px;
+            border-radius: 30px; font-size: 0.9rem; color: #5c4710; margin: 12px 0;
+            border: 1px solid #f0d78c;
+        }
+        .edit-hint { display: block; margin-top: 8px; font-size: 0.8rem; color: #6c8574; }
+        .edit-hint a { color: #c78d20; font-weight: 600; }
+
+        .quick-jump { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 24px 0 30px; }
+        .quick-jump a {
+            background: white; border: var(--border-subtle); padding: 8px 18px;
+            border-radius: 24px; text-decoration: none; color: var(--green-dark);
+            font-size: 0.85rem; font-weight: 500; transition: 0.2s; white-space: nowrap;
+        }
+        .quick-jump a:hover { background: var(--green-dark); color: white; border-color: var(--green-dark); }
+
+        .category-title {
+            font-size: 1.9rem; color: var(--green-dark); border-left: 6px solid var(--gold);
+            padding-left: 18px; margin: 44px 0 20px; display: flex; align-items: center; gap: 10px;
+        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; margin-bottom: 30px; }
+
+        .plant-card {
+            background: var(--card-bg); border-radius: var(--radius);
+            box-shadow: var(--shadow); overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex; flex-direction: column; position: relative;
+            border: var(--border-subtle);
+        }
+        .plant-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+        .plant-card .badge {
+            position: absolute; top: 12px; left: 12px; background: var(--gold);
+            color: white; font-size: 0.7rem; padding: 5px 12px; border-radius: 14px;
+            font-weight: 700; letter-spacing: 0.4px; z-index: 5;
+        }
+        .badge.fruit { background: #e07b39; }
+        .badge.orchid { background: #6b7dd4; }
+        .badge.pot { background: #b54b4b; }
+        .stock-badge {
+            position: absolute; top: 12px; right: 12px; font-size: 0.7rem;
+            padding: 5px 12px; border-radius: 14px; font-weight: 700; z-index: 5;
+            text-transform: uppercase;
+        }
+        .stock-badge.instock { background: #c8e6c9; color: #2e7d32; }
+        .stock-badge.lowstock { background: #fff3e0; color: #e65100; }
+        .stock-badge.soldout { background: #ffebee; color: #c62828; }
+        .stock-badge.preorder { background: #e3f2fd; color: #1565c0; }
+        .plant-card.soldout-card { opacity: 0.7; }
+        .plant-card.soldout-card:hover { opacity: 0.85; }
+
+        .plant-img {
+            width: 100%; height: 250px; object-fit: cover;
+            background: #eef3ed; border-bottom: 1px solid #e0e8e1; display: block;
+        }
+        .plant-body { padding: 18px; flex-grow: 1; display: flex; flex-direction: column; }
+        .plant-body h3 { font-size: 1.2rem; color: #1a3b2b; margin-bottom: 2px; }
+        .sci-name { font-style: italic; font-size: 0.8rem; color: #6c8574; margin-bottom: 5px; }
+        .burmese { font-size: 0.9rem; font-weight: 600; color: #2d5a3f; margin-bottom: 6px; }
+        .desc { font-size: 0.85rem; color: #4a5c4f; margin-bottom: 4px; }
+        .desc-mm { font-size: 0.85rem; color: #4a5c4f; margin-bottom: 10px; display: block; }
+        .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+        .tags span { background: #e8f5e9; color: #1a3b2b; font-size: 0.7rem; padding: 3px 10px; border-radius: 12px; font-weight: 500; }
+        .price {
+            font-weight: 700; font-size: 1rem; color: #9e5e00; background: #fff4e0;
+            display: inline-block; padding: 6px 18px; border-radius: 22px; margin-top: auto;
+            align-self: flex-start; border: 1px solid #f0d78c;
+        }
+        .price.loading-price { color: #999; background: #f5f5f5; font-style: italic; }
+        .note-line { font-size: 0.7rem; color: #c78d20; margin-top: 6px; font-style: italic; }
+
+        .pots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .pot-card {
+            background: white; border-radius: var(--radius); box-shadow: var(--shadow);
+            overflow: hidden; text-align: center; padding-bottom: 16px;
+            border: var(--border-subtle); transition: transform 0.2s;
+        }
+        .pot-card:hover { transform: translateY(-4px); }
+        .pot-card img { width: 100%; height: 190px; object-fit: cover; background: #fdf2f5; }
+        .pot-card h4 { margin: 12px 0 4px; font-size: 1rem; }
+        .pot-card .pot-price { font-weight: 700; color: #b54b4b; }
+
+        .back-to-top {
+            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px;
+            background: var(--green-dark); color: white; border: none; border-radius: 50%;
+            font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            z-index: 998; display: none; align-items: center; justify-content: center;
+            transition: all 0.3s ease; opacity: 0; transform: translateY(20px);
+        }
+        .back-to-top.visible { display: flex; opacity: 1; transform: translateY(0); }
+        .back-to-top:hover { background: var(--gold); transform: translateY(-4px); }
+
+        footer {
+            background: var(--green-dark); color: #c8e6c9; text-align: center;
+            padding: 32px 20px; margin-top: 40px; font-size: 0.9rem;
+        }
+        footer a { color: #f5d87c; text-decoration: none; }
+
         @media (max-width: 768px) {
-            .header-right { gap: 10px; }
-            .menu-toggle { display: block; }
-            nav { position: absolute; top: 85px; left: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
-            nav.active { max-height: 400px; }
-            nav ul { flex-direction: column; padding: 24px; gap: 16px; text-align: center; }
+            .grid { grid-template-columns: 1fr; }
+            .pots-grid { grid-template-columns: 1fr 1fr; }
+            .cart-panel { max-width: 100%; }
+        }
+        @media print {
+            body { background: white; }
+            .top-bar, .quick-jump, .btn-checkout, .btn-refresh, .price-status,
+            .stock-badge, .badge, .edit-hint, .note-line, .btn-add-cart, .qty-selector,
+            .cart-overlay, .cart-icon-wrap, .back-to-top { display: none; }
+            .plant-card { box-shadow: none; break-inside: avoid; border: 1px solid #ccc; opacity: 1 !important; }
+            .grid { gap: 10px; grid-template-columns: repeat(2, 1fr); }
+            .plant-img { height: 170px; }
+            footer { background: none; color: #333; }
         }
     </style>
 </head>
 <body>
-<header>
-    <div class="container header-content">
-        <div class="logo">
-            <h1>ပန်းသတင်း</h1>
-            <span data-lang-en="PREMIUM SERVICES" data-lang-my="အထူးဝန်ဆောင်မှု">PREMIUM SERVICES</span>
+
+<!-- ═══════════════ TOP BAR ═══════════════ -->
+<div class="top-bar">
+    <div class="brand">ပန်းသတင်း <small>LANDSCAPE</small></div>
+    <div class="top-bar-actions">
+        <span class="price-status loading" id="priceStatus">🔄 Loading prices...</span>
+        <button class="btn-refresh" id="btnRefresh" title="Refresh prices from Google Sheet">🔄 Refresh Prices</button>
+        <div class="cart-icon-wrap" id="cartIconWrap">
+            <button class="cart-icon-btn" id="btnCartIcon">🛒 <span id="cartLabel">Cart</span></button>
+            <span class="cart-count" id="cartCount" style="display:none">0</span>
         </div>
-        <div class="header-right">
-            <div class="lang-switcher">
-                <button class="lang-btn active" data-lang="en">EN</button>
-                <button class="lang-btn" data-lang="my">မြန်မာ</button>
-            </div>
-            <div class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></div>
-        </div>
-        <nav id="navMenu">
-            <ul>
-                <li><a href="index.html" data-lang-en="Home" data-lang-my="ပင်မ">Home</a></li>
-                <li><a href="index.html#services" data-lang-en="Services" data-lang-my="ဝန်ဆောင်မှုများ">Services</a></li>
-                <li><a href="index.html#gallery" data-lang-en="Gallery" data-lang-my="လက်ရာများ">Gallery</a></li>
-                <li><a href="index.html#contact" data-lang-en="Contact" data-lang-my="ဆက်သွယ်ရန်">Contact</a></li>
-            </ul>
-        </nav>
+        <a href="calculator.html" class="btn-checkout" id="btnGoCheckout">
+            🛒 Go to Checkout <span id="checkoutCount"></span>
+        </a>
     </div>
-</header>
-<main>
-    <div class="container">
-        <div class="page-header">
-            <div class="breadcrumb"><a href="plant-catalogs.html" data-lang-en="Home" data-lang-my="ပင်မ">Home</a> / <span data-lang-en="Plant Sale" data-lang-my="Plant Sale">Plant Sale</span></div>
-            <h1><span data-lang-en="Plant Sale" data-lang-my="အပင်ရောင်းချခြင်း">Plant Sale</span></h1>
-            <p class="subhead" data-lang-en="Quality plants for your home and garden" data-lang-my="သင့်အိမ်နှင့် ဥယျာဉ်အတွက် အရည်အသွေးမီအပင်များ">Quality plants for your home and garden</p>
-        </div>
-        <div class="service-hero">
-            <div>
-                <h2 data-lang-en="Healthy Plants, Happy Homes" data-lang-my="ကျန်းမာသောအပင်များ၊ ပျော်ရွှင်သောအိမ်များ">Healthy Plants, Happy Homes</h2>
-                <p style="margin: 20px 0;" data-lang-en="Browse our extensive collection of indoor and outdoor plants. From low-maintenance succulents to statement trees, we have plants for every space and skill level. All plants are locally grown and acclimated." data-lang-my="ကျွန်ုပ်တို့၏ အိမ်တွင်းနှင့် ပြင်ပအပင်မျိုးစုံကို ကြည့်ရှုလိုက်ပါ။">Browse our extensive collection of indoor and outdoor plants. From low-maintenance succulents to statement trees, we have plants for every space and skill level.</p>
-                <a href="index.html#contact" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> <span data-lang-en="Order Plants" data-lang-my="အပင်မှာယူရန်">Order Plants</span></a>
-            </div>
-            <div class="service-hero-image"></div>
-        </div>
-        <h2 style="text-align:center; margin-bottom:30px;" data-lang-en="Popular Plants" data-lang-my="လူကြိုက်များသောအပင်များ">Popular Plants</h2>
-        <div class="plant-grid">
-             <div class="plant-card"><<i class="fas fa-leaf"></i><h3>Plants</h3><p class="plant-price">5K - 500K</p><p data-lang-en="Various plants available" data-lang-my="အပင်">plants</p></div>
-              <div class="plant-card"><i class="fas fa-tree"></i><h3>Orchids</h3><p class="plant-price">10K - 100K</p><p data-lang-en="Various colors available" data-lang-my="အရောင်စုံရရှိနိုင်">Various colors available</p></div>
-             <div class="plant-card"><i class="fa-solid fa-snowflake"></i><h3>Pots</h3><p class="plant-price">3K - 250K</p><p data-lang-en="Various colors available" data-lang-my="အရောင်စုံရရှိနိုင်">Various colors available</p></div>
-        </div>
-        <div class="pricing-card">
-            <h3 data-lang-en="Delivery Available" data-lang-my="အိမ်အရောက်ပို့ဆောင်ပေးသည်">Delivery Available</h3>
-            <p data-lang-en="Free delivery on orders over 100000MMK" data-lang-my="100000MMK နှင့်အထက် မှာယူပါက အခမဲ့ပို့ဆောင်ပေးသည်">Free delivery on orders over 1000000MMK</p>
-            <a href="plant-catalogs.html" class="btn btn-outline" style="margin-top: 20px;"><span data-lang-en="Browse Catalog" data-lang-my="ကတ်တလောက်ကြည့်ရန်">Browse Catalog</span> <i class="fas fa-arrow-right"></i></a>
+</div>
+
+<!-- ═══════════════ CART OVERLAY ═══════════════ -->
+<div class="cart-overlay" id="cartOverlay">
+    <div class="cart-panel" id="cartPanel">
+        <h3>🛒 Shopping Cart <button class="cart-close" id="btnCartClose">×</button></h3>
+        <div id="cartItems"><p class="cart-empty">Your cart is empty.<br>ဈေးခြင်းတောင်းဗလာဖြစ်နေပါသည်။</p></div>
+        <div class="cart-footer" id="cartFooter" style="display:none">
+            <div class="cart-total"><span>Total / စုစုပေါင်း:</span><span id="cartTotal">0 Ks</span></div>
+            <a href="calculator.html" class="btn-cart-checkout" id="btnCartCheckout">🛒 Go to Checkout / ဈေးရှင်းမည်</a>
+            <button class="btn-cart-clear" id="btnCartClear">Clear Cart / ဖျက်မည်</button>
         </div>
     </div>
-</main>
-<footer>
-    <div class="container">
-        <p>© 2026 PTD Landscaping Services. <span data-lang-en="All rights reserved." data-lang-my="မူပိုင်ခွင့်အားလုံး လက်ဝယ်ရှိသည်။">All rights reserved.</span></p>
+</div>
+
+<div class="container">
+
+    <header>
+        <h1>🌿 Plant Catalog & Price Guide</h1>
+        <p class="subtitle">စိုက်ပင် စာရင်းနှင့် ဈေးနှုန်းလမ်းညွှန်</p>
+        <div class="price-note">
+            📍 Prices are for standard nursery sizes (1–5 gal). Varies by size and availability. All plants Myanmar‑grown.<br>
+            ဈေးနှုန်းများမှာ သာမန်ပျိုးအိုးအရွယ် (၁–၅ ဂါလံ) အတွက်ဖြစ်ပြီး အပင်အရွယ်နှင့် ရရှိနိုင်မှုပေါ် မူတည်ပါသည်။
+        </div>
+        <div class="edit-hint">
+            💡 <strong>How to check updated prices:</strong>  
+            <a href="#" id="sheetLink" target="_blank" rel="noopener">Google Sheet</a> → Click "Refresh Prices" button for live prices!
+        </div>
+    </header>
+
+    <div class="quick-jump">
+        <a href="#fruits">🍋 Fruits / သစ်သီးပင်</a>
+        <a href="#orchids">🌸 Orchids / သစ်ခွ</a>
+        <a href="#pots">🪴 Pots / အိုး</a>
+        <a href="#shrubs">🌺 Shrubs & Climbers</a>
+        <a href="#trees">🌳 Trees & Palms</a>
+        <a href="#indoor">🪴 Indoor & Shade</a>
+        <a href="#perennials">🌸 Perennials & Groundcovers</a>
+        <a href="#fence">🌿 Fence & Balcony Specials</a>
     </div>
-</footer>
+
+    <h2 id="fruits" class="category-title">🍋 Fruit Plants / သစ်သီးပင် (၂၅ မျိုး)</h2>
+    <div class="grid" id="fruits-grid"></div>
+
+    <h2 id="orchids" class="category-title">🌸 Orchids / သစ်ခွ (၂၀ မျိုး)</h2>
+    <div class="grid" id="orchids-grid"></div>
+
+    <h2 id="pots" class="category-title">🪴 Pots & Containers / အိုးများ</h2>
+    <div class="pots-grid" id="pots-grid"></div>
+
+    <h2 id="shrubs" class="category-title">🌺 Shrubs & Climbers / ချုံပင်နှင့်နွယ်ပင် (၁၅ မျိုး)</h2>
+    <div class="grid" id="shrubs-grid"></div>
+
+    <h2 id="trees" class="category-title">🌳 Trees & Palms / သစ်ပင်နှင့်ထန်းပင် (၁၂ မျိုး)</h2>
+    <div class="grid" id="trees-grid"></div>
+
+    <h2 id="indoor" class="category-title">🪴 Indoor & Shade Plants / အိမ်တွင်းနှင့်အရိပ်ပင် (၁၂ မျိုး)</h2>
+    <div class="grid" id="indoor-grid"></div>
+
+    <h2 id="perennials" class="category-title">🌸 Perennials & Groundcovers / နှစ်ကြာခံပန်းပင်နှင့်မြေဖုံးပင် (၁၂ မျိုး)</h2>
+    <div class="grid" id="perennials-grid"></div>
+
+    <h2 id="fence" class="category-title">🌿 Fence & Balcony Specials / ခြံစည်းရိုးနှင့်လသာဆောင်အထူး (၁၀ မျိုး)</h2>
+    <div class="grid" id="fence-grid"></div>
+
+    <button class="back-to-top" id="backToTop" title="Back to top" aria-label="Back to top">↑</button>
+
+    <footer>
+        <strong>🌿 ပန်းသတင်း Landscape</strong><br>
+        📞 09-XXX-XXX-XXX | ✉️ pttlandscapeservices@ gmail.com<br>
+        <a href="https://zyanamite.github.io//ptt/" target="_blank" rel="noopener">🌐 PTDlandscape</a><br>
+        All plants grown in Myanmar | အပင်အားလုံး မြန်မာပြည်တွင်းစိုက်ပျိုးသည်<br>
+        Prices are indicative. ဈေးနှုန်းများမှာ ခန့်မှန်းခြေဖြစ်သည်။<br>
+        <small>&copy; 2025 Pantathin Landscape | Prices managed via Google Sheets</small>
+    </footer>
+</div>
+
 <script>
-    (function() {
-        let currentLang = 'en';
-        function switchLanguage(lang) {
-            currentLang = lang;
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.lang === lang) btn.classList.add('active');
-            });
-            document.querySelectorAll('[data-lang-en][data-lang-my]').forEach(el => {
-                const text = el.dataset[`lang${lang === 'en' ? 'En' : 'My'}`];
-                if (text) el.textContent = text;
-            });
-            localStorage.setItem('ptt_lang_pref', lang);
-        }
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', function() { switchLanguage(this.dataset.lang); });
+(function() {
+    var GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQzthDCHJACnjbjtXCzlsPQY3brcqwU4K035F_KkTVpBCj6SNwdfEJZe3S6gQgNqHnlfP6lRT0-A9mP/pub?output=csv';
+
+    var DEFAULT_PRICES = {
+        'mango-fruit.jpg':'12,000 – 30,000 Ks','jackfruit.jpg':'10,000 – 20,000 Ks','durian.jpg':'15,000 – 45,000 Ks','papaya.jpg':'3,000 – 8,000 Ks','guava.jpg':'5,000 – 12,000 Ks','custard-apple.jpg':'6,000 – 15,000 Ks','avocado.jpg':'10,000 – 25,000 Ks','banana.jpg':'2,500 – 6,000 Ks','pomelo.jpg':'8,000 – 18,000 Ks','lime.jpg':'4,000 – 10,000 Ks','starfruit.jpg':'7,000 – 15,000 Ks','pomegranate.jpg':'6,000 – 14,000 Ks','dragon-fruit.jpg':'3,000 – 8,000 Ks','soursop.jpg':'8,000 – 18,000 Ks','sapodilla.jpg':'6,000 – 14,000 Ks','langsat.jpg':'12,000 – 25,000 Ks','mangosteen.jpg':'15,000 – 35,000 Ks','rambutan.jpg':'10,000 – 22,000 Ks','lychee.jpg':'10,000 – 22,000 Ks','tamarind.jpg':'5,000 – 12,000 Ks','jujube.jpg':'4,000 – 10,000 Ks','passion-fruit.jpg':'3,000 – 7,000 Ks','persimmon.jpg':'10,000 – 25,000 Ks','burmese-grape.jpg':'8,000 – 18,000 Ks','mulberry.jpg':'4,000 – 8,000 Ks','dendrobium-hybrid.jpg':'8,000 – 18,000 Ks','vanda.jpg':'15,000 – 35,000 Ks','cymbidium.jpg':'12,000 – 25,000 Ks','paphiopedilum.jpg':'20,000 – 50,000 Ks','rhynchostylis.jpg':'10,000 – 22,000 Ks','phalaenopsis.jpg':'10,000 – 20,000 Ks','aerides.jpg':'9,000 – 18,000 Ks','bulbophyllum.jpg':'8,000 – 18,000 Ks','coelogyne.jpg':'10,000 – 22,000 Ks','eria.jpg':'7,000 – 15,000 Ks','phaius.jpg':'12,000 – 25,000 Ks','thunia.jpg':'10,000 – 20,000 Ks','renanthera.jpg':'15,000 – 35,000 Ks','pleione.jpg':'12,000 – 25,000 Ks','cleisostoma.jpg':'8,000 – 16,000 Ks','acampe.jpg':'7,000 – 15,000 Ks','ascocentrum.jpg':'10,000 – 20,000 Ks','pholidota.jpg':'8,000 – 18,000 Ks','nervilia.jpg':'6,000 – 12,000 Ks','blue-vanda.jpg':'25,000 – 60,000 Ks','pot-terracotta.jpg':'2,500 – 12,000 Ks','pot-cement.jpg':'5,000 – 25,000 Ks','pot-glazed.jpg':'8,000 – 35,000 Ks','pot-plastic.jpg':'500 – 4,000 Ks','pot-growbag.jpg':'1,500 – 6,000 Ks','pot-hanging.jpg':'4,000 – 10,000 Ks','pot-selfwatering.jpg':'7,000 – 18,000 Ks','pot-orchid.jpg':'3,000 – 8,000 Ks','bougainvillea.jpg':'8,000 – 15,000 Ks','ixora.jpg':'5,000 – 10,000 Ks','hibiscus.jpg':'6,000 – 12,000 Ks','rangoon-creeper.jpg':'5,000 – 10,000 Ks','bleeding-heart.jpg':'6,500 – 12,000 Ks','muang.jpg':'4,000 – 8,000 Ks','king-jasmine.jpg':'8,000 – 18,000 Ks','allamanda.jpg':'4,000 – 8,000 Ks','pagoda-flower.jpg':'6,000 – 12,000 Ks','night-jasmine.jpg':'4,000 – 8,000 Ks','garlic-vine.jpg':'5,000 – 10,000 Ks','amherstia.jpg':'20,000 – 50,000 Ks','gardenia.jpg':'6,000 – 14,000 Ks','butterfly-bush.jpg':'4,000 – 8,000 Ks','jungle-flame.jpg':'5,000 – 10,000 Ks','frangipani.jpg':'15,000 – 30,000 Ks','golden-shower.jpg':'20,000 – 45,000 Ks','foxtail-palm.jpg':'25,000 – 50,000 Ks','teak.jpg':'3,000 – 8,000 Ks','neem.jpg':'3,000 – 7,000 Ks','areca-palm.jpg':'8,000 – 18,000 Ks','rain-tree.jpg':'10,000 – 25,000 Ks','mezali.jpg':'5,000 – 12,000 Ks','star-flower.jpg':'8,000 – 18,000 Ks','mohur.jpg':'10,000 – 25,000 Ks','travellers-palm.jpg':'15,000 – 35,000 Ks','fishtail-palm.jpg':'12,000 – 28,000 Ks','snake-plant.jpg':'4,000 – 8,000 Ks','peace-lily.jpg':'7,000 – 12,000 Ks','pothos.jpg':'3,000 – 6,000 Ks','croton.jpg':'6,000 – 14,000 Ks','chinese-evergreen.jpg':'5,000 – 10,000 Ks','monstera.jpg':'8,000 – 18,000 Ks','boston-fern.jpg':'5,000 – 10,000 Ks','zz-plant.jpg':'5,000 – 12,000 Ks','dracaena.jpg':'6,000 – 15,000 Ks','spider-plant.jpg':'2,500 – 5,000 Ks','rubber-plant.jpg':'7,000 – 15,000 Ks','calathea.jpg':'6,000 – 12,000 Ks','jasmine.jpg':'4,000 – 9,000 Ks','mexican-petunia.jpg':'3,000 – 6,000 Ks','lantana.jpg':'3,500 – 7,000 Ks','coleus.jpg':'2,000 – 5,000 Ks','marigold.jpg':'1,500 – 3,000 Ks','portulaca.jpg':'1,000 – 2,500 Ks','canna.jpg':'3,000 – 6,000 Ks','heliconia.jpg':'5,000 – 12,000 Ks','barleria.jpg':'3,000 – 6,000 Ks','plumbago.jpg':'4,000 – 8,000 Ks','pentas.jpg':'2,000 – 4,000 Ks','euphorbia.jpg':'3,000 – 7,000 Ks','bamboo.jpg':'10,000 – 20,000 Ks','thunbergia.jpg':'4,000 – 8,000 Ks','morning-glory.jpg':'2,000 – 4,000 Ks','clematis.jpg':'5,000 – 12,000 Ks','asparagus.jpg':'3,000 – 6,000 Ks','snake-jasmine.jpg':'3,500 – 7,000 Ks','vinca.jpg':'1,500 – 3,000 Ks','clitoria.jpg':'2,000 – 4,000 Ks','caladium.jpg':'3,000 – 7,000 Ks','ruellia.jpg':'2,500 – 5,000 Ks'
+    };
+
+    var plantData = {
+        fruits: [
+            { file:'mango-fruit.jpg',badge:'Popular',badgeClass:'fruit',en:'Mango (grafted)',sci:'Mangifera indica',mm:'သရက်ပင် (Tha-yet Pin)',desc:"King of fruits. Grafted varieties: Sein Ta Lone, Ma Chit Su, Yin Kwe.",descMM:'သရက်ဘုရင်။ စိန်တစ်လုံး၊ မချစ်စု၊ ရင်ကွဲ စသည့် ကိုင်းဆက်မျိုးများ။',tags:['☀️ Full Sun','💧 Medium','📏 10-20m']},
+            { file:'jackfruit.jpg',badge:'Popular',badgeClass:'fruit',en:'Jackfruit',sci:'Artocarpus heterophyllus',mm:'ပိန္နဲပင် (Pein-ne Pin)',desc:'Giant fruit, sweet & nutritious. Thrives in any Myanmar soil.',descMM:'ချိုသောအသီးကြီး။ မြန်မာမြေတိုင်းတွင် ဖြစ်ထွန်းသည်။',tags:['☀️ Full Sun','💧 Medium','📏 10-20m']},
+            { file:'durian.jpg',badge:'Premium',badgeClass:'fruit',en:'Durian (grafted)',sci:'Durio zibethinus',mm:'ဒူးရင်းပင် (Du-yin Pin)',desc:'Monthong & local varieties. Rich flavour, high market value.',descMM:'မွန်သောင်းနှင့် မြန်မာမျိုးများ။ ဈေးကွက်တန်ဖိုးမြင့်သည်။',tags:['☀️ Full Sun','💧 High','📏 15-25m']},
+            { file:'papaya.jpg',badge:'',badgeClass:'',en:'Papaya',sci:'Carica papaya',mm:'သင်္ဘောပင် (Thin-baw Pin)',desc:'Fast-growing, fruits within a year. Solo & local varieties.',descMM:'တစ်နှစ်အတွင်း သီးသည်။ ဆိုလိုနှင့် မြန်မာမျိုးများ။',tags:['☀️ Full Sun','💧 Medium','📏 2-5m']},
+            { file:'guava.jpg',badge:'',badgeClass:'',en:'Guava',sci:'Psidium guajava',mm:'မာလကာပင် (Ma-la-ka Pin)',desc:'Crunchy, vitamin-rich fruit. Bears year-round.',descMM:'ကြွပ်သောအသီး၊ ဗီတာမင်ကြွယ်ဝသည်။ တစ်နှစ်ပတ်လုံးသီးသည်။',tags:['☀️ Full Sun','💧 Medium','📏 3-6m']},
+            { file:'custard-apple.jpg',badge:'',badgeClass:'',en:'Custard Apple',sci:'Annona squamosa',mm:'ဩဇာပင် (Aw-za Pin)',desc:'Sweet, creamy flesh. Drought-tolerant small tree.',descMM:'ချိုသောအသား၊ ရေရှားဒဏ်ခံနိုင်သောအပင်ငယ်။',tags:['☀️ Full Sun','💧 Low','📏 3-6m']},
+            { file:'avocado.jpg',badge:'Trending',badgeClass:'fruit',en:'Avocado (grafted)',sci:'Persea americana',mm:'ထောပတ်ပင် (Htaw-bat Pin)',desc:'Buttery fruit, high demand. Grafted varieties fruit in 3 years.',descMM:'ထောပတ်သီး ဝယ်လိုအားများ။ ကိုင်းဆက်ပင်များ ၃ နှစ်အတွင်းသီးသည်။',tags:['☀️ Full Sun','💧 Medium','📏 8-15m']},
+            { file:'banana.jpg',badge:'',badgeClass:'',en:'Banana (Dwarf)',sci:'Musa spp.',mm:'ငှက်ပျောပင် (Hnget-pyaw Pin)',desc:'Rakhine, Red, Dwarf Cavendish. Fruits in 8-12 months.',descMM:'ရခိုင်၊ အနီ၊ ထောင့်အငှက်ပျောမျိုးများ။ ၈-၁၂ လအတွင်းသီးသည်။',tags:['☀️ Full Sun','💧 High','📏 1.5-3m']},
+            { file:'pomelo.jpg',badge:'',badgeClass:'',en:'Pomelo',sci:'Citrus maxima',mm:'ကျွဲကောပင် (Kywe-gaw Pin)',desc:'Sweet-tangy citrus giant. Popular in Myanmar gardens.',descMM:'ချိုချဉ်သော အသီးကြီး။ မြန်မာခြံများတွင် စိုက်များသည်။',tags:['☀️ Full Sun','💧 Medium','📏 5-10m']},
+            { file:'lime.jpg',badge:'',badgeClass:'',en:'Lime / Lemon',sci:'Citrus aurantiifolia',mm:'သံပုရာပင် / ရှောက်ပင် (Than-bu-ya / Shauk Pin)',desc:'Essential kitchen plant. Can grow in large pots.',descMM:'မီးဖိုချောင်အတွက် မရှိမဖြစ်။ အိုးကြီးများတွင် စိုက်နိုင်သည်။',tags:['☀️ Full Sun','💧 Medium','📏 2-4m']},
+            { file:'starfruit.jpg',badge:'',badgeClass:'',en:'Star Fruit',sci:'Averrhoa carambola',mm:'စောင်းလျားပင် (Zaung-ya Pin)',desc:'Unique star-shaped fruit. Sweet & sour varieties available.',descMM:'ကြယ်ပုံသဏ္ဌာန်အသီး။ အချိုနှင့်အချဉ်မျိုး ရနိုင်သည်။',tags:['☀️ Full Sun','💧 Medium','📏 5-10m']},
+            { file:'pomegranate.jpg',badge:'',badgeClass:'',en:'Pomegranate',sci:'Punica granatum',mm:'သလဲပင် (Tha-le Pin)',desc:'Red jewel-like arils. Very drought-hardy.',descMM:'အနီရောင်ပတဲအသီး။ အပင်ခိုင်သည်နှင့် ရေရှားဒဏ်ခံနိုင်သည်။',tags:['☀️ Full Sun','💧 Low','📏 3-5m']},
+            { file:'dragon-fruit.jpg',badge:'',badgeClass:'',en:'Dragon Fruit',sci:'Hylocereus undatus',mm:'နဂါးမောက်သီး (Na-gar-mauk Thee)',desc:'Exotic cactus fruit. Grows easily on a post.',descMM:'ထူးဆန်းသော ရှားစောင်းသီး။ တိုင်တွင် အလွယ်တကူစိုက်နိုင်သည်။',tags:['☀️ Full Sun','💧 Low','📏 Climber']},
+            { file:'soursop.jpg',badge:'',badgeClass:'',en:'Soursop',sci:'Annona muricata',mm:'ဒူးရင်းရိုင်း (Du-yin-yaing)',desc:'Spiky green fruit, creamy pulp. Medicinal properties.',descMM:'အစိမ်းရောင်ဆူးသီး၊ နူးညံ့သောအသား။ ဆေးဖက်ဝင်သည်။',tags:['☀️ Full Sun','💧 Medium','📏 4-8m']},
+            { file:'sapodilla.jpg',badge:'',badgeClass:'',en:'Sapodilla',sci:'Manilkara zapota',mm:'သပွတ်ပင် (Tha-but Pin)',desc:'Brown sugar-sweet fruit. Evergreen shade tree.',descMM:'ထန်းညက်သကြားချိုသောအသီး။ အမြဲစိမ်းအရိပ်ရပင်။',tags:['☀️ Full Sun','💧 Low','📏 5-10m']},
+            { file:'langsat.jpg',badge:'',badgeClass:'',en:'Langsat / Duku',sci:'Lansium domesticum',mm:'လန်းဆတ်ပင် (Lan-sat Pin)',desc:'Translucent sweet-sour flesh. Tropical favourite.',descMM:'ဝင်းလက်သောချိုချဉ်အသား။ အပူပိုင်းဒေသအကြိုက်။',tags:['☀️ Full Sun','💧 High','📏 10-20m']},
+            { file:'mangosteen.jpg',badge:'Premium',badgeClass:'fruit',en:'Mangosteen',sci:'Garcinia mangostana',mm:'မင်းဂွတ်ပင် (Min-gut Pin)',desc:'Queen of fruits. Slow-growing but highly prized.',descMM:'သစ်သီးဘုရင်မ။ ကြီးထွားနှေးသော်လည်း တန်ဖိုးမြင့်သည်။',tags:['☀️ Full Sun','💧 High','📏 6-20m']},
+            { file:'rambutan.jpg',badge:'',badgeClass:'',en:'Rambutan',sci:'Nephelium lappaceum',mm:'ကြက်မောက်ပင် (Kyet-mauk Pin)',desc:'Hairy red fruit, sweet translucent flesh.',descMM:'အနီရောင်အမွှေးသီး၊ ချိုသောအသား။',tags:['☀️ Full Sun','💧 High','📏 8-15m']},
+            { file:'lychee.jpg',badge:'',badgeClass:'',en:'Lychee',sci:'Litchi chinensis',mm:'လိုင်ချီးပင် (Lychee Pin)',desc:'Fragrant, juicy fruit. Needs cool dry season to flower.',descMM:'ရနံ့သင်းသောအသီး။ ပွင့်ရန် အေးသောနွေလိုအပ်သည်။',tags:['☀️ Full Sun','💧 Medium','📏 6-12m']},
+            { file:'tamarind.jpg',badge:'',badgeClass:'',en:'Tamarind (Sweet)',sci:'Tamarindus indica',mm:'မန်ကျည်းပင် (Ma-gyi Pin)',desc:'Sweet brown pulp. Large shade tree, drought-proof.',descMM:'ချိုသောအညိုရောင်အသား။ အရိပ်ရအပင်ကြီး၊ ရေရှားဒဏ်ခံနိုင်သည်။',tags:['☀️ Full Sun','💧 Low','📏 10-20m']},
+            { file:'jujube.jpg',badge:'',badgeClass:'',en:'Jujube',sci:'Ziziphus mauritiana',mm:'ဆီးပင် (Zee Pin)',desc:'Small apple-like fruit. Hardy tree, any soil.',descMM:'ပန်းသီးနှင့်တူသောအသီးငယ်။ မည်သည့်မြေတွင်မဆိုဖြစ်ထွန်းသည်။',tags:['☀️ Full Sun','💧 Low','📏 4-8m']},
+            { file:'passion-fruit.jpg',badge:'',badgeClass:'',en:'Passion Fruit',sci:'Passiflora edulis',mm:'ပတ်ရှင်သီး (Passion Thee)',desc:'Tangy aromatic pulp. Fast-growing vine.',descMM:'ချဉ်သောရနံ့အသား။ အလျင်အမြန်ကြီးထွားသောနွယ်ပင်။',tags:['☀️ Full Sun','💧 Medium','📏 Climber']},
+            { file:'persimmon.jpg',badge:'',badgeClass:'',en:'Persimmon',sci:'Diospyros kaki',mm:'တည်ပင် (Tee Pin)',desc:'Bright orange fruit. Cooler highland areas ideal.',descMM:'လိမ္မော်ရောင်တောက်ပသောအသီး။ အေးသောကုန်းမြင့်ဒေသများအတွက်သင့်တော်သည်။',tags:['☀️ Full Sun','💧 Medium','📏 5-10m']},
+            { file:'burmese-grape.jpg',badge:'',badgeClass:'',en:'Burmese Grape',sci:'Baccaurea ramiflora',mm:'ကနစိုပင် / လီးသီး (Ka-na-so / Lee Thee Pin)',desc:'Native Myanmar fruit. Tangy-sweet, growing in popularity.',descMM:'မြန်မာဇာတိအသီး။ ချဉ်ချိုအရသာ၊ လူကြိုက်များလာသည်။',tags:['☀️ Full Sun','💧 Medium','📏 8-15m']},
+            { file:'mulberry.jpg',badge:'',badgeClass:'',en:'Mulberry',sci:'Morus alba',mm:'ပိုးစာပင် (Poe-za Pin)',desc:'Sweet berries, fast grower. Leaves feed silkworms too.',descMM:'ချိုသောအသီးငယ်များ၊ အလျင်အမြန်ကြီးထွားသည်။ အရွက်ဖြင့် ပိုးမွေးနိုင်သည်။',tags:['☀️ Full Sun','💧 Medium','📏 4-10m']}
+        ],
+        orchids: [
+            { file:'dendrobium-hybrid.jpg',badge:'Bestseller',badgeClass:'orchid',en:'Dendrobium (Hybrid Mix)',sci:'Dendrobium hybrids',mm:'ဒန်ဒရိုဘီယမ် သစ်ခွ',desc:"Myanmar's most popular orchid genus. Long-lasting sprays in purple, pink, white.",descMM:'မြန်မာတွင် လူကြိုက်အများဆုံးသစ်ခွ။ ခရမ်း၊ ပန်းရောင်၊ အဖြူရောင်ဖြာပွင့်များ။',tags:['🌤️ Bright Indirect','💧 Medium','📏 30-60cm']},
+            { file:'vanda.jpg',badge:'Rare',badgeClass:'orchid',en:'Vanda (Blue/Purple)',sci:'Vanda coerulea / hybrids',mm:'ဗန်ဒါသစ်ခွ',desc:'Striking large blooms. Native to Myanmar highlands.',descMM:'ကြီးမားလှပသောပွင့်များ။ မြန်မာကုန်းမြင့်မှ ဇာတိဖြစ်သည်။',tags:['🌤️ Bright Indirect','💧 High','📏 40-80cm']},
+            { file:'cymbidium.jpg',badge:'',badgeClass:'',en:'Cymbidium (Boat Orchid)',sci:'Cymbidium spp.',mm:'စင်ဘီဒီယမ် သစ်ခွ',desc:'Elegant sprays for cooler months. Popular gift orchid.',descMM:'အေးသောလများတွင် ကြော့ရှင်းသောပွင့်ခိုင်များ။',tags:['🌤️ Bright Indirect','💧 Medium','📏 40-70cm']},
+            { file:'paphiopedilum.jpg',badge:'Native',badgeClass:'orchid',en:'Slipper Orchid',sci:'Paphiopedilum hirsutissimum',mm:'ဖိနပ်သစ်ခွ',desc:"Rare Myanmar native. Distinctive pouch flower. Collector's item.",descMM:'ရှားပါးမြန်မာဇာတိသစ်ခွ။ ဖိနပ်ပုံသဏ္ဌာန်ပွင့်ရှိသည်။',tags:['🌿 Shade','💧 High','📏 15-25cm']},
+            { file:'rhynchostylis.jpg',badge:'',badgeClass:'',en:'Foxtail Orchid',sci:'Rhynchostylis retusa',mm:'မြွေမြီးသစ်ခွ',desc:'Dense, drooping pink/white flower spikes. Strong fragrance.',descMM:'ပန်းရောင်/အဖြူတွဲလျားပွင့်ခိုင်။ ရနံ့ပြင်းသည်။',tags:['🌤️ Bright Indirect','💧 Medium','📏 30-50cm']},
+            { file:'phalaenopsis.jpg',badge:'',badgeClass:'',en:'Moth Orchid',sci:'Phalaenopsis parishii',mm:'ဖလေနော့ပ်စစ် သစ်ခွ',desc:'Easy-care indoor orchid. Blooms for months.',descMM:'ပြုစုရလွယ်သော အိမ်တွင်းသစ်ခွ။ လပေါင်းများစွာ ပွင့်သည်။',tags:['🏠 Indoor','💧 Low','📏 20-40cm']},
+            { file:'aerides.jpg',badge:'',badgeClass:'',en:'Fox Brush Orchid',sci:'Aerides odorata',mm:'အေရီးဒီးစ် သစ်ခွ',desc:'Waxy, fragrant white/pink flowers. Hardy outdoor orchid.',descMM:'ဖယောင်းသားဖြူ/ပန်းရောင်ပွင့်များ။ အပြင်စိုက်ရန် ခံနိုင်ရည်ရှိသည်။',tags:['🌤️ Bright Indirect','💧 Medium','📏 25-45cm']},
+            { file:'bulbophyllum.jpg',badge:'',badgeClass:'',en:'Bulbophyllum',sci:'Bulbophyllum spp.',mm:'ဘူလ်ဘိုဖီလမ် သစ်ခွ',desc:'Strangely beautiful flowers. Many Myanmar native species.',descMM:'ထူးဆန်းလှပသောပွင့်များ။ မြန်မာဇာတိမျိုးစိတ်များစွာရှိသည်။',tags:['🌿 Shade','💧 High','📏 15-40cm']},
+            { file:'coelogyne.jpg',badge:'',badgeClass:'',en:'Coelogyne',sci:'Coelogyne spp.',mm:'စီလော်ဂျင်နီ သစ်ခွ',desc:'Fragrant, often white or green blooms.',descMM:'ရနံ့သင်းသော အဖြူ/အစိမ်းပွင့်များ။',tags:['🌿 Shade','💧 Medium','📏 25-50cm']},
+            { file:'eria.jpg',badge:'',badgeClass:'',en:'Eria',sci:'Eria flava',mm:'အီးရီးယား သစ်ခွ',desc:'Small, fuzzy flowers. Easy to grow mounted.',descMM:'အမွှေးနုအပွင့်ငယ်များ။ တွယ်စိုက်ရန်လွယ်ကူသည်။',tags:['🌤️ Bright Indirect','💧 Medium','📏 20-40cm']},
+            { file:'phaius.jpg',badge:'',badgeClass:'',en:'Phaius (Nun Orchid)',sci:'Phaius wallichii',mm:'ဖေးယပ်စ် သစ်ခွ',desc:'Tall spikes, terrestrial. Grows in garden beds.',descMM:'အရပ်ရှည်သောပွင့်တံ၊ မြေတွင်စိုက်နိုင်သည်။',tags:['🌿 Shade','💧 High','📏 60-120cm']},
+            { file:'thunia.jpg',badge:'',badgeClass:'',en:'Thunia',sci:'Thunia marshalliana',mm:'ထူနီးယား သစ်ခွ',desc:'Large white/pink blooms. Seasonal growth.',descMM:'အဖြူ/ပန်းရောင်ပွင့်ကြီးများ။ ရာသီအလိုက်ကြီးထွား။',tags:['🌤️ Bright Indirect','💧 Seasonal','📏 30-70cm']},
+            { file:'renanthera.jpg',badge:'',badgeClass:'',en:'Renanthera',sci:'Renanthera imschootiana',mm:'ရီနန်သီရာ သစ်ခွ',desc:'Vibrant red sprays. Native to Myanmar.',descMM:'အနီရောင်တောက်ပသောဖြာပွင့်များ။ မြန်မာဇာတိ။',tags:['☀️ Bright','💧 High','📏 40-80cm']},
+            { file:'pleione.jpg',badge:'',badgeClass:'',en:'Pleione',sci:'Pleione praecox',mm:'ပလီယိုနီ သစ်ခွ',desc:'Miniature, beautiful pink blooms.',descMM:'အရွယ်သေးသော ပန်းရောင်လှပသောပွင့်များ။',tags:['🌿 Shade','💧 Medium','📏 10-20cm']},
+            { file:'cleisostoma.jpg',badge:'',badgeClass:'',en:'Cleisostoma',sci:'Cleisostoma brevipes',mm:'ကလိုင်ဆိုစတိုမာ သစ်ခွ',desc:'Tiny flowers on arching spikes. Good for small spaces.',descMM:'ကောက်ကွေးသောတံပေါ်တွင် ပွင့်ငယ်ကလေးများ။',tags:['🌤️ Bright Indirect','💧 Medium','📏 15-30cm']},
+            { file:'acampe.jpg',badge:'',badgeClass:'',en:'Acampe',sci:'Acampe spp.',mm:'အေကမ်ပီ သစ်ခွ',desc:'Robust, fragrant small flowers. Tolerates heat well.',descMM:'ကြံ့ခိုင်ပြီး ရနံ့သင်းသောပွင့်ငယ်များ။ အပူဒဏ်ခံနိုင်သည်။',tags:['🌤️ Bright','💧 Medium','📏 20-40cm']},
+            { file:'ascocentrum.jpg',badge:'',badgeClass:'',en:'Ascocentrum',sci:'Ascocentron spp.',mm:'အက်စကိုစင်ထရမ် သစ်ခွ',desc:'Dense clusters of tiny bright flowers.',descMM:'ပွင့်ငယ်များစုဖွဲ့ထားသောတောက်ပသောသစ်ခွ။',tags:['🌤️ Bright Indirect','💧 Medium','📏 15-30cm']},
+            { file:'pholidota.jpg',badge:'',badgeClass:'',en:'Pholidota (Rattlesnake Orchid)',sci:'Pholidata spp.',mm:'ဖိုလီဒိုတာ သစ်ခွ',desc:'Chains of tiny white flowers. Pendulous growth habit.',descMM:'အဖြူရောင်ပွင့်ငယ်များ ကွင်းဆက်ကဲ့သို့။',tags:['🌿 Shade','💧 Medium','📏 20-35cm']},
+            { file:'nervilia.jpg',badge:'',badgeClass:'',en:'Nervilia',sci:'Nervilia aragoana',mm:'နာဗီလီယာ သစ်ခွ',desc:'Rare ground orchid. Unique round leaf.',descMM:'ရှားပါးမြေသစ်ခွ။ ထူးခြားသောအရွက်ဝိုင်း။',tags:['🌿 Shade','💧 Medium','📏 10-20cm']},
+            { file:'blue-vanda.jpg',badge:'Rare',badgeClass:'orchid',en:'Blue Vanda (Coerulea)',sci:'Vanda coerulea',mm:'ဗန်ဒါအပြာ (Vanda A-pya)',desc:'True Myanmar native species. Protected, limited stock.',descMM:'မြန်မာဇာတိစစ်စစ်မျိုး။ ထိန်းသိမ်းထားပြီး အကန့်အသတ်ဖြင့်ရောင်းချသည်။',tags:['🌤️ Bright','💧 High','📏 40-80cm']}
+        ],
+        pots: [
+            { file:'pot-terracotta.jpg',en:'Terracotta Pot',mm:'မြေအိုး (Myay Oh)',desc:"Breathable, classic look. 6″–16″ diameter."},
+            { file:'pot-cement.jpg',en:'Cement Pot',mm:'ဘိလပ်မြေအိုး (Bi-lat-mye Oh)',desc:"Heavy-duty, weather-proof. Modern matte finish. 10″–24″."},
+            { file:'pot-glazed.jpg',en:'Glazed Ceramic Pot',mm:'စဉ့်အိုး / ကြွေအိုး (Sint Oh / Kywei Oh)',desc:"High-shine colours. Indoor/outdoor. 8″–18″."},
+            { file:'pot-plastic.jpg',en:'Plastic Nursery Pot',mm:'ပလတ်စတစ်အိုး (Plastic Oh)',desc:'Lightweight, affordable. 1-gal to 15-gal sizes.'},
+            { file:'pot-growbag.jpg',en:'Fabric Grow Bag',mm:'စိုက်အိတ် (Saik Ait)',desc:'Air-prunes roots, healthy growth. 5–20 gallon.'},
+            { file:'pot-hanging.jpg',en:'Hanging Basket',mm:'ဆွဲအိုး (Swel Oh)',desc:'Coco liner + chain. Perfect for ferns & trailing plants.'},
+            { file:'pot-selfwatering.jpg',en:'Self-Watering Pot',mm:'ရေလှောင်အိုး (Yay-hlaung Oh)',desc:"Reservoir base. 8″–14″."},
+            { file:'pot-orchid.jpg',en:'Orchid Pot (Slotted)',mm:'သစ်ခွအိုး (Thit-khwa Oh)',desc:"Extra drainage holes. 4″–10″."}
+        ],
+        shrubs: [
+            { file:'bougainvillea.jpg',en:'Bougainvillea',sci:'Bougainvillea spectabilis',mm:'စက္ကူပန်း (Sakku Pan)',desc:'Bright papery bracts, great for fences & walls.',descMM:'ခြံစည်းရိုး၊ နံရံများအတွက် အကောင်းဆုံး။',tags:['☀️ Full Sun','💧 Low']},
+            { file:'ixora.jpg',en:'Ixora',sci:'Ixora coccinea',mm:'ပိန်းနဲပန်း (Pein-ne Pan)',desc:'Red/orange flower clusters. Ideal for low hedges.',descMM:'အနီ/လိမ္မော်ပွင့်ခိုင်။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'hibiscus.jpg',en:'Hibiscus',sci:'Hibiscus rosa-sinensis',mm:'ခေါင်ရန်းပန်း (Khaung-yan Pan)',desc:'Large trumpet blooms. Great accent shrub.',descMM:'ကြီးမားသောပွင့်များ။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'rangoon-creeper.jpg',en:'Rangoon Creeper',sci:'Combretum indicum',mm:'မြတ်လေးနွယ် (Myat-lay-nwe)',desc:'Fragrant colour-changing blooms. Trellis climber.',descMM:'အဖြူ၊ပန်းရောင်၊အနီပြောင်းလဲသောပန်း။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'bleeding-heart.jpg',en:'Bleeding Heart Vine',sci:'Clerodendrum thomsoniae',mm:'ဂုလ္လီပန်း (Gulli Pan)',desc:'Red heart flowers against white calyces.',descMM:'အဖြူခွက်ထဲမှ အနီနှလုံးပုံပွင့်။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'muang.jpg',en:'Muang / Orange Trumpet',sci:'Pyrostegia venusta',mm:'မောင်းပန်း (Maung Pan)',desc:'Masses of orange tubular flowers. Myanmar classic.',descMM:'နွေရာသီတွင် လိမ္မော်ပွင့်များ။',tags:['☀️ Full Sun','💧 Low']},
+            { file:'king-jasmine.jpg',en:'King Jasmine',sci:'Jasminum rex',mm:'မြတ်လေးဘုရင် (Myat-lay Bayin)',desc:'Larger blooms, intensely fragrant.',descMM:'မြတ်လေးထက်ပွင့်ကြီးပြီး ရနံ့အလွန်ပြင်းသည်။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'allamanda.jpg',en:'Allamanda',sci:'Allamanda cathartica',mm:'ရွှေကြက်ရင်း (Shwe-kyet-yin)',desc:'Golden trumpet flowers year-round.',descMM:'ရွှေရောင်ပွင့်များ တစ်နှစ်ပတ်လုံးပွင့်သည်။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'pagoda-flower.jpg',en:'Pagoda Flower',sci:'Clerodendrum paniculatum',mm:'ပုဂံပန်း (Bagan Pan)',desc:'Pagoda-shaped red/orange flower clusters.',descMM:'ဘုရားပုံသဏ္ဌာန် အနီ/လိမ္မော်ပွင့်ခိုင်များ။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'night-jasmine.jpg',en:'Night Jasmine',sci:'Cestrum nocturnum',mm:'ညပန်း (Nya Pan)',desc:'Intoxicating fragrance at night.',descMM:'ညအခါ မူးမေ့ဖွယ်ရနံ့။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'garlic-vine.jpg',en:'Garlic Vine',sci:'Mansoa alliacea',mm:'ကြက်သွန်နွယ် (Kyet-thun Nwe)',desc:'Lavender blooms, leaves smell like garlic.',descMM:'ခရမ်းနုရောင်ပွင့်များ၊ အရွက်ကြိတ်လျှင် ကြက်သွန်ဖြူနံ့ထွက်သည်။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'amherstia.jpg',en:'Pride of Myanmar',sci:'Amherstia nobilis',mm:'သိုက်ပန်း (Thaik Pan)',desc:'Stunning red hanging blooms. Rare Burmese native.',descMM:'အနီရောင်တွဲလျားပွင့်များ။ ရှားပါးလှပသောမြန်မာဇာတိပင်။',tags:['☀️ Full Sun','💧 High']},
+            { file:'gardenia.jpg',en:'Gardenia',sci:'Gardenia jasminoides',mm:'ဇီးဖြူပန်း (Zee-byu Pan)',desc:'Pure white, heavenly scented blooms.',descMM:'ဖြူစင်မွှေးကြိုင်သောပွင့်များ။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'butterfly-bush.jpg',en:'Butterfly Bush',sci:'Buddleja asiatica',mm:'လိပ်ပြာပန်း (Leik-pyar Pan)',desc:'Attracts butterflies with fragrant white spikes.',descMM:'အဖြူရောင်ပွင့်တံများဖြင့် လိပ်ပြာများကိုဆွဲဆောင်သည်။',tags:['☀️ Full Sun','💧 Low']},
+            { file:'jungle-flame.jpg',en:'Jungle Flame',sci:'Ixora chinensis',mm:'ပိန်းနဲပန်းအနီ (Pein-ne Pan A-ni)',desc:'Compact habit with bright red clusters.',descMM:'အနီရောင်တောက်ပသောပွင့်ခိုင်များ။',tags:['☀️ Full Sun','💧 Medium']}
+        ],
+        trees: [
+            { file:'frangipani.jpg',en:'Frangipani',sci:'Plumeria rubra',mm:'ဇီဇဝါပန်း (Zi-zawar Pan)',desc:'Iconic fragrant flowers. Minimal care.',descMM:'ရနံ့သင်းသော ရိုးရာပန်း။',tags:['☀️ Full Sun','💧 Low']},
+            { file:'golden-shower.jpg',en:'Golden Shower Tree',sci:'Cassia fistula',mm:'ငုရွှေဝါပန်း (Ngu-shwe-war)',desc:'National flower of Myanmar. Yellow cascading blooms.',descMM:'နွေရာသီတွင် အဝါရောင်ပွင့်ခိုင်များ။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'foxtail-palm.jpg',en:'Foxtail Palm',sci:'Wodyetia bifurcata',mm:'မြီးတောင်အုန်း (Myi-taung Ohn)',desc:'Bushy fronds, modern driveway palm.',descMM:'ခေတ်မီအိမ်ရှေ့လမ်းအတွက်။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'teak.jpg',en:'Teak',sci:'Tectona grandis',mm:'ကျွန်းပင် (Kyun Pin)',desc:'Investment timber tree. Landscape specimen.',descMM:'ရင်းနှီးမြှုပ်နှံမှုအတွက်သစ်ပင်။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'neem.jpg',en:'Neem',sci:'Azadirachta indica',mm:'တမာပင် (Ta-ma Pin)',desc:'Medicinal shade tree. Pest-repellent.',descMM:'ဆေးဖက်ဝင်အရိပ်ရပင်။',tags:['☀️ Full Sun','💧 Low']},
+            { file:'areca-palm.jpg',en:'Areca Palm',sci:'Dypsis lutescens',mm:'အုန်းချယ်ပင် (Ohn-chel Pin)',desc:'Clumping palm, indoor/outdoor screen.',descMM:'စုဖွဲ့ပေါက်သောထန်း။',tags:['🌤️ Bright Indirect','💧 Medium']},
+            { file:'rain-tree.jpg',en:'Rain Tree',sci:'Samanea saman',mm:'မိုးသစ်ပင် (Moe-thit Pin)',desc:'Wide canopy shade tree.',descMM:'ကျယ်ပြန့်သောအရိပ်ရပင်။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'mezali.jpg',en:'Mezali',sci:'Cassia siamea',mm:'မယ်ဇလီပင် (Me-za-li Pin)',desc:'Yellow blooms, fast-growing. Edible leaves.',descMM:'အဝါရောင်ပွင့်များ၊ အရွက်စားနိုင်သည်။',tags:['☀️ Full Sun','💧 Low']},
+            { file:'star-flower.jpg',en:'Star Flower Tree',sci:'Mimusops elengi',mm:'ခရေပင် (Kha-yay Pin)',desc:'Fragrant star-shaped flowers.',descMM:'ကြယ်ပုံသဏ္ဌာန်ရနံ့သင်းသောပန်း။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'mohur.jpg',en:'Mohur Tree / Flamboyant',sci:'Delonix regia',mm:'စိန်ပန်းပင် (Sein-pan Pin)',desc:'Fiery red/orange blooms in summer.',descMM:'နွေရာသီတွင် အနီ/လိမ္မော်ရောင်တောက်ပသောပွင့်များ။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'travellers-palm.jpg',en:'Travellers Palm',sci:'Ravenala madagascariensis',mm:'ခရီးသွားထန်း (Kha-yi-thwa Htan)',desc:'Banana-like fan shape.',descMM:'ငှက်ပျောရွက်နှင့်တူသောယပ်ပုံစံ။',tags:['☀️ Full Sun','💧 High']},
+            { file:'fishtail-palm.jpg',en:'Fish Tail Palm',sci:'Caryota mitis',mm:'ငါးမြီးထန်း (Nga-mi Htan)',desc:'Unique fishtail-shaped leaflets.',descMM:'ထူးခြားသောငါးမြီးပုံအရွက်။',tags:['☀️ Full Sun','💧 Medium']}
+        ],
+        indoor: [
+            { file:'snake-plant.jpg',en:'Snake Plant',sci:'Dracaena trifasciata',mm:'မြွေလျှာပင် (Mwe-yar Pin)',desc:'Indestructible, air-purifying.',descMM:'မသေသလောက်သောအိမ်တွင်းပင်။',tags:['🏠 Indoor','💧 Low']},
+            { file:'peace-lily.jpg',en:'Peace Lily',sci:'Spathiphyllum wallisii',mm:'ငြိမ်းချမ်းရေးလီလီ',desc:'White elegant blooms. Great for offices.',descMM:'အဖြူရောင်ကြော့ရှင်းသောပန်း။',tags:['🏠 Indoor','💧 Medium']},
+            { file:'pothos.jpg',en:'Money Plant / Pothos',sci:'Epipremnum aureum',mm:'ငွေပင် (Ngwe Pin)',desc:'Trailing vine for shelves & hanging baskets.',descMM:'တွဲဆွဲထားနိုင်သောနွယ်ပင်။',tags:['🏠 Indoor','💧 Low']},
+            { file:'croton.jpg',en:'Croton',sci:'Codiaeum variegatum',mm:'ဇော်ဂျီပင် (Zaw-gyi Pin)',desc:'Colourful foliage in yellow, red, orange.',descMM:'အရောင်စုံအရွက်များ။',tags:['🏠 Indoor/Outdoor','💧 Medium']},
+            { file:'chinese-evergreen.jpg',en:'Chinese Evergreen',sci:'Aglaonema commutatum',mm:'အဂ်လော်နီးမား',desc:'Silver-green patterned leaves.',descMM:'ငွေရောင်အစိမ်းရောင်အရွက်ပုံစံ။',tags:['🏠 Indoor','💧 Low']},
+            { file:'monstera.jpg',en:'Swiss Cheese Plant',sci:'Monstera deliciosa',mm:'မွန်စတီရာ',desc:'Iconic split leaves. Statement plant.',descMM:'ထင်ရှားသောအရွက်ခွဲပုံစံ။',tags:['🏠 Indoor','💧 Medium']},
+            { file:'boston-fern.jpg',en:'Boston Fern',sci:'Nephrolepis exaltata',mm:'ဒေါင်းမြီးပင် (Daung-mi Pin)',desc:'Classic lush green fern.',descMM:'စိမ်းစိုသောရှေးရိုးအတိုင်ပင်။',tags:['🏠 Indoor','💧 High']},
+            { file:'zz-plant.jpg',en:'ZZ Plant',sci:'Zamioculcas zamiifolia',mm:'ဇီဇီပင် (ZZ Pin)',desc:'Glossy leaves, survives neglect.',descMM:'ဂရုစိုက်မှုအနည်းဆုံးလိုအပ်သည်။',tags:['🏠 Indoor','💧 Low']},
+            { file:'dracaena.jpg',en:'Dracaena (Dragon Tree)',sci:'Dracaena marginata',mm:'ဒရာစီနာ',desc:'Spiky, architectural foliage.',descMM:'ချွန်ထက်သောအရွက်ပုံစံ။',tags:['🏠 Indoor','💧 Low']},
+            { file:'spider-plant.jpg',en:'Spider Plant',sci:'Chlorophytum comosum',mm:'ပင့်ကူပင် (Pint-ku Pin)',desc:'Air-purifying, produces baby plantlets.',descMM:'လေသန့်စင်ပေးပြီး သားပေါက်များထွက်သည်။',tags:['🏠 Indoor','💧 Medium']},
+            { file:'rubber-plant.jpg',en:'Rubber Plant',sci:'Ficus elastica',mm:'ရာဘာပင် (Rubber Pin)',desc:'Large glossy leaves. Grows tall indoors.',descMM:'အရွက်ကြီးများတောက်ပသည်။',tags:['🏠 Indoor','💧 Medium']},
+            { file:'calathea.jpg',en:'Calathea (Prayer Plant)',sci:'Calathea spp.',mm:'ကလာသီယာ',desc:'Striking leaf patterns.',descMM:'ထင်ရှားသောအရွက်ပုံစံ။',tags:['🏠 Indoor','💧 High']}
+        ],
+        perennials: [
+            { file:'jasmine.jpg',en:'Arabian Jasmine',sci:'Jasminum sambac',mm:'မြတ်လေးပန်း (Myat-lay Pan)',desc:'Sweet fragrance, small white flowers.',descMM:'မွှေးကြိုင်သောအဖြူရောင်ပွင့်ငယ်များ။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'mexican-petunia.jpg',en:'Mexican Petunia',sci:'Ruellia simplex',mm:'ပုလဲပန်း (Pale Pan)',desc:'Purple/pink blooms. Fast-spreading border.',descMM:'ခရမ်း/ပန်းရောင်ပွင့်များ။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'lantana.jpg',en:'Lantana',sci:'Lantana camara',mm:'လန်တာနာ',desc:'Multi-coloured flower clusters. Drought-proof.',descMM:'အရောင်စုံပွင့်ခိုင်ငယ်များ။',tags:['☀️ Full Sun','💧 Low']},
+            { file:'coleus.jpg',en:'Coleus',sci:'Plectranthus scutellarioides',mm:'ရောင်စုံဆေးပင် (Yaung-son Say Pin)',desc:'Vivid foliage in endless colour combos.',descMM:'အရောင်စုံအရွက်များ။',tags:['🌿 Shade','💧 Medium']},
+            { file:'marigold.jpg',en:'Marigold',sci:'Tagetes erecta',mm:'ထပ်တစ်ရာပန်း (Htat-ta-yar Pan)',desc:'Golden blooms year-round. Pest repellent.',descMM:'ရွှေရောင်ပန်း။ ပိုးမွှားတားသည်။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'portulaca.jpg',en:"Moss Rose / 9 o'clock",sci:'Portulaca grandiflora',mm:'၉ နာရီပန်း (Ko-nar-yi Pan)',desc:'Succulent leaves, bright blooms.',descMM:'ရေသိုလှောင်ရွက်နှင့်တောက်ပသောပွင့်များ။',tags:['☀️ Full Sun','💧 Low']},
+            { file:'canna.jpg',en:'Canna Lily',sci:'Canna indica',mm:'ငှက်ပျောပန်းနီ (Hnget-pyaw Pan-ni)',desc:'Tropical foliage with red/yellow blooms.',descMM:'အနီ/အဝါရောင်ပွင့်များ။',tags:['☀️ Full Sun','💧 High']},
+            { file:'heliconia.jpg',en:'Heliconia',sci:'Heliconia psittacorum',mm:'ဟယ်လီကိုနီယာ',desc:'Exotic lobster-claw blooms.',descMM:'ထူးဆန်းသောပုစွန်ခြေသည်းပုံပွင့်။',tags:['☀️ Full Sun','💧 High']},
+            { file:'barleria.jpg',en:'Barleria',sci:'Barleria cristata',mm:'ဖြူခက်ပြာ (Phyu-khet-pyar)',desc:'Purple/pink or white flowers. Hardy.',descMM:'ခရမ်း/ပန်းရောင်/အဖြူပွင့်များ။',tags:['☀️ Full Sun','💧 Low']},
+            { file:'plumbago.jpg',en:'Plumbago',sci:'Plumbago auriculata',mm:'ပလမ်ဘာဂို',desc:'Sky-blue flower clusters.',descMM:'ကောင်းကင်ပြာပွင့်ခိုင်များ။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'pentas.jpg',en:'Pentas (Star Cluster)',sci:'Pentas lanceolata',mm:'ကြယ်စုပန်း (Kyal-su Pan)',desc:'Butterfly magnet. Blooms pink, red, purple.',descMM:'လိပ်ပြာများကိုဆွဲဆောင်သည်။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'euphorbia.jpg',en:'Euphorbia (Crown of Thorns)',sci:'Euphorbia milii',mm:'သရဖူဆူးပင် (Tha-ra-phu Su Pin)',desc:'Spiky succulent with colourful bracts year-round.',descMM:'ဆူးရှိသောရေသိုလှောင်ပင်။',tags:['☀️ Full Sun','💧 Low']}
+        ],
+        fence: [
+            { file:'bamboo.jpg',en:'Dwarf Bamboo (Clumping)',sci:'Bambusa multiplex',mm:'ဝါးပုပင် (Wah-pu Pin)',desc:'Non-invasive. Instant privacy screen.',descMM:'စုဖွဲ့ပေါက်သောမပြန့်သောမျိုး။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'thunbergia.jpg',en:'Clock Vine',sci:'Thunbergia grandiflora',mm:'ဆေးဒန်းနွယ် (Say-dan Nwe)',desc:'Blue/purple drooping blooms. Fast cover.',descMM:'အပြာ/ခရမ်းတွဲလျားပွင့်များ။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'morning-glory.jpg',en:'Morning Glory',sci:'Ipomoea purpurea',mm:'ကြက်မောက်နွယ် (Kyet-mauk Nwe)',desc:'Blue/purple trumpet flowers each morning.',descMM:'နံနက်တိုင်းပွင့်သောခေါင်းလောင်းပွင့်။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'clematis.jpg',en:'Clematis',sci:'Clematis spp.',mm:'ကလီမက်တစ်',desc:'Large star-shaped blooms. Trellis plant.',descMM:'ကြယ်ပုံသဏ္ဌာန်အရောင်စုံပွင့်ကြီးများ။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'asparagus.jpg',en:'Asparagus Fern',sci:'Asparagus setaceus',mm:'ကညွတ်အတိုင်ပင် (Ka-nyut A-tain Pin)',desc:'Feathery foliage. Balcony favourite.',descMM:'အမွှေးနုကဲ့သို့အရွက်များ။',tags:['🌿 Shade','💧 Medium']},
+            { file:'snake-jasmine.jpg',en:'Snake Jasmine',sci:'Rhinacanthus nasutus',mm:'မြွေမြတ်လေး (Mwe-myat-lay)',desc:'Small white flowers, medicinal leaves.',descMM:'အဖြူရောင်ပွင့်ငယ်များ၊ ဆေးဖက်ဝင်။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'vinca.jpg',en:'Vinca (Periwinkle)',sci:'Catharanthus roseus',mm:'သင်္ဘောမန်ကျည်း (Thin-baw Ma-gyi)',desc:'Pink/white blooms year-round.',descMM:'တစ်နှစ်ပတ်လုံး ပန်းရောင်/အဖြူပွင့်သည်။',tags:['☀️ Full Sun','💧 Low']},
+            { file:'clitoria.jpg',en:'Butterfly Pea',sci:'Clitoria ternatea',mm:'ပဲပုပ်ပန်း (Pe-pote Pan)',desc:'Edible blue flowers for tea.',descMM:'လက်ဖက်ရည်အတွက် စားနိုင်သောအပြာရောင်ပွင့်။',tags:['☀️ Full Sun','💧 Medium']},
+            { file:'caladium.jpg',en:'Caladium',sci:'Caladium bicolor',mm:'ကလေဒီယမ်',desc:'Heart-shaped leaves in pink, red, white.',descMM:'နှလုံးပုံအရွက်များ။',tags:['🌿 Shade','💧 High']},
+            { file:'ruellia.jpg',en:'Ruellia (Wild Petunia)',sci:'Ruellia brittoniana',mm:'ရူးလီးယား',desc:'Purple/pink bell-shaped blooms.',descMM:'ခရမ်း/ပန်းရောင်ခေါင်းလောင်းပုံပွင့်။',tags:['☀️ Full Sun','💧 Medium']}
+        ]
+    };
+
+    var sheetPrices = {};
+    var cart = JSON.parse(localStorage.getItem('ptt_cart') || '[]');
+
+    function saveCart() {
+        localStorage.setItem('ptt_cart', JSON.stringify(cart));
+        updateCartUI();
+    }
+
+    function addToCart(item) {
+        var existing = cart.find(function(c) {
+            return c.file === item.file && c.size === item.size;
         });
-        const savedLang = localStorage.getItem('ptt_lang_pref');
-        if (savedLang && (savedLang === 'en' || savedLang === 'my')) switchLanguage(savedLang);
-        const menuToggle = document.getElementById('menuToggle');
-        const navMenu = document.getElementById('navMenu');
-        if (menuToggle) menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
-        document.querySelectorAll('nav a').forEach(link => link.addEventListener('click', () => navMenu.classList.remove('active')));
+        if (existing) {
+            existing.qty += item.qty;
+        } else {
+            cart.push(item);
+        }
+        saveCart();
+        bumpCartIcon();
+        showToast('✅ Added to cart! / ဈေးခြင်းထဲထည့်ပြီးပါပြီ။');
+    }
+
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        saveCart();
+    }
+
+    function clearCart() {
+        cart = [];
+        saveCart();
+    }
+
+    function updateCartUI() {
+        var count = cart.reduce(function(s, i) { return s + i.qty; }, 0);
+        var countEl = document.getElementById('cartCount');
+        var labelEl = document.getElementById('cartLabel');
+        var checkoutCount = document.getElementById('checkoutCount');
+
+        if (count > 0) {
+            countEl.style.display = 'flex';
+            countEl.textContent = count;
+            labelEl.textContent = 'Cart (' + count + ')';
+            if (checkoutCount) checkoutCount.textContent = '(' + count + ')';
+        } else {
+            countEl.style.display = 'none';
+            labelEl.textContent = 'Cart';
+            if (checkoutCount) checkoutCount.textContent = '';
+        }
+
+        // Update cart panel
+        var cartItemsEl = document.getElementById('cartItems');
+        var cartFooter = document.getElementById('cartFooter');
+        var cartTotalEl = document.getElementById('cartTotal');
+
+        if (cart.length === 0) {
+            cartItemsEl.innerHTML = '<p class="cart-empty">Your cart is empty.<br>ဈေးခြင်းတောင်းဗလာဖြစ်နေပါသည်။</p>';
+            cartFooter.style.display = 'none';
+        } else {
+            var total = 0;
+            cartItemsEl.innerHTML = cart.map(function(item, i) {
+                var lineTotal = item.unitPrice * item.qty;
+                total += lineTotal;
+                var sizeLabel = item.size === 'small' ? 'သေး' : item.size === 'medium' ? 'လတ်' : 'ကြီး';
+                return '<div class="cart-item">' +
+                    '<div class="cart-item-info">' +
+                    '<div class="cart-item-name">' + (item.mm || item.en) + '</div>' +
+                    '<div class="cart-item-meta">' + sizeLabel + ' | Qty: ' + item.qty + ' | ' + item.unitPrice.toLocaleString() + ' Ks</div>' +
+                    '</div>' +
+                    '<div class="cart-item-price">' + lineTotal.toLocaleString() + ' Ks</div>' +
+                    '<button class="cart-item-remove" data-index="' + i + '">×</button>' +
+                    '</div>';
+            }).join('');
+            cartTotalEl.textContent = total.toLocaleString() + ' Ks';
+            cartFooter.style.display = 'block';
+
+            // Bind remove buttons
+            cartItemsEl.querySelectorAll('.cart-item-remove').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    removeFromCart(parseInt(this.dataset.index));
+                });
+            });
+        }
+
+        // Update checkout button
+        var btnCheckout = document.getElementById('btnGoCheckout');
+        if (btnCheckout) {
+            if (count > 0) {
+                btnCheckout.innerHTML = '🛒 Go to Checkout <span id="checkoutCount">(' + count + ')</span>';
+            } else {
+                btnCheckout.innerHTML = '🛒 Go to Checkout';
+            }
+        }
+        // Re-bind checkout count span
+        var cc = document.getElementById('checkoutCount');
+        if (cc && count === 0) cc.textContent = '';
+    }
+
+    function bumpCartIcon() {
+        var countEl = document.getElementById('cartCount');
+        countEl.classList.add('bump');
+        setTimeout(function() { countEl.classList.remove('bump'); }, 300);
+    }
+
+    function showToast(msg) {
+        var t = document.createElement('div');
+        t.className = 'toast';
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(function() { t.classList.add('show'); }, 100);
+        setTimeout(function() { t.classList.remove('show'); setTimeout(function() { t.remove(); }, 300); }, 2500);
+    }
+
+    function getPrice(filename) {
+        if (sheetPrices[filename]) return sheetPrices[filename].price;
+        if (DEFAULT_PRICES[filename]) return DEFAULT_PRICES[filename];
+        return 'Price on request';
+    }
+
+    function getStatus(filename) {
+        if (sheetPrices[filename]) return sheetPrices[filename].status;
+        return 'instock';
+    }
+
+    function getNote(filename) {
+        if (sheetPrices[filename] && sheetPrices[filename].note) return sheetPrices[filename].note;
+        return '';
+    }
+
+    function parsePriceRange(priceText) {
+        var m = priceText.match(/([\d,]+)\s*[-–]\s*([\d,]+)\s*Ks/);
+        if (m) return { lo: parseInt(m[1].replace(/,/g, '')), hi: parseInt(m[2].replace(/,/g, '')) };
+        var s = priceText.match(/([\d,]+)\s*Ks/);
+        var p = s ? parseInt(s[1].replace(/,/g, '')) : 0;
+        return { lo: p, hi: p };
+    }
+
+    function renderPlantCard(plant, category) {
+        var price = getPrice(plant.file);
+        var status = getStatus(plant.file);
+        var note = getNote(plant.file);
+        var soldoutClass = (status === 'soldout') ? ' soldout-card' : '';
+        var isSoldout = status === 'soldout';
+        var priceRange = parsePriceRange(price);
+        var midPrice = Math.round((priceRange.lo + priceRange.hi) / 2);
+
+        var badgeHTML = '';
+        if (plant.badge) badgeHTML = '<span class="badge ' + (plant.badgeClass || '') + '">' + plant.badge + '</span>';
+
+        var stockHTML = '';
+        var stockLabels = { instock: 'In Stock', lowstock: 'Low Stock', soldout: 'Sold Out', preorder: 'Pre‑order' };
+        if (status !== 'instock') stockHTML = '<span class="stock-badge ' + status + '">' + (stockLabels[status] || status) + '</span>';
+
+        var noteHTML = '';
+        if (note) noteHTML = '<div class="note-line">📝 ' + note + '</div>';
+
+        var orchidClass = (plant.badgeClass === 'orchid') ? ' orchid-card' : '';
+
+        var cardHTML = '<div class="plant-card' + soldoutClass + orchidClass + '" data-file="' + plant.file + '" data-en="' + plant.en + '" data-mm="' + plant.mm + '">' +
+            badgeHTML + stockHTML +
+            '<img class="plant-img" src="images/' + plant.file + '" alt="' + plant.en + '" loading="lazy">' +
+            '<div class="plant-body">' +
+            '<h3>' + plant.en + '</h3>' +
+            (plant.sci ? '<div class="sci-name">' + plant.sci + '</div>' : '') +
+            '<div class="burmese">' + plant.mm + '</div>' +
+            (plant.desc ? '<div class="desc">' + plant.desc + '</div>' : '') +
+            (plant.descMM ? '<div class="desc-mm">' + plant.descMM + '</div>' : '') +
+            (plant.tags ? '<div class="tags">' + plant.tags.map(function(t) { return '<span>' + t + '</span>'; }).join('') + '</div>' : '') +
+            '<span class="price">' + price + '</span>' +
+            noteHTML;
+
+        if (!isSoldout) {
+            cardHTML += '<div class="qty-selector">' +
+                '<button class="qty-minus" data-file="' + plant.file + '">−</button>' +
+                '<span class="qty-num" id="qty-' + plant.file.replace(/\./g, '-') + '">1</span>' +
+                '<button class="qty-plus" data-file="' + plant.file + '">+</button>' +
+                '</div>' +
+                '<button class="btn-add-cart" data-file="' + plant.file + '" data-en="' + plant.en + '" data-mm="' + plant.mm + '" data-price-lo="' + priceRange.lo + '" data-price-hi="' + priceRange.hi + '">🛒 Add to Cart</button>';
+        } else {
+            cardHTML += '<button class="btn-add-cart" disabled style="background:#ccc;cursor:not-allowed">Sold Out</button>';
+        }
+
+        cardHTML += '</div></div>';
+        return cardHTML;
+    }
+
+    function renderPotCard(pot) {
+        var price = getPrice(pot.file);
+        var status = getStatus(pot.file);
+        var note = getNote(pot.file);
+        var soldoutClass = (status === 'soldout') ? ' soldout-card' : '';
+        var isSoldout = status === 'soldout';
+        var priceRange = parsePriceRange(price);
+
+        var stockHTML = '';
+        var stockLabels = { instock: 'In Stock', lowstock: 'Low Stock', soldout: 'Sold Out', preorder: 'Pre‑order' };
+        if (status !== 'instock') stockHTML = '<span class="stock-badge ' + status + '">' + (stockLabels[status] || status) + '</span>';
+
+        var noteHTML = '';
+        if (note) noteHTML = '<div class="note-line">📝 ' + note + '</div>';
+
+        var cardHTML = '<div class="pot-card' + soldoutClass + '" data-file="' + pot.file + '" data-en="' + pot.en + '" data-mm="' + pot.mm + '">' +
+            stockHTML +
+            '<img src="images/' + pot.file + '" alt="' + pot.en + '" loading="lazy">' +
+            '<h4>' + pot.en + '</h4>' +
+            '<p class="burmese">' + pot.mm + '</p>' +
+            '<p>' + pot.desc + '</p>' +
+            '<span class="pot-price">' + price + '</span>' +
+            noteHTML;
+
+        if (!isSoldout) {
+            cardHTML += '<div class="qty-selector" style="justify-content:center;margin-top:8px">' +
+                '<button class="qty-minus" data-file="' + pot.file + '">−</button>' +
+                '<span class="qty-num" id="qty-' + pot.file.replace(/\./g, '-') + '">1</span>' +
+                '<button class="qty-plus" data-file="' + pot.file + '">+</button>' +
+                '</div>' +
+                '<button class="btn-add-cart" data-file="' + pot.file + '" data-en="' + pot.en + '" data-mm="' + pot.mm + '" data-price-lo="' + priceRange.lo + '" data-price-hi="' + priceRange.hi + '" style="margin-top:6px;width:90%">🛒 Add to Cart</button>';
+        } else {
+            cardHTML += '<button class="btn-add-cart" disabled style="background:#ccc;cursor:not-allowed;margin-top:6px;width:90%">Sold Out</button>';
+        }
+
+        cardHTML += '</div>';
+        return cardHTML;
+    }
+
+    function renderAllCards() {
+        document.getElementById('fruits-grid').innerHTML = plantData.fruits.map(function(p) { return renderPlantCard(p, 'fruits'); }).join('');
+        document.getElementById('orchids-grid').innerHTML = plantData.orchids.map(function(p) { return renderPlantCard(p, 'orchids'); }).join('');
+        document.getElementById('pots-grid').innerHTML = plantData.pots.map(renderPotCard).join('');
+        document.getElementById('shrubs-grid').innerHTML = plantData.shrubs.map(function(p) { return renderPlantCard(p, 'shrubs'); }).join('');
+        document.getElementById('trees-grid').innerHTML = plantData.trees.map(function(p) { return renderPlantCard(p, 'trees'); }).join('');
+        document.getElementById('indoor-grid').innerHTML = plantData.indoor.map(function(p) { return renderPlantCard(p, 'indoor'); }).join('');
+        document.getElementById('perennials-grid').innerHTML = plantData.perennials.map(function(p) { return renderPlantCard(p, 'perennials'); }).join('');
+        document.getElementById('fence-grid').innerHTML = plantData.fence.map(function(p) { return renderPlantCard(p, 'fence'); }).join('');
+        bindCartButtons();
+    }
+
+    function bindCartButtons() {
+        // Qty buttons
+        document.querySelectorAll('.qty-minus').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                var file = this.dataset.file;
+                var id = 'qty-' + file.replace(/\./g, '-');
+                var el = document.getElementById(id);
+                if (el) {
+                    var val = parseInt(el.textContent) || 1;
+                    if (val > 1) el.textContent = val - 1;
+                }
+            });
+        });
+        document.querySelectorAll('.qty-plus').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                var file = this.dataset.file;
+                var id = 'qty-' + file.replace(/\./g, '-');
+                var el = document.getElementById(id);
+                if (el) {
+                    var val = parseInt(el.textContent) || 1;
+                    if (val < 99) el.textContent = val + 1;
+                }
+            });
+        });
+
+        // Add to cart buttons
+        document.querySelectorAll('.btn-add-cart:not([disabled])').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var file = this.dataset.file;
+                var en = this.dataset.en;
+                var mm = this.dataset.mm;
+                var lo = parseInt(this.dataset.priceLo);
+                var hi = parseInt(this.dataset.priceHi);
+                var qtyId = 'qty-' + file.replace(/\./g, '-');
+                var qtyEl = document.getElementById(qtyId);
+                var qty = qtyEl ? parseInt(qtyEl.textContent) || 1 : 1;
+
+                // Use medium (average) price for cart
+                var unitPrice = Math.round((lo + hi) / 2);
+
+                addToCart({
+                    file: file,
+                    en: en,
+                    mm: mm,
+                    size: 'medium',
+                    qty: qty,
+                    unitPrice: unitPrice
+                });
+
+                // Flash button
+                this.classList.add('added');
+                this.textContent = '✅ Added!';
+                var self = this;
+                setTimeout(function() {
+                    self.classList.remove('added');
+                    self.textContent = '🛒 Add to Cart';
+                }, 1200);
+
+                // Reset qty
+                if (qtyEl) qtyEl.textContent = '1';
+            });
+        });
+    }
+
+    // Cart panel toggle
+    document.getElementById('btnCartIcon').addEventListener('click', function() {
+        document.getElementById('cartOverlay').classList.add('open');
+    });
+    document.getElementById('btnCartClose').addEventListener('click', function() {
+        document.getElementById('cartOverlay').classList.remove('open');
+    });
+    document.getElementById('cartOverlay').addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('open');
+    });
+    document.getElementById('btnCartClear').addEventListener('click', function() {
+        if (confirm('Clear all items from cart? / ဈေးခြင်းထဲမှအားလုံးဖျက်မည်လား။')) {
+            clearCart();
+            document.getElementById('cartOverlay').classList.remove('open');
+        }
+    });
+
+    // Transfer cart to calculator via localStorage before navigating
+    document.getElementById('btnGoCheckout').addEventListener('click', function(e) {
+        // Cart is already in localStorage as 'ptt_cart'
+        // The calculator reads 'ptt_cart' on load
+    });
+    document.getElementById('btnCartCheckout').addEventListener('click', function() {
+        // Cart is already saved
+    });
+
+    function loadPrices() {
+        var statusEl = document.getElementById('priceStatus');
+        if (!statusEl) return;
+        statusEl.textContent = '🔄 Loading prices...';
+        statusEl.className = 'price-status loading';
+
+        fetch(GOOGLE_SHEET_CSV_URL)
+            .then(function(response) {
+                if (!response.ok) throw new Error('Sheet not accessible');
+                return response.text();
+            })
+            .then(function(csvText) {
+                var rows = csvText.trim().split('\n').map(function(row) {
+                    var cols = [];
+                    var current = '';
+                    var inQuotes = false;
+                    for (var i = 0; i < row.length; i++) {
+                        var char = row.charAt(i);
+                        if (char === '"') { inQuotes = !inQuotes; }
+                        else if (char === ',' && !inQuotes) { cols.push(current.trim()); current = ''; }
+                        else { current += char; }
+                    }
+                    cols.push(current.trim());
+                    return cols;
+                });
+                sheetPrices = {};
+                for (var i = 1; i < rows.length; i++) {
+                    var filename = rows[i][0];
+                    var price = rows[i][1];
+                    var status = rows[i][2];
+                    var note = rows[i][3];
+                    if (filename && price) {
+                        sheetPrices[filename.trim()] = {
+                            price: price.trim(),
+                            status: (status || 'instock').trim().toLowerCase(),
+                            note: (note || '').trim()
+                        };
+                    }
+                }
+                var count = Object.keys(sheetPrices).length;
+                statusEl.textContent = '✅ Prices loaded: ' + count + ' items';
+                statusEl.className = 'price-status success';
+                renderAllCards();
+            })
+            .catch(function(err) {
+                console.warn('Google Sheet load failed, using defaults:', err.message);
+                statusEl.textContent = '⚠️ Using default prices';
+                statusEl.className = 'price-status error';
+                sheetPrices = {};
+                renderAllCards();
+            });
+    }
+
+    document.getElementById('sheetLink').href = GOOGLE_SHEET_CSV_URL;
+    document.getElementById('btnRefresh').addEventListener('click', loadPrices);
+
+    // Back to top
+    (function() {
+        var btn = document.getElementById('backToTop');
+        if (!btn) return;
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 500) btn.classList.add('visible');
+            else btn.classList.remove('visible');
+        });
+        btn.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
     })();
+
+    // Init
+    renderAllCards();
+    updateCartUI();
+    loadPrices();
+})();
 </script>
 </body>
 </html>
