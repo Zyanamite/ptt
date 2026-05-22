@@ -525,11 +525,11 @@ function openCheckout(){
     html+='<div class="checkout-summary" id="chkSummary"><div class="checkout-line"><span>'+(currentLang==='mm'?'စုစုပေါင်း':'Subtotal')+'</span><span>'+subtotal.toLocaleString()+' Ks</span></div><div class="checkout-line"><span>'+(currentLang==='mm'?'ပို့ဆောင်ခ':'Delivery')+'</span><span id="chkDeliveryFee">0 Ks</span></div><div class="checkout-discount" id="chkDiscount"></div><div class="checkout-line grand"><span>💰 '+(currentLang==='mm'?'စုစုပေါင်း':'Grand Total')+'</span><span id="chkGrand">'+subtotal.toLocaleString()+' Ks</span></div></div>';
 
     html+='<h3><span class="section-icon">📞</span> '+(currentLang==='mm'?'ဆက်သွယ်ရန်':'Contact')+'</h3>';
-    html+='<div class="contact-grid">';
-    html+='<a href="tel:+959123456789" class="contact-card"><div class="cc-icon">📞</div><strong>'+(currentLang==='mm'?'ဖုန်း':'Call')+'</strong></a>';
-    html+='<a href="mailto:pttlandscapeservices@gmail.com" class="contact-card"><div class="cc-icon">📧</div><strong>Email</strong></a>';
-    html+='<a href="https://m.me/yourpage" target="_blank" class="contact-card"><div class="cc-icon">💬</div><strong>Messenger</strong></a>';
-    html+='</div>';
+   html+='<div class="contact-grid">';
+html+='<a href="tel:+959123456789" class="contact-card"><div class="cc-icon">📞</div><strong>'+(currentLang==='mm'?'ဖုန်း':'Call')+'</strong></a>';
+html+='<a href="https://m.me/yourpage" target="_blank" class="contact-card"><div class="cc-icon">💬</div><strong>Messenger</strong></a>';
+html+='
+    html+='<button class="btn-act white" id="btnClearCart">🗑 '+(currentLang==='mm'?'ဖျက်မည်':'Clear Cart')+'</button>';</div>';
 
     html+='<div class="action-grid">';
     html+='<button class="btn-act primary" id="btnEmailEst">📧 '+(currentLang==='mm'?'အီးမေးလ်':'Email')+'</button>';
@@ -563,6 +563,14 @@ function openCheckout(){
             updateSummary();
         });
     });
+    document.getElementById('btnClearCart').addEventListener('click',function(){
+    if(confirm(currentLang==='mm'?'ဖျက်မှာသေချာလား။':'Clear all items?')){
+        cart=[];
+        saveCart();
+        updateCartBadge();
+        document.getElementById('checkoutOverlay').classList.remove('open');
+    }
+});
 
     // Generate Card with 2 sections
     document.getElementById('btnGenerateCard').addEventListener('click',function(){
