@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ပန်းသတင်း Landscape – Shop & Estimate</title>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --g900: #0f1f17; --g800: #1a3328; --g700: #2d5a3f; --g500: #4a7c59; --g300: #8ab89a;
@@ -25,7 +24,7 @@
 
         /* ── Top Bar ── */
         .topbar{
-            background:rgba(15,31,23,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+            background:rgba(15,31,23,0.95);backdrop-filter:blur(20px);
             color:white;padding:12px 28px;position:sticky;top:0;z-index:100;
             display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
             border-bottom:1px solid rgba(255,255,255,0.08);
@@ -74,7 +73,7 @@
         .tab-btn.popular{background:var(--gold-light);color:#6b4c10;border-color:var(--gold);font-weight:700}
         .tab-btn.popular.active{background:var(--gold);color:#3d2a00;border-color:var(--gold)}
 
-        /* ── Section ── */
+        /* ── Container ── */
         .container{max-width:1320px;margin:0 auto;padding:0 20px 60px}
         .section-title{font-size:1.5rem;font-weight:800;color:var(--g900);margin:32px 0 16px;padding-left:16px;border-left:4px solid var(--gold);letter-spacing:-0.3px}
 
@@ -135,7 +134,7 @@
         }
         .checkout-overlay.open{display:flex}
         .checkout-modal{
-            background:white;border-radius:var(--radius-lg);width:100%;max-width:800px;
+            background:white;border-radius:var(--radius-lg);width:100%;max-width:850px;
             max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-xl);animation:modalIn 0.4s ease;
         }
         @keyframes modalIn{from{opacity:0;transform:translateY(30px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -157,12 +156,21 @@
         .checkout-item-name{font-weight:600;font-size:0.9rem;color:var(--g900)}
         .checkout-item-meta{font-size:0.75rem;color:var(--gray-600)}
         .checkout-item-price{font-weight:700;color:var(--g900);white-space:nowrap}
-        .checkout-delivery{
-            background:var(--gold-light);border:2px solid var(--gold);border-radius:var(--radius);
-            padding:16px 20px;margin:16px 0;
+
+        /* Township Selector */
+        .township-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin:12px 0}
+        .township-card{
+            background:white;border:2px solid var(--gray-200);border-radius:12px;padding:12px;
+            text-align:center;cursor:pointer;transition:var(--transition);
         }
-        .checkout-delivery label{font-weight:700;color:var(--g900);display:block;margin-bottom:6px;font-size:0.85rem}
-        .checkout-delivery select{width:100%;padding:10px;border:2px solid var(--gray-200);border-radius:10px;font-family:inherit;font-size:0.9rem}
+        .township-card:hover,.township-card.selected{border-color:var(--gold);background:var(--gold-light);box-shadow:var(--shadow)}
+        .township-card .t-icon{font-size:1.5rem;margin-bottom:4px}
+        .township-card strong{display:block;font-size:0.8rem;color:var(--g900)}
+        .township-card .t-fee{font-weight:700;color:var(--gold);font-size:0.8rem}
+        .township-card .t-desc{font-size:0.65rem;color:var(--gray-600)}
+        .township-card.selected{background:var(--g700);color:white;border-color:var(--g700)}
+        .township-card.selected strong,.township-card.selected .t-fee,.township-card.selected .t-desc{color:white}
+
         .checkout-summary{
             background:var(--g50);border-radius:var(--radius);padding:20px;margin:16px 0;
         }
@@ -170,7 +178,14 @@
         .checkout-line.grand{font-size:1.2rem;font-weight:800;border-top:2px solid var(--g300);padding-top:12px;margin-top:8px;color:var(--g900)}
         .checkout-discount{color:var(--gold);font-weight:600;font-size:0.8rem;text-align:right}
 
-        /* ── Contact Cards ── */
+        /* Receipt (hidden) */
+        .receipt-hidden{position:absolute;left:-9999px;top:0;width:400px;background:white;padding:24px;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.2);font-family:'Inter',sans-serif}
+        .receipt-hidden .rec-logo{font-weight:800;font-size:1.3rem;color:var(--g900);margin-bottom:4px}
+        .receipt-hidden .rec-title{font-size:1rem;font-weight:700;color:var(--g700);margin-bottom:12px;border-bottom:2px dashed var(--g300);padding-bottom:8px}
+        .receipt-hidden .rec-item{display:flex;justify-content:space-between;font-size:0.85rem;padding:4px 0}
+        .receipt-hidden .rec-total{font-weight:800;font-size:1.1rem;border-top:2px solid var(--g300);margin-top:8px;padding-top:8px}
+        .receipt-hidden .rec-footer{font-size:0.7rem;color:var(--gray-600);margin-top:12px;text-align:center}
+
         .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:16px 0}
         .contact-card{
             background:var(--g50);border:2px solid var(--gray-200);border-radius:var(--radius);
@@ -183,7 +198,6 @@
         .contact-card p{font-size:0.72rem;color:var(--gray-600);margin-bottom:4px}
         .contact-card span{display:inline-block;background:var(--g700);color:white;padding:4px 14px;border-radius:14px;font-size:0.7rem;font-weight:600;margin-top:4px}
 
-        /* ── Action Buttons ── */
         .action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:16px 0}
         .btn-act{
             padding:14px 16px;border-radius:var(--radius-sm);font-weight:700;text-align:center;
@@ -219,7 +233,6 @@
             transition:opacity 0.3s;pointer-events:none;font-size:0.85rem;box-shadow:var(--shadow-lg);
         }
         .toast.show{opacity:1}
-
         .empty-text{text-align:center;color:#aaa;padding:20px}
 
         @media(max-width:768px){
@@ -229,8 +242,7 @@
             .checkout-modal{border-radius:var(--radius)}
             .checkout-header{border-radius:var(--radius) var(--radius) 0 0}
             .tab-btn{font-size:0.7rem;padding:7px 12px}
-            .contact-grid{grid-template-columns:repeat(2,1fr)}
-            .action-grid{grid-template-columns:repeat(2,1fr)}
+            .township-grid{grid-template-columns:repeat(2,1fr)}
         }
     </style>
 </head>
@@ -271,6 +283,15 @@
 
 <button class="back-top" id="backTop" title="Back to top">↑</button>
 
+<!-- Hidden Receipt Template -->
+<div class="receipt-hidden" id="receiptTemplate">
+    <div class="rec-logo">🌿 ပန်းသတင်း LANDSCAPE</div>
+    <div class="rec-title">Estimate / ခန့်မှန်းခြေ</div>
+    <div id="receiptItems"></div>
+    <div class="rec-total" id="receiptTotal"></div>
+    <div class="rec-footer">📞 09-123-456-789 | pttlandscapeservices@gmail.com</div>
+</div>
+
 <!-- CHECKOUT MODAL -->
 <div class="checkout-overlay" id="checkoutOverlay">
     <div class="checkout-modal">
@@ -290,8 +311,35 @@ var currentLang='en';
 var cart=JSON.parse(localStorage.getItem('ptt_cart')||'[]');
 var plantCatalogData=[],serviceCatalogData=[],currentTab='popular';
 
-var PLANTS_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vR22WF-9wb_hxPWqloOoUYxRgbcWi46lbDIw65JtHLMtMMETMzChz1pcRieoJR_nBHb210NxJzmOqDT/pub?gid=616508581&single=true&output=csv';
-var SERVICES_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vR22WF-9wb_hxPWqloOoUYxRgbcWi46lbDIw65JtHLMtMMETMzChz1pcRieoJR_nBHb210NxJzmOqDT/pub?gid=237556812&single=true&output=csv';
+var PLANTS_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vR22WF-9wb_hxPWqloOoUYxRgbcWi46lbDIw65JtHLMtMMETMzChz1pcRieoJR_nBHb210NxJzmOqDT/pubhtml?gid=616508581&single=true';
+var SERVICES_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vR22WF-9wb_hxPWqloOoUYxRgbcWi46lbDIw65JtHLMtMMETMzChz1pcRieoJR_nBHb210NxJzmOqDT/pubhtml?gid=237556812&single=true';
+
+// Township data with fees (example for Yangon)
+var townships = [
+    {nameEN:"Hlaing", nameMM:"လှိုင်", fee:3000, icon:"🏘️"},
+    {nameEN:"Kamayut", nameMM:"ကမာရွတ်", fee:3000, icon:"🏫"},
+    {nameEN:"Sanchaung", nameMM:"စမ်းချောင်း", fee:3000, icon:"🏠"},
+    {nameEN:"Dagon", nameMM:"ဒဂုံ", fee:4000, icon:"🏢"},
+    {nameEN:"Bahan", nameMM:"ဗဟန်း", fee:4000, icon:"🏛️"},
+    {nameEN:"Mayangone", nameMM:"မရမ်းကုန်း", fee:5000, icon:"🏡"},
+    {nameEN:"Insein", nameMM:"အင်းစိန်", fee:5000, icon:"🏭"},
+    {nameEN:"Mingaladon", nameMM:"မင်္ဂလာဒုံ", fee:7000, icon:"✈️"},
+    {nameEN:"North Okkalapa", nameMM:"မြောက်ဥက္ကလာပ", fee:6000, icon:"🌳"},
+    {nameEN:"South Okkalapa", nameMM:"တောင်ဥက္ကလာပ", fee:6000, icon:"🌇"},
+    {nameEN:"Thingangyun", nameMM:"သင်္ဃန်းကျွန်း", fee:5000, icon:"🕌"},
+    {nameEN:"Tamwe", nameMM:"တာမွေ", fee:4000, icon:"🏬"},
+    {nameEN:"Pazundaung", nameMM:"ပုဇွန်တောင်", fee:3000, icon:"🏗️"},
+    {nameEN:"Kyauktada", nameMM:"ကျောက်တံတား", fee:2000, icon:"🏦"},
+    {nameEN:"Lanmadaw", nameMM:"လမ်းမတော်", fee:2000, icon:"🛕"},
+    {nameEN:"Latha", nameMM:"လသာ", fee:2000, icon:"🏪"},
+    {nameEN:"Pabedan", nameMM:"ပန်းဘဲတန်း", fee:2000, icon:"🏚️"},
+    {nameEN:"Botataung", nameMM:"ဗိုလ်တထောင်", fee:3000, icon:"⚓"},
+    {nameEN:"Dala", nameMM:"ဒလ", fee:8000, icon:"⛴️"},
+    {nameEN:"Thanlyin", nameMM:"သန်လျင်", fee:10000, icon:"🌉"},
+    {nameEN:"Hlegu", nameMM:"လှည်းကူး", fee:12000, icon:"🌾"},
+    {nameEN:"Hmawbi", nameMM:"မှော်ဘီ", fee:15000, icon:"🏞️"},
+    {nameEN:"Taikkyi", nameMM:"တိုက်ကြီး", fee:18000, icon:"⛰️"}
+];
 
 function parseCSV(t){var r=[],c='',q=false;for(var i=0;i<t.length;i++){var ch=t.charAt(i);if(ch=='"')q=!q;else if(ch===','&&!q){r.push(c.trim());c='';}else c+=ch;}r.push(c.trim());return r;}
 function fetchCSV(u){return fetch(u).then(r=>r.text()).then(t=>t.trim().split('\n').map(parseCSV));}
@@ -378,66 +426,126 @@ function updateCartBadge(){
 function openCheckout(){
     if(!cart.length){showToast(currentLang==='mm'?'ဈေးခြင်းဗလာဖြစ်နေသည်':'Cart is empty');return;}
     var subtotal=cart.reduce((s,i)=>s+(i.unitPrice||0)*(i.qty||1),0);
+    var selectedTownship=null;
     var html='<h3>📋 '+(currentLang==='mm'?'ရွေးထားသောပစ္စည်းများ':'Selected Items')+'</h3>';
     cart.forEach((item,i)=>{
         var name=currentLang==='mm'?(item.nameMM||item.nameEN||item.service):(item.nameEN||item.service);
         var lt=(item.unitPrice||0)*(item.qty||1);
         html+='<div class="checkout-item"><div><div class="checkout-item-name">'+name+'</div><div class="checkout-item-meta">Qty: '+item.qty+' | '+item.unitPrice.toLocaleString()+' Ks</div></div><div class="checkout-item-price">'+lt.toLocaleString()+' Ks</div></div>';
     });
-    html+='<h3>🚚 '+(currentLang==='mm'?'ပို့ဆောင်ခ':'Delivery')+'</h3>';
-    html+='<div class="checkout-delivery"><label>'+(currentLang==='mm'?'အကွားအဝေးရွေးပါ':'Select distance')+'</label><select id="chkDelivery"><option value="0">'+(currentLang==='mm'?'ကိုယ်တိုင်လာယူ (အခမဲ့)':'Self Pickup (Free)')+'</option><option value="5000">'+(currentLang==='mm'?'အနီး ≤၅ကီလို – ၅၀၀၀ ကျပ်':'Nearby ≤5km – 5,000 Ks')+'</option><option value="15000">'+(currentLang==='mm'?'အလတ် ၅-၁၅ကီလို – ၁၅၀၀၀ ကျပ်':'Mid 5-15km – 15,000 Ks')+'</option><option value="30000">'+(currentLang==='mm'?'အဝေး ၁၅-၃၀ကီလို – ၃၀၀၀၀ ကျပ်':'Far 15-30km – 30,000 Ks')+'</option><option value="50000">'+(currentLang==='mm'?'အလွန်ဝေး ၃၀+ကီလို – ၅၀၀၀၀ ကျပ်':'Very Far 30+km – 50,000 Ks')+'</option></select></div>';
+    html+='<h3>📍 '+(currentLang==='mm'?'ပို့ဆောင်မည့်မြို့နယ်':'Delivery Township')+'</h3>';
+    html+='<p style="font-size:0.8rem;color:var(--gray-600);margin-bottom:8px">'+(currentLang==='mm'?'သင့်မြို့နယ်ကိုရွေးချယ်ပါ':'Select your township')+'</p>';
+    html+='<div class="township-grid" id="townshipGrid">';
+    townships.forEach((t,i)=>{
+        html+='<div class="township-card" data-index="'+i+'" data-fee="'+t.fee+'"><div class="t-icon">'+t.icon+'</div><strong>'+(currentLang==='mm'?t.nameMM:t.nameEN)+'</strong><div class="t-fee">'+t.fee.toLocaleString()+' Ks</div><div class="t-desc">'+(currentLang==='mm'?'ပို့ဆောင်ခ':'Delivery fee')+'</div></div>';
+    });
+    html+='</div>';
     html+='<div class="checkout-summary" id="chkSummary"><div class="checkout-line"><span>'+(currentLang==='mm'?'စုစုပေါင်း':'Subtotal')+'</span><span>'+subtotal.toLocaleString()+' Ks</span></div><div class="checkout-line"><span>'+(currentLang==='mm'?'ပို့ဆောင်ခ':'Delivery')+'</span><span id="chkDeliveryFee">0 Ks</span></div><div class="checkout-discount" id="chkDiscount"></div><div class="checkout-line grand"><span>💰 '+(currentLang==='mm'?'စုစုပေါင်း':'Grand Total')+'</span><span id="chkGrand">'+subtotal.toLocaleString()+' Ks</span></div></div>';
+
     // Contact options
     html+='<h3>📞 '+(currentLang==='mm'?'ဆက်သွယ်ရန်':'Contact Us')+'</h3>';
     html+='<div class="contact-grid">';
     html+='<a href="tel:+959123456789" class="contact-card"><div class="cc-icon">📞</div><strong>'+(currentLang==='mm'?'ဖုန်းဆက်ရန်':'Call Us')+'</strong><p>09-123-456-789</p><span>'+(currentLang==='mm'?'ခေါ်မည် →':'Call →')+'</span></a>';
     html+='<a href="mailto:pttlandscapeservices@gmail.com" class="contact-card"><div class="cc-icon">📧</div><strong>Email</strong><p>pttlandscapeservices@</p><span>'+(currentLang==='mm'?'ပို့မည် →':'Send →')+'</span></a>';
     html+='<a href="https://m.me/yourpage" target="_blank" class="contact-card"><div class="cc-icon">💬</div><strong>Messenger</strong><p>'+(currentLang==='mm'?'စာပို့ရန်':'Chat now')+'</p><span>'+(currentLang==='mm'?'စာပို့မည် →':'Chat →')+'</span></a>';
-    html+='<a href="#" onclick="navigator.clipboard.writeText(\''+(currentLang==='mm'?'၀၉၁၂၃၄၅၆၇၈၉':'09123456789')+'\');showToast(\'📋 Copied!\')" class="contact-card"><div class="cc-icon">📋</div><strong>'+(currentLang==='mm'?'နံပါတ်ကူးမည်':'Copy Number')+'</strong><p>09-123-456-789</p><span>'+(currentLang==='mm'?'ကူးမည် →':'Copy →')+'</span></a>';
+    html+='<a href="#" class="contact-card" id="btnCopyNumber"><div class="cc-icon">📋</div><strong>'+(currentLang==='mm'?'နံပါတ်ကူးမည်':'Copy Number')+'</strong><p>09-123-456-789</p><span>'+(currentLang==='mm'?'ကူးမည် →':'Copy →')+'</span></a>';
     html+='</div>';
+
     // Actions
     html+='<h3>⚡ '+(currentLang==='mm'?'လုပ်ဆောင်ချက်များ':'Actions')+'</h3>';
     html+='<div class="action-grid">';
     html+='<button class="btn-act primary" id="btnEmailEst">📧 '+(currentLang==='mm'?'အီးမေးလ်ပို့':'Email Estimate')+'</button>';
-    html+='<button class="btn-act white" id="btnSaveImg">🖼 '+(currentLang==='mm'?'ပုံသိမ်း':'Save Image')+'</button>';
-    html+='<button class="btn-act whatsapp" id="btnWA"><img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'white\'%3E%3Cpath d=\'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z\'/%3E%3C/svg%3E" style="width:18px;height:18px"> '+(currentLang==='mm'?'WhatsApp':'WhatsApp')+'</button>';
+    html+='<button class="btn-act white" id="btnGenerateCard">📸 '+(currentLang==='mm'?'ကဒ်ထုတ်မည်':'Generate Card')+'</button>';
+    html+='<button class="btn-act whatsapp" id="btnWA">📱 WhatsApp</button>';
     html+='<button class="btn-act messenger" id="btnMessenger">💬 Messenger</button>';
     html+='<button class="btn-act viber" id="btnViber">📱 Viber</button>';
     html+='<button class="btn-act gold" id="btnPrint">🖨 '+(currentLang==='mm'?'ပရင့်ထုတ်':'Print')+'</button>';
     html+='<button class="btn-act white" id="btnCopyText">📋 '+(currentLang==='mm'?'စာသားကူး':'Copy Text')+'</button>';
     html+='<button class="btn-act white" id="btnClearCart">🗑 '+(currentLang==='mm'?'ဖျက်မည်':'Clear Cart')+'</button>';
     html+='</div>';
+
     document.getElementById('checkoutBody').innerHTML=html;
-    // Bind delivery
-    var updateChk=function(){
-        var df=parseInt(document.getElementById('chkDelivery').value)||0;
-        var tot=subtotal+df,disc=tot>500000?0.10:tot>200000?0.05:0,da=Math.round(tot*disc),gt=tot-da;
-        document.getElementById('chkDeliveryFee').textContent=df?df.toLocaleString()+' Ks':(currentLang==='mm'?'အခမဲ့':'Free');
+
+    // Township selection
+    var deliveryFee=0;
+    var updateSummary=function(){
+        var tot=subtotal+deliveryFee,disc=tot>500000?0.10:tot>200000?0.05:0,da=Math.round(tot*disc),gt=tot-da;
+        document.getElementById('chkDeliveryFee').textContent=deliveryFee?deliveryFee.toLocaleString()+' Ks':(currentLang==='mm'?'အခမဲ့':'Free');
         document.getElementById('chkDiscount').textContent=disc?(currentLang==='mm'?'🎉 '+disc*100+'% လျှော့စျေး (-'+da.toLocaleString()+' Ks)':'🎉 '+disc*100+'% discount (-'+da.toLocaleString()+' Ks)'):'';
         document.getElementById('chkGrand').textContent=gt.toLocaleString()+' Ks';
     };
-    document.getElementById('chkDelivery').addEventListener('change',updateChk);updateChk();
+    document.querySelectorAll('.township-card').forEach(card=>{
+        card.addEventListener('click',function(){
+            document.querySelectorAll('.township-card').forEach(c=>c.classList.remove('selected'));
+            this.classList.add('selected');
+            deliveryFee=parseInt(this.dataset.fee);
+            selectedTownship=townships[parseInt(this.dataset.index)];
+            updateSummary();
+        });
+    });
+
     // Bind actions
-    document.getElementById('btnEmailEst').addEventListener('click',function(){var df=parseInt(document.getElementById('chkDelivery').value)||0;var tot=subtotal+df,disc=tot>500000?0.10:tot>200000?0.05:0,da=Math.round(tot*disc),gt=tot-da;var t=getCartText(df,disc,da,gt);window.location.href='mailto:pttlandscapeservices@gmail.com?subject='+encodeURIComponent('Landscape Estimate')+'&body='+encodeURIComponent(t);});
-    document.getElementById('btnSaveImg').addEventListener('click',function(){html2canvas(document.getElementById('checkoutBody'),{backgroundColor:'white',scale:2}).then(c=>{var a=document.createElement('a');a.download='estimate.png';a.href=c.toDataURL();a.click();showToast('✅ Image saved!');});});
-    document.getElementById('btnWA').addEventListener('click',function(){var df=parseInt(document.getElementById('chkDelivery').value)||0;var tot=subtotal+df,disc=tot>500000?0.10:tot>200000?0.05:0,da=Math.round(tot*disc),gt=tot-da;window.open('https://wa.me/959123456789?text='+encodeURIComponent(getCartText(df,disc,da,gt)));});
+    document.getElementById('btnEmailEst').addEventListener('click',function(){
+        var tot=subtotal+deliveryFee,disc=tot>500000?0.10:tot>200000?0.05:0,da=Math.round(tot*disc),gt=tot-da;
+        var t=buildCartText(deliveryFee,disc,da,gt,selectedTownship);
+        window.location.href='mailto:pttlandscapeservices@gmail.com?subject='+encodeURIComponent('Landscape Estimate')+'&body='+encodeURIComponent(t);
+    });
+    document.getElementById('btnGenerateCard').addEventListener('click',function(){
+        generateReceiptImage(subtotal,deliveryFee,selectedTownship);
+    });
+    document.getElementById('btnWA').addEventListener('click',function(){
+        var tot=subtotal+deliveryFee,disc=tot>500000?0.10:tot>200000?0.05:0,da=Math.round(tot*disc),gt=tot-da;
+        window.open('https://wa.me/959123456789?text='+encodeURIComponent(buildCartText(deliveryFee,disc,da,gt,selectedTownship)));
+    });
     document.getElementById('btnMessenger').addEventListener('click',function(){window.open('https://m.me/yourpage','_blank');});
     document.getElementById('btnViber').addEventListener('click',function(){window.open('viber://chat?number=%2B959123456789');});
     document.getElementById('btnPrint').addEventListener('click',function(){window.print();});
-    document.getElementById('btnCopyText').addEventListener('click',function(){var df=parseInt(document.getElementById('chkDelivery').value)||0;var tot=subtotal+df,disc=tot>500000?0.10:tot>200000?0.05:0,da=Math.round(tot*disc),gt=tot-da;navigator.clipboard.writeText(getCartText(df,disc,da,gt)).then(()=>showToast('📋 Copied!'));});
-    document.getElementById('btnClearCart').addEventListener('click',function(){if(confirm(currentLang==='mm'?'ဖျက်မှာသေချာလား။':'Clear cart?')){cart=[];saveCart();updateCartBadge();document.getElementById('checkoutOverlay').classList.remove('open');}});
+    document.getElementById('btnCopyText').addEventListener('click',function(){
+        var tot=subtotal+deliveryFee,disc=tot>500000?0.10:tot>200000?0.05:0,da=Math.round(tot*disc),gt=tot-da;
+        navigator.clipboard.writeText(buildCartText(deliveryFee,disc,da,gt,selectedTownship)).then(()=>showToast('📋 Copied!'));
+    });
+    document.getElementById('btnClearCart').addEventListener('click',function(){
+        if(confirm(currentLang==='mm'?'ဖျက်မှာသေချာလား။':'Clear cart?')){cart=[];saveCart();updateCartBadge();document.getElementById('checkoutOverlay').classList.remove('open');}
+    });
+    document.getElementById('btnCopyNumber').addEventListener('click',function(e){e.preventDefault();navigator.clipboard.writeText('09123456789').then(()=>showToast('📋 Copied!'));});
+
     document.getElementById('checkoutOverlay').classList.add('open');
 }
 
-function getCartText(df,disc,da,gt){
+function buildCartText(deliveryFee,disc,da,gt,township){
     var t='🌿 ပန်းသတင်း LANDSCAPE ESTIMATE\n'+'='.repeat(35)+'\n\n';
     cart.forEach(i=>{var n=currentLang==='mm'?(i.nameMM||i.nameEN||i.service):(i.nameEN||i.service);t+='• '+n+' ×'+i.qty+' = '+(i.unitPrice*i.qty).toLocaleString()+' Ks\n';});
     t+='\nSubtotal: '+cart.reduce((s,i)=>s+(i.unitPrice||0)*(i.qty||1),0).toLocaleString()+' Ks';
-    t+='\nDelivery: '+(df?df.toLocaleString()+' Ks':'Free');
+    if(township)t+='\nDelivery ('+(currentLang==='mm'?township.nameMM:township.nameEN)+'): '+(deliveryFee?deliveryFee.toLocaleString()+' Ks':'Free');
+    else t+='\nDelivery: '+(deliveryFee?deliveryFee.toLocaleString()+' Ks':'Free');
     if(disc)t+='\nDiscount: -'+da.toLocaleString()+' Ks';
     t+='\n💰 GRAND TOTAL: '+gt.toLocaleString()+' Ks';
     t+='\n\n📞 09-123-456-789 | pttlandscapeservices@gmail.com';
     return t;
+}
+
+function generateReceiptImage(subtotal,deliveryFee,township){
+    var receipt=document.getElementById('receiptTemplate');
+    var itemsHtml='';
+    cart.forEach(i=>{
+        var n=currentLang==='mm'?(i.nameMM||i.nameEN||i.service):(i.nameEN||i.service);
+        itemsHtml+='<div class="rec-item"><span>'+n+' ×'+i.qty+'</span><span>'+(i.unitPrice*i.qty).toLocaleString()+' Ks</span></div>';
+    });
+    document.getElementById('receiptItems').innerHTML=itemsHtml;
+    var tot=subtotal+deliveryFee,disc=tot>500000?0.10:tot>200000?0.05:0,da=Math.round(tot*disc),gt=tot-da;
+    var totalHtml='<div class="rec-item"><span>Subtotal</span><span>'+subtotal.toLocaleString()+' Ks</span></div>';
+    if(township)totalHtml+='<div class="rec-item"><span>Delivery ('+(currentLang==='mm'?township.nameMM:township.nameEN)+')</span><span>'+(deliveryFee?deliveryFee.toLocaleString()+' Ks':'Free')+'</span></div>';
+    if(disc)totalHtml+='<div class="rec-item"><span>Discount</span><span>-'+da.toLocaleString()+' Ks</span></div>';
+    totalHtml+='<div class="rec-item" style="font-weight:800;margin-top:4px"><span>GRAND TOTAL</span><span>'+gt.toLocaleString()+' Ks</span></div>';
+    document.getElementById('receiptTotal').innerHTML=totalHtml;
+
+    html2canvas(receipt,{backgroundColor:'white',scale:2}).then(canvas=>{
+        var a=document.createElement('a');
+        a.download='estimate-'+new Date().toISOString().slice(0,10)+'.png';
+        a.href=canvas.toDataURL('image/png');
+        a.click();
+        showToast('📸 Estimate card downloaded!');
+    });
 }
 
 document.getElementById('btnCartOpen').addEventListener('click',openCheckout);
