@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ပန်းသတင်း Landscape – Shop & Estimate</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --g900: #0f1f17; --g800: #1a3328; --g700: #2d5a3f; --g500: #4a7c59; --g300: #8ab89a;
+            --g100: #e8f5e9; --g50: #f4faf5; --gold: #daa520; --gold2: #f0c040; --gold-light: #fffdf5;
+            --brown: #8B4513; --cream: #fef9f0; --white: #ffffff;
+            --gray-50: #fafbf9; --gray-100: #f5f6f4; --gray-200: #e8ebe7; --gray-400: #a0a8a0;
+            --gray-600: #6b7280; --gray-800: #1e2e21;
+            --red-100: #fee2e2; --red-500: #dc2626;
+            --radius-sm: 10px; --radius: 16px; --radius-lg: 24px;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04); --shadow: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-lg: 0 12px 32px rgba(0,0,0,0.08); --shadow-xl: 0 20px 48px rgba(0,0,0,0.12);
+            --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'Inter','Noto Sans Myanmar',system-ui,sans-serif;background:var(--cream);color:var(--gray-800);line-height:1.6;min-height:100vh}
+
+        /* ── Top Bar ── */
+        .topbar{
+            background:rgba(15,31,23,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+            color:white;padding:12px 28px;position:sticky;top:0;z-index:100;
+            display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+            border-bottom:1px solid rgba(255,255,255,0.08);
+        }
+        .brand{font-weight:800;font-size:1.2rem;display:flex;align-items:center;gap:8px;letter-spacing:-0.3px}
+        .brand span{font-size:0.5rem;opacity:0.5;text-transform:uppercase;letter-spacing:2px;font-weight:500}
+        .top-actions{display:flex;align-items:center;gap:10px}
+        .lang-switch{display:flex;background:rgba(255,255,255,0.08);border-radius:22px;padding:2px}
+        .lang-btn{padding:7px 16px;border:none;cursor:pointer;font-weight:600;font-size:0.78rem;background:transparent;color:rgba(255,255,255,0.7);border-radius:20px;transition:var(--transition);font-family:inherit}
+        .lang-btn.active{background:white;color:var(--g900)}
+        .cart-btn{
+            background:var(--gold);color:#3d2a00;border:none;padding:9px 18px;border-radius:22px;
+            cursor:pointer;font-weight:700;font-size:0.85rem;position:relative;transition:var(--transition);
+            font-family:inherit;box-shadow:0 2px 8px rgba(218,165,32,0.3);
+        }
+        .cart-btn:hover{background:#e8b830;transform:translateY(-1px);box-shadow:0 4px 12px rgba(218,165,32,0.4)}
+        .cart-count{
+            position:absolute;top:-8px;right:-8px;background:var(--g900);color:white;
+            width:24px;height:24px;border-radius:50%;font-size:0.65rem;display:flex;
+            align-items:center;justify-content:center;font-weight:700;display:none;
+            border:2px solid white;
+        }
+
+        /* ── Hero ── */
+        .hero{
+            background:linear-gradient(160deg,#0a1a12 0%,#132a1e 30%,var(--g800) 60%,#1e3d2c 100%);
+            color:white;text-align:center;padding:60px 20px 50px;position:relative;overflow:hidden;
+        }
+        .hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 30% 50%,rgba(74,124,89,0.2) 0%,transparent 60%);}
+        .hero h1{font-size:2.6rem;font-weight:900;margin-bottom:8px;position:relative;z-index:1;letter-spacing:-1px}
+        .hero p{opacity:0.8;position:relative;z-index:1;font-size:1.05rem;font-weight:400;max-width:600px;margin:0 auto}
+
+        /* ── Tabs ── */
+        .tab-bar{
+            display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:20px 20px 0;
+            position:sticky;top:68px;z-index:99;background:var(--cream);
+        }
+        .tab-btn{
+            padding:10px 18px;border-radius:24px;border:none;cursor:pointer;font-weight:600;
+            font-size:0.82rem;transition:var(--transition);font-family:inherit;
+            background:white;color:var(--gray-600);border:1px solid var(--gray-200);
+            box-shadow:var(--shadow-sm);
+        }
+        .tab-btn:hover{border-color:var(--g300);color:var(--g700)}
+        .tab-btn.active{background:var(--g700);color:white;border-color:var(--g700);box-shadow:var(--shadow)}
+        .tab-btn.popular{background:var(--gold-light);color:#6b4c10;border-color:var(--gold);font-weight:700}
+        .tab-btn.popular.active{background:var(--gold);color:#3d2a00;border-color:var(--gold)}
+
+        /* ── Section ── */
+        .container{max-width:1320px;margin:0 auto;padding:0 20px 60px}
+        .section-title{font-size:1.5rem;font-weight:800;color:var(--g900);margin:32px 0 16px;padding-left:16px;border-left:4px solid var(--gold);letter-spacing:-0.3px}
+
+        /* ── Grid ── */
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;margin-bottom:28px}
+        .card{
+            background:white;border-radius:var(--radius);overflow:hidden;
+            box-shadow:var(--shadow);transition:var(--transition);display:flex;flex-direction:column;
+            position:relative;border:1px solid transparent;
+        }
+        .card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--g100)}
+        .card-img-wrap{position:relative;overflow:hidden;height:200px;background:#eef3ed}
+        .card-img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s}
+        .card:hover .card-img{transform:scale(1.05)}
+        .card-badges{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;z-index:2}
+        .badge-pop{background:var(--gold);color:#3d2a00;font-size:0.6rem;padding:4px 10px;border-radius:12px;font-weight:700}
+        .badge-stock{font-size:0.6rem;padding:4px 10px;border-radius:12px;font-weight:700;text-transform:uppercase}
+        .badge-stock.instock{background:#c8e6c9;color:#2e7d32}
+        .badge-stock.lowstock{background:#fff3e0;color:#e65100}
+        .badge-stock.soldout{background:#ffebee;color:#c62828}
+        .card-body{padding:16px;flex:1;display:flex;flex-direction:column}
+        .card-body h3{font-size:0.95rem;font-weight:700;color:var(--g900);margin-bottom:2px;line-height:1.3}
+        .card-mm{font-weight:600;color:var(--g700);font-size:0.82rem;margin-bottom:6px}
+        .card-tags{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px}
+        .card-tags span{background:var(--g100);color:var(--g700);font-size:0.6rem;padding:3px 8px;border-radius:10px;font-weight:500}
+        .card-price{font-weight:700;color:#9e5e00;background:var(--gold-light);display:inline-block;padding:6px 14px;border-radius:14px;font-size:0.85rem;margin-top:auto}
+        .card-qty{display:flex;align-items:center;gap:6px;margin-top:8px}
+        .card-qty button{width:28px;height:28px;border-radius:50%;border:2px solid var(--g300);background:white;font-weight:700;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;transition:var(--transition);color:var(--g700)}
+        .card-qty button:hover{background:var(--g100);border-color:var(--g500)}
+        .card-qty span{font-weight:600;min-width:20px;text-align:center;font-size:0.85rem}
+        .btn-add-cart{
+            background:var(--g700);color:white;border:none;padding:9px 0;border-radius:10px;
+            font-weight:600;cursor:pointer;font-size:0.82rem;margin-top:8px;width:100%;
+            transition:var(--transition);font-family:inherit;letter-spacing:-0.2px;
+        }
+        .btn-add-cart:hover{background:var(--g900);box-shadow:0 4px 12px rgba(15,31,23,0.25)}
+        .btn-add-cart.added{background:var(--gold);color:#3d2a00}
+        .soldout .card-img-wrap::after{content:'SOLD OUT';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.7);color:white;padding:8px 20px;border-radius:8px;font-weight:800;font-size:0.9rem}
+        .soldout .card-img{opacity:0.5}
+
+        /* ── Services ── */
+        .service-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:20px}
+        .s-card{
+            background:white;border:2px solid var(--gray-200);border-radius:var(--radius);padding:20px;
+            text-align:center;cursor:pointer;transition:var(--transition);
+        }
+        .s-card:hover{border-color:var(--g300);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+        .s-card .s-icon{font-size:2rem;margin-bottom:8px}
+        .s-card h3{font-size:0.9rem;font-weight:700;color:var(--g900);margin-bottom:4px}
+        .s-card .s-price{font-weight:700;color:var(--brown);font-size:0.85rem;margin-bottom:6px}
+        .s-card .s-features{font-size:0.7rem;color:var(--gray-600);margin-bottom:8px;line-height:1.4}
+        .s-card .btn-add-cart{width:auto;padding:8px 20px;display:inline-block}
+
+        /* ── CHECKOUT MODAL ── */
+        .checkout-overlay{
+            position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);
+            z-index:200;display:none;align-items:center;justify-content:center;padding:20px;
+        }
+        .checkout-overlay.open{display:flex}
+        .checkout-modal{
+            background:white;border-radius:var(--radius-lg);width:100%;max-width:800px;
+            max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-xl);animation:modalIn 0.4s ease;
+        }
+        @keyframes modalIn{from{opacity:0;transform:translateY(30px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+        .checkout-header{
+            background:linear-gradient(135deg,var(--g900),var(--g700));color:white;
+            padding:24px 28px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+            display:flex;justify-content:space-between;align-items:center;
+        }
+        .checkout-header h2{font-size:1.3rem;font-weight:800;letter-spacing:-0.3px}
+        .checkout-close{background:rgba(255,255,255,0.2);border:none;color:white;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.2rem;transition:var(--transition)}
+        .checkout-close:hover{background:rgba(255,255,255,0.3)}
+        .checkout-body{padding:28px}
+        .checkout-body h3{font-size:0.9rem;font-weight:700;color:var(--g900);margin:20px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--g100)}
+        .checkout-body h3:first-child{margin-top:0}
+        .checkout-item{
+            display:flex;justify-content:space-between;align-items:center;padding:10px 0;
+            border-bottom:1px solid var(--gray-100);gap:12px;
+        }
+        .checkout-item-name{font-weight:600;font-size:0.9rem;color:var(--g900)}
+        .checkout-item-meta{font-size:0.75rem;color:var(--gray-600)}
+        .checkout-item-price{font-weight:700;color:var(--g900);white-space:nowrap}
+        .checkout-delivery{
+            background:var(--gold-light);border:2px solid var(--gold);border-radius:var(--radius);
+            padding:16px 20px;margin:16px 0;
+        }
+        .checkout-delivery label{font-weight:700;color:var(--g900);display:block;margin-bottom:6px;font-size:0.85rem}
+        .checkout-delivery select{width:100%;padding:10px;border:2px solid var(--gray-200);border-radius:10px;font-family:inherit;font-size:0.9rem}
+        .checkout-summary{
+            background:var(--g50);border-radius:var(--radius);padding:20px;margin:16px 0;
+        }
+        .checkout-line{display:flex;justify-content:space-between;padding:4px 0;font-size:0.9rem}
+        .checkout-line.grand{font-size:1.2rem;font-weight:800;border-top:2px solid var(--g300);padding-top:12px;margin-top:8px;color:var(--g900)}
+        .checkout-discount{color:var(--gold);font-weight:600;font-size:0.8rem;text-align:right}
+
+        /* ── Contact Cards ── */
+        .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:16px 0}
+        .contact-card{
+            background:var(--g50);border:2px solid var(--gray-200);border-radius:var(--radius);
+            padding:18px 14px;text-align:center;transition:var(--transition);cursor:pointer;
+            text-decoration:none;color:inherit;display:block;
+        }
+        .contact-card:hover{border-color:var(--g300);box-shadow:var(--shadow);transform:translateY(-2px)}
+        .contact-card .cc-icon{font-size:2rem;margin-bottom:6px}
+        .contact-card strong{display:block;font-size:0.85rem;color:var(--g900);margin-bottom:2px}
+        .contact-card p{font-size:0.72rem;color:var(--gray-600);margin-bottom:4px}
+        .contact-card span{display:inline-block;background:var(--g700);color:white;padding:4px 14px;border-radius:14px;font-size:0.7rem;font-weight:600;margin-top:4px}
+
+        /* ── Action Buttons ── */
+        .action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:16px 0}
+        .btn-act{
+            padding:14px 16px;border-radius:var(--radius-sm);font-weight:700;text-align:center;
+            cursor:pointer;font-size:0.85rem;border:none;font-family:inherit;transition:var(--transition);
+            display:flex;align-items:center;justify-content:center;gap:6px;
+        }
+        .btn-act.primary{background:var(--g700);color:white}
+        .btn-act.primary:hover{background:var(--g900)}
+        .btn-act.gold{background:var(--gold);color:#3d2a00}
+        .btn-act.gold:hover{background:#e8b830}
+        .btn-act.white{background:white;color:var(--g700);border:2px solid var(--g700)}
+        .btn-act.white:hover{background:var(--g50)}
+        .btn-act.whatsapp{background:#25D366;color:white}
+        .btn-act.whatsapp:hover{background:#1fb855}
+        .btn-act.messenger{background:#0084FF;color:white}
+        .btn-act.messenger:hover{background:#0073e6}
+        .btn-act.viber{background:#7360f2;color:white}
+        .btn-act.viber:hover{background:#5e4de0}
+
+        .back-top{
+            position:fixed;bottom:28px;right:28px;width:50px;height:50px;
+            background:var(--g700);color:white;border:none;border-radius:50%;
+            font-size:1.3rem;cursor:pointer;z-index:150;box-shadow:var(--shadow-lg);
+            transition:var(--transition);display:flex;align-items:center;justify-content:center;
+            opacity:0;visibility:hidden;transform:translateY(20px);
+        }
+        .back-top.visible{opacity:1;visibility:visible;transform:translateY(0)}
+        .back-top:hover{background:var(--g900);transform:translateY(-4px)}
+
+        .toast{
+            position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--g900);
+            color:white;padding:10px 24px;border-radius:24px;z-index:300;opacity:0;
+            transition:opacity 0.3s;pointer-events:none;font-size:0.85rem;box-shadow:var(--shadow-lg);
+        }
+        .toast.show{opacity:1}
+
+        .empty-text{text-align:center;color:#aaa;padding:20px}
+
+        @media(max-width:768px){
+            .hero h1{font-size:1.7rem}
+            .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+            .card-img-wrap{height:150px}
+            .checkout-modal{border-radius:var(--radius)}
+            .checkout-header{border-radius:var(--radius) var(--radius) 0 0}
+            .tab-btn{font-size:0.7rem;padding:7px 12px}
+            .contact-grid{grid-template-columns:repeat(2,1fr)}
+            .action-grid{grid-template-columns:repeat(2,1fr)}
+        }
+    </style>
+</head>
+<body>
+<div class="topbar">
+    <div class="brand">🌿 ပန်းသတင်း <span>LANDSCAPE</span></div>
+    <div class="top-actions">
+        <div class="lang-switch">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="mm">မြန်မာ</button>
+        </div>
+        <button class="cart-btn" id="btnCartOpen">🛒 <span id="cartLabel">Cart</span><span class="cart-count" id="cartCount">0</span></button>
+    </div>
+</div>
+
+<header class="hero">
+    <h1 data-en="🌿 Plant Shop & Estimator" data-mm="🌿 အပင်ဆိုင်နှင့်ခန့်မှန်းတွက်ချက်မှု">🌿 Plant Shop & Estimator</h1>
+    <p data-en="Browse our catalog, add to cart, and get an instant estimate with delivery" data-mm="ကျွန်ုပ်တို့၏စာရင်းကိုကြည့်ရှုပါ၊ ဈေးခြင်းထဲထည့်ပါ၊ ပို့ဆောင်ခနှင့်အတူ ခန့်မှန်းခြေချက်ချင်းရယူပါ">Browse our catalog, add to cart, and get an instant estimate with delivery</p>
+</header>
+
+<div class="tab-bar" id="tabBar">
+    <button class="tab-btn popular active" data-tab="popular">🔥 Popular</button>
+    <button class="tab-btn" data-tab="all">🌿 All Plants</button>
+    <button class="tab-btn" data-tab="fruits">🍋 Fruits</button>
+    <button class="tab-btn" data-tab="orchids">🌸 Orchids</button>
+    <button class="tab-btn" data-tab="pots">🪴 Pots</button>
+    <button class="tab-btn" data-tab="shrubs">🌺 Shrubs</button>
+    <button class="tab-btn" data-tab="trees">🌳 Trees</button>
+    <button class="tab-btn" data-tab="indoor">🏠 Indoor</button>
+    <button class="tab-btn" data-tab="perennials">🌸 Perennials</button>
+    <button class="tab-btn" data-tab="fence">🌿 Fence</button>
+    <button class="tab-btn" data-tab="services">🛠️ Services</button>
+</div>
+
+<div class="container" id="contentContainer">
+    <p style="text-align:center;color:#999;padding:50px">Loading catalog from Google Sheets...</p>
+</div>
+
+<button class="back-top" id="backTop" title="Back to top">↑</button>
+
+<!-- CHECKOUT MODAL -->
+<div class="checkout-overlay" id="checkoutOverlay">
+    <div class="checkout-modal">
+        <div class="checkout-header">
+            <h2 data-en="🛒 Your Estimate" data-mm="🛒 သင့်ခန့်မှန်းခြေ">🛒 Your Estimate</h2>
+            <button class="checkout-close" id="btnCheckoutClose">×</button>
+        </div>
+        <div class="checkout-body" id="checkoutBody">
+            <p class="empty-text" data-en="Your cart is empty" data-mm="ဈေးခြင်းဗလာဖြစ်နေသည်">Your cart is empty</p>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+var currentLang='en';
+var cart=JSON.parse(localStorage.getItem('ptt_cart')||'[]');
+var plantCatalogData=[],serviceCatalogData=[],currentTab='popular';
+
+var PLANTS_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQzthDCHJACnjbjtXCzlsPQY3brcqwU4K035F_KkTVpBCj6SNwdfEJZe3S6gQgNqHnlfP6lRT0-A9mP/pub?gid=0&single=true&output=csv';
+var SERVICES_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQzthDCHJACnjbjtXCzlsPQY3brcqwU4K035F_KkTVpBCj6SNwdfEJZe3S6gQgNqHnlfP6lRT0-A9mP/pub?gid=1111111&single=true&output=csv';
+
+function parseCSV(t){var r=[],c='',q=false;for(var i=0;i<t.length;i++){var ch=t.charAt(i);if(ch=='"')q=!q;else if(ch===','&&!q){r.push(c.trim());c='';}else c+=ch;}r.push(c.trim());return r;}
+function fetchCSV(u){return fetch(u).then(r=>r.text()).then(t=>t.trim().split('\n').map(parseCSV));}
+
+function buildCatalog(d){plantCatalogData=[];for(var i=1;i<d.length;i++){var r=d[i];if(r.length<2)continue;plantCatalogData.push({type:r[0]||'Plant',file:r[1],nameEN:r[2]||'',nameMM:r[3]||r[2],catEN:r[4]||'',catMM:r[5]||r[4],priceLow:parseInt((r[6]||'0').replace(/,/g,''))||0,priceHigh:parseInt((r[7]||'0').replace(/,/g,''))||0,status:(r[8]||'instock').toLowerCase(),badge:r[9]||'',badgeClass:r[10]||'',sci:r[11]||'',descEN:r[12]||'',descMM:r[13]||'',tags:(r[14]||'').split('|').map(t=>t.trim()).filter(Boolean)});}renderContent();}
+function buildServices(d){serviceCatalogData=[];for(var i=1;i<d.length;i++){var r=d[i];if(r.length<5)continue;serviceCatalogData.push({cat:r[0]||'',nameEN:r[1]||'',nameMM:r[2]||r[1],priceLow:parseInt((r[3]||'0').replace(/,/g,''))||0,priceHigh:parseInt((r[4]||'0').replace(/,/g,''))||0,isRange:(parseInt((r[3]||'0').replace(/,/g,''))||0)!==(parseInt((r[4]||'0').replace(/,/g,''))||0),features:(r[5]||'').split('|').map(f=>f.trim()).filter(Boolean)});}renderContent();}
+
+function getPopular(){return plantCatalogData.filter(p=>p.badge&&/popular|bestseller|trending|premium/i.test(p.badge));}
+function getByCat(tab){var m={fruits:'fruit',orchids:'orchid',shrubs:'shrub',trees:'tree',indoor:'indoor',perennials:'perennial',fence:'fence'};if(tab==='pots')return plantCatalogData.filter(p=>p.type==='Pot'||/pot/i.test(p.catEN));var k=m[tab];return k?plantCatalogData.filter(p=>new RegExp(k,'i').test(p.catEN)):plantCatalogData;}
+
+function renderCard(p){
+    var dn=currentLang==='mm'?p.nameMM:p.nameEN;
+    var price=p.priceLow===p.priceHigh?p.priceLow.toLocaleString()+' Ks':p.priceLow.toLocaleString()+' – '+p.priceHigh.toLocaleString()+' Ks';
+    var sold=p.status==='soldout';
+    var h='<div class="card'+(sold?' soldout':'')+'">';
+    h+='<div class="card-img-wrap"><img class="card-img" src="images/'+p.file+'" alt="'+dn+'" loading="lazy" onerror="this.style.display=\'none\'">';
+    h+='<div class="card-badges">';
+    if(p.badge&&/popular|bestseller/i.test(p.badge))h+='<span class="badge-pop">🔥 '+p.badge+'</span>';else h+='<span></span>';
+    if(p.status!=='instock')h+='<span class="badge-stock '+p.status+'">'+p.status+'</span>';else h+='<span></span>';
+    h+='</div></div><div class="card-body"><h3>'+dn+'</h3>';
+    if(p.nameMM!==p.nameEN)h+='<div class="card-mm">'+p.nameMM+'</div>';
+    if(p.tags.length)h+='<div class="card-tags">'+p.tags.map(t=>'<span>'+t+'</span>').join('')+'</div>';
+    h+='<span class="card-price">'+price+'</span>';
+    if(!sold){
+        h+='<div class="card-qty"><button class="qty-minus">−</button><span class="qty-num">1</span><button class="qty-plus">+</button></div>';
+        h+='<button class="btn-add-cart" data-file="'+p.file+'" data-en="'+p.nameEN+'" data-mm="'+p.nameMM+'" data-lo="'+p.priceLow+'" data-hi="'+p.priceHigh+'">🛒 '+(currentLang==='mm'?'ထည့်မည်':'Add to Cart')+'</button>';
+    }
+    h+='</div></div>';return h;
+}
+
+function renderContent(){
+    var items;var html='';
+    if(currentTab==='popular'){items=getPopular();if(items.length)html+='<h2 class="section-title">🔥 '+(currentLang==='mm'?'လူကြိုက်များသော':'Popular Picks')+'</h2>';}
+    else if(currentTab==='all')items=plantCatalogData;
+    else if(currentTab==='services'){renderServices();return;}
+    else items=getByCat(currentTab);
+    if(currentTab==='all'||currentTab==='popular'){html+='<div class="grid">'+items.map(renderCard).join('')+'</div>';}
+    else{var g={};items.forEach(p=>{var c=currentLang==='mm'?p.catMM:p.catEN;if(!g[c])g[c]=[];g[c].push(p);});for(var c in g){html+='<h2 class="section-title">'+c+'</h2><div class="grid">'+g[c].map(renderCard).join('')+'</div>';}}
+    document.getElementById('contentContainer').innerHTML=html||'<p class="empty-text">No items found</p>';
+    bindButtons();window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderServices(){
+    var g={};serviceCatalogData.forEach(s=>{var c=s.cat||'Other';if(!g[c])g[c]=[];g[c].push(s);});
+    var h='<h2 class="section-title">🛠️ '+(currentLang==='mm'?'ဝန်ဆောင်မှုများ':'Services')+'</h2>';
+    for(var c in g){h+='<h3 style="margin:20px 0 10px;color:var(--g900);font-weight:700">'+c+'</h3><div class="service-grid">';
+        g[c].forEach(s=>{var n=currentLang==='mm'?s.nameMM:s.nameEN;var p=s.isRange?s.priceLow.toLocaleString()+' – '+s.priceHigh.toLocaleString()+' Ks':s.priceLow.toLocaleString()+' Ks';
+            h+='<div class="s-card"><div class="s-icon">🛠️</div><h3>'+n+'</h3><div class="s-price">'+p+'</div>';
+            if(s.features.length)h+='<div class="s-features">'+s.features.map(f=>'🌿 '+f).join('<br>')+'</div>';
+            h+='<button class="btn-add-cart" data-svc="'+s.nameEN+'" data-mm="'+s.nameMM+'" data-price="'+Math.round((s.priceLow+s.priceHigh)/2)+'">'+(currentLang==='mm'?'+ ထည့်မည်':'+ Add to Cart')+'</button></div>';});
+        h+='</div>';}
+    document.getElementById('contentContainer').innerHTML=h;bindButtons();window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function bindButtons(){
+    document.querySelectorAll('.qty-minus').forEach(b=>b.addEventListener('click',function(e){e.preventDefault();var n=this.parentElement.querySelector('.qty-num');var v=parseInt(n.textContent)||1;if(v>1)n.textContent=v-1;}));
+    document.querySelectorAll('.qty-plus').forEach(b=>b.addEventListener('click',function(e){e.preventDefault();var n=this.parentElement.querySelector('.qty-num');var v=parseInt(n.textContent)||1;if(v<99)n.textContent=v+1;}));
+    document.querySelectorAll('.btn-add-cart[data-file]').forEach(b=>b.addEventListener('click',function(){
+        var f=this.dataset.file,en=this.dataset.en,mm=this.dataset.mm,lo=parseInt(this.dataset.lo),hi=parseInt(this.dataset.hi);
+        var qty=parseInt(this.parentElement.querySelector('.qty-num').textContent)||1;
+        var unit=Math.round((lo+hi)/2);
+        var ex=cart.find(c=>c.file===f);if(ex)ex.qty+=qty;else cart.push({file:f,nameEN:en,nameMM:mm,unitPrice:unit,qty:qty,size:'medium'});
+        saveCart();updateCartBadge();showToast(currentLang==='mm'?'✅ ထည့်ပြီးပါပြီ':'✅ Added!');
+        this.classList.add('added');this.textContent='✅';var self=this;
+        setTimeout(()=>{self.classList.remove('added');self.textContent='🛒 '+(currentLang==='mm'?'ထည့်မည်':'Add to Cart');},1200);
+        this.parentElement.querySelector('.qty-num').textContent='1';
+    }));
+    document.querySelectorAll('.btn-add-cart[data-svc]').forEach(b=>b.addEventListener('click',function(){
+        var n=this.dataset.svc,mm=this.dataset.mm||n,pr=parseInt(this.dataset.price);
+        var ex=cart.find(c=>c.service===n);if(ex)ex.qty++;else cart.push({service:n,nameEN:n,nameMM:mm,unitPrice:pr,qty:1,isService:true});
+        saveCart();updateCartBadge();showToast(currentLang==='mm'?'✅ ထည့်ပြီးပါပြီ':'✅ Added!');
+    }));
+}
+
+function saveCart(){localStorage.setItem('ptt_cart',JSON.stringify(cart));}
+function updateCartBadge(){
+    var count=cart.reduce((s,i)=>s+(i.qty||1),0);
+    var ce=document.getElementById('cartCount'),le=document.getElementById('cartLabel');
+    ce.style.display=count?'flex':'none';ce.textContent=count;
+    le.textContent=(currentLang==='mm'?'ဈေးခြင်း':'Cart')+(count?' ('+count+')':'');
+}
+
+// ═══════════ CHECKOUT ═══════════
+function openCheckout(){
+    if(!cart.length){showToast(currentLang==='mm'?'ဈေးခြင်းဗလာဖြစ်နေသည်':'Cart is empty');return;}
+    var subtotal=cart.reduce((s,i)=>s+(i.unitPrice||0)*(i.qty||1),0);
+    var html='<h3>📋 '+(currentLang==='mm'?'ရွေးထားသောပစ္စည်းများ':'Selected Items')+'</h3>';
+    cart.forEach((item,i)=>{
+        var name=currentLang==='mm'?(item.nameMM||item.nameEN||item.service):(item.nameEN||item.service);
+        var lt=(item.unitPrice||0)*(item.qty||1);
+        html+='<div class="checkout-item"><div><div class="checkout-item-name">'+name+'</div><div class="checkout-item-meta">Qty: '+item.qty+' | '+item.unitPrice.toLocaleString()+' Ks</div></div><div class="checkout-item-price">'+lt.toLocaleString()+' Ks</div></div>';
+    });
+    html+='<h3>🚚 '+(currentLang==='mm'?'ပို့ဆောင်ခ':'Delivery')+'</h3>';
+    html+='<div class="checkout-delivery"><label>'+(currentLang==='mm'?'အကွားအဝေးရွေးပါ':'Select distance')+'</label><select id="chkDelivery"><option value="0">'+(currentLang==='mm'?'ကိုယ်တိုင်လာယူ (အခမဲ့)':'Self Pickup (Free)')+'</option><option value="5000">'+(currentLang==='mm'?'အနီး ≤၅ကီလို – ၅၀၀၀ ကျပ်':'Nearby ≤5km – 5,000 Ks')+'</option><option value="15000">'+(currentLang==='mm'?'အလတ် ၅-၁၅ကီလို – ၁၅၀၀၀ ကျပ်':'Mid 5-15km – 15,000 Ks')+'</option><option value="30000">'+(currentLang==='mm'?'အဝေး ၁၅-၃၀ကီလို – ၃၀၀၀၀ ကျပ်':'Far 15-30km – 30,000 Ks')+'</option><option value="50000">'+(currentLang==='mm'?'အလွန်ဝေး ၃၀+ကီလို – ၅၀၀၀၀ ကျပ်':'Very Far 30+km – 50,000 Ks')+'</option></select></div>';
+    html+='<div class="checkout-summary" id="chkSummary"><div class="checkout-line"><span>'+(currentLang==='mm'?'စုစုပေါင်း':'Subtotal')+'</span><span>'+subtotal.toLocaleString()+' Ks</span></div><div class="checkout-line"><span>'+(currentLang==='mm'?'ပို့ဆောင်ခ':'Delivery')+'</span><span id="chkDeliveryFee">0 Ks</span></div><div class="checkout-discount" id="chkDiscount"></div><div class="checkout-line grand"><span>💰 '+(currentLang==='mm'?'စုစုပေါင်း':'Grand Total')+'</span><span id="chkGrand">'+subtotal.toLocaleString()+' Ks</span></div></div>';
+    // Contact options
+    html+='<h3>📞 '+(currentLang==='mm'?'ဆက်သွယ်ရန်':'Contact Us')+'</h3>';
+    html+='<div class="contact-grid">';
+    html+='<a href="tel:+959123456789" class="contact-card"><div class="cc-icon">📞</div><strong>'+(currentLang==='mm'?'ဖုန်းဆက်ရန်':'Call Us')+'</strong><p>09-123-456-789</p><span>'+(currentLang==='mm'?'ခေါ်မည် →':'Call →')+'</span></a>';
+    html+='<a href="mailto:pttlandscapeservices@gmail.com" class="contact-card"><div class="cc-icon">📧</div><strong>Email</strong><p>pttlandscapeservices@</p><span>'+(currentLang==='mm'?'ပို့မည် →':'Send →')+'</span></a>';
+    html+='<a href="https://m.me/yourpage" target="_blank" class="contact-card"><div class="cc-icon">💬</div><strong>Messenger</strong><p>'+(currentLang==='mm'?'စာပို့ရန်':'Chat now')+'</p><span>'+(currentLang==='mm'?'စာပို့မည် →':'Chat →')+'</span></a>';
+    html+='<a href="#" onclick="navigator.clipboard.writeText(\''+(currentLang==='mm'?'၀၉၁၂၃၄၅၆၇၈၉':'09123456789')+'\');showToast(\'📋 Copied!\')" class="contact-card"><div class="cc-icon">📋</div><strong>'+(currentLang==='mm'?'နံပါတ်ကူးမည်':'Copy Number')+'</strong><p>09-123-456-789</p><span>'+(currentLang==='mm'?'ကူးမည် →':'Copy →')+'</span></a>';
+    html+='</div>';
+    // Actions
+    html+='<h3>⚡ '+(currentLang==='mm'?'လုပ်ဆောင်ချက်များ':'Actions')+'</h3>';
+    html+='<div class="action-grid">';
+    html+='<button class="btn-act primary" id="btnEmailEst">📧 '+(currentLang==='mm'?'အီးမေးလ်ပို့':'Email Estimate')+'</button>';
+    html+='<button class="btn-act white" id="btnSaveImg">🖼 '+(currentLang==='mm'?'ပုံသိမ်း':'Save Image')+'</button>';
+    html+='<button class="btn-act whatsapp" id="btnWA"><img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'white\'%3E%3Cpath d=\'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z\'/%3E%3C/svg%3E" style="width:18px;height:18px"> '+(currentLang==='mm'?'WhatsApp':'WhatsApp')+'</button>';
+    html+='<button class="btn-act messenger" id="btnMessenger">💬 Messenger</button>';
+    html+='<button class="btn-act viber" id="btnViber">📱 Viber</button>';
+    html+='<button class="btn-act gold" id="btnPrint">🖨 '+(currentLang==='mm'?'ပရင့်ထုတ်':'Print')+'</button>';
+    html+='<button class="btn-act white" id="btnCopyText">📋 '+(currentLang==='mm'?'စာသားကူး':'Copy Text')+'</button>';
+    html+='<button class="btn-act white" id="btnClearCart">🗑 '+(currentLang==='mm'?'ဖျက်မည်':'Clear Cart')+'</button>';
+    html+='</div>';
+    document.getElementById('checkoutBody').innerHTML=html;
+    // Bind delivery
+    var updateChk=function(){
+        var df=parseInt(document.getElementById('chkDelivery').value)||0;
+        var tot=subtotal+df,disc=tot>500000?0.10:tot>200000?0.05:0,da=Math.round(tot*disc),gt=tot-da;
+        document.getElementById('chkDeliveryFee').textContent=df?df.toLocaleString()+' Ks':(currentLang==='mm'?'အခမဲ့':'Free');
+        document.getElementById('chkDiscount').textContent=disc?(currentLang==='mm'?'🎉 '+disc*100+'% လျှော့စျေး (-'+da.toLocaleString()+' Ks)':'🎉 '+disc*100+'% discount (-'+da.toLocaleString()+' Ks)'):'';
+        document.getElementById('chkGrand').textContent=gt.toLocaleString()+' Ks';
+    };
+    document.getElementById('chkDelivery').addEventListener('change',updateChk);updateChk();
+    // Bind actions
+    document.getElementById('btnEmailEst').addEventListener('click',function(){var df=parseInt(document.getElementById('chkDelivery').value)||0;var tot=subtotal+df,disc=tot>500000?0.10:tot>200000?0.05:0,da=Math.round(tot*disc),gt=tot-da;var t=getCartText(df,disc,da,gt);window.location.href='mailto:pttlandscapeservices@gmail.com?subject='+encodeURIComponent('Landscape Estimate')+'&body='+encodeURIComponent(t);});
+    document.getElementById('btnSaveImg').addEventListener('click',function(){html2canvas(document.getElementById('checkoutBody'),{backgroundColor:'white',scale:2}).then(c=>{var a=document.createElement('a');a.download='estimate.png';a.href=c.toDataURL();a.click();showToast('✅ Image saved!');});});
+    document.getElementById('btnWA').addEventListener('click',function(){var df=parseInt(document.getElementById('chkDelivery').value)||0;var tot=subtotal+df,disc=tot>500000?0.10:tot>200000?0.05:0,da=Math.round(tot*disc),gt=tot-da;window.open('https://wa.me/959123456789?text='+encodeURIComponent(getCartText(df,disc,da,gt)));});
+    document.getElementById('btnMessenger').addEventListener('click',function(){window.open('https://m.me/yourpage','_blank');});
+    document.getElementById('btnViber').addEventListener('click',function(){window.open('viber://chat?number=%2B959123456789');});
+    document.getElementById('btnPrint').addEventListener('click',function(){window.print();});
+    document.getElementById('btnCopyText').addEventListener('click',function(){var df=parseInt(document.getElementById('chkDelivery').value)||0;var tot=subtotal+df,disc=tot>500000?0.10:tot>200000?0.05:0,da=Math.round(tot*disc),gt=tot-da;navigator.clipboard.writeText(getCartText(df,disc,da,gt)).then(()=>showToast('📋 Copied!'));});
+    document.getElementById('btnClearCart').addEventListener('click',function(){if(confirm(currentLang==='mm'?'ဖျက်မှာသေချာလား။':'Clear cart?')){cart=[];saveCart();updateCartBadge();document.getElementById('checkoutOverlay').classList.remove('open');}});
+    document.getElementById('checkoutOverlay').classList.add('open');
+}
+
+function getCartText(df,disc,da,gt){
+    var t='🌿 ပန်းသတင်း LANDSCAPE ESTIMATE\n'+'='.repeat(35)+'\n\n';
+    cart.forEach(i=>{var n=currentLang==='mm'?(i.nameMM||i.nameEN||i.service):(i.nameEN||i.service);t+='• '+n+' ×'+i.qty+' = '+(i.unitPrice*i.qty).toLocaleString()+' Ks\n';});
+    t+='\nSubtotal: '+cart.reduce((s,i)=>s+(i.unitPrice||0)*(i.qty||1),0).toLocaleString()+' Ks';
+    t+='\nDelivery: '+(df?df.toLocaleString()+' Ks':'Free');
+    if(disc)t+='\nDiscount: -'+da.toLocaleString()+' Ks';
+    t+='\n💰 GRAND TOTAL: '+gt.toLocaleString()+' Ks';
+    t+='\n\n📞 09-123-456-789 | pttlandscapeservices@gmail.com';
+    return t;
+}
+
+document.getElementById('btnCartOpen').addEventListener('click',openCheckout);
+document.getElementById('btnCheckoutClose').addEventListener('click',function(){document.getElementById('checkoutOverlay').classList.remove('open');});
+document.getElementById('checkoutOverlay').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
+
+// Tabs
+document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',function(){document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));this.classList.add('active');currentTab=this.dataset.tab;renderContent();}));
+
+// Back to top
+var backTop=document.getElementById('backTop');
+window.addEventListener('scroll',function(){backTop.classList.toggle('visible',window.scrollY>500);});
+backTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+// Language
+function setLang(lang){currentLang=lang;document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));document.querySelectorAll('[data-en][data-mm]').forEach(el=>{var t=el.dataset[lang];if(!t)return;if(el.tagName==='OPTION')el.textContent=t;else el.childNodes.forEach(n=>{if(n.nodeType===3)n.textContent=t;});});renderContent();updateCartBadge();}
+document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',function(){setLang(this.dataset.lang);}));
+
+function showToast(msg){var t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.classList.add('show'),100);setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300)},2500);}
+
+// Init
+Promise.all([fetchCSV(PLANTS_CSV_URL),fetchCSV(SERVICES_CSV_URL)]).then(([p,s])=>{buildCatalog(p);buildServices(s);updateCartBadge();}).catch(()=>{document.getElementById('contentContainer').innerHTML='<p style="text-align:center;color:red;padding:50px">⚠️ Could not load from Google Sheets.</p>';});
+})();
+</script>
+</body>
+</html>
