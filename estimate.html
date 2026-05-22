@@ -290,8 +290,8 @@ var currentLang='en';
 var cart=JSON.parse(localStorage.getItem('ptt_cart')||'[]');
 var plantCatalogData=[],serviceCatalogData=[],currentTab='popular';
 
-var PLANTS_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQzthDCHJACnjbjtXCzlsPQY3brcqwU4K035F_KkTVpBCj6SNwdfEJZe3S6gQgNqHnlfP6lRT0-A9mP/pub?gid=0&single=true&output=csv';
-var SERVICES_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQzthDCHJACnjbjtXCzlsPQY3brcqwU4K035F_KkTVpBCj6SNwdfEJZe3S6gQgNqHnlfP6lRT0-A9mP/pub?gid=1111111&single=true&output=csv';
+var PLANTS_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vR22WF-9wb_hxPWqloOoUYxRgbcWi46lbDIw65JtHLMtMMETMzChz1pcRieoJR_nBHb210NxJzmOqDT/pub?gid=616508581&single=true&output=csv';
+var SERVICES_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vR22WF-9wb_hxPWqloOoUYxRgbcWi46lbDIw65JtHLMtMMETMzChz1pcRieoJR_nBHb210NxJzmOqDT/pub?gid=237556812&single=true&output=csv';
 
 function parseCSV(t){var r=[],c='',q=false;for(var i=0;i<t.length;i++){var ch=t.charAt(i);if(ch=='"')q=!q;else if(ch===','&&!q){r.push(c.trim());c='';}else c+=ch;}r.push(c.trim());return r;}
 function fetchCSV(u){return fetch(u).then(r=>r.text()).then(t=>t.trim().split('\n').map(parseCSV));}
