@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>ပန်းသတင်း မြေယာအလှဆင်ခြင်း · Voucher</title>
+  <!-- html2canvas for image export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f4f7f2;
+      font-family: 'Segoe UI', 'Myanmar Text', 'Noto Sans Myanmar', system-ui, sans-serif;
+      color: #1e2b1c;
+      line-height: 1.5;
+      padding: 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .app-wrapper {
+      max-width: 1250px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* header bar */
+    .top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+      margin-bottom: 1.5rem;
+      border: 1px solid #e2e8dd;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      background: #2c5a3a;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+    }
+
+    .brand-text h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1e3b23;
+      letter-spacing: -0.2px;
+    }
+
+    .brand-text span {
+      font-size: 0.7rem;
+      color: #6b7b64;
+      font-weight: 500;
+    }
+
+    .phone-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f8faf6;
+      border-radius: 40px;
+      padding: 0.4rem 0.4rem 0.4rem 1.2rem;
+      border: 1px solid #d9e2d3;
+    }
+
+    .phone-section input {
+      border: none;
+      background: transparent;
+      font-size: 0.9rem;
+      outline: none;
+      width: 150px;
+      color: #1e2b1c;
+      font-family: inherit;
+    }
+
+    .phone-section button {
+      background: #2c5a3a;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 0.5rem 1.2rem;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+
+    .phone-section button:hover {
+      background: #1e3b23;
+    }
+
+    .saved-indicator {
+      font-size: 0.75rem;
+      color: #2c5a3a;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      gap: 4px;
+      margin-left: 6px;
+    }
+
+    .saved-indicator.show {
+      display: flex;
+    }
+
+    /* grid layout */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+      border: 1px solid #e5ecdf;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: #f9fbf7;
+      padding: 0.9rem 1.25rem;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #1e3b23;
+      border-bottom: 1px solid #e2e8dd;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .card-body {
+      padding: 1.25rem;
+    }
+
+    /* customer row */
+    .customer-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .field {
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: #5b6b52;
+      margin-bottom: 0.3rem;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      padding: 0.65rem 0.8rem;
+      border: 1.5px solid #dfe6d8;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      background: #fdfdfb;
+      transition: 0.2s;
+      font-family: inherit;
+    }
+
+    .field input:focus {
+      border-color: #2c5a3a;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(44,90,58,0.1);
+    }
+
+    /* category tabs */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 1.2rem;
+    }
+
+    .tab {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      border: 1.5px solid #dde5d4;
+      background: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #4b5a41;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .tab.active {
+      background: #2c5a3a;
+      color: white;
+      border-color: #2c5a3a;
+    }
+
+    .add-item-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: flex-end;
+      background: #f9fbf7;
+      padding: 0.9rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      border: 1px dashed #d1dbc7;
+    }
+
+    .add-item-row .field {
+      flex: 1;
+      min-width: 70px;
+    }
+
+    .add-item-row .field.name-field {
+      flex: 2;
+      min-width: 120px;
+    }
+
+    .btn-add {
+      background: #2c5a3a;
+      color: white;
+      border: none;
+      border-radius: 24px;
+      padding: 0.6rem 1.2rem;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+      font-family: inherit;
+      height: 40px;
+    }
+
+    .btn-add:hover {
+      background: #1e3b23;
+    }
+
+    .item-list {
+      list-style: none;
+      max-height: 260px;
+      overflow-y: auto;
+      border: 1px solid #e2e8dd;
+      border-radius: 10px;
+      margin-bottom: 0.8rem;
+    }
+
+    .item-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid #f0f4eb;
+      font-size: 0.82rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .item-info .name {
+      font-weight: 700;
+      color: #1e2b1c;
+    }
+
+    .item-meta {
+      font-size: 0.7rem;
+      color: #6b7b64;
+    }
+
+    .category-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: #e9f0e2;
+      color: #3c5630;
+      margin-left: 6px;
+      text-transform: uppercase;
+    }
+
+    .item-subtotal {
+      font-weight: 700;
+      color: #1e3b23;
+      white-space: nowrap;
+    }
+
+    .btn-delete {
+      background: none;
+      border: 1px solid #e0d0cd;
+      color: #a14b3f;
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+    }
+
+    .btn-delete:hover {
+      background: #fceeec;
+      border-color: #b55a4a;
+    }
+
+    .clear-btn {
+      background: transparent;
+      border: 1px solid #cdd6c5;
+      color: #5f6b55;
+      border-radius: 20px;
+      padding: 0.4rem 1rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      float: right;
+      font-family: inherit;
+    }
+
+    .totals {
+      background: #f9fbf7;
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      margin-top: 0.8rem;
+      border: 1px solid #e2e8dd;
+    }
+
+    .totals .row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      padding: 0.2rem 0;
+    }
+
+    .grand-total {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #1e3b23;
+      border-top: 2px dashed #cdd6c5;
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+    }
+
+    /* voucher preview */
+    .voucher-actions {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-save, .btn-print {
+      padding: 0.65rem 1.4rem;
+      border-radius: 24px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-family: inherit;
+    }
+
+    .btn-save {
+      background: #1e3b23;
+      color: white;
+    }
+
+    .btn-save:hover {
+      background: #122616;
+    }
+
+    .btn-print {
+      background: white;
+      border: 1.5px solid #2c5a3a;
+      color: #2c5a3a;
+    }
+
+    .voucher-card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 2rem 1.8rem 1.8rem;
+      border: 2px solid #cfdac4;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.06);
+      position: relative;
+      background-image: linear-gradient(to bottom, #ffffff, #fdfdfa);
+    }
+
+    .voucher-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: #2c5a3a;
+      border-radius: 14px 14px 0 0;
+    }
+
+    .voucher-header {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .business-name {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #1e3b23;
+      letter-spacing: 0.3px;
+    }
+
+    .voucher-phone {
+      font-weight: 700;
+      color: #2c5a3a;
+      margin-top: 0.3rem;
+      font-size: 0.9rem;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px dashed #cbd5be;
+      margin: 1rem 0;
+    }
+
+    .voucher-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #4b5b3f;
+      font-weight: 500;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.8rem;
+    }
+
+    th {
+      text-align: left;
+      background: #f4f7ef;
+      padding: 0.6rem 0.5rem;
+      font-weight: 700;
+      color: #34492b;
+      border-bottom: 2px solid #cfdac4;
+    }
+
+    td {
+      padding: 0.55rem 0.5rem;
+      border-bottom: 1px solid #ecf0e6;
+    }
+
+    .col-qty {
+      text-align: center;
+      width: 60px;
+    }
+
+    .col-price, .col-total {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .voucher-total-line {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #1e3b23;
+      margin-top: 0.5rem;
+      padding-top: 0.6rem;
+      border-top: 2px solid #cfdac4;
+    }
+
+    .voucher-footer {
+      text-align: center;
+      margin-top: 1.4rem;
+      font-size: 0.7rem;
+      color: #8a9980;
+    }
+
+    .empty-voucher {
+      text-align: center;
+      color: #b7c4ac;
+      padding: 1.5rem;
+    }
+
+    /* toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: #1e2b1c;
+      color: white;
+      padding: 0.7rem 1.6rem;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      z-index: 999;
+      transition: transform 0.3s ease;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .top-bar, .card:first-of-type, .voucher-actions, .toast { display: none !important; }
+      .main-grid { grid-template-columns: 1fr; }
+      .voucher-card { box-shadow: none; border: 2px solid #1e3b23; }
+    }
+  </style>
+</head>
+<body>
+<div class="app-wrapper">
+  <!-- header -->
+  <div class="top-bar">
+    <div class="brand">
+      <div class="brand-mark">ပ</div>
+      <div class="brand-text">
+        <h2>ပန်းသတင်း မြေယာအလှဆင်ခြင်း</h2>
+        <span>Landscape & Garden Services</span>
+      </div>
+    </div>
+    <div class="phone-section">
+      <input type="text" id="phoneInput" placeholder="ဖုန်းနံပါတ်" maxlength="20">
+      <button onclick="savePhone()">သိမ်းမယ်</button>
+      <span class="saved-indicator" id="phoneSaved">သိမ်းပြီး</span>
+    </div>
+  </div>
+
+  <!-- main grid -->
+  <div class="main-grid">
+    <!-- left input panel -->
+    <div class="card">
+      <div class="card-header">စျေးနှုန်းထည့်သွင်းရန်</div>
+      <div class="card-body">
+        <div class="customer-row">
+          <div class="field">
+            <label>ကုမ္ပဏီ / ဖောက်သည်အမည်</label>
+            <input type="text" id="customerName" placeholder="ဥပမာ - ABC" oninput="updateVoucher()">
+          </div>
+          <div class="field">
+            <label>ရက်စွဲ</label>
+            <input type="date" id="voucherDate" oninput="updateVoucher()">
+          </div>
+        </div>
+
+        <div class="tabs" id="categoryTabs">
+          <button class="tab active" data-cat="plant" onclick="setCategory('plant', this)">အပင်</button>
+          <button class="tab" data-cat="grass" onclick="setCategory('grass', this)">မြက်ခင်း</button>
+          <button class="tab" data-cat="stone" onclick="setCategory('stone', this)">ကျောက်ခင်း</button>
+          <button class="tab" data-cat="service" onclick="setCategory('service', this)">ဝန်ဆောင်မှု</button>
+        </div>
+
+        <div class="add-item-row">
+          <div class="field name-field">
+            <label>ပစ္စည်းအမည်</label>
+            <input type="text" id="itemName" placeholder="အမည်...">
+          </div>
+          <div class="field" style="max-width:70px;">
+            <label>အရေအတွက်</label>
+            <input type="number" id="itemQty" value="1" min="1">
+          </div>
+          <div class="field" style="max-width:110px;">
+            <label>တစ်ယူနစ်စျေး</label>
+            <input type="number" id="itemPrice" placeholder="0" min="0" step="100">
+          </div>
+          <button class="btn-add" onclick="addItem()">ထည့်မယ်</button>
+        </div>
+
+        <ul class="item-list" id="itemList">
+          <li class="empty-voucher">ပစ္စည်းများထည့်ပါ</li>
+        </ul>
+        <button class="clear-btn" onclick="clearAllItems()">အားလုံးဖျက်မယ်</button>
+
+        <div class="totals">
+          <div class="row"><span>ပစ္စည်းစုစုပေါင်း</span> <span id="subtotalDisplay">0 ကျပ်</span></div>
+          <div class="row grand-total"><span>စုစုပေါင်းငွေ</span> <span id="grandTotalDisplay">0 ကျပ်</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- right voucher panel -->
+    <div>
+      <div class="voucher-actions">
+        <button class="btn-save" onclick="saveAsImage()">ပုံသိမ်းမယ် (Save Image)</button>
+        <button class="btn-print" onclick="window.print()">ပရင့်ထုတ်မယ်</button>
+      </div>
+
+      <div class="voucher-card" id="voucherCard">
+        <div class="voucher-header">
+          <div class="business-name">ပန်းသတင်း မြေယာအလှဆင်ခြင်း</div>
+          <div class="voucher-phone" id="voucherPhoneDisplay">
+            ဖုန်း : <span id="voucherPhoneNumber">-</span>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="voucher-meta">
+          <span>ဖောက်သည် : <strong id="voucherCustomer">-</strong></span>
+          <span>ရက်စွဲ : <strong id="voucherDateDisplay">-</strong></span>
+        </div>
+        <div class="divider"></div>
+        <table>
+          <thead> <tr><th>ပစ္စည်းအမည်</th><th class="col-qty">အရေအတွက်</th><th class="col-price">တစ်ယူနစ်စျေး</th><th class="col-total">စုစုပေါင်း</th></tr> </thead>
+          <tbody id="voucherTableBody">
+            <tr><td colspan="4" class="empty-voucher">ပစ္စည်းများ ထည့်သွင်းပါ</td></tr>
+          </tbody>
+        </table>
+        <div class="voucher-total-line">
+          စုစုပေါင်းငွေ : <span id="voucherGrandTotal">0 ကျပ်</span>
+        </div>
+        <div class="voucher-footer">ပန်းသတင်း မြေယာအလှဆင်ခြင်း မှ ကျေးဇူးတင်ပါသည်</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  (function() {
+    // State
+    let items = [];
+    let currentCategory = 'plant';
+    const categoryNames = { plant: 'အပင်', grass: 'မြက်ခင်း', stone: 'ကျောက်ခင်း', service: 'ဝန်ဆောင်မှု' };
+
+    // DOM elements
+    const itemName = document.getElementById('itemName');
+    const itemQty = document.getElementById('itemQty');
+    const itemPrice = document.getElementById('itemPrice');
+    const itemList = document.getElementById('itemList');
+    const voucherTableBody = document.getElementById('voucherTableBody');
+    const phoneInput = document.getElementById('phoneInput');
+    const voucherPhoneSpan = document.getElementById('voucherPhoneNumber');
+
+    // Initialize
+    function init() {
+      document.getElementById('voucherDate').value = new Date().toISOString().split('T')[0];
+      const savedPhone = localStorage.getItem('landscape_voucher_phone');
+      if (savedPhone) {
+        phoneInput.value = savedPhone;
+        voucherPhoneSpan.textContent = savedPhone;
+        document.getElementById('phoneSaved').classList.add('show');
+      } else {
+        voucherPhoneSpan.textContent = 'ဖုန်းမထည့်ရသေး';
+      }
+      // load session items
+      const savedItems = sessionStorage.getItem('landscape_voucher_items');
+      if (savedItems) {
+        try { items = JSON.parse(savedItems); } catch(e){ items = []; }
+        renderItemList();
+      }
+      updateVoucher();
+
+      // Enter key support
+      itemName.addEventListener('keydown', e => { if(e.key==='Enter') itemQty.focus(); });
+      itemQty.addEventListener('keydown', e => { if(e.key==='Enter') itemPrice.focus(); });
+      itemPrice.addEventListener('keydown', e => { if(e.key==='Enter') addItem(); });
+    }
+
+    window.setCategory = function(cat, btn) {
+      currentCategory = cat;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      itemName.focus();
+    };
+
+    window.addItem = function() {
+      const name = itemName.value.trim();
+      const qty = parseInt(itemQty.value) || 1;
+      const price = parseFloat(itemPrice.value) || 0;
+      if (!name) { showToast('ပစ္စည်းအမည်ထည့်ပါ'); return; }
+      if (price <= 0) { showToast('စျေးနှုန်းထည့်ပါ'); return; }
+      items.push({ category: currentCategory, name, qty, price, subtotal: qty * price });
+      itemName.value = ''; itemQty.value = '1'; itemPrice.value = '';
+      saveItemsToSession();
+      renderItemList();
+      updateVoucher();
+      itemName.focus();
+      showToast('ထည့်သွင်းပြီး');
+    };
+
+    window.deleteItem = function(index) {
+      items.splice(index, 1);
+      saveItemsToSession();
+      renderItemList();
+      updateVoucher();
+    };
+
+    window.clearAllItems = function() {
+      if (items.length === 0) return;
+      if (confirm('အားလုံးဖျက်မှာသေချာလား')) {
+        items = [];
+        saveItemsToSession();
+        renderItemList();
+        updateVoucher();
+      }
+    };
+
+    function renderItemList() {
+      if (items.length === 0) {
+        itemList.innerHTML = '<li class="empty-voucher">ပစ္စည်းများထည့်ပါ</li>';
+        return;
+      }
+      itemList.innerHTML = items.map((item, i) => {
+        const cat = categoryNames[item.category] || item.category;
+        return `<li>
+          <div class="item-info">
+            <span class="name">${escapeHTML(item.name)}</span>
+            <span class="category-badge">${cat}</span>
+            <div class="item-meta">${item.qty} ခု × ${formatNumber(item.price)} ကျပ်</div>
+          </div>
+          <span class="item-subtotal">${formatNumber(item.subtotal)} ကျပ်</span>
+          <button class="btn-delete" onclick="deleteItem(${i})">&#x2715;</button>
+        </li>`;
+      }).join('');
+    }
+
+    window.updateVoucher = function() {
+      const customer = document.getElementById('customerName').value.trim() || '-';
+      const dateVal = document.getElementById('voucherDate').value;
+      let dateDisplay = '-';
+      if (dateVal) {
+        const d = new Date(dateVal + 'T00:00:00');
+        dateDisplay = d.toLocaleDateString('my-MM', { year:'numeric', month:'long', day:'numeric' });
+        if (dateDisplay === dateVal) { const parts = dateVal.split('-'); dateDisplay = `${parts[2]}/${parts[1]}/${parts[0]}`; }
+      }
+      document.getElementById('voucherCustomer').textContent = customer;
+      document.getElementById('voucherDateDisplay').textContent = dateDisplay;
+      const phone = phoneInput.value.trim() || localStorage.getItem('landscape_voucher_phone') || '-';
+      voucherPhoneSpan.textContent = phone;
+
+      if (items.length === 0) {
+        voucherTableBody.innerHTML = '<tr><td colspan="4" class="empty-voucher">ပစ္စည်းများ ထည့်သွင်းပါ</td></tr>';
+      } else {
+        voucherTableBody.innerHTML = items.map(item => 
+          `<tr>
+            <td>${escapeHTML(item.name)}</td>
+            <td class="col-qty">${item.qty}</td>
+            <td class="col-price">${formatNumber(item.price)} ကျပ်</td>
+            <td class="col-total">${formatNumber(item.subtotal)} ကျပ်</td>
+          </tr>`
+        ).join('');
+      }
+      const total = items.reduce((sum, i) => sum + i.subtotal, 0);
+      document.getElementById('subtotalDisplay').textContent = formatNumber(total) + ' ကျပ်';
+      document.getElementById('grandTotalDisplay').textContent = formatNumber(total) + ' ကျပ်';
+      document.getElementById('voucherGrandTotal').textContent = formatNumber(total) + ' ကျပ်';
+    };
+
+    window.savePhone = function() {
+      const phone = phoneInput.value.trim();
+      if (!phone) { showToast('ဖုန်းနံပါတ်ထည့်ပါ'); return; }
+      localStorage.setItem('landscape_voucher_phone', phone);
+      voucherPhoneSpan.textContent = phone;
+      document.getElementById('phoneSaved').classList.add('show');
+      setTimeout(() => document.getElementById('phoneSaved').classList.remove('show'), 1800);
+      updateVoucher();
+      showToast('ဖုန်းသိမ်းပြီး');
+    };
+
+    window.saveAsImage = async function() {
+      const card = document.getElementById('voucherCard');
+      const btn = document.querySelector('.btn-save');
+      const originalText = btn.textContent;
+      btn.textContent = 'လုပ်ဆောင်နေသည်...';
+      btn.disabled = true;
+      try {
+        const canvas = await html2canvas(card, { scale: 2, backgroundColor: '#ffffff', allowTaint: true, logging: false });
+        canvas.toBlob(blob => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          const cust = document.getElementById('customerName').value.trim() || 'voucher';
+          a.download = `Voucher_${cust.slice(0,20)}_${new Date().toISOString().slice(0,10)}.png`;
+          a.href = url; a.click(); URL.revokeObjectURL(url);
+          showToast('ပုံသိမ်းပြီး');
+        }, 'image/png');
+      } catch (e) {
+        showToast('ပုံသိမ်းရန်မအောင်မြင်ပါ');
+      } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    };
+
+    function saveItemsToSession() {
+      sessionStorage.setItem('landscape_voucher_items', JSON.stringify(items));
+    }
+
+    function formatNumber(num) { return Number(num).toLocaleString('en-US'); }
+    function escapeHTML(str) { const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      clearTimeout(t._hide); t._hide = setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+    phoneInput.addEventListener('input', () => {
+      voucherPhoneSpan.textContent = phoneInput.value.trim() || localStorage.getItem('landscape_voucher_phone') || '-';
+    });
+  })();
+</script>
+</body>
+</html>
