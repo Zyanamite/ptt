@@ -1,919 +1,442 @@
 <!DOCTYPE html>
 <html lang="my">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>ပန်းသတင်း မြေယာအလှဆင်ခြင်း · Voucher</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      background: #f4f7f2;
-      font-family: 'Segoe UI', 'Myanmar Text', 'Noto Sans Myanmar', system-ui, sans-serif;
-      color: #1e2b1c;
-      line-height: 1.5;
-      min-height: 100vh;
-    }
-    /* login overlay */
-    .login-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-    .login-box {
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 2rem 2rem 1.8rem;
-      width: 90%;
-      max-width: 380px;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.2);
-      text-align: center;
-    }
-    .login-box h2 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 0.3rem;
-      color: #1e3b23;
-    }
-    .login-box p {
-      font-size: 0.8rem;
-      color: #5b6b52;
-      margin-bottom: 1.2rem;
-    }
-    .login-box select, .login-box input {
-      width: 100%;
-      padding: 0.8rem 1rem;
-      border: 1.5px solid #dde5d4;
-      border-radius: 12px;
-      font-size: 0.9rem;
-      margin-bottom: 0.8rem;
-      text-align: center;
-      font-family: inherit;
-    }
-    .login-box button {
-      width: 100%;
-      background: #2c5a3a;
-      color: white;
-      border: none;
-      padding: 0.8rem;
-      border-radius: 30px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: 0.2s;
-      font-family: inherit;
-    }
-    .login-box button:hover {
-      background: #1e3b23;
-    }
-    .login-error {
-      color: #b13e3e;
-      font-size: 0.8rem;
-      margin-top: 0.5rem;
-      min-height: 1.2rem;
-    }
-    .app-main {
-      display: none;
-    }
-    .app-wrapper {
-      max-width: 1250px;
-      margin: 0 auto;
-      padding: 1.5rem;
-    }
-    .top-bar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      background: white;
-      border-radius: 14px;
-      padding: 0.8rem 1.5rem;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.04);
-      margin-bottom: 1.2rem;
-      border: 1px solid #e2e8dd;
-      gap: 0.8rem;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .brand-mark {
-      width: 34px;
-      height: 34px;
-      background: #2c5a3a;
-      border-radius: 8px;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 1rem;
-    }
-    .brand-text h2 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #1e3b23;
-    }
-    .brand-text span {
-      font-size: 0.7rem;
-      color: #6b7b64;
-    }
-    .nav-links {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-    .nav-link {
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 0.8rem;
-      cursor: pointer;
-      background: #f1f4ed;
-      border: none;
-      color: #3d4d34;
-      font-family: inherit;
-    }
-    .nav-link.active {
-      background: #2c5a3a;
-      color: white;
-    }
-    .phone-section {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: #f8faf6;
-      border-radius: 40px;
-      padding: 0.4rem 0.4rem 0.4rem 1rem;
-      border: 1px solid #d9e2d3;
-    }
-    .phone-section input {
-      border: none;
-      background: transparent;
-      font-size: 0.85rem;
-      outline: none;
-      width: 130px;
-      color: #1e2b1c;
-      font-family: inherit;
-    }
-    .phone-section button {
-      background: #2c5a3a;
-      color: white;
-      border: none;
-      border-radius: 30px;
-      padding: 0.45rem 1rem;
-      font-weight: 600;
-      font-size: 0.75rem;
-      cursor: pointer;
-      font-family: inherit;
-    }
-    .main-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      align-items: start;
-    }
-    @media (max-width: 900px) {
-      .main-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-    .card {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-      border: 1px solid #e5ecdf;
-      overflow: hidden;
-    }
-    .card-header {
-      background: #f9fbf7;
-      padding: 0.9rem 1.25rem;
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: #1e3b23;
-      border-bottom: 1px solid #e2e8dd;
-    }
-    .card-body {
-      padding: 1.25rem;
-    }
-    .field label {
-      display: block;
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      color: #5b6b52;
-      margin-bottom: 0.2rem;
-    }
-    .field input {
-      width: 100%;
-      padding: 0.65rem 0.8rem;
-      border: 1.5px solid #dfe6d8;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      background: #fdfdfb;
-      font-family: inherit;
-    }
-    .customer-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-    }
-    .customer-row .field {
-      flex: 1;
-      min-width: 130px;
-    }
-    .tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 1rem;
-    }
-    .tab {
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      border: 1.5px solid #dde5d4;
-      background: white;
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      color: #4b5a41;
-      font-family: inherit;
-    }
-    .tab.active {
-      background: #2c5a3a;
-      color: white;
-      border-color: #2c5a3a;
-    }
-    .add-item-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-      align-items: flex-end;
-      background: #f9fbf7;
-      padding: 0.9rem;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      border: 1px dashed #d1dbc7;
-    }
-    .add-item-row .field {
-      flex: 1;
-      min-width: 70px;
-    }
-    .add-item-row .field.name-field {
-      flex: 2;
-      min-width: 120px;
-    }
-    .btn-add {
-      background: #2c5a3a;
-      color: white;
-      border: none;
-      border-radius: 24px;
-      padding: 0.6rem 1.2rem;
-      font-weight: 700;
-      font-size: 0.8rem;
-      cursor: pointer;
-      white-space: nowrap;
-      font-family: inherit;
-      height: 40px;
-    }
-    .item-list {
-      list-style: none;
-      max-height: 240px;
-      overflow-y: auto;
-      border: 1px solid #e2e8dd;
-      border-radius: 10px;
-      margin-bottom: 0.8rem;
-    }
-    .item-list li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.7rem 1rem;
-      border-bottom: 1px solid #f0f4eb;
-      font-size: 0.82rem;
-      flex-wrap: wrap;
-    }
-    .item-name {
-      font-weight: 700;
-    }
-    .category-badge {
-      font-size: 0.6rem;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 12px;
-      background: #e9f0e2;
-      color: #3c5630;
-      margin-left: 6px;
-    }
-    .btn-delete {
-      background: none;
-      border: 1px solid #e0d0cd;
-      color: #a14b3f;
-      border-radius: 50%;
-      width: 26px;
-      height: 26px;
-      cursor: pointer;
-    }
-    .clear-btn {
-      background: transparent;
-      border: 1px solid #cdd6c5;
-      color: #5f6b55;
-      border-radius: 20px;
-      padding: 0.4rem 1rem;
-      font-size: 0.75rem;
-      cursor: pointer;
-      float: right;
-      font-family: inherit;
-    }
-    .totals {
-      background: #f9fbf7;
-      border-radius: 10px;
-      padding: 0.8rem 1rem;
-      margin-top: 0.8rem;
-    }
-    .voucher-card {
-      background: white;
-      border-radius: 14px;
-      padding: 2rem 1.8rem 1.8rem;
-      border: 2px solid #cfdac4;
-      position: relative;
-    }
-    .voucher-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 5px;
-      background: #2c5a3a;
-      border-radius: 14px 14px 0 0;
-    }
-    .business-name {
-      font-size: 1.3rem;
-      font-weight: 800;
-      text-align: center;
-    }
-    .voucher-phone {
-      text-align: center;
-      font-weight: 700;
-      color: #2c5a3a;
-    }
-    .divider {
-      border-top: 1px dashed #cbd5be;
-      margin: 1rem 0;
-    }
-    .voucher-meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1rem 0;
-      font-size: 0.8rem;
-    }
-    th {
-      background: #f4f7ef;
-      padding: 0.5rem;
-      text-align: left;
-    }
-    td {
-      padding: 0.5rem;
-      border-bottom: 1px solid #ecf0e6;
-    }
-    .voucher-total-line {
-      display: flex;
-      justify-content: flex-end;
-      font-weight: 800;
-      font-size: 1.1rem;
-      margin-top: 0.5rem;
-    }
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%) translateY(120px);
-      background: #1e2b1c;
-      color: white;
-      padding: 0.7rem 1.6rem;
-      border-radius: 30px;
-      z-index: 1000;
-      transition: 0.3s;
-    }
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-    }
-    .invoice-list-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.7rem 0;
-      border-bottom: 1px solid #e9efe2;
-    }
-    .hidden {
-      display: none !important;
-    }
-    .admin-settings-btn {
-      background: transparent;
-      border: 1px solid #c5cdbb;
-      color: #3d4d34;
-      border-radius: 20px;
-      padding: 0.4rem 1rem;
-      font-size: 0.75rem;
-      cursor: pointer;
-      margin-left: 0.5rem;
-    }
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1001;
-    }
-    .modal-box {
-      background: white;
-      border-radius: 16px;
-      padding: 1.5rem;
-      width: 90%;
-      max-width: 320px;
-    }
-    @media print {
-      body { background: white; }
-      .top-bar, .card:first-of-type, .voucher-actions, .toast, .login-overlay { display: none !important; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>ပန်းသတင်း မြေယာအလှဆင်ခြင်း · Voucher</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f4f7f2; font-family: 'Segoe UI', 'Myanmar Text', 'Noto Sans Myanmar', sans-serif; color: #1e2b1c; line-height: 1.5; min-height: 100vh; }
+        .login-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 999; }
+        .login-box { background: #fff; border-radius: 20px; padding: 2rem 2rem 1.8rem; width: 90%; max-width: 380px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); text-align: center; }
+        .login-box h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.3rem; color: #1e3b23; }
+        .login-box p { font-size: 0.8rem; color: #5b6b52; margin-bottom: 1.2rem; }
+        .login-box select, .login-box input { width: 100%; padding: 0.8rem 1rem; border: 1.5px solid #dde5d4; border-radius: 12px; font-size: 0.9rem; margin-bottom: 0.8rem; text-align: center; font-family: inherit; }
+        .login-box button { width: 100%; background: #2c5a3a; color: white; border: none; padding: 0.8rem; border-radius: 30px; font-weight: 700; font-size: 0.9rem; cursor: pointer; }
+        .login-error { color: #b13e3e; font-size: 0.8rem; margin-top: 0.5rem; min-height: 1.2rem; }
+        .app-main { display: none; }
+        .app-wrapper { max-width: 1250px; margin: 0 auto; padding: 1.5rem; }
+        .top-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; background: white; border-radius: 14px; padding: 0.8rem 1.5rem; box-shadow: 0 6px 18px rgba(0,0,0,0.04); margin-bottom: 1.2rem; border: 1px solid #e2e8dd; gap: 0.8rem; }
+        .brand { display: flex; align-items: center; gap: 0.5rem; }
+        .brand-mark { width: 34px; height: 34px; background: #2c5a3a; border-radius: 8px; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; }
+        .brand-text h2 { font-size: 1.1rem; font-weight: 700; color: #1e3b23; }
+        .brand-text span { font-size: 0.7rem; color: #6b7b64; }
+        .nav-links { display: flex; gap: 0.5rem; }
+        .nav-link { padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.8rem; cursor: pointer; background: #f1f4ed; border: none; color: #3d4d34; font-family: inherit; }
+        .nav-link.active { background: #2c5a3a; color: white; }
+        .phone-section { display: flex; align-items: center; gap: 8px; background: #f8faf6; border-radius: 40px; padding: 0.4rem 0.4rem 0.4rem 1rem; border: 1px solid #d9e2d3; }
+        .phone-section input { border: none; background: transparent; font-size: 0.85rem; outline: none; width: 130px; color: #1e2b1c; font-family: inherit; }
+        .phone-section button { background: #2c5a3a; color: white; border: none; border-radius: 30px; padding: 0.45rem 1rem; font-weight: 600; font-size: 0.75rem; cursor: pointer; font-family: inherit; }
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; }
+        @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
+        .card { background: white; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.04); border: 1px solid #e5ecdf; overflow: hidden; }
+        .card-header { background: #f9fbf7; padding: 0.9rem 1.25rem; font-weight: 700; font-size: 0.9rem; color: #1e3b23; border-bottom: 1px solid #e2e8dd; }
+        .card-body { padding: 1.25rem; }
+        .field label { display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #5b6b52; margin-bottom: 0.2rem; }
+        .field input { width: 100%; padding: 0.65rem 0.8rem; border: 1.5px solid #dfe6d8; border-radius: 10px; font-size: 0.85rem; background: #fdfdfb; font-family: inherit; }
+        .customer-row { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; }
+        .customer-row .field { flex: 1; min-width: 130px; }
+        .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
+        .tab { padding: 0.5rem 1rem; border-radius: 20px; border: 1.5px solid #dde5d4; background: white; font-size: 0.8rem; font-weight: 600; cursor: pointer; color: #4b5a41; font-family: inherit; }
+        .tab.active { background: #2c5a3a; color: white; border-color: #2c5a3a; }
+        .add-item-row { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: flex-end; background: #f9fbf7; padding: 0.9rem; border-radius: 12px; margin-bottom: 1rem; border: 1px dashed #d1dbc7; }
+        .add-item-row .field { flex: 1; min-width: 70px; }
+        .add-item-row .field.name-field { flex: 2; min-width: 120px; }
+        .btn-add { background: #2c5a3a; color: white; border: none; border-radius: 24px; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.8rem; cursor: pointer; white-space: nowrap; font-family: inherit; height: 40px; }
+        .item-list { list-style: none; max-height: 240px; overflow-y: auto; border: 1px solid #e2e8dd; border-radius: 10px; margin-bottom: 0.8rem; }
+        .item-list li { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 1rem; border-bottom: 1px solid #f0f4eb; font-size: 0.82rem; flex-wrap: wrap; }
+        .item-name { font-weight: 700; }
+        .category-badge { font-size: 0.6rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; background: #e9f0e2; color: #3c5630; margin-left: 6px; }
+        .btn-delete { background: none; border: 1px solid #e0d0cd; color: #a14b3f; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; }
+        .clear-btn { background: transparent; border: 1px solid #cdd6c5; color: #5f6b55; border-radius: 20px; padding: 0.4rem 1rem; font-size: 0.75rem; cursor: pointer; float: right; font-family: inherit; }
+        .totals { background: #f9fbf7; border-radius: 10px; padding: 0.8rem 1rem; margin-top: 0.8rem; }
+        .voucher-card { background: white; border-radius: 14px; padding: 2rem 1.8rem 1.8rem; border: 2px solid #cfdac4; position: relative; }
+        .voucher-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: #2c5a3a; border-radius: 14px 14px 0 0; }
+        .business-name { font-size: 1.3rem; font-weight: 800; text-align: center; }
+        .voucher-phone { text-align: center; font-weight: 700; color: #2c5a3a; }
+        .divider { border-top: 1px dashed #cbd5be; margin: 1rem 0; }
+        .voucher-meta { display: flex; justify-content: space-between; font-size: 0.8rem; }
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.8rem; }
+        th { background: #f4f7ef; padding: 0.5rem; text-align: left; }
+        td { padding: 0.5rem; border-bottom: 1px solid #ecf0e6; }
+        .voucher-total-line { display: flex; justify-content: flex-end; font-weight: 800; font-size: 1.1rem; margin-top: 0.5rem; }
+        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(120px); background: #1e2b1c; color: white; padding: 0.7rem 1.6rem; border-radius: 30px; z-index: 1000; transition: 0.3s; }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .invoice-list-item { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid #e9efe2; }
+        .hidden { display: none !important; }
+        .admin-settings-btn { background: transparent; border: 1px solid #c5cdbb; color: #3d4d34; border-radius: 20px; padding: 0.4rem 1rem; font-size: 0.75rem; cursor: pointer; margin-left: 0.5rem; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1001; }
+        .modal-box { background: white; border-radius: 16px; padding: 1.5rem; width: 90%; max-width: 320px; }
+        @media print { body { background: white; } .top-bar, .card:first-of-type, .voucher-actions, .toast, .login-overlay { display: none !important; } }
+    </style>
 </head>
 <body>
-  <!-- LOGIN OVERLAY -->
-  <div class="login-overlay" id="loginOverlay">
-    <div class="login-box">
-      <h2>ပန်းသတင်း မြေယာအလှဆင်ခြင်း</h2>
-      <p id="loginMessage">ဝင်ရန် အခန်းကဏ္ဍ နှင့် စကားဝှက်ထည့်ပါ</p>
-      <select id="roleSelect">
-        <option value="admin">Admin</option>
-        <option value="user">User</option>
-      </select>
-      <input type="password" id="passwordInput" placeholder="စကားဝှက်" autocomplete="off">
-      <button onclick="handleLogin()">ဝင်မယ်</button>
-      <div class="login-error" id="loginError"></div>
-    </div>
-  </div>
-
-  <!-- MAIN APP (hidden) -->
-  <div class="app-main" id="appMain">
-    <div class="app-wrapper">
-      <div class="top-bar">
-        <div class="brand">
-          <div class="brand-mark">ပ</div>
-          <div class="brand-text">
+    <!-- ==================== LOGIN OVERLAY ==================== -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
             <h2>ပန်းသတင်း မြေယာအလှဆင်ခြင်း</h2>
-            <span>Landscape Services</span>
-          </div>
+            <p id="loginMessage">ဝင်ရန် အခန်းကဏ္ဍ နှင့် စကားဝှက်ထည့်ပါ</p>
+            <select id="roleSelect"><option value="admin">Admin</option><option value="user">User</option></select>
+            <input type="password" id="passwordInput" placeholder="စကားဝှက်" autocomplete="off">
+            <button onclick="handleLogin()">ဝင်မယ်</button>
+            <div class="login-error" id="loginError"></div>
         </div>
-        <div class="nav-links" id="navLinks">
-          <button class="nav-link active" id="navVoucher" onclick="switchTab('voucher')">Voucher</button>
-          <button class="nav-link" id="navInvoices" onclick="switchTab('invoices')">သိမ်းထားသော ဘောက်ချာများ</button>
-        </div>
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-          <div class="phone-section">
-            <input type="text" id="phoneInput" placeholder="ဖုန်းနံပါတ်">
-            <button onclick="savePhone()">သိမ်းမယ်</button>
-          </div>
-          <button class="admin-settings-btn hidden" id="adminSettingsBtn" onclick="openAdminSettings()">ဆက်တင်</button>
-          <button class="admin-settings-btn" id="logoutBtn" onclick="logout()">ထွက်မယ်</button>
-        </div>
-      </div>
-
-      <!-- VOUCHER TAB -->
-      <div id="tabVoucher">
-        <div class="main-grid">
-          <div class="card">
-            <div class="card-header">စျေးနှုန်းထည့်သွင်းရန်</div>
-            <div class="card-body">
-              <div class="customer-row">
-                <div class="field"><label>ကုမ္ပဏီ / ဖောက်သည်</label><input type="text" id="customerName" oninput="updateVoucher()"></div>
-                <div class="field"><label>ရက်စွဲ</label><input type="date" id="voucherDate" oninput="updateVoucher()"></div>
-              </div>
-              <div class="tabs">
-                <button class="tab active" data-cat="plant" onclick="setCategory('plant', this)">အပင်</button>
-                <button class="tab" data-cat="grass" onclick="setCategory('grass', this)">မြက်ခင်း</button>
-                <button class="tab" data-cat="stone" onclick="setCategory('stone', this)">ကျောက်ခင်း</button>
-                <button class="tab" data-cat="service" onclick="setCategory('service', this)">ဝန်ဆောင်မှု</button>
-              </div>
-              <div class="add-item-row">
-                <div class="field name-field"><label>ပစ္စည်းအမည်</label><input type="text" id="itemName"></div>
-                <div class="field" style="max-width:70px"><label>အရေအတွက်</label><input type="number" id="itemQty" value="1" min="1"></div>
-                <div class="field" style="max-width:110px"><label>စျေးနှုန်း</label><input type="number" id="itemPrice" min="0" step="100"></div>
-                <button class="btn-add" onclick="addItem()">ထည့်မယ်</button>
-              </div>
-              <ul class="item-list" id="itemList"></ul>
-              <button class="clear-btn" onclick="clearAllItems()">အားလုံးဖျက်မယ်</button>
-              <div class="totals">
-                <div style="display:flex;justify-content:space-between"><span>စုစုပေါင်း</span><span id="grandTotalDisplay">0 ကျပ်</span></div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div style="margin-bottom:1rem; display:flex; gap:0.5rem;">
-              <button class="btn-add" onclick="saveInvoiceAndImage()" style="background:#1e3b23;">ပုံသိမ်းပြီး သိမ်းမယ်</button>
-              <button class="btn-add" onclick="window.print()" style="background:white; color:#2c5a3a; border:1.5px solid #2c5a3a;">ပရင့်</button>
-            </div>
-            <div class="voucher-card" id="voucherCard">
-              <div class="business-name">ပန်းသတင်း မြေယာအလှဆင်ခြင်း</div>
-              <div class="voucher-phone">ဖုန်း : <span id="voucherPhoneNumber">-</span></div>
-              <div class="divider"></div>
-              <div class="voucher-meta">
-                <span>ဖောက်သည် : <strong id="voucherCustomer">-</strong></span>
-                <span>ရက်စွဲ : <strong id="voucherDateDisplay">-</strong></span>
-              </div>
-              <div class="divider"></div>
-              <table>
-                <thead><tr><th>ပစ္စည်း</th><th>အရေအတွက်</th><th>စျေး</th><th>စုစုပေါင်း</th></tr></thead>
-                <tbody id="voucherTableBody"></tbody>
-              </table>
-              <div class="voucher-total-line">စုစုပေါင်းငွေ : <span id="voucherGrandTotal">0 ကျပ်</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- INVOICES TAB (admin only) -->
-      <div id="tabInvoices" class="hidden">
-        <div class="card">
-          <div class="card-header">သိမ်းထားသော ဘောက်ချာများ</div>
-          <div class="card-body" id="invoicesList"></div>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <!-- ADMIN SETTINGS MODAL -->
-  <div id="adminModal" class="modal-overlay hidden">
-    <div class="modal-box">
-      <h3 style="margin-bottom:1rem;">ဆက်တင်</h3>
-      <label style="font-weight:600;">User စကားဝှက် အသစ်</label>
-      <input type="password" id="newUserPassword" placeholder="စကားဝှက်အသစ်" style="width:100%; padding:0.6rem; margin:0.5rem 0;">
-      <div style="display:flex; gap:0.5rem; justify-content: flex-end;">
-        <button onclick="closeAdminModal()" style="background:#ddd; border:none; padding:0.5rem 1rem; border-radius:20px;">မလုပ်တော့</button>
-        <button onclick="setUserPassword()" style="background:#2c5a3a; color:white; border:none; padding:0.5rem 1rem; border-radius:20px;">သိမ်းမယ်</button>
-      </div>
+    <!-- ==================== MAIN APP ==================== -->
+    <div class="app-main" id="appMain">
+        <div class="app-wrapper">
+            <div class="top-bar">
+                <div class="brand">
+                    <div class="brand-mark">ပ</div>
+                    <div class="brand-text">
+                        <h2>ပန်းသတင်း မြေယာအလှဆင်ခြင်း</h2>
+                        <span>Landscape Services</span>
+                    </div>
+                </div>
+                <div class="nav-links" id="navLinks">
+                    <button class="nav-link active" id="navVoucher" onclick="switchTab('voucher')">Voucher</button>
+                    <button class="nav-link" id="navInvoices" onclick="switchTab('invoices')">သိမ်းထားသော ဘောက်ချာများ</button>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                    <div class="phone-section">
+                        <input type="text" id="phoneInput" placeholder="ဖုန်းနံပါတ်">
+                        <button onclick="savePhone()">သိမ်းမယ်</button>
+                    </div>
+                    <button class="admin-settings-btn hidden" id="adminSettingsBtn" onclick="openAdminSettings()">ဆက်တင်</button>
+                    <button class="admin-settings-btn" id="logoutBtn" onclick="logout()">ထွက်မယ်</button>
+                </div>
+            </div>
+
+            <!-- VOUCHER TAB -->
+            <div id="tabVoucher">
+                <div class="main-grid">
+                    <div class="card">
+                        <div class="card-header">စျေးနှုန်းထည့်သွင်းရန်</div>
+                        <div class="card-body">
+                            <div class="customer-row">
+                                <div class="field"><label>ကုမ္ပဏီ / ဖောက်သည်</label><input type="text" id="customerName" oninput="updateVoucher()"></div>
+                                <div class="field"><label>ရက်စွဲ</label><input type="date" id="voucherDate" oninput="updateVoucher()"></div>
+                            </div>
+                            <div class="tabs">
+                                <button class="tab active" data-cat="plant" onclick="setCategory('plant', this)">အပင်</button>
+                                <button class="tab" data-cat="grass" onclick="setCategory('grass', this)">မြက်ခင်း</button>
+                                <button class="tab" data-cat="stone" onclick="setCategory('stone', this)">ကျောက်ခင်း</button>
+                                <button class="tab" data-cat="service" onclick="setCategory('service', this)">ဝန်ဆောင်မှု</button>
+                            </div>
+                            <div class="add-item-row">
+                                <div class="field name-field"><label>ပစ္စည်းအမည်</label><input type="text" id="itemName"></div>
+                                <div class="field" style="max-width:70px"><label>အရေအတွက်</label><input type="number" id="itemQty" value="1" min="1"></div>
+                                <div class="field" style="max-width:110px"><label>စျေးနှုန်း</label><input type="number" id="itemPrice" min="0" step="100"></div>
+                                <button class="btn-add" onclick="addItem()">ထည့်မယ်</button>
+                            </div>
+                            <ul class="item-list" id="itemList"></ul>
+                            <button class="clear-btn" onclick="clearAllItems()">အားလုံးဖျက်မယ်</button>
+                            <div class="totals">
+                                <div style="display:flex;justify-content:space-between"><span>စုစုပေါင်း</span><span id="grandTotalDisplay">0 ကျပ်</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="margin-bottom:1rem; display:flex; gap:0.5rem;">
+                            <button class="btn-add" onclick="saveInvoiceToCloud()" style="background:#1e3b23;">ပုံသိမ်းပြီး Cloud သိမ်းမယ်</button>
+                            <button class="btn-add" onclick="window.print()" style="background:white; color:#2c5a3a; border:1.5px solid #2c5a3a;">ပရင့်</button>
+                        </div>
+                        <div class="voucher-card" id="voucherCard">
+                            <div class="business-name">ပန်းသတင်း မြေယာအလှဆင်ခြင်း</div>
+                            <div class="voucher-phone">ဖုန်း : <span id="voucherPhoneNumber">-</span></div>
+                            <div class="divider"></div>
+                            <div class="voucher-meta">
+                                <span>ဖောက်သည် : <strong id="voucherCustomer">-</strong></span>
+                                <span>ရက်စွဲ : <strong id="voucherDateDisplay">-</strong></span>
+                            </div>
+                            <div class="divider"></div>
+                            <table>
+                                <thead><tr><th>ပစ္စည်း</th><th>အရေအတွက်</th><th>စျေး</th><th>စုစုပေါင်း</th></tr></thead>
+                                <tbody id="voucherTableBody"></tbody>
+                            </table>
+                            <div class="voucher-total-line">စုစုပေါင်းငွေ : <span id="voucherGrandTotal">0 ကျပ်</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INVOICES TAB (admin only) -->
+            <div id="tabInvoices" class="hidden">
+                <div class="card">
+                    <div class="card-header">Cloud ပေါ်မှ ဘောက်ချာများ (Admin Only)</div>
+                    <div class="card-body" id="invoicesList"><p>Loading...</p></div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div class="toast" id="toast"></div>
+    <!-- ADMIN SETTINGS MODAL -->
+    <div id="adminModal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3 style="margin-bottom:1rem;">ဆက်တင်</h3>
+            <label style="font-weight:600;">User စကားဝှက် အသစ်</label>
+            <input type="password" id="newUserPassword" placeholder="စကားဝှက်အသစ်" style="width:100%; padding:0.6rem; margin:0.5rem 0;">
+            <div style="display:flex; gap:0.5rem; justify-content:flex-end;">
+                <button onclick="closeAdminModal()" style="background:#ddd; border:none; padding:0.5rem 1rem; border-radius:20px;">မလုပ်တော့</button>
+                <button onclick="setUserPassword()" style="background:#2c5a3a; color:white; border:none; padding:0.5rem 1rem; border-radius:20px;">သိမ်းမယ်</button>
+            </div>
+        </div>
+    </div>
 
-  <script>
-    (function() {
-      // ---------- STORAGE KEYS ----------
-      const ADMIN_PASS_KEY = 'landscape_admin_password';
-      const USER_PASS_KEY = 'landscape_user_password';
-      const PHONE_KEY = 'landscape_voucher_phone';
-      const INVOICES_KEY = 'landscape_invoices';
-      const SESSION_ROLE_KEY = 'currentRole';
+    <div class="toast" id="toast"></div>
 
-      let currentItems = [];
-      let currentCategory = 'plant';
-      let currentRole = null; // 'admin' or 'user'
+    <script>
+        // ╔══════════════════════════════════════╗
+        // ║  CONFIGURATION – PASTE YOUR URL HERE  ║
+        // ╚══════════════════════════════════════╝
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxLV3Q3COP4FGW28XALdi8hDLfZNJkMKaQ7fApa0OfbPfQ9LzyG65i3a6aD7ow5rbjR/exec'; // e.g. https://script.google.com/macros/s/XXXX/exec
+        // ═══════════════════════════════════════
 
-      // ---------- LOGIN / SESSION ----------
-      function getSavedRole() {
-        return sessionStorage.getItem(SESSION_ROLE_KEY);
-      }
+        const ADMIN_PASS_KEY = 'landscape_admin_password';
+        const USER_PASS_KEY = 'landscape_user_password';
+        const PHONE_KEY = 'landscape_voucher_phone';
+        const SESSION_ROLE_KEY = 'currentRole';
 
-      function setSessionRole(role) {
-        sessionStorage.setItem(SESSION_ROLE_KEY, role);
-        currentRole = role;
-      }
+        let currentItems = [];
+        let currentCategory = 'plant';
+        let currentRole = null;
 
-      function clearSession() {
-        sessionStorage.removeItem(SESSION_ROLE_KEY);
-        currentRole = null;
-      }
+        // ---------- LOGIN / SESSION ----------
+        function getSavedRole() { return sessionStorage.getItem(SESSION_ROLE_KEY); }
+        function setSessionRole(role) { sessionStorage.setItem(SESSION_ROLE_KEY, role); currentRole = role; }
+        function clearSession() { sessionStorage.removeItem(SESSION_ROLE_KEY); currentRole = null; }
 
-      // Check if already logged in
-      function checkExistingSession() {
-        const role = getSavedRole();
-        if (role === 'admin' || role === 'user') {
-          currentRole = role;
-          document.getElementById('loginOverlay').style.display = 'none';
-          document.getElementById('appMain').style.display = 'block';
-          applyRolePermissions();
-          initApp();
-        }
-      }
-
-      window.handleLogin = function() {
-        const role = document.getElementById('roleSelect').value;
-        const password = document.getElementById('passwordInput').value.trim();
-        const errorEl = document.getElementById('loginError');
-        errorEl.textContent = '';
-
-        if (role === 'admin') {
-          let savedAdminPass = localStorage.getItem(ADMIN_PASS_KEY);
-          if (!savedAdminPass) {
-            if (password.length < 3) {
-              errorEl.textContent = 'စကားဝှက် အနည်းဆုံး ၃လုံး';
-              return;
+        function checkExistingSession() {
+            const role = getSavedRole();
+            if (role === 'admin' || role === 'user') {
+                currentRole = role;
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('appMain').style.display = 'block';
+                applyRolePermissions();
+                initApp();
             }
-            localStorage.setItem(ADMIN_PASS_KEY, password);
-            savedAdminPass = password;
-            showToast('Admin စကားဝှက် သတ်မှတ်ပြီးပါပြီ');
-          }
-          if (password === savedAdminPass) {
-            setSessionRole('admin');
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('appMain').style.display = 'block';
-            applyRolePermissions();
-            initApp();
-          } else {
-            errorEl.textContent = 'စကားဝှက်မှားနေပါသည်';
-          }
-        } else { // user
-          const savedUserPass = localStorage.getItem(USER_PASS_KEY);
-          if (!savedUserPass) {
-            errorEl.textContent = 'User စကားဝှက် မသတ်မှတ်ရသေးပါ။ Admin ကိုဆက်သွယ်ပါ။';
-            return;
-          }
-          if (password === savedUserPass) {
-            setSessionRole('user');
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('appMain').style.display = 'block';
-            applyRolePermissions();
-            initApp();
-          } else {
-            errorEl.textContent = 'စကားဝှက်မှားနေပါသည်';
-          }
         }
-      };
 
-      window.logout = function() {
-        clearSession();
-        document.getElementById('appMain').style.display = 'none';
-        document.getElementById('loginOverlay').style.display = 'flex';
-        document.getElementById('passwordInput').value = '';
-        document.getElementById('loginError').textContent = '';
-      };
-
-      function applyRolePermissions() {
-        const isAdmin = (currentRole === 'admin');
-        // Show/hide invoices nav button
-        const invoicesNav = document.getElementById('navInvoices');
-        if (isAdmin) {
-          invoicesNav.classList.remove('hidden');
-          document.getElementById('adminSettingsBtn').classList.remove('hidden');
-        } else {
-          invoicesNav.classList.add('hidden');
-          document.getElementById('adminSettingsBtn').classList.add('hidden');
-          // If currently on invoices tab, switch back to voucher
-          if (!document.getElementById('tabInvoices').classList.contains('hidden')) {
-            switchTab('voucher');
-          }
-        }
-      }
-
-      // ---------- INIT APP ----------
-      function initApp() {
-        document.getElementById('voucherDate').value = new Date().toISOString().split('T')[0];
-        const savedPhone = localStorage.getItem(PHONE_KEY);
-        if (savedPhone) {
-          document.getElementById('phoneInput').value = savedPhone;
-          document.getElementById('voucherPhoneNumber').textContent = savedPhone;
-        }
-        renderItemList();
-        updateVoucher();
-        if (currentRole === 'admin') {
-          renderInvoicesList();
-        }
-        document.getElementById('itemName').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('itemQty').focus(); });
-        document.getElementById('itemQty').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('itemPrice').focus(); });
-        document.getElementById('itemPrice').addEventListener('keydown', e => { if(e.key==='Enter') addItem(); });
-      }
-
-      // ---------- TAB SWITCH ----------
-      window.switchTab = function(tab) {
-        document.getElementById('tabVoucher').classList.add('hidden');
-        document.getElementById('tabInvoices').classList.add('hidden');
-        document.getElementById('navVoucher').classList.remove('active');
-        document.getElementById('navInvoices').classList.remove('active');
-        if (tab === 'voucher') {
-          document.getElementById('tabVoucher').classList.remove('hidden');
-          document.getElementById('navVoucher').classList.add('active');
-        } else if (tab === 'invoices' && currentRole === 'admin') {
-          document.getElementById('tabInvoices').classList.remove('hidden');
-          document.getElementById('navInvoices').classList.add('active');
-          renderInvoicesList();
-        }
-      };
-
-      // ---------- CATEGORY ----------
-      window.setCategory = function(cat, btn) {
-        currentCategory = cat;
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        btn.classList.add('active');
-      };
-
-      // ---------- ITEMS ----------
-      window.addItem = function() {
-        const name = document.getElementById('itemName').value.trim();
-        const qty = parseInt(document.getElementById('itemQty').value) || 1;
-        const price = parseFloat(document.getElementById('itemPrice').value) || 0;
-        if (!name || price <= 0) return showToast('အမည်နှင့်စျေးထည့်ပါ');
-        currentItems.push({ category: currentCategory, name, qty, price, subtotal: qty * price });
-        document.getElementById('itemName').value = '';
-        document.getElementById('itemQty').value = '1';
-        document.getElementById('itemPrice').value = '';
-        renderItemList();
-        updateVoucher();
-      };
-
-      window.deleteItem = function(index) {
-        currentItems.splice(index, 1);
-        renderItemList();
-        updateVoucher();
-      };
-
-      window.clearAllItems = function() {
-        if (!currentItems.length) return;
-        if (confirm('အားလုံးဖျက်မှာလား')) {
-          currentItems = [];
-          renderItemList();
-          updateVoucher();
-        }
-      };
-
-      function renderItemList() {
-        const list = document.getElementById('itemList');
-        if (!currentItems.length) {
-          list.innerHTML = '<li style="justify-content:center; color:#aaa;">ပစ္စည်းများထည့်ပါ</li>';
-          return;
-        }
-        list.innerHTML = currentItems.map((item, i) => `
-          <li>
-            <div><span class="item-name">${esc(item.name)}</span><span class="category-badge">${item.category}</span></div>
-            <span>${item.qty} x ${item.price} = ${item.subtotal} ကျပ်</span>
-            <button class="btn-delete" onclick="deleteItem(${i})">&#x2715;</button>
-          </li>`).join('');
-      }
-
-      function updateVoucher() {
-        const cust = document.getElementById('customerName').value.trim() || '-';
-        const dateVal = document.getElementById('voucherDate').value;
-        let dateDisplay = dateVal || '-';
-        const phone = document.getElementById('phoneInput').value.trim() || localStorage.getItem(PHONE_KEY) || '-';
-        document.getElementById('voucherCustomer').textContent = cust;
-        document.getElementById('voucherDateDisplay').textContent = dateDisplay;
-        document.getElementById('voucherPhoneNumber').textContent = phone;
-        const tbody = document.getElementById('voucherTableBody');
-        if (!currentItems.length) {
-          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#aaa;">ပစ္စည်းမထည့်ရသေး</td></tr>';
-        } else {
-          tbody.innerHTML = currentItems.map(i => `<tr><td>${esc(i.name)}</td><td>${i.qty}</td><td>${i.price}</td><td>${i.subtotal}</td></tr>`).join('');
-        }
-        const total = currentItems.reduce((s, i) => s + i.subtotal, 0);
-        document.getElementById('grandTotalDisplay').textContent = total + ' ကျပ်';
-        document.getElementById('voucherGrandTotal').textContent = total + ' ကျပ်';
-      }
-
-      window.savePhone = function() {
-        const phone = document.getElementById('phoneInput').value.trim();
-        if (!phone) return showToast('ဖုန်းထည့်ပါ');
-        localStorage.setItem(PHONE_KEY, phone);
-        document.getElementById('voucherPhoneNumber').textContent = phone;
-        showToast('ဖုန်းသိမ်းပြီး');
-      };
-
-      // ---------- INVOICE STORAGE (shared, but only admin can manage) ----------
-      function getInvoices() {
-        try { return JSON.parse(localStorage.getItem(INVOICES_KEY)) || []; } catch { return []; }
-      }
-
-      function saveInvoices(invoices) {
-        localStorage.setItem(INVOICES_KEY, JSON.stringify(invoices));
-      }
-
-      window.saveInvoiceAndImage = async function() {
-        if (!currentItems.length) return showToast('ပစ္စည်းထည့်ပါ');
-        const invoice = {
-          id: Date.now(),
-          customer: document.getElementById('customerName').value.trim() || 'အမည်မဲ့',
-          date: document.getElementById('voucherDate').value,
-          items: currentItems.map(i => ({...i})),
-          total: currentItems.reduce((s,i) => s + i.subtotal, 0),
-          phone: document.getElementById('phoneInput').value.trim() || localStorage.getItem(PHONE_KEY) || ''
+        window.handleLogin = function() {
+            const role = document.getElementById('roleSelect').value;
+            const password = document.getElementById('passwordInput').value.trim();
+            const errorEl = document.getElementById('loginError');
+            errorEl.textContent = '';
+            if (role === 'admin') {
+                let saved = localStorage.getItem(ADMIN_PASS_KEY);
+                if (!saved) { if(password.length<3){errorEl.textContent='စကားဝှက် အနည်းဆုံး ၃လုံး';return;} localStorage.setItem(ADMIN_PASS_KEY, password); saved = password; }
+                if (password === saved) { setSessionRole('admin'); document.getElementById('loginOverlay').style.display='none'; document.getElementById('appMain').style.display='block'; applyRolePermissions(); initApp(); }
+                else errorEl.textContent = 'စကားဝှက်မှားနေပါသည်';
+            } else {
+                const saved = localStorage.getItem(USER_PASS_KEY);
+                if (!saved) { errorEl.textContent = 'User စကားဝှက် မသတ်မှတ်ရသေးပါ။ Admin ကိုဆက်သွယ်ပါ။'; return; }
+                if (password === saved) { setSessionRole('user'); document.getElementById('loginOverlay').style.display='none'; document.getElementById('appMain').style.display='block'; applyRolePermissions(); initApp(); }
+                else errorEl.textContent = 'စကားဝှက်မှားနေပါသည်';
+            }
         };
-        const invoices = getInvoices();
-        invoices.unshift(invoice);
-        saveInvoices(invoices);
-        showToast('ဘောက်ချာသိမ်းပြီး');
 
-        try {
-          const canvas = await html2canvas(document.getElementById('voucherCard'), { scale: 2, backgroundColor: '#ffffff' });
-          canvas.toBlob(blob => {
-            const a = document.createElement('a');
-            a.download = `invoice_${invoice.id}.png`;
-            a.href = URL.createObjectURL(blob);
-            a.click();
-          });
-        } catch(e) { console.warn('image save failed'); }
-      };
+        window.logout = function() {
+            clearSession();
+            document.getElementById('appMain').style.display = 'none';
+            document.getElementById('loginOverlay').style.display = 'flex';
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('loginError').textContent = '';
+        };
 
-      function renderInvoicesList() {
-        if (currentRole !== 'admin') return;
-        const container = document.getElementById('invoicesList');
-        const invoices = getInvoices();
-        if (!invoices.length) {
-          container.innerHTML = '<p style="color:#888;">သိမ်းထားသော ဘောက်ချာမရှိသေးပါ</p>';
-          return;
+        function applyRolePermissions() {
+            const isAdmin = (currentRole === 'admin');
+            document.getElementById('navInvoices').classList.toggle('hidden', !isAdmin);
+            document.getElementById('adminSettingsBtn').classList.toggle('hidden', !isAdmin);
+            if (!isAdmin && !document.getElementById('tabInvoices').classList.contains('hidden')) {
+                switchTab('voucher');
+            }
         }
-        container.innerHTML = invoices.map(inv => `
-          <div class="invoice-list-item">
-            <div>
-              <strong>${esc(inv.customer)}</strong> <small>${inv.date}</small><br>
-              <span>စုစုပေါင်း ${inv.total} ကျပ်</span>
-            </div>
-            <div style="display:flex; gap:0.3rem;">
-              <button onclick="loadInvoice(${inv.id})" style="background:#e9f0e2; border:none; padding:0.3rem 0.8rem; border-radius:12px;">ပြန်ဖွင့်</button>
-              <button onclick="deleteInvoice(${inv.id})" style="background:#fceeec; border:none; padding:0.3rem 0.8rem; border-radius:12px;">ဖျက်</button>
-            </div>
-          </div>`).join('');
-      }
 
-      window.loadInvoice = function(id) {
-        if (currentRole !== 'admin') return;
-        const invoices = getInvoices();
-        const inv = invoices.find(i => i.id === id);
-        if (!inv) return;
-        document.getElementById('customerName').value = inv.customer;
-        document.getElementById('voucherDate').value = inv.date;
-        if (inv.phone) document.getElementById('phoneInput').value = inv.phone;
-        currentItems = inv.items.map(i => ({...i}));
-        renderItemList();
-        updateVoucher();
-        switchTab('voucher');
-      };
-
-      window.deleteInvoice = function(id) {
-        if (currentRole !== 'admin') return;
-        if (!confirm('ဤဘောက်ချာကိုဖျက်မှာလား')) return;
-        let invoices = getInvoices().filter(i => i.id !== id);
-        saveInvoices(invoices);
-        renderInvoicesList();
-      };
-
-      // ---------- ADMIN SETTINGS ----------
-      window.openAdminSettings = function() {
-        if (currentRole !== 'admin') return;
-        document.getElementById('adminModal').classList.remove('hidden');
-        document.getElementById('newUserPassword').value = '';
-      };
-
-      window.closeAdminModal = function() {
-        document.getElementById('adminModal').classList.add('hidden');
-      };
-
-      window.setUserPassword = function() {
-        const newPass = document.getElementById('newUserPassword').value.trim();
-        if (newPass.length < 3) {
-          alert('စကားဝှက် အနည်းဆုံး ၃လုံး');
-          return;
+        // ---------- INIT ----------
+        function initApp() {
+            document.getElementById('voucherDate').value = new Date().toISOString().split('T')[0];
+            const savedPhone = localStorage.getItem(PHONE_KEY);
+            if (savedPhone) { document.getElementById('phoneInput').value = savedPhone; document.getElementById('voucherPhoneNumber').textContent = savedPhone; }
+            renderItemList(); updateVoucher();
+            if (currentRole === 'admin') loadInvoicesFromCloud();
+            document.getElementById('itemName').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('itemQty').focus(); });
+            document.getElementById('itemQty').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('itemPrice').focus(); });
+            document.getElementById('itemPrice').addEventListener('keydown', e => { if(e.key==='Enter') addItem(); });
         }
-        localStorage.setItem(USER_PASS_KEY, newPass);
-        closeAdminModal();
-        showToast('User စကားဝှက် ပြောင်းပြီး');
-      };
 
-      // ---------- HELPERS ----------
-      function esc(str) { const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
-      function showToast(msg) {
-        const t = document.getElementById('toast');
-        t.textContent = msg; t.classList.add('show');
-        clearTimeout(t._hide); t._hide = setTimeout(() => t.classList.remove('show'), 2000);
-      }
+        window.switchTab = function(tab) {
+            document.getElementById('tabVoucher').classList.add('hidden');
+            document.getElementById('tabInvoices').classList.add('hidden');
+            document.getElementById('navVoucher').classList.remove('active');
+            document.getElementById('navInvoices').classList.remove('active');
+            if (tab === 'voucher') {
+                document.getElementById('tabVoucher').classList.remove('hidden');
+                document.getElementById('navVoucher').classList.add('active');
+            } else if (tab === 'invoices' && currentRole === 'admin') {
+                document.getElementById('tabInvoices').classList.remove('hidden');
+                document.getElementById('navInvoices').classList.add('active');
+                loadInvoicesFromCloud();
+            }
+        };
 
-      // ---------- INITIAL LOAD ----------
-      document.getElementById('passwordInput').addEventListener('keydown', e => { if(e.key==='Enter') handleLogin(); });
-      checkExistingSession();
-      // If no session, ensure login overlay is visible
-      if (!getSavedRole()) {
-        document.getElementById('loginOverlay').style.display = 'flex';
-        document.getElementById('appMain').style.display = 'none';
-      }
-    })();
-  </script>
+        window.setCategory = function(cat, btn) {
+            currentCategory = cat;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+        };
+
+        window.addItem = function() {
+            const name = document.getElementById('itemName').value.trim();
+            const qty = parseInt(document.getElementById('itemQty').value) || 1;
+            const price = parseFloat(document.getElementById('itemPrice').value) || 0;
+            if (!name || price <= 0) return showToast('အမည်နှင့်စျေးထည့်ပါ');
+            currentItems.push({ category: currentCategory, name, qty, price, subtotal: qty * price });
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemQty').value = '1';
+            document.getElementById('itemPrice').value = '';
+            renderItemList(); updateVoucher();
+        };
+
+        window.deleteItem = function(index) { currentItems.splice(index, 1); renderItemList(); updateVoucher(); };
+
+        window.clearAllItems = function() {
+            if (!currentItems.length) return;
+            if (confirm('အားလုံးဖျက်မှာလား')) { currentItems = []; renderItemList(); updateVoucher(); }
+        };
+
+        function renderItemList() {
+            const list = document.getElementById('itemList');
+            if (!currentItems.length) { list.innerHTML = '<li style="justify-content:center; color:#aaa;">ပစ္စည်းများထည့်ပါ</li>'; return; }
+            list.innerHTML = currentItems.map((item, i) => `
+                <li>
+                    <div><span class="item-name">${esc(item.name)}</span><span class="category-badge">${item.category}</span></div>
+                    <span>${item.qty} x ${item.price} = ${item.subtotal} ကျပ်</span>
+                    <button class="btn-delete" onclick="deleteItem(${i})">&#x2715;</button>
+                </li>`).join('');
+        }
+
+        function updateVoucher() {
+            const cust = document.getElementById('customerName').value.trim() || '-';
+            const dateVal = document.getElementById('voucherDate').value;
+            const phone = document.getElementById('phoneInput').value.trim() || localStorage.getItem(PHONE_KEY) || '-';
+            document.getElementById('voucherCustomer').textContent = cust;
+            document.getElementById('voucherDateDisplay').textContent = dateVal || '-';
+            document.getElementById('voucherPhoneNumber').textContent = phone;
+            const tbody = document.getElementById('voucherTableBody');
+            if (!currentItems.length) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#aaa;">ပစ္စည်းမထည့်ရသေး</td></tr>'; }
+            else { tbody.innerHTML = currentItems.map(i => `<tr><td>${esc(i.name)}</td><td>${i.qty}</td><td>${i.price}</td><td>${i.subtotal}</td></tr>`).join(''); }
+            const total = currentItems.reduce((s, i) => s + i.subtotal, 0);
+            document.getElementById('grandTotalDisplay').textContent = total + ' ကျပ်';
+            document.getElementById('voucherGrandTotal').textContent = total + ' ကျပ်';
+        }
+
+        window.savePhone = function() {
+            const phone = document.getElementById('phoneInput').value.trim();
+            if (!phone) return showToast('ဖုန်းထည့်ပါ');
+            localStorage.setItem(PHONE_KEY, phone);
+            document.getElementById('voucherPhoneNumber').textContent = phone;
+            showToast('ဖုန်းသိမ်းပြီး');
+        };
+
+        // ---------- CLOUD STORAGE (Google Apps Script) ----------
+        async function saveInvoiceToCloud() {
+            if (!currentItems.length) return showToast('ပစ္စည်းထည့်ပါ');
+            const invoice = {
+                customer: document.getElementById('customerName').value.trim() || 'အမည်မဲ့',
+                date: document.getElementById('voucherDate').value,
+                items: currentItems.map(i => ({...i})),
+                total: currentItems.reduce((s,i) => s + i.subtotal, 0),
+                phone: document.getElementById('phoneInput').value.trim() || localStorage.getItem(PHONE_KEY) || '',
+                timestamp: new Date().toISOString()
+            };
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Google Apps Script requires no-cors for simple POST
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({ action: 'addInvoice', data: invoice })
+                });
+                showToast('Cloud သို့ သိမ်းပြီး');
+                // Still save image locally
+                try {
+                    const canvas = await html2canvas(document.getElementById('voucherCard'), { scale: 2, backgroundColor: '#ffffff' });
+                    canvas.toBlob(blob => {
+                        const a = document.createElement('a');
+                        a.download = `invoice_${Date.now()}.png`;
+                        a.href = URL.createObjectURL(blob);
+                        a.click();
+                    });
+                } catch(e) {}
+                if (currentRole === 'admin') loadInvoicesFromCloud();
+            } catch (e) {
+                showToast('Cloud သိမ်းရန် မအောင်မြင်ပါ');
+            }
+        }
+
+        async function loadInvoicesFromCloud() {
+            if (currentRole !== 'admin') return;
+            const container = document.getElementById('invoicesList');
+            container.innerHTML = '<p>Loading...</p>';
+            try {
+                const res = await fetch(SCRIPT_URL + '?action=getInvoices');
+                const data = await res.json();
+                if (!data.invoices || data.invoices.length === 0) {
+                    container.innerHTML = '<p style="color:#888;">Cloud ပေါ်တွင် ဘောက်ချာမရှိသေးပါ</p>';
+                    return;
+                }
+                container.innerHTML = data.invoices.map(inv => `
+                    <div class="invoice-list-item">
+                        <div>
+                            <strong>${esc(inv.customer)}</strong> <small>${inv.date}</small><br>
+                            <span>စုစုပေါင်း ${inv.total} ကျပ်</span>
+                        </div>
+                        <div>
+                            <button onclick='deleteCloudInvoice("${inv.id}")' style="background:#fceeec; border:none; padding:0.3rem 0.8rem; border-radius:12px;">ဖျက်</button>
+                        </div>
+                    </div>`).join('');
+            } catch (e) {
+                container.innerHTML = '<p style="color:red;">Cloud မှ အချက်အလက်များ မရယူနိုင်ပါ</p>';
+            }
+        }
+
+        window.deleteCloudInvoice = async function(id) {
+            if (currentRole !== 'admin') return;
+            if (!confirm('ဤဘောက်ချာကို Cloud ပေါ်မှ ဖျက်မှာလား')) return;
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({ action: 'deleteInvoice', id: id })
+                });
+                showToast('Cloud ပေါ်မှ ဖျက်ပြီး');
+                loadInvoicesFromCloud();
+            } catch(e) { showToast('ဖျက်၍မရပါ'); }
+        };
+
+        // ---------- ADMIN SETTINGS ----------
+        window.openAdminSettings = function() { document.getElementById('adminModal').classList.remove('hidden'); };
+        window.closeAdminModal = function() { document.getElementById('adminModal').classList.add('hidden'); };
+        window.setUserPassword = function() {
+            const p = document.getElementById('newUserPassword').value.trim();
+            if (p.length < 3) { alert('စကားဝှက် အနည်းဆုံး ၃လုံး'); return; }
+            localStorage.setItem(USER_PASS_KEY, p);
+            closeAdminModal();
+            showToast('User စကားဝှက် ပြောင်းပြီး');
+        };
+
+        function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.classList.add('show');
+            clearTimeout(t._hide); t._hide = setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        document.getElementById('passwordInput').addEventListener('keydown', e => { if(e.key==='Enter') handleLogin(); });
+        checkExistingSession();
+        if (!getSavedRole()) { document.getElementById('loginOverlay').style.display='flex'; document.getElementById('appMain').style.display='none'; }
+    </script>
 </body>
 </html>
