@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Essence Landscape • Business Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-light: #d1fae5;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+        }
+        .sidebar {
+            background: #ffffff;
+            border-right: 1px solid var(--border);
+            min-height: 100vh;
+            width: 260px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 30;
+            box-shadow: 1px 0 10px rgba(0, 0, 0, 0.02);
+        }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #64748b;
+            transition: all 0.15s;
+            margin: 2px 8px;
+        }
+        .sidebar-nav a:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        .sidebar-nav a.active-nav {
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .main-content {
+            margin-left: 260px;
+            padding: 32px;
+            min-height: 100vh;
+        }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+        }
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.15s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background: #047857;
+        }
+        .btn-outline {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.15s;
+            cursor: pointer;
+        }
+        .btn-outline:hover {
+            background: #f8fafc;
+        }
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background: #f1f5f9;
+            color: #475569;
+        }
+        .tag-green {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .tag-blue {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .tag-yellow {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        input,
+        textarea,
+        select {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            width: 100%;
+            outline: none;
+            transition: border 0.15s;
+            background: #fff;
+        }
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            text-align: left;
+            padding: 12px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            border-bottom: 2px solid var(--border);
+            font-weight: 600;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.9rem;
+        }
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        @media print {
+            .sidebar,
+            .no-print {
+                display: none !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                padding: 0 !important;
+            }
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .status-active {
+            background: #10b981;
+        }
+        .status-pending {
+            background: #f59e0b;
+        }
+        .status-completed {
+            background: #6366f1;
+        }
+    </style>
+</head>
+<body class="flex">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar flex flex-col py-6 no-print">
+        <div class="px-6 mb-8">
+            <h1 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <i class="fa-solid fa-leaf" style="color:var(--primary);"></i> GreenEssence
+            </h1>
+            <p class="text-xs text-gray-400 mt-1">Business Command Center</p>
+        </div>
+
+        <nav class="sidebar-nav flex-1" id="nav-menu">
+            <a href="#" data-page="dashboard" class="active-nav"><i class="fa-solid fa-grid-2 w-5"></i> Dashboard</a>
+            <a href="#" data-page="members"><i class="fa-solid fa-users w-5"></i> အဖွဲ့ဝင်များ</a>
+            <a href="#" data-page="projects"><i class="fa-solid fa-diagram-project w-5"></i> ပရောဂျက်များ</a>
+            <a href="#" data-page="inventory"><i class="fa-solid fa-warehouse w-5"></i> ပစ္စည်းစာရင်း</a>
+            <a href="#" data-page="services"><i class="fa-solid fa-trowel w-5"></i> ဝန်ဆောင်မှုများ</a>
+            <a href="#" data-page="financials"><i class="fa-solid fa-chart-line w-5"></i> ငွေကြေး</a>
+            <a href="#" data-page="csr"><i class="fa-solid fa-hand-holding-heart w-5"></i> CSR Tracker</a>
+            <a href="#" data-page="schedule"><i class="fa-solid fa-calendar-days w-5"></i> အချိန်ဇယား</a>
+            <a href="#" data-page="invoice"><i class="fa-solid fa-file-invoice w-5"></i> Invoice/Quote</a>
+            <a href="#" data-page="plan"><i class="fa-solid fa-file-lines w-5"></i> Business Plan</a>
+        </nav>
+
+        <div class="px-4 mt-auto">
+            <button id="login-btn" onclick="toggleLogin()" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition text-sm text-gray-600">
+                <i class="fa-solid fa-lock"></i> <span id="login-text">Founder Login</span>
+            </button>
+            <p class="text-xs text-gray-300 text-center mt-3">© 2026 Green Essence</p>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content flex-1" id="main-content"></main>
+
+    <!-- LOGIN MODAL -->
+    <div id="login-modal" class="modal hidden">
+        <div class="modal-content" style="max-width:380px;">
+            <h3 class="font-bold text-xl mb-2">Founder Login</h3>
+            <p class="text-sm text-gray-500 mb-4">Admin panel သုံးရန် စကားဝှက်ထည့်ပါ</p>
+            <input id="password-input" type="password" placeholder="စကားဝှက်" class="mb-3">
+            <button onclick="checkLogin()" class="btn-primary w-full">Login</button>
+            <p id="login-error" class="text-red-500 text-sm mt-2 hidden">စကားဝှက် မှားနေပါသည်</p>
+        </div>
+    </div>
+
+    <script>
+        // ────────────────────────────────────
+        // DATA & HELPERS
+        // ────────────────────────────────────
+        const DEFAULT_MEMBERS = [
+            { id: 1, name: 'ကိုမင်းခန့်', role: 'Founder & Lead Designer', skills: ['Landscape Design', '3D
+                    SketchUp', 'Plant Selection'], avatar: 'MK' },
+            { id: 2, name: 'မမြတ်စု', role: 'Nursery Manager', skills: ['Propagation', 'Soil Science',
+                    'Retail Sales'
+                ], avatar: 'MS' },
+            { id: 3, name: 'ကိုကျော်သူ', role: 'Site Supervisor', skills: ['Irrigation', 'Hardscape',
+                    'Team Management'
+                ], avatar: 'KS' },
+            { id: 4, name: 'မအိမ့်ချို', role: 'Marketing Lead', skills: ['Social Media', 'Content Creation',
+                    'CSR Campaigns'
+                ], avatar: 'MC' }
+        ];
+
+        const DEFAULT_PROJECTS = [
+            { id: 1, client: 'ဦးလှ (ဗဟန်း)', type: 'Landscape Design', budget: '၂၅ သိန်း', status: 'active',
+                deadline: '2026-06-30', progress: 60 },
+            { id: 2, client: 'City Mart (ကမာရွတ်)', type: 'Green Wall', budget: '၁၅ သိန်း', status: 'active',
+                deadline: '2026-07-15', progress: 30 },
+            { id: 3, client: 'ဒေါ်အေး (တာမွေ)', type: 'Maintenance', budget: '၅ သိန်း/လ', status: 'completed',
+                deadline: '2026-05-20', progress: 100 },
+        ];
+
+        const DEFAULT_INVENTORY = [
+            { id: 1, item: 'အုတ်ခွက်ပန်းအိုး (အကြီး)', category: 'Hardscape', qty: 45, unit: 'လုံး', cost: 2500,
+                price: 5000 },
+            { id: 2, item: 'မြေဆွေး (၁၀ကီလို)', category: 'Soil', qty: 120, unit: 'အိတ်', cost: 3500, price: 6000 },
+            { id: 3, item: 'မုန်လာဥပင်', category: 'Indoor Plant', qty: 80, unit: 'ပင်', cost: 800, price: 2000 },
+            { id: 4, item: 'သစ်ခွပင်', category: 'Outdoor Plant', qty: 35, unit: 'ပင်', cost: 1500, price: 3500 },
+        ];
+
+        function loadData(key, def) { let d = localStorage.getItem(key); return d ? JSON.parse(d) : def; }
+
+        function saveData(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+        function checkAdmin() { return sessionStorage.getItem('adminLoggedIn') === 'true'; }
+
+        let currentPage = 'dashboard';
+
+        // ────────────────────────────────────
+        // NAVIGATION
+        // ────────────────────────────────────
+        const pages = { dashboard, members, projects, inventory, services, financials, csr, schedule, invoice, plan };
+
+        function navigateTo(page) {
+            currentPage = page;
+            document.querySelectorAll('#nav-menu a').forEach(a => a.classList.remove('active-nav'));
+            document.querySelector(`[data-page="${page}"]`)?.classList.add('active-nav');
+            pages[page]();
+        }
+
+        // ────────────────────────────────────
+        // 1. DASHBOARD
+        // ────────────────────────────────────
+        function dashboard() {
+            let members = loadData('ge_members', DEFAULT_MEMBERS);
+            let projects = loadData('ge_projects', DEFAULT_PROJECTS);
+            let html = `
+        <h2 class="text-2xl font-bold mb-6">📊 Dashboard</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <div class="stat-card"><p class="text-sm text-gray-500">ပရောဂျက်များ</p><p class="text-3xl font-bold mt-1">${projects.length}</p><p class="text-xs text-gray-400 mt-1">${projects.filter(p=>p.status==='active').length} ခု လုပ်ဆောင်ဆဲ</p></div>
+          <div class="stat-card"><p class="text-sm text-gray-500">ဤလဝင်ငွေ</p><p class="text-3xl font-bold mt-1">၄၅ သိန်း</p><p class="text-xs text-green-600 mt-1">↑ 12%</p></div>
+          <div class="stat-card"><p class="text-sm text-gray-500">CSR အပင်</p><p class="text-3xl font-bold mt-1">၁၂၀</p><p class="text-xs text-gray-400 mt-1">Target 200</p></div>
+          <div class="stat-card"><p class="text-sm text-gray-500">Inventory</p><p class="text-3xl font-bold mt-1">၂၈၀</p><p class="text-xs text-gray-400 mt-1">ပစ္စည်းမျိုးစုံ</p></div>
+        </div>
+        <div class="card">
+          <h3 class="font-bold text-lg mb-3">လက်ရှိ ပရောဂျက်များ</h3>
+          <table><thead><tr><th>Client</th><th>အမျိုးအစား</th><th>Budget</th><th>တိုးတက်မှု</th><th>Status</th></tr></thead>
+          <tbody>${projects.map(p=>`<tr><td>${p.client}</td><td>${p.type}</td><td>${p.budget}</td><td><div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-emerald-500 h-2 rounded-full" style="width:${p.progress}%"></div></div><span class="text-xs">${p.progress}%</span></td><td><span class="tag ${p.status==='active'?'tag-green':p.status==='completed'?'tag-blue':'tag-yellow'}">${p.status}</span></td></tr>`).join('')}</tbody></table>
+        </div>`;
+            document.getElementById('main-content').innerHTML = html;
+        }
+
+        // ────────────────────────────────────
+        // 2. MEMBERS
+        // ────────────────────────────────────
+        function members() {
+            let mem = loadData('ge_members', DEFAULT_MEMBERS);
+            let admin = checkAdmin();
+            let html = `
+        <div class="flex justify-between mb-6"><h2 class="text-2xl font-bold">👥 အဖွဲ့ဝင်များ</h2>${admin?`<button onclick="addMemberModal()" class="btn-primary"><i class="fa-solid fa-plus mr-1"></i> အသစ်ထည့်မည်</button>`:''}</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="member-list">${mem.map(m=>memberCard(m,admin)).join('')}</div>
+        <div id="member-form-container"></div>`;
+            document.getElementById('main-content').innerHTML = html;
+        }
+
+        function memberCard(m, admin) {
+            return `<div class="card relative">${admin?`<button onclick="deleteMember(${m.id})" class="absolute top-4 right-4 text-gray-400 hover:text-red-500"><i class="fa-solid fa-trash"></i></button>`:''}
+        <div class="flex items-center gap-3 mb-3"><span class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center font-bold text-emerald-700">${m.avatar}</span><div><p class="font-bold" ${admin?'contenteditable="true"':''} onblur="updateMember(${m.id},'name',this.innerText)">${m.name}</p><p class="text-sm text-gray-500" ${admin?'contenteditable="true"':''} onblur="updateMember(${m.id},'role',this.innerText)">${m.role}</p></div></div>
+        <div class="flex flex-wrap gap-1">${m.skills.map((s,i)=>`<span class="tag tag-green" ${admin?'contenteditable="true"':''} onblur="updateSkill(${m.id},${i},this.innerText)">${s}</span>`).join('')}${admin?`<button onclick="addSkill(${m.id})" class="text-xs text-emerald-600 ml-1">+</button>`:''}</div></div>`;
+        }
+
+        function addMemberModal() {
+            document.getElementById('member-form-container').innerHTML = `
+        <div class="card mt-4"><h3 class="font-bold mb-3">အဖွဲ့ဝင်အသစ်</h3><input id="nm" placeholder="အမည်" class="mb-2"><input id="nr" placeholder="ရာထူး" class="mb-2"><input id="ns" placeholder="ကျွမ်းကျင်မှု (ကော်မာခြား)" class="mb-3"><button onclick="saveNewMember()" class="btn-primary">သိမ်းမည်</button></div>`;
+        }
+
+        function saveNewMember() {
+            if (!checkAdmin()) return;
+            let name = document.getElementById('nm').value.trim();
+            let role = document.getElementById('nr').value.trim();
+            let skills = document.getElementById('ns').value.split(',').map(s => s.trim()).filter(s => s);
+            if (!name) return alert('အမည်ထည့်ပါ');
+            let members = loadData('ge_members', DEFAULT_MEMBERS);
+            members.push({ id: Date.now(), name, role, skills, avatar: name.split(' ').map(w => w[0]).join('')
+                    .toUpperCase().slice(0, 2) });
+            saveData('ge_members', members);
+            members();
+        }
+
+        function deleteMember(id) {
+            if (!checkAdmin() || !confirm('ဖျက်မှာသေချာလား?')) return;
+            saveData('ge_members', loadData('ge_members').filter(m => m.id !== id));
+            members();
+        }
+
+        function updateMember(id, f, v) {
+            if (!checkAdmin()) return;
+            let m = loadData('ge_members');
+            let o = m.find(x => x.id === id);
+            if (o) { o[f] = v;
+                saveData('ge_members', m); }
+        }
+
+        function updateSkill(id, i, v) {
+            if (!checkAdmin()) return;
+            let m = loadData('ge_members');
+            let o = m.find(x => x.id === id);
+            if (o && o.skills[i] !== undefined) { o.skills[i] = v;
+                saveData('ge_members', m); }
+        }
+
+        function addSkill(id) {
+            if (!checkAdmin()) return;
+            let m = loadData('ge_members');
+            let o = m.find(x => x.id === id);
+            if (o) { o.skills.push('skill');
+                saveData('ge_members', m);
+                members(); }
+        }
+
+        // ────────────────────────────────────
+        // 3. PROJECTS (NEW)
+        // ────────────────────────────────────
+        function projects() {
+            let projects = loadData('ge_projects', DEFAULT_PROJECTS);
+            let admin = checkAdmin();
+            let html = `
+        <div class="flex justify-between mb-6"><h2 class="text-2xl font-bold">📋 ပရောဂျက်များ</h2>${admin?`<button onclick="addProjectModal()" class="btn-primary"><i class="fa-solid fa-plus mr-1"></i> ပရောဂျက်သစ်</button>`:''}</div>
+        <div class="card"><table><thead><tr><th>Client</th><th>အမျိုးအစား</th><th>Budget</th><th>Deadline</th><th>တိုးတက်မှု</th><th>Status</th><th></th></tr></thead><tbody id="project-tbody">${projects.map(p=>projectRow(p,admin)).join('')}</tbody></table></div>
+        <div id="project-form-container"></div>`;
+            document.getElementById('main-content').innerHTML = html;
+        }
+
+        function projectRow(p, admin) {
+            return `<tr><td ${admin?'contenteditable="true"':''} onblur="updateProject(${p.id},'client',this.innerText)">${p.client}</td><td ${admin?'contenteditable="true"':''} onblur="updateProject(${p.id},'type',this.innerText)">${p.type}</td><td ${admin?'contenteditable="true"':''} onblur="updateProject(${p.id},'budget',this.innerText)">${p.budget}</td><td ${admin?'contenteditable="true"':''} onblur="updateProject(${p.id},'deadline',this.innerText)">${p.deadline}</td><td><input type="range" min="0" max="100" value="${p.progress}" onchange="updateProject(${p.id},'progress',this.value)" style="width:80px;"> ${p.progress}%</td><td><select onchange="updateProject(${p.id},'status',this.value)" ${admin?'':'disabled'}><option value="active" ${p.status==='active'?'selected':''}>Active</option><option value="pending" ${p.status==='pending'?'selected':''}>Pending</option><option value="completed" ${p.status==='completed'?'selected':''}>Completed</option></select></td><td>${admin?`<button onclick="deleteProject(${p.id})" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-trash"></i></button>`:''}</td></tr>`;
+        }
+
+        function addProjectModal() {
+            document.getElementById('project-form-container').innerHTML = `
+        <div class="card mt-4"><h3 class="font-bold mb-3">ပရောဂျက်အသစ်</h3><input id="pc" placeholder="Client" class="mb-2"><input id="pt" placeholder="အမျိုးအစား" class="mb-2"><input id="pb" placeholder="Budget" class="mb-2"><input id="pd" type="date" class="mb-3"><button onclick="saveNewProject()" class="btn-primary">သိမ်းမည်</button></div>`;
+        }
+
+        function saveNewProject() {
+            if (!checkAdmin()) return;
+            let projects = loadData('ge_projects', DEFAULT_PROJECTS);
+            projects.push({ id: Date.now(), client: document.getElementById('pc').value, type: document.getElementById('pt')
+                    .value, budget: document.getElementById('pb').value, deadline: document.getElementById('pd')
+                    .value, progress: 0, status: 'pending' });
+            saveData('ge_projects', projects);
+            projects();
+        }
+
+        function updateProject(id, field, value) {
+            if (!checkAdmin()) return;
+            let projects = loadData('ge_projects', DEFAULT_PROJECTS);
+            let p = projects.find(x => x.id === id);
+            if (p) { p[field] = (field === 'progress') ? parseInt(value) : value;
+                saveData('ge_projects', projects); }
+        }
+
+        function deleteProject(id) {
+            if (!checkAdmin() || !confirm('ဖျက်မှာသေချာလား?')) return;
+            saveData('ge_projects', loadData('ge_projects').filter(p => p.id !== id));
+            projects();
+        }
+
+        // ────────────────────────────────────
+        // 4. INVENTORY (NEW)
+        // ────────────────────────────────────
+        function inventory() {
+            let inv = loadData('ge_inventory', DEFAULT_INVENTORY);
+            let admin = checkAdmin();
+            let html = `
+        <div class="flex justify-between mb-6"><h2 class="text-2xl font-bold">📦 ပစ္စည်းစာရင်း</h2>${admin?`<button onclick="addInventoryModal()" class="btn-primary"><i class="fa-solid fa-plus mr-1"></i> ပစ္စည်းသစ်</button>`:''}</div>
+        <div class="card"><table><thead><tr><th>ပစ္စည်း</th><th>အမျိုးအစား</th><th>လက်ကျန်</th><th>ဝယ်ဈေး</th><th>ရောင်းဈေး</th><th></th></tr></thead><tbody>${inv.map(i=>`<tr><td ${admin?'contenteditable="true"':''} onblur="updateInventory(${i.id},'item',this.innerText)">${i.item}</td><td ${admin?'contenteditable="true"':''} onblur="updateInventory(${i.id},'category',this.innerText)">${i.category}</td><td ${admin?'contenteditable="true"':''} onblur="updateInventory(${i.id},'qty',this.innerText)">${i.qty} ${i.unit}</td><td ${admin?'contenteditable="true"':''} onblur="updateInventory(${i.id},'cost',this.innerText)">${i.cost}</td><td ${admin?'contenteditable="true"':''} onblur="updateInventory(${i.id},'price',this.innerText)">${i.price}</td><td>${admin?`<button onclick="deleteInventory(${i.id})" class="text-red-400"><i class="fa-solid fa-trash"></i></button>`:''}</td></tr>`).join('')}</tbody></table></div>
+        <div id="inventory-form-container"></div>`;
+            document.getElementById('main-content').innerHTML = html;
+        }
+
+        function addInventoryModal() {
+            document.getElementById('inventory-form-container').innerHTML = `
+        <div class="card mt-4"><h3 class="font-bold mb-3">ပစ္စည်းအသစ်</h3><input id="ii" placeholder="ပစ္စည်းအမည်" class="mb-2"><input id="ic" placeholder="အမျိုးအစား" class="mb-2"><input id="iq" placeholder="အရေအတွက်" class="mb-2"><input id="iu" placeholder="ယူနစ်" class="mb-2"><input id="ico" placeholder="ဝယ်ဈေး" class="mb-2"><input id="ip" placeholder="ရောင်းဈေး" class="mb-3"><button onclick="saveNewInventory()" class="btn-primary">သိမ်းမည်</button></div>`;
+        }
+
+        function saveNewInventory() {
+            if (!checkAdmin()) return;
+            let inv = loadData('ge_inventory', DEFAULT_INVENTORY);
+            inv.push({ id: Date.now(), item: document.getElementById('ii').value, category: document.getElementById('ic')
+                    .value, qty: parseInt(document.getElementById('iq').value), unit: document.getElementById('iu')
+                    .value, cost: parseInt(document.getElementById('ico').value), price: parseInt(document
+                        .getElementById('ip').value) });
+            saveData('ge_inventory', inv);
+            inventory();
+        }
+
+        function updateInventory(id, field, value) {
+            if (!checkAdmin()) return;
+            let inv = loadData('ge_inventory', DEFAULT_INVENTORY);
+            let i = inv.find(x => x.id === id);
+            if (i) { i[field] = (['qty', 'cost', 'price'].includes(field)) ? parseInt(value) : value;
+                saveData('ge_inventory', inv); }
+        }
+
+        function deleteInventory(id) {
+            if (!checkAdmin() || !confirm('ဖျက်မှာသေချာလား?')) return;
+            saveData('ge_inventory', loadData('ge_inventory').filter(i => i.id !== id));
+            inventory();
+        }
+
+        // ────────────────────────────────────
+        // 5. SERVICES
+        // ────────────────────────────────────
+        function services() {
+            document.getElementById('main-content').innerHTML = `
+        <h2 class="text-2xl font-bold mb-6">🛠️ ဝန်ဆောင်မှုများ</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="card"><i class="fa-solid fa-tree text-2xl text-emerald-600 mb-2"></i><h3 class="font-bold text-lg">Landscape Design & Build</h3><p class="text-gray-600 text-sm">ခြံသစ်၊ ပြုပြင်ခြင်း၊ Green Wall၊ Water Feature။ ၁ Sqft ၈၀၀၀ ကျပ်မှ။</p></div>
+          <div class="card"><i class="fa-solid fa-seedling text-2xl text-emerald-600 mb-2"></i><h3 class="font-bold text-lg">Plant Nursery</h3><p class="text-gray-600 text-sm">အိမ်တွင်း/အပြင် အပင် ၂၀၀+၊ အိုး၊ မြေ။ ၁၅၀၀ ကျပ်မှ။</p></div>
+          <div class="card"><i class="fa-solid fa-scissors text-2xl text-emerald-600 mb-2"></i><h3 class="font-bold text-lg">Maintenance</h3><p class="text-gray-600 text-sm">လစဉ်/အပတ်စဉ် ပြုစုရေး။ ၅၀,၀၀၀ ကျပ်မှ။</p></div>
+          <div class="card"><i class="fa-solid fa-hand-holding-heart text-2xl text-emerald-600 mb-2"></i><h3 class="font-bold text-lg">CSR အစီအစဉ်</h3><p class="text-gray-600 text-sm">ဝယ်ယူမှုတိုင်း ကျောင်း/ဆေးရုံသို့ အပင် ၁ ပင် လှူ။</p></div>
+        </div>`;
+        }
+
+        // ────────────────────────────────────
+        // 6. FINANCIALS
+        // ────────────────────────────────────
+        function financials() {
+            let admin = checkAdmin();
+            document.getElementById('main-content').innerHTML = `
+        <h2 class="text-2xl font-bold mb-6">💰 ငွေကြေးစီမံချက်</h2>
+        <div class="card mb-4"><h3 class="font-bold mb-3">Startup Costs</h3><table><tr><td>ကုမ္ပဏီမှတ်ပုံတင်ခ</td><td class="text-right"><span ${admin?'contenteditable="true"':''}>300,000</span> ကျပ်</td></tr><tr><td>ပျိုးခင်းငှားရမ်းခ (၆လ)</td><td class="text-right"><span ${admin?'contenteditable="true"':''}>18,000,000</span> ကျပ်</td></tr><tr><td>ကိရိယာများ</td><td class="text-right"><span ${admin?'contenteditable="true"':''}>2,500,000</span> ကျပ်</td></tr><tr class="font-bold"><td>စုစုပေါင်း</td><td class="text-right">၂၅.၈ သိန်း</td></tr></table></div>
+        <div class="card"><p><strong>လစဉ်ကုန်ကျ-</strong> <span ${admin?'contenteditable="true"':''}>18</span> သိန်း</p><p><strong>လစဉ်ဝင်ငွေ-</strong> <span ${admin?'contenteditable="true"':''}>22</span> သိန်း</p><p><strong>Break-even-</strong> ၈ လ</p></div>`;
+        }
+
+        // ────────────────────────────────────
+        // 7. CSR
+        // ────────────────────────────────────
+        function csr() {
+            document.getElementById('main-content').innerHTML = `
+        <h2 class="text-2xl font-bold mb-6">🌱 CSR Tracker</h2>
+        <div class="card mb-4"><p class="text-gray-500">လှူဒါန်းပြီး</p><p class="text-4xl font-bold">၁၂၀</p><div class="w-full bg-gray-200 rounded-full h-3 mt-2"><div class="bg-emerald-500 h-3 rounded-full" style="width:60%"></div></div><p class="text-xs mt-1">ပစ်မှတ် ၂၀၀</p></div>
+        <div class="card"><h3 class="font-bold mb-2">မှတ်တမ်း</h3><ul class="text-sm text-gray-600"><li>၂၀၂၆ ဇွန် ၁၀ - အ.ထ.က(၂) - ၃၀ ပင်</li><li>၂၀၂၆ မေ ၂၂ - သီရိမြိုင်ကျောင်း - ၂၀ ပင်</li><li>၂၀၂၆ မေ ၅ - ရန်ကင်းဆေးရုံ - ၁၅ ပင်</li></ul></div>`;
+        }
+
+        // ────────────────────────────────────
+        // 8. SCHEDULE
+        // ────────────────────────────────────
+        function schedule() {
+            let admin = checkAdmin();
+            let days = ['တနင်္လာ', 'အင်္ဂါ', 'ဗုဒ္ဓဟူး', 'ကြာသပတေး', 'သောကြာ', 'စနေ', 'တနင်္ဂနွေ'];
+            let times = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+            const DEF_SCHED = {
+                'တနင်္လာ_8:00': 'Nursery inspection\n[Target: daily]',
+                'တနင်္လာ_10:00': 'Team meeting\n[Target: 10:30]',
+                'အင်္ဂါ_9:00': 'CSR delivery\n[Target: 50 plants]'
+            };
+            let sched = loadData('ge_schedule', DEF_SCHED);
+            let html = `
+        <h2 class="text-2xl font-bold mb-6">📅 အချိန်ဇယား</h2>
+        <div class="card overflow-x-auto"><table><thead><tr><th>အချိန်</th>${days.map(d=>`<th>${d}</th>`).join('')}</tr></thead><tbody>${times.map(t=>`<tr><td class="font-medium">${t}</td>${days.map(d=>{let key=`${d}_${t}`;let val=sched[key]||'';return `<td><div class="editable-cell" data-cell="${key}" ${admin?'contenteditable="true"':''} onblur="saveScheduleCell(this)">${val.replace(/\n/g,'<br>')}</div></td>`;}).join('')}</tr>`).join('')}</tbody></table></div>`;
+            document.getElementById('main-content').innerHTML = html;
+        }
+
+        function saveScheduleCell(el) {
+            if (!checkAdmin()) return;
+            let s = loadData('ge_schedule', {});
+            s[el.dataset.cell] = el.innerText;
+            saveData('ge_schedule', s);
+        }
+
+        // ────────────────────────────────────
+        // 9. INVOICE / QUOTE (NEW)
+        // ────────────────────────────────────
+        function invoice() {
+            let html = `
+        <h2 class="text-2xl font-bold mb-6">📄 Invoice / Quote Generator</h2>
+        <div class="card no-print" id="invoice-form">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div><label class="text-sm font-medium">Client Name</label><input id="inv-client" value="ဦးလှ (ဗဟန်း)"></div>
+            <div><label class="text-sm font-medium">Date</label><input id="inv-date" type="date"></div>
+            <div><label class="text-sm font-medium">အမျိုးအစား</label><select id="inv-type"><option>Quote</option><option>Invoice</option></select></div>
+            <div><label class="text-sm font-medium">ပရောဂျက်</label><input id="inv-project" value="Landscape Design"></div>
+          </div>
+          <table class="mb-4"><thead><tr><th>အကြောင်းအရာ</th><th>အရေအတွက်</th><th>နှုန်း</th><th>စုစုပေါင်း</th></tr></thead>
+          <tbody id="inv-items">
+            <tr><td><input value="ဒီဇိုင်းဆွဲခ"></td><td><input value="1" type="number" onchange="calcInv()"></td><td><input value="50000" type="number" onchange="calcInv()"></td><td class="font-medium">50,000</td></tr>
+            <tr><td><input value="အပင် (မုန်လာဥ)"></td><td><input value="20" type="number" onchange="calcInv()"></td><td><input value="2000" type="number" onchange="calcInv()"></td><td class="font-medium">40,000</td></tr>
+          </tbody></table>
+          <div class="flex justify-between items-center"><button onclick="addInvRow()" class="btn-outline"><i class="fa-solid fa-plus mr-1"></i> Add Row</button><p class="text-xl font-bold">Total: <span id="inv-total">90,000</span> ကျပ်</p></div>
+          <button onclick="window.print()" class="btn-primary mt-4"><i class="fa-solid fa-print mr-1"></i> Print</button>
+        </div>
+        <div class="card print-only mt-6" id="print-invoice" style="display:none;"><h3 class="font-bold text-xl" id="print-title">Quote</h3><p id="print-client"></p><p id="print-date"></p><table id="print-table"></table><p class="text-right font-bold text-lg mt-4" id="print-total"></p></div>`;
+            document.getElementById('main-content').innerHTML = html;
+            document.getElementById('inv-date').value = new Date().toISOString().split('T')[0];
+            calcInv();
+        }
+
+        function addInvRow() {
+            let tbody = document.getElementById('inv-items');
+            let tr = document.createElement('tr');
+            tr.innerHTML =
+                `<td><input></td><td><input type="number" onchange="calcInv()"></td><td><input type="number" onchange="calcInv()"></td><td class="font-medium">0</td>`;
+            tbody.appendChild(tr);
+        }
+
+        function calcInv() {
+            let rows = document.querySelectorAll('#inv-items tr');
+            let total = 0;
+            rows.forEach(row => {
+                let qty = parseFloat(row.querySelectorAll('input')[1]?.value) || 0;
+                let rate = parseFloat(row.querySelectorAll('input')[2]?.value) || 0;
+                let sum = qty * rate;
+                row.querySelectorAll('td')[3].innerText = sum.toLocaleString();
+                total += sum;
+            });
+            document.getElementById('inv-total').innerText = total.toLocaleString();
+        }
+
+        // ────────────────────────────────────
+        // 10. BUSINESS PLAN
+        // ────────────────────────────────────
+        function plan() {
+            let admin = checkAdmin();
+            let saved = localStorage.getItem('ge_businessplan') || `<h3>၁။ လုပ်ငန်းအကျဉ်းချုပ်</h3><p>Green Essence Landscape Co., Ltd. သည်...</p><h3>၂။ ဈေးကွက်သုံးသပ်ချက်</h3><p>...</p><h3>၃။ ငွေကြေးခန့်မှန်းချက်</h3><p>...</p>`;
+            document.getElementById('main-content').innerHTML = `
+        <h2 class="text-2xl font-bold mb-6">📄 Business Plan</h2>
+        <div class="card"><div ${admin?'contenteditable="true"':''} id="bp-text" onblur="saveBP()" class="prose max-w-none">${saved}</div></div>`;
+        }
+
+        function saveBP() { if (checkAdmin()) localStorage.setItem('ge_businessplan', document.getElementById('bp-text')
+                .innerHTML); }
+
+        // ────────────────────────────────────
+        // LOGIN
+        // ────────────────────────────────────
+        function toggleLogin() {
+            if (checkAdmin()) { sessionStorage.removeItem('adminLoggedIn');
+                updateUI();
+                navigateTo(currentPage); } else document.getElementById('login-modal').classList.remove('hidden');
+        }
+
+        function checkLogin() {
+            if (document.getElementById('password-input').value === 'green2026') {
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                document.getElementById('login-modal').classList.add('hidden');
+                updateUI();
+                navigateTo(currentPage);
+            } else document.getElementById('login-error').classList.remove('hidden');
+        }
+
+        function updateUI() {
+            let admin = checkAdmin();
+            document.getElementById('login-text').innerText = admin ? 'Logout (Admin)' : 'Founder Login';
+        }
+
+        // ────────────────────────────────────
+        // INIT
+        // ────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUI();
+            document.getElementById('nav-menu').addEventListener('click', e => {
+                e.preventDefault();
+                let page = e.target.closest('a')?.dataset.page;
+                if (page) navigateTo(page);
+            });
+            navigateTo('dashboard');
+            document.addEventListener('click', e => { if (e.target.id === 'login-modal') e.target.classList.add(
+                    'hidden'); });
+        });
+    </script>
+</body>
+</html>
