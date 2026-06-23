@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>ပန်းသတင်း Landscaping | Estimate & Catalog</title>
+    <title>ပန်းသတင်း Landscaping | Estimate &amp; Catalog</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Padauk:wght@400;700&amp;display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
+        /* ── Reset & Variables ── */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --primary: #1a3b2e;
@@ -60,43 +61,20 @@
         .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
         h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.02em; }
         .section-title { text-align: center; margin-bottom: 50px; }
-        .section-title h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 14px; }
-        .section-title .subhead { color: var(--text-soft); font-size: 1.05rem; max-width: 600px; margin: 0 auto; }
-        
-        .lang-switcher { display: flex; gap: 6px; }
-        .lang-btn {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.3);
-            color: var(--text-dark);
-            padding: 7px 14px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: var(--transition);
-            backdrop-filter: blur(5px);
-            background: rgba(255,255,255,0.4);
-        }
-        .lang-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .lang-btn:hover { background: var(--primary-light); color: white; }
-        
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 14px 32px;
-            border-radius: var(--border-radius-btn);
-            font-weight: 600;
-            text-decoration: none;
-            transition: var(--transition);
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
+        .subhead { opacity: 0.75; font-size: 0.95rem; font-weight: 500; margin-top: 6px; }
+
+        /* ── Buttons ── */
         .btn-primary {
             background: var(--primary);
             color: white;
+            padding: 12px 28px;
+            border-radius: var(--border-radius-btn);
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            font-size: 1rem;
             box-shadow: var(--shadow-sm);
         }
         .btn-primary:hover {
@@ -104,7 +82,8 @@
             transform: translateY(-3px);
             box-shadow: var(--shadow-md), var(--shadow-glow);
         }
-        
+
+        /* ── Header ── */
         header {
             position: sticky;
             top: 0;
@@ -115,11 +94,11 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
             border-bottom: 1px solid rgba(255,255,255,0.5);
         }
-        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .logo a { text-decoration: none; color: inherit; }
         .logo h1 { font-size: 1.8rem; font-weight: 700; color: var(--primary); line-height: 1.2; }
         .logo span { font-size: 0.75rem; opacity: 0.75; font-weight: 500; letter-spacing: 1px; color: var(--text-soft); }
-        .header-right { display: flex; align-items: center; gap: 14px; }
+        .header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
         .home-btn, .cart-btn-header {
             display: inline-flex;
             align-items: center;
@@ -159,132 +138,128 @@
             font-weight: 700;
         }
 
-        /* ── Back to Top ── */
-        .back-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 48px;
-            height: 48px;
+        /* ── Language Switcher ── */
+        .lang-switcher {
+            display: flex;
+            background: rgba(0,0,0,0.05);
+            border-radius: 40px;
+            padding: 3px;
+        }
+        .lang-btn {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            background: transparent;
+            color: var(--text-soft);
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .lang-btn.active {
             background: var(--primary);
             color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 1.3rem;
-            cursor: pointer;
-            z-index: 150;
-            box-shadow: var(--shadow-md);
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(15px);
         }
-        .back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        .back-to-top:hover {
-            background: var(--primary-light);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
-        }
+        .lang-btn:hover:not(.active) { background: rgba(0,0,0,0.05); }
 
         /* ── Catalog Tabs ── */
         .catalog-tabs {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 8px;
             justify-content: center;
-            margin-bottom: 28px;
+            margin-bottom: 32px;
         }
         .catalog-tab {
-            padding: 9px 18px;
-            border-radius: 40px;
-            border: 1.5px solid rgba(0,0,0,0.08);
-            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1.5px solid rgba(0,0,0,0.06);
+            background: white;
             font-weight: 600;
-            font-size: 0.84rem;
+            font-size: 0.82rem;
+            cursor: pointer;
             transition: var(--transition);
             font-family: inherit;
-            background: white;
             color: var(--text-soft);
         }
-        .catalog-tab:hover { border-color: var(--accent); color: var(--primary); background: #f0faf4; }
-        .catalog-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .catalog-tab.popular-tab { background: var(--gold-light); color: #5c3d0a; border-color: var(--gold); font-weight: 700; }
-        .catalog-tab.popular-tab.active { background: var(--gold); color: #3d2a00; border-color: var(--gold); }
+        .catalog-tab:hover { border-color: var(--accent); background: #f0faf4; }
+        .catalog-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
 
-        /* ── Plant Grid ── */
+        /* ── Plant Card ── */
         .catalog-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-            gap: 16px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
         }
         .plant-card {
             background: white;
-            border-radius: 18px;
+            border-radius: var(--border-radius-card);
+            border: 1px solid rgba(0,0,0,0.04);
             overflow: hidden;
-            box-shadow: var(--shadow-sm);
             transition: var(--transition);
+            box-shadow: var(--shadow-sm);
             display: flex;
             flex-direction: column;
-            border: 1px solid rgba(0,0,0,0.04);
         }
         .plant-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-6px);
             box-shadow: var(--shadow-md);
-            border-color: var(--accent);
         }
-        .plant-card-img {
+        .plant-card-img-wrap {
             position: relative;
             overflow: hidden;
-            height: 180px;
-            background: linear-gradient(135deg, #eef3ed, #f5faf6);
+            background: #f5f7f5;
         }
-        .plant-card-img img {
+        .plant-card-img {
             width: 100%;
-            height: 100%;
+            height: 180px;
             object-fit: cover;
-            transition: transform 0.4s ease;
+            display: block;
+            transition: var(--transition);
         }
-        .plant-card:hover .plant-card-img img { transform: scale(1.05); }
-        .plant-badge {
+        .plant-card:hover .plant-card-img { transform: scale(1.03); }
+        .plant-card-badges {
             position: absolute;
             top: 10px;
             left: 10px;
-            background: var(--gold);
-            color: #3d2a00;
-            font-size: 0.6rem;
-            padding: 3px 10px;
-            border-radius: 10px;
-            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
-        .plant-stock-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 0.6rem;
-            padding: 3px 10px;
-            border-radius: 10px;
+        .badge-pop {
+            background: rgba(255, 200, 0, 0.92);
+            color: #5c3d0a;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            backdrop-filter: blur(4px);
+        }
+        .badge-stock {
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.65rem;
             font-weight: 700;
             text-transform: uppercase;
+            backdrop-filter: blur(4px);
         }
-        .plant-stock-badge.instock { background: #c8e6c9; color: #2e7d32; }
-        .plant-stock-badge.lowstock { background: #fff3e0; color: #e65100; }
-        .plant-stock-badge.soldout { background: #ffebee; color: #c62828; }
+        .badge-stock.soldout { background: rgba(200, 50, 50, 0.85); color: white; }
+        .badge-stock.preorder { background: rgba(255, 165, 0, 0.85); color: white; }
+        .badge-stock.instock { background: rgba(46, 125, 50, 0.85); color: white; }
+
         .plant-card-body {
-            padding: 14px;
+            padding: 16px 16px 18px;
             flex: 1;
             display: flex;
             flex-direction: column;
         }
         .plant-card-body h4 {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 700;
             color: var(--primary);
             margin-bottom: 2px;
@@ -295,26 +270,60 @@
             font-size: 0.76rem;
             margin-bottom: 4px;
         }
+        .plant-sci {
+            font-size: 0.7rem;
+            color: var(--text-soft);
+            font-style: italic;
+            opacity: 0.6;
+            margin-bottom: 4px;
+        }
+        .plant-desc {
+            font-size: 0.78rem;
+            color: var(--text-soft);
+            opacity: 0.75;
+            margin-bottom: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.4;
+        }
+        .plant-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+        .plant-tags span {
+            background: var(--bg-light);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: var(--text-soft);
+            border: 1px solid rgba(0,0,0,0.04);
+        }
         .plant-card-price {
             font-weight: 700;
             color: #9e5e00;
             background: var(--gold-light);
             display: inline-block;
-            padding: 4px 11px;
+            padding: 4px 12px;
             border-radius: 10px;
             font-size: 0.8rem;
             margin-top: auto;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+            align-self: flex-start;
         }
         .plant-qty-row {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 2px;
+            gap: 10px;
+            margin-top: 4px;
         }
         .plant-qty-row button {
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             border: 1.5px solid var(--accent);
             background: white;
@@ -329,42 +338,45 @@
             line-height: 1;
         }
         .plant-qty-row button:hover { background: #f0faf4; }
-        .plant-qty-row span { font-weight: 600; min-width: 20px; text-align: center; font-size: 0.82rem; }
+        .plant-qty-row span { font-weight: 600; min-width: 24px; text-align: center; font-size: 0.85rem; }
         .btn-add {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 8px 0;
-            border-radius: 10px;
+            padding: 10px 0;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             width: 100%;
             transition: var(--transition);
             font-family: inherit;
+            margin-top: 8px;
         }
         .btn-add:hover { background: var(--primary-light); }
         .btn-add.added { background: var(--gold); color: #3d2a00; }
-        .soldout-overlay { position: relative; }
-        .soldout-overlay::after {
-            content: 'SOLD OUT';
+
+        /* ── Sold Out Overlay ── */
+        .plant-card.soldout .plant-card-img { opacity: 0.4; }
+        .plant-card.soldout .soldout-badge {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.75);
             color: white;
             padding: 8px 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 800;
             font-size: 0.85rem;
+            letter-spacing: 1px;
         }
-        .soldout-overlay img { opacity: 0.4; }
 
+        /* ── Services Grid ── */
         .services-catalog-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
         }
         .svc-card {
             background: white;
@@ -374,116 +386,58 @@
             text-align: center;
             transition: var(--transition);
         }
-        .svc-card:hover { border-color: var(--accent); box-shadow: var(--shadow-sm); transform: translateY(-3px); }
-        .svc-card .svc-icon { font-size: 1.8rem; margin-bottom: 6px; }
-        .svc-card h4 { font-size: 0.85rem; font-weight: 700; color: var(--primary); margin-bottom: 3px; }
-        .svc-card .svc-price { font-weight: 700; color: var(--primary-light); font-size: 0.8rem; margin-bottom: 8px; }
-        .svc-card .btn-add { width: auto; padding: 7px 16px; display: inline-block; }
+        .svc-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: var(--shadow-sm); }
+        .svc-card .s-icon { font-size: 2rem; margin-bottom: 6px; }
+        .svc-card h4 { font-size: 0.9rem; color: var(--primary); }
+        .svc-card .s-price { font-weight: 700; color: #9e5e00; font-size: 0.85rem; margin: 6px 0; }
+        .svc-card .s-features { font-size: 0.75rem; color: var(--text-soft); opacity: 0.7; margin-bottom: 10px; }
+        .svc-card .btn-add { margin-top: 4px; }
 
-        /* ── Estimate Section ── */
-        .estimator-section { padding: 40px 0 60px; }
+        /* ── Estimator Section ── */
+        .estimator-section { padding: 60px 0 80px; background: var(--bg-light); }
         .estimator-card {
-            background: var(--bg-glass);
-            backdrop-filter: blur(8px);
-            padding: 36px 30px;
+            background: white;
             border-radius: var(--border-radius-card);
             box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(255,255,255,0.6);
-            max-width: 900px;
+            padding: 32px 36px;
+            max-width: 720px;
             margin: 0 auto;
+            border: 1px solid rgba(0,0,0,0.04);
         }
-        .estimator-card h3 {
-            font-size: 1.35rem;
-            color: var(--primary);
-            margin-bottom: 18px;
-            padding-bottom: 14px;
-            border-bottom: 2px solid rgba(116, 198, 157, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .cart-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            gap: 12px;
-        }
-        .cart-item:last-child { border-bottom: none; }
-        .cart-item-img {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            object-fit: cover;
-            flex-shrink: 0;
-            background: #e8f5e9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-        .cart-item-info { flex: 1; min-width: 0; }
-        .cart-item-name { font-weight: 600; font-size: 0.9rem; color: var(--text-dark); word-break: break-word; }
-        .cart-item-meta { font-size: 0.75rem; color: var(--text-soft); }
-        .cart-item-price { font-weight: 700; color: var(--primary); white-space: nowrap; font-size: 0.9rem; }
+        .empty-cart { text-align: center; padding: 30px 0; }
+        .empty-cart .empty-icon { font-size: 3rem; margin-bottom: 12px; }
 
-        .township-header {
+        .estimate-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: pointer;
-            user-select: none;
-            padding: 12px 0;
-            margin-top: 6px;
-            color: var(--primary);
-            font-weight: 600;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
         }
-        .township-arrow { font-size: 1.1rem; transition: transform 0.3s; }
-        .township-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 8px;
-            margin: 10px 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease;
-            max-height: 600px;
-            opacity: 1;
-        }
-        .township-grid.collapsed { max-height: 0; margin: 0; opacity: 0; }
-        .township-card {
-            background: white;
-            border: 1.5px solid rgba(0,0,0,0.08);
-            border-radius: 16px;
-            padding: 12px 8px;
-            text-align: center;
+        .estimate-item:last-child { border-bottom: none; }
+        .estimate-item .ei-name { font-weight: 600; font-size: 0.9rem; }
+        .estimate-item .ei-qty { color: var(--text-soft); font-size: 0.85rem; }
+        .estimate-item .ei-price { font-weight: 700; color: #9e5e00; }
+        .estimate-item .ei-remove {
+            background: none;
+            border: none;
+            color: #cc5555;
             cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0 6px;
             transition: var(--transition);
         }
-        .township-card:hover { border-color: var(--accent); background: #f0faf4; box-shadow: var(--shadow-sm); }
-        .township-card.selected { background: var(--primary); color: white; border-color: var(--primary); }
-        .township-card .t-icon { font-size: 1.3rem; margin-bottom: 3px; }
-        .township-card strong { display: block; font-size: 0.75rem; }
-        .township-card .t-fee { font-weight: 700; color: var(--accent-glow); font-size: 0.75rem; }
-        .township-card.selected .t-fee { color: rgba(255,255,255,0.9); }
-        .township-card .t-desc { font-size: 0.62rem; opacity: 0.7; }
+        .estimate-item .ei-remove:hover { transform: scale(1.2); }
 
-        .summary-box {
-            background: rgba(26, 59, 46, 0.04);
-            border-radius: 22px;
-            padding: 20px 22px;
-            margin: 18px 0;
-            border: 1px solid rgba(26, 59, 46, 0.08);
-        }
-        .summary-line { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.9rem; color: var(--text-soft); }
+        .summary-line { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.9rem; color: var(--text-soft); }
         .summary-line.grand {
             font-size: 1.25rem;
             font-weight: 800;
             border-top: 2px solid var(--accent);
-            padding-top: 12px;
-            margin-top: 8px;
+            padding-top: 14px;
+            margin-top: 10px;
             color: var(--primary);
         }
-
         .save-hint {
             background: var(--gold-light);
             border: 1.5px dashed var(--gold);
@@ -494,8 +448,40 @@
             color: #5c3d0a;
             text-align: center;
             font-weight: 500;
-            line-height: 1.5;
         }
+        .action-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 16px 0;
+        }
+        .btn-act {
+            padding: 12px 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.82rem;
+            border: none;
+            font-family: inherit;
+            transition: var(--transition);
+            flex: 1;
+            min-width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .btn-act.gold { background: var(--gold); color: #3d2a00; }
+        .btn-act.gold:hover { background: #e8b830; transform: translateY(-2px); }
+        .btn-act.green { background: var(--primary); color: white; }
+        .btn-act.green:hover { background: var(--primary-light); transform: translateY(-2px); }
+        .btn-act.outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-act.outline:hover { background: var(--primary); color: white; }
 
         .contact-grid {
             display: flex;
@@ -505,7 +491,7 @@
         }
         .contact-card {
             flex: 1;
-            min-width: 80px;
+            min-width: 70px;
             background: white;
             border: 1.5px solid rgba(0,0,0,0.06);
             border-radius: 18px;
@@ -518,112 +504,113 @@
         }
         .contact-card:hover { border-color: var(--accent); box-shadow: var(--shadow-sm); transform: translateY(-2px); }
         .contact-card .cc-icon { font-size: 1.5rem; margin-bottom: 5px; }
-        .contact-card strong { display: block; font-size: 0.78rem; color: var(--primary); }
-        .contact-card.fb-card { border-color: #d4e4fb; background: #f5f9ff; }
-        .contact-card.fb-card:hover { border-color: #1877F2; }
-        .contact-card.tiktok-card { border-color: #e0e0e0; background: #fafafa; }
-        .contact-card.tiktok-card:hover { border-color: #000; }
-        .contact-card.email-card { border-color: #fce4d8; background: #fffaf7; }
-        .contact-card.email-card:hover { border-color: #d97746; }
+        .contact-card strong { display: block; font-size: 0.75rem; color: var(--primary); }
 
-        .action-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin: 16px 0;
-        }
-        .btn-act {
-            padding: 11px 14px;
-            border-radius: 50px;
-            font-weight: 700;
-            text-align: center;
-            cursor: pointer;
-            font-size: 0.82rem;
+        /* ── Back to Top ── */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            color: white;
             border: none;
-            font-family: inherit;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
             transition: var(--transition);
-            flex: 1;
-            min-width: 75px;
-            white-space: nowrap;
+            z-index: 999;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
         }
-        .btn-act.primary { background: var(--primary); color: white; }
-        .btn-act.primary:hover { background: var(--primary-light); box-shadow: var(--shadow-glow); }
-        .btn-act.gold {
-            background: var(--gold);
-            color: #3d2a00;
-            box-shadow: 0 2px 10px rgba(199, 141, 32, 0.3);
-            animation: gentlePulse 3s ease-in-out infinite;
-        }
-        @keyframes gentlePulse {
-            0%, 100% { box-shadow: 0 2px 10px rgba(199, 141, 32, 0.3); }
-            50% { box-shadow: 0 6px 20px rgba(199, 141, 32, 0.5); }
-        }
-        .btn-act.gold:hover { background: #e8b830; transform: translateY(-2px); animation: none; }
-        .btn-act.white { background: white; color: var(--primary); border: 1.5px solid var(--primary); }
-        .btn-act.white:hover { background: #f0faf4; }
-        .btn-act.fb-btn { background: #1877F2; color: white; }
-        .btn-act.fb-btn:hover { background: #166fe5; box-shadow: 0 4px 14px rgba(24, 119, 242, 0.3); }
-        .btn-act.tiktok-btn { background: #000; color: white; }
-        .btn-act.tiktok-btn:hover { background: #1a1a1a; box-shadow: 0 4px 14px rgba(0,0,0,0.3); }
-        .btn-act.danger { background: #fef2f2; color: #c62828; border: 1.5px solid #ffcdd2; }
-        .btn-act.danger:hover { background: #ffebee; }
+        .back-to-top:hover { background: var(--primary-light); transform: translateY(-3px); }
 
-        .empty-cart {
-            text-align: center;
-            padding: 30px 0;
-        }
-        .empty-cart .empty-icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.6; }
-
+        /* ── Toast ── */
         .toast {
             position: fixed;
-            bottom: 30px;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--primary);
             color: white;
-            padding: 12px 26px;
-            border-radius: 50px;
-            z-index: 300;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow-md);
+            z-index: 9999;
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
-            font-size: 0.85rem;
-            box-shadow: var(--shadow-md);
-            font-weight: 500;
         }
         .toast.show { opacity: 1; }
 
-        footer {
-            margin-top: 60px;
-            padding: 36px 0;
-            text-align: center;
-            border-top: 1px solid rgba(0,0,0,0.05);
-            color: var(--text-soft);
-        }
-
+        /* ── Mobile Responsive ── */
         @media (max-width: 768px) {
-            .section-title h2 { font-size: 1.8rem; }
-            .estimator-card { padding: 24px 16px; }
+            .container { padding: 0 16px; }
+            .logo h1 { font-size: 1.3rem; }
+            .logo span { font-size: 0.6rem; }
+            .header-content { flex-direction: column; align-items: stretch; gap: 8px; }
+            .header-right { justify-content: center; gap: 8px; }
+            .home-btn, .cart-btn-header { padding: 8px 14px; font-size: 0.78rem; }
+            .catalog-tabs { gap: 6px; }
+            .catalog-tab { padding: 8px 14px; font-size: 0.72rem; }
             .catalog-grid { grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 12px; }
             .plant-card-img { height: 140px; }
-            .township-grid { grid-template-columns: repeat(2, 1fr); }
-            .action-grid .btn-act { min-width: 65px; font-size: 0.74rem; padding: 10px 8px; }
-            .services-catalog-grid { grid-template-columns: repeat(2, 1fr); }
+            .plant-card-body { padding: 12px 12px 14px; }
+            .plant-card-body h4 { font-size: 0.82rem; }
+            .plant-card-body .plant-mm { font-size: 0.68rem; }
+            .plant-sci { font-size: 0.62rem; }
+            .plant-desc { font-size: 0.7rem; -webkit-line-clamp: 1; }
+            .plant-tags span { font-size: 0.55rem; padding: 1px 8px; }
+            .plant-card-price { font-size: 0.72rem; padding: 3px 10px; }
+            .plant-qty-row button { width: 24px; height: 24px; font-size: 0.8rem; }
+            .plant-qty-row span { min-width: 20px; font-size: 0.78rem; }
+            .btn-add { font-size: 0.72rem; padding: 8px 0; }
+            .services-catalog-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .svc-card { padding: 14px 10px; }
+            .svc-card h4 { font-size: 0.78rem; }
+            .estimator-card { padding: 20px 16px; }
+            .action-grid .btn-act { min-width: 60px; font-size: 0.72rem; padding: 10px 8px; }
+            .contact-grid { gap: 6px; }
+            .contact-card { min-width: 60px; padding: 10px 6px; }
+            .contact-card .cc-icon { font-size: 1.2rem; }
+            .contact-card strong { font-size: 0.65rem; }
             .back-to-top { bottom: 20px; right: 20px; width: 42px; height: 42px; font-size: 1.1rem; }
+            .toast { font-size: 0.8rem; padding: 10px 20px; bottom: 80px; }
+            .summary-line.grand { font-size: 1.05rem; }
+        }
+
+        @media (max-width: 420px) {
+            .catalog-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .plant-card-img { height: 110px; }
+            .plant-card-body h4 { font-size: 0.75rem; }
+            .plant-card-body .plant-mm { font-size: 0.6rem; }
+            .plant-card-price { font-size: 0.65rem; padding: 2px 8px; }
+            .plant-qty-row button { width: 20px; height: 20px; font-size: 0.7rem; }
+            .plant-qty-row span { min-width: 16px; font-size: 0.7rem; }
+            .btn-add { font-size: 0.65rem; padding: 6px 0; }
+            .services-catalog-grid { grid-template-columns: 1fr 1fr; }
+            .estimator-card { padding: 16px 12px; }
+            .header-right .home-btn span, .header-right .cart-btn-header span { font-size: 0.7rem; }
         }
     </style>
 </head>
 <body>
+
+<!-- ─── Toast ─── -->
+<div class="toast" id="toast"></div>
+
+<!-- ─── Header ─── -->
 <header>
     <div class="container header-content">
         <div class="logo">
             <a href="index.html">
                 <h1>ပန်းသတင်း Landscape</h1>
-                <span data-lang-en="ESTIMATE & CATALOG" data-lang-my="ခန့်မှန်းခြေနှင့် Catalog">ESTIMATE & CATALOG</span>
+                <span data-lang-en="ESTIMATE &amp; CATALOG" data-lang-my="ခန့်မှန်းခြေနှင့် Catalog">ESTIMATE &amp; CATALOG</span>
             </a>
         </div>
         <div class="header-right">
@@ -641,15 +628,14 @@
 </header>
 
 <main>
-    <!-- CATALOG SECTION -->
+    <!-- ─── CATALOG SECTION ─── -->
     <section style="padding: 60px 0 40px;">
         <div class="container">
             <div class="section-title">
-                <h2 data-lang-en="Plant Shop & Services" data-lang-my="အပင်ဆိုင်နှင့် ဝန်ဆောင်မှုများ">Plant Shop & Services</h2>
-                <div class="subhead" data-lang-en="Browse our catalog and add items to your estimate"
-                     data-lang-my="Catalog ကိုကြည့်ပြီး ခန့်မှန်းခြေထဲသို့ ထည့်ပါ">Browse our catalog and add items to your estimate</div>
+                <h2 data-lang-en="Plant Shop &amp; Services" data-lang-my="အပင်ဆိုင်နှင့် ဝန်ဆောင်မှုများ">Plant Shop &amp; Services</h2>
+                <div class="subhead" data-lang-en="Browse our catalog and add items to your estimate" data-lang-my="Catalog ကိုကြည့်ပြီး ခန့်မှန်းခြေထဲသို့ ထည့်ပါ">Browse our catalog and add items to your estimate</div>
             </div>
-            
+
             <div class="catalog-tabs" id="catalogTabs">
                 <button class="catalog-tab popular-tab active" data-cat="popular">🔥 <span data-lang-en="Popular" data-lang-my="လူကြိုက်များ">Popular</span></button>
                 <button class="catalog-tab" data-cat="all">🌿 <span data-lang-en="All Plants" data-lang-my="အပင်အားလုံး">All Plants</span></button>
@@ -668,13 +654,12 @@
         </div>
     </section>
 
-    <!-- ESTIMATE SECTION -->
+    <!-- ─── ESTIMATE SECTION ─── -->
     <section id="estimateSection" class="estimator-section">
         <div class="container">
             <div class="section-title">
                 <h2 data-lang-en="Your Estimate" data-lang-my="သင့်ခန့်မှန်းခြေ">Your Estimate</h2>
-                <div class="subhead" data-lang-en="Review your selections, save as image, and contact us."
-                     data-lang-my="သင်ရွေးချယ်ထားသည်များကို ပြန်ကြည့်ပါ၊ ပုံသိမ်းပါ၊ ဆက်သွယ်ပါ။">Review your selections, save as image, and contact us.</div>
+                <div class="subhead" data-lang-en="Review your selections, save as image, and contact us." data-lang-my="သင်ရွေးချယ်ထားသည်များကို ပြန်ကြည့်ပါ၊ ပုံသိမ်းပါ၊ ဆက်သွယ်ပါ။">Review your selections, save as image, and contact us.</div>
             </div>
             <div class="estimator-card" id="estimatorContent">
                 <div class="empty-cart">
@@ -687,17 +672,10 @@
     </section>
 </main>
 
-<!-- Back to Top Button -->
+<!-- ─── Back to Top ─── -->
 <button class="back-to-top" id="backToTop" title="Back to top">
     <i class="fas fa-arrow-up"></i>
 </button>
-
-<footer>
-    <div class="container">
-        <p>© 2025 PTT Landscaping Services. <span data-lang-en="All rights reserved." data-lang-my="မူပိုင်ခွင့်အားလုံး လက်ဝယ်ရှိသည်။">All rights reserved.</span></p>
-        <p style="margin-top: 10px; opacity:0.8;"><span data-lang-en="Expertise • Reliability • Creativity" data-lang-my="ကျွမ်းကျင်မှု • ယုံကြည်စိတ်ချရမှု • ဖန်တီးမှု">Expertise • Reliability • Creativity</span></p>
-    </div>
-</footer>
 
 <script>
 (function() {
@@ -734,47 +712,80 @@
         { nameEN: "Thanlyin", nameMM: "သန်လျင်", fee: 10000, icon: "🌉" }
     ];
 
-    function parseCSV(t) { var r = [], c = '', q = false; for (var i = 0; i < t.length; i++) { var ch = t.charAt(i); if (ch === '"') q = !q; else if (ch === ',' && !q) { r.push(c.trim()); c = ''; } else c += ch; } r.push(c.trim()); return r; }
-    function fetchCSV(url) { return fetch(url).then(function(r) { return r.text(); }).then(function(t) { return t.trim().split('\n').map(parseCSV); }); }
+    // ─── CSV Helpers ──────────────────────────────────────────────
+    function parseCSV(t) {
+        var r = [], c = '', q = false;
+        for (var i = 0; i < t.length; i++) {
+            var ch = t.charAt(i);
+            if (ch === '"') q = !q;
+            else if (ch === ',' && !q) { r.push(c.trim()); c = ''; }
+            else c += ch;
+        }
+        r.push(c.trim());
+        return r;
+    }
 
+    function fetchCSV(url) {
+        return fetch(url).then(function(r) { return r.text(); })
+            .then(function(t) { return t.trim().split('\n').map(parseCSV); });
+    }
+
+    // ─── Load Data ──────────────────────────────────────────────
     function loadAllData() {
-        return Promise.all([fetchCSV(PLANTS_CSV_URL), fetchCSV(SERVICES_CSV_URL)]).then(function(results) {
-            var plantRows = results[0];
-            var serviceRows = results[1];
-            plantCatalogData = [];
-            for (var i = 1; i < plantRows.length; i++) {
-                var r = plantRows[i];
-                if (r.length < 2) continue;
-                plantCatalogData.push({
-                    type: r[0] || 'Plant',
-                    file: r[1],
-                    nameEN: r[2] || '',
-                    nameMM: r[3] || r[2] || '',
-                    catEN: r[4] || '',
-                    catMM: r[5] || r[4] || '',
-                    priceLow: parseInt((r[6] || '0').replace(/,/g, '')) || 0,
-                    priceHigh: parseInt((r[7] || '0').replace(/,/g, '')) || 0,
-                    status: (r[8] || 'instock').toLowerCase(),
-                    badge: r[9] || ''
-                });
-            }
-            serviceCatalogData = [];
-            for (var j = 1; j < serviceRows.length; j++) {
-                var sr = serviceRows[j];
-                if (sr.length < 5) continue;
-                serviceCatalogData.push({
-                    cat: sr[0] || '',
-                    nameEN: sr[1] || '',
-                    nameMM: sr[2] || sr[1] || '',
-                    priceLow: parseInt((sr[3] || '0').replace(/,/g, '')) || 0,
-                    priceHigh: parseInt((sr[4] || '0').replace(/,/g, '')) || 0,
-                    features: (sr[5] || '').split('|').map(function(f) { return f.trim(); }).filter(Boolean)
-                });
-            }
+        return Promise.all([fetchCSV(PLANTS_CSV_URL), fetchCSV(SERVICES_CSV_URL)])
+            .then(function(results) {
+                var plantRows = results[0];
+                var serviceRows = results[1];
+
+                plantCatalogData = [];
+                for (var i = 1; i < plantRows.length; i++) {
+                    var r = plantRows[i];
+                    if (r.length < 2) continue;
+                    plantCatalogData.push({
+                        type: r[0] || 'Plant',
+                        file: r[1],
+                        nameEN: r[2] || '',
+                        nameMM: r[3] || r[2] || '',
+                        catEN: r[4] || '',
+                        catMM: r[5] || r[4] || '',
+                        priceLow: parseInt((r[6] || '0').replace(/,/g, '')) || 0,
+                        priceHigh: parseInt((r[7] || '0').replace(/,/g, '')) || 0,
+                        status: (r[8] || 'instock').toLowerCase(),
+                        badge: r[9] || '',
+                        badgeClass: r[10] || '',
+                        sci: r[11] || '',
+                        descEN: r[12] || '',
+                        descMM: r[13] || '',
+                        tags: (r[14] || '').split('|').map(function(t) { return t.trim(); }).filter(Boolean)
+                    });
+                }
+
+                serviceCatalogData = [];
+                for (var j = 1; j < serviceRows.length; j++) {
+                    var sr = serviceRows[j];
+                    if (sr.length < 5) continue;
+                    serviceCatalogData.push({
+                        cat: sr[0] || '',
+                        nameEN: sr[1] || '',
+                        nameMM: sr[2] || sr[1] || '',
+                        priceLow: parseInt((sr[3] || '0').replace(/,/g, '')) || 0,
+                        priceHigh: parseInt((sr[4] || '0').replace(/,/g, '')) || 0,
+                        features: (sr[5] || '').split('|').map(function(f) { return f.trim(); }).filter(Boolean)
+                    });
+                }
+
+                renderCatalog();
+                renderEstimate();
+            });
+    }
+
+    // ─── Filter Functions ──────────────────────────────────────
+    function getPopular() {
+        return plantCatalogData.filter(function(p) {
+            return p.badge && /popular|bestseller|trending|premium/i.test(p.badge);
         });
     }
 
-    function getPopular() { return plantCatalogData.filter(function(p) { return p.badge && /popular|bestseller|trending|premium/i.test(p.badge); }); }
     function getByCat(tab) {
         var m = { fruits: 'fruit', orchids: 'orchid', shrubs: 'shrub', trees: 'tree', indoor: 'indoor' };
         if (tab === 'pots') return plantCatalogData.filter(function(p) { return p.type === 'Pot' || /pot/i.test(p.catEN); });
@@ -782,294 +793,362 @@
         return k ? plantCatalogData.filter(function(p) { return new RegExp(k, 'i').test(p.catEN); }) : plantCatalogData;
     }
 
+    // ─── Render Card (Full Details from estimate.html) ──────
+    function renderPlantCard(p) {
+        var name = currentLang === 'mm' ? p.nameMM : p.nameEN;
+        var price = p.priceLow === p.priceHigh ?
+            p.priceLow.toLocaleString() + ' Ks' :
+            p.priceLow.toLocaleString() + ' – ' + p.priceHigh.toLocaleString() + ' Ks';
+        var isSold = p.status === 'soldout';
+        var desc = currentLang === 'mm' ? p.descMM : p.descEN;
+        var sciName = p.sci || '';
+
+        var h = '<div class="plant-card' + (isSold ? ' soldout' : '') + '">';
+        h += '<div class="plant-card-img-wrap">';
+        h += '<img class="plant-card-img" src="images/' + p.file + '" alt="' + name + '" loading="lazy" onerror="this.style.display=\'none\'">';
+        h += '<div class="plant-card-badges">';
+        if (p.badge && /popular|bestseller/i.test(p.badge)) {
+            h += '<span class="badge-pop">🔥 ' + p.badge + '</span>';
+        }
+        if (isSold) {
+            h += '<span class="badge-stock soldout">SOLD OUT</span>';
+        } else if (p.status === 'preorder') {
+            h += '<span class="badge-stock preorder">Pre-Order</span>';
+        }
+        h += '</div>';
+        if (isSold) {
+            h += '<div class="soldout-badge">SOLD OUT</div>';
+        }
+        h += '</div>';
+
+        h += '<div class="plant-card-body">';
+        h += '<h4>' + name + '</h4>';
+        if (p.nameMM !== p.nameEN) {
+            h += '<div class="plant-mm">' + p.nameMM + '</div>';
+        }
+        if (sciName) {
+            h += '<div class="plant-sci">' + sciName + '</div>';
+        }
+        if (desc) {
+            h += '<div class="plant-desc">' + desc + '</div>';
+        }
+        if (p.tags && p.tags.length) {
+            h += '<div class="plant-tags">' + p.tags.map(function(t) { return '<span>' + t + '</span>'; }).join('') + '</div>';
+        }
+        h += '<span class="plant-card-price">' + price + '</span>';
+
+        if (!isSold) {
+            h += '<div class="plant-qty-row">';
+            h += '<button class="qty-minus">−</button>';
+            h += '<span class="qty-num">1</span>';
+            h += '<button class="qty-plus">+</button>';
+            h += '</div>';
+            h += '<button class="btn-add" data-file="' + p.file + '" data-en="' + p.nameEN + '" data-mm="' + p.nameMM + '" data-lo="' + p.priceLow + '" data-hi="' + p.priceHigh + '">';
+            h += '🛒 ' + (currentLang === 'mm' ? 'ထည့်မည်' : 'Add to Cart');
+            h += '</button>';
+        } else {
+            h += '<button class="btn-add" style="background:#ccc;color:#666;cursor:not-allowed;" disabled>Sold Out</button>';
+        }
+
+        h += '</div></div>';
+        return h;
+    }
+
+    // ─── Render Services ──────────────────────────────────────
+    function renderServices() {
+        var g = {};
+        serviceCatalogData.forEach(function(s) {
+            var c = s.cat || 'Other';
+            if (!g[c]) g[c] = [];
+            g[c].push(s);
+        });
+
+        var h = '<h2 class="section-title">🛠️ ' + (currentLang === 'mm' ? 'ဝန်ဆောင်မှုများ' : 'Services') + '</h2>';
+        for (var c in g) {
+            h += '<h3 style="margin:24px 0 12px;color:var(--primary);font-weight:700;font-size:1.05rem;">' + c + '</h3>';
+            h += '<div class="services-catalog-grid">';
+            g[c].forEach(function(s) {
+                var n = currentLang === 'mm' ? s.nameMM : s.nameEN;
+                var p = s.priceLow === s.priceHigh ?
+                    s.priceLow.toLocaleString() + ' Ks' :
+                    s.priceLow.toLocaleString() + ' – ' + s.priceHigh.toLocaleString() + ' Ks';
+                h += '<div class="svc-card">';
+                h += '<div class="s-icon">🛠️</div>';
+                h += '<h4>' + n + '</h4>';
+                h += '<div class="s-price">' + p + '</div>';
+                if (s.features && s.features.length) {
+                    h += '<div class="s-features">' + s.features.map(function(f) { return '🌿 ' + f; }).join('<br>') + '</div>';
+                }
+                h += '<button class="btn-add" data-svc="' + s.nameEN + '" data-mm="' + s.nameMM + '" data-price="' + Math.round((s.priceLow + s.priceHigh) / 2) + '">';
+                h += '+' + (currentLang === 'mm' ? ' ထည့်မည်' : ' Add to Cart');
+                h += '</button>';
+                h += '</div>';
+            });
+            h += '</div>';
+        }
+        return h;
+    }
+
+    // ─── Render Catalog ──────────────────────────────────────
     function renderCatalog() {
         var container = document.getElementById('catalogContent');
+        var html = '';
+
         if (currentCatalogTab === 'services') {
-            var g = {};
-            serviceCatalogData.forEach(function(s) { var c = s.cat || 'Other'; if (!g[c]) g[c] = []; g[c].push(s); });
-            var h = '';
-            for (var c in g) {
-                h += '<h3 style="margin:20px 0 10px;color:var(--primary);font-weight:700;font-size:1.05rem;">' + c + '</h3>';
-                h += '<div class="services-catalog-grid">';
-                g[c].forEach(function(s) {
-                    var n = currentLang === 'en' ? s.nameEN : s.nameMM;
-                    var p = s.priceLow === s.priceHigh ? s.priceLow.toLocaleString() + ' Ks' : s.priceLow.toLocaleString() + ' – ' + s.priceHigh.toLocaleString() + ' Ks';
-                    h += '<div class="svc-card"><div class="svc-icon">🛠️</div><h4>' + n + '</h4><div class="svc-price">' + p + '</div>';
-                    h += '<button class="btn-add" data-svc="' + s.nameEN + '" data-mm="' + s.nameMM + '" data-price="' + Math.round((s.priceLow + s.priceHigh) / 2) + '">' + (currentLang === 'en' ? '+ Add' : '+ ထည့်မည်') + '</button></div>';
-                });
-                h += '</div>';
-            }
-            container.innerHTML = h;
+            html = renderServices();
         } else {
-            var items = currentCatalogTab === 'popular' ? getPopular() : currentCatalogTab === 'all' ? plantCatalogData : getByCat(currentCatalogTab);
-            var html = '<div class="catalog-grid">';
-            items.forEach(function(p) {
-                var dn = currentLang === 'en' ? p.nameEN : p.nameMM;
-                var price = p.priceLow === p.priceHigh ? p.priceLow.toLocaleString() + ' Ks' : p.priceLow.toLocaleString() + ' – ' + p.priceHigh.toLocaleString() + ' Ks';
-                var sold = p.status === 'soldout';
-                html += '<div class="plant-card' + (sold ? ' soldout-overlay' : '') + '">';
-                html += '<div class="plant-card-img"><img src="images/' + p.file + '" alt="' + dn + '" loading="lazy" onerror="this.style.display=\'none\'">';
-                if (p.badge && /popular|bestseller/i.test(p.badge)) html += '<span class="plant-badge">🔥 ' + p.badge + '</span>';
-                if (p.status !== 'instock') html += '<span class="plant-stock-badge ' + p.status + '">' + p.status + '</span>';
-                html += '</div><div class="plant-card-body"><h4>' + dn + '</h4>';
-                if (p.nameMM !== p.nameEN) html += '<div class="plant-mm">' + p.nameMM + '</div>';
-                html += '<span class="plant-card-price">' + price + '</span>';
-                if (!sold) {
-                    html += '<div class="plant-qty-row"><button class="qty-minus">−</button><span class="qty-num">1</span><button class="qty-plus">+</button></div>';
-                    html += '<button class="btn-add" data-file="' + p.file + '" data-en="' + p.nameEN + '" data-mm="' + p.nameMM + '" data-lo="' + p.priceLow + '" data-hi="' + p.priceHigh + '">' + (currentLang === 'en' ? '+ Add to Cart' : '+ ထည့်မည်') + '</button>';
+            var items = currentCatalogTab === 'popular' ? getPopular() :
+                        currentCatalogTab === 'all' ? plantCatalogData :
+                        getByCat(currentCatalogTab);
+
+            if (currentCatalogTab === 'all' || currentCatalogTab === 'popular') {
+                html = '<div class="catalog-grid">' + items.map(renderPlantCard).join('') + '</div>';
+            } else {
+                var groups = {};
+                items.forEach(function(p) {
+                    var cat = currentLang === 'mm' ? p.catMM : p.catEN;
+                    if (!groups[cat]) groups[cat] = [];
+                    groups[cat].push(p);
+                });
+                for (var cat in groups) {
+                    html += '<h2 class="section-title" style="font-size:1.3rem;margin:30px 0 16px;">' + cat + '</h2>';
+                    html += '<div class="catalog-grid">' + groups[cat].map(renderPlantCard).join('') + '</div>';
                 }
-                html += '</div></div>';
-            });
-            html += '</div>';
-            container.innerHTML = html;
+            }
         }
-        bindCatalogButtons();
+
+        container.innerHTML = html || '<p style="text-align:center;color:var(--text-soft);padding:40px 0;">No items found</p>';
+        bindButtons();
     }
 
-    function bindCatalogButtons() {
-        document.querySelectorAll('.qty-minus').forEach(function(b) {
-            b.addEventListener('click', function(e) {
-                e.preventDefault();
-                var n = this.parentElement.querySelector('.qty-num');
-                var v = parseInt(n.textContent) || 1;
-                if (v > 1) n.textContent = v - 1;
-            });
-        });
-        document.querySelectorAll('.qty-plus').forEach(function(b) {
-            b.addEventListener('click', function(e) {
-                e.preventDefault();
-                var n = this.parentElement.querySelector('.qty-num');
-                var v = parseInt(n.textContent) || 1;
-                if (v < 99) n.textContent = v + 1;
-            });
-        });
-        document.querySelectorAll('.btn-add[data-file]').forEach(function(b) {
-            b.addEventListener('click', function() {
-                var f = this.dataset.file, en = this.dataset.en, mm = this.dataset.mm, lo = parseInt(this.dataset.lo), hi = parseInt(this.dataset.hi);
-                var qty = parseInt(this.parentElement.querySelector('.qty-num').textContent) || 1;
-                var unit = Math.round((lo + hi) / 2);
-                var ex = cart.find(function(c) { return c.file === f; });
-                if (ex) ex.qty += qty;
-                else cart.push({ file: f, nameEN: en, nameMM: mm, unitPrice: unit, qty: qty, type: 'plant' });
-                saveCart();
-                updateCartBadge();
-                renderEstimate();
-                showToast(currentLang === 'en' ? '✅ Added!' : '✅ ထည့်ပြီးပါပြီ');
-                this.classList.add('added');
-                this.textContent = '✅';
-                var self = this;
-                setTimeout(function() { self.classList.remove('added'); self.textContent = (currentLang === 'en' ? '+ Add to Cart' : '+ ထည့်မည်'); }, 1200);
-                this.parentElement.querySelector('.qty-num').textContent = '1';
-            });
-        });
-        document.querySelectorAll('.btn-add[data-svc]').forEach(function(b) {
-            b.addEventListener('click', function() {
-                var n = this.dataset.svc, mm = this.dataset.mm || n, pr = parseInt(this.dataset.price);
-                var ex = cart.find(function(c) { return c.service === n; });
-                if (ex) ex.qty++;
-                else cart.push({ service: n, nameEN: n, nameMM: mm, unitPrice: pr, qty: 1, type: 'service' });
-                saveCart();
-                updateCartBadge();
-                renderEstimate();
-                showToast(currentLang === 'en' ? '✅ Added!' : '✅ ထည့်ပြီးပါပြီ');
-            });
-        });
-    }
-
-    function saveCart() { localStorage.setItem('ptt_cart', JSON.stringify(cart)); }
-
-    function updateCartBadge() {
-        var count = cart.reduce(function(s, i) { return s + (i.qty || 1); }, 0);
-        var ce = document.getElementById('cartCountHeader');
-        ce.style.display = count ? 'flex' : 'none';
-        ce.textContent = count;
-    }
-
+    // ─── Render Estimate ──────────────────────────────────────
     function renderEstimate() {
         var container = document.getElementById('estimatorContent');
         if (!cart.length) {
-            container.innerHTML = '<div class="empty-cart"><div class="empty-icon">🛒</div><p style="font-size:1.05rem; color: var(--text-soft);">' + (currentLang === 'en' ? 'Your cart is empty' : 'ဈေးခြင်းဗလာဖြစ်နေသည်') + '</p><p style="color: var(--text-soft); font-size:0.85rem;">' + (currentLang === 'en' ? 'Add plants or services from the catalog above' : 'အပေါ်က catalog မှ အပင်များ သို့မဟုတ် ဝန်ဆောင်မှုများ ထည့်ပါ') + '</p></div>';
+            container.innerHTML = '<div class="empty-cart"><div class="empty-icon">🛒</div><p style="font-size:1.05rem;color:var(--text-soft);" data-lang-en="Your cart is empty" data-lang-my="ဈေးခြင်းဗလာဖြစ်နေသည်">Your cart is empty</p><p style="color:var(--text-soft);font-size:0.85rem;" data-lang-en="Add plants or services from the catalog above" data-lang-my="အပေါ်က catalog မှ အပင်များ သို့မဟုတ် ဝန်ဆောင်မှုများ ထည့်ပါ">Add plants or services from the catalog above</p></div>';
+            updateCartBadge();
             return;
         }
 
-        var plants = cart.filter(function(i) { return i.type === 'plant'; });
-        var services = cart.filter(function(i) { return i.type === 'service'; });
-        var plantSub = plants.reduce(function(s, i) { return s + (i.unitPrice || 0) * (i.qty || 1); }, 0);
-        var serviceSub = services.reduce(function(s, i) { return s + (i.unitPrice || 0) * (i.qty || 1); }, 0);
-        var subtotal = plantSub + serviceSub;
-        var deliveryFee = 0;
-        var selectedTownship = townships[0];
-
+        var total = 0;
         var html = '';
-        if (plants.length) {
-            html += '<h3>🌱 ' + (currentLang === 'en' ? 'Plants & Pots' : 'အပင်နှင့်အိုး') + '</h3>';
-            plants.forEach(function(item) {
-                var name = currentLang === 'en' ? (item.nameEN || item.file || 'Plant') : (item.nameMM || item.nameEN || item.file || 'အပင်');
-                var lt = (item.unitPrice || 0) * (item.qty || 1);
-                html += '<div class="cart-item"><div class="cart-item-img">🌿</div><div class="cart-item-info"><div class="cart-item-name">' + name + '</div><div class="cart-item-meta">Qty: ' + item.qty + ' | ' + (item.unitPrice || 0).toLocaleString() + ' Ks</div></div><div class="cart-item-price">' + lt.toLocaleString() + ' Ks</div></div>';
-            });
-        }
-        if (services.length) {
-            html += '<h3 style="margin-top:24px;">🛠️ ' + (currentLang === 'en' ? 'Services' : 'ဝန်ဆောင်မှု') + '</h3>';
-            services.forEach(function(item) {
-                var name = currentLang === 'en' ? (item.nameEN || item.service || 'Service') : (item.nameMM || item.nameEN || item.service || 'ဝန်ဆောင်မှု');
-                var lt = (item.unitPrice || 0) * (item.qty || 1);
-                html += '<div class="cart-item"><div class="cart-item-img">🛠️</div><div class="cart-item-info"><div class="cart-item-name">' + name + '</div><div class="cart-item-meta">Qty: ' + item.qty + ' | ' + (item.unitPrice || 0).toLocaleString() + ' Ks</div></div><div class="cart-item-price">' + lt.toLocaleString() + ' Ks</div></div>';
-            });
-        }
 
-        html += '<div class="township-header" id="townshipHeader">📍 ' + (currentLang === 'en' ? 'Delivery Township' : 'ပို့ဆောင်မည့်မြို့နယ်') + ' <span class="township-arrow">▼</span></div>';
-        html += '<div class="township-grid" id="townshipGrid">';
-        townships.forEach(function(t, i) {
-            html += '<div class="township-card' + (i === 0 ? ' selected' : '') + '" data-index="' + i + '" data-fee="' + t.fee + '"><div class="t-icon">' + t.icon + '</div><strong>' + (currentLang === 'en' ? t.nameEN : t.nameMM) + '</strong><div class="t-fee">' + (t.fee === 0 ? (currentLang === 'en' ? 'Free' : 'အခမဲ့') : t.fee.toLocaleString() + ' Ks') + '</div><div class="t-desc">' + (currentLang === 'en' ? 'Delivery' : 'ပို့ဆောင်ခ') + '</div></div>';
+        cart.forEach(function(item, idx) {
+            var name = currentLang === 'mm' ? (item.nameMM || item.nameEN) : item.nameEN;
+            var price = item.unitPrice || 0;
+            var subtotal = price * (item.qty || 1);
+            total += subtotal;
+            html += '<div class="estimate-item">';
+            html += '<div><span class="ei-name">' + name + '</span> <span class="ei-qty">×' + (item.qty || 1) + '</span></div>';
+            html += '<div><span class="ei-price">' + subtotal.toLocaleString() + ' Ks</span>';
+            html += '<button class="ei-remove" data-idx="' + idx + '" title="Remove">✕</button></div>';
+            html += '</div>';
         });
+
+        // Delivery (simple: default to first township)
+        var deliveryFee = 3000;
+        total += deliveryFee;
+
+        html += '<div class="summary-line"><span>Subtotal</span><span>' + (total - deliveryFee).toLocaleString() + ' Ks</span></div>';
+        html += '<div class="summary-line"><span>🚚 Delivery</span><span>' + deliveryFee.toLocaleString() + ' Ks</span></div>';
+        html += '<div class="summary-line grand"><span>Total</span><span>' + total.toLocaleString() + ' Ks</span></div>';
+
+        html += '<div class="save-hint">💡 ' + (currentLang === 'mm' ? 'အောက်က ခလုတ်ကို နှိပ်ပြီး ပုံသိမ်းပါ၊ ပြီးရင် ဆက်သွယ်ပါ။' : 'Save as image below, then contact us.') + '</div>';
+
+        html += '<div class="action-grid">';
+        html += '<button class="btn-act gold" id="btnSaveImage"><i class="fas fa-image"></i> ' + (currentLang === 'mm' ? 'ပုံသိမ်းမည်' : 'Save Image') + '</button>';
+        html += '<button class="btn-act green" id="btnClearCart"><i class="fas fa-trash"></i> ' + (currentLang === 'mm' ? 'ရှင်းမည်' : 'Clear') + '</button>';
         html += '</div>';
-        
-        var grandTotal = subtotal + deliveryFee;
-        html += '<div class="summary-box"><div class="summary-line"><span>' + (currentLang === 'en' ? 'Subtotal' : 'စုစုပေါင်း') + '</span><span>' + subtotal.toLocaleString() + ' Ks</span></div><div class="summary-line"><span>' + (currentLang === 'en' ? 'Delivery' : 'ပို့ဆောင်ခ') + '</span><span id="deliveryFeeDisplay">0 Ks</span></div><div class="summary-line grand"><span>💰 ' + (currentLang === 'en' ? 'Grand Total' : 'စုစုပေါင်း') + '</span><span id="grandTotalDisplay">' + grandTotal.toLocaleString() + ' Ks</span></div></div>';
 
-        html += '<div class="contact-grid">' +
-            '<a href="' + SOCIAL.facebook + '" target="_blank" class="contact-card fb-card"><div class="cc-icon">💬</div><strong>Facebook</strong></a>' +
-            '<a href="' + SOCIAL.tiktok + '" target="_blank" class="contact-card tiktok-card"><div class="cc-icon">🎵</div><strong>TikTok</strong></a>' +
-            '<a href="mailto:' + SOCIAL.email + '" class="contact-card email-card"><div class="cc-icon">📧</div><strong>' + (currentLang === 'en' ? 'Email' : 'အီးမေးလ်') + '</strong></a></div>';
-
-        html += '<div class="save-hint">💡 ' + (currentLang === 'en' ? 'Tap "📸 Save as Image" to download your estimate. Then share it via Facebook, TikTok, or Email!' : '"📸 ဓာတ်ပုံသိမ်းမည်" ကိုနှိပ်၍ ခန့်မှန်းခြေကို ပုံအဖြစ်သိမ်းပါ။ Facebook၊ TikTok သို့မဟုတ် Email မှ ဆက်သွယ်ပါ။') + '</div>';
-
-        html += '<div class="action-grid">' +
-            '<button class="btn-act primary" id="btnEmailEst">📧 ' + (currentLang === 'en' ? 'Email' : 'အီးမေးလ်') + '</button>' +
-            '<button class="btn-act fb-btn" id="btnFBMessenger">💬 Messenger</button>' +
-            '<button class="btn-act tiktok-btn" id="btnTikTok">🎵 TikTok</button>' +
-            '<button class="btn-act gold" id="btnSaveImage">📸 ' + (currentLang === 'en' ? 'Save Image' : 'ပုံသိမ်းမည်') + '</button>' +
-            '<button class="btn-act white" id="btnPrint">🖨 ' + (currentLang === 'en' ? 'Print' : 'ပရင့်') + '</button>' +
-            '<button class="btn-act white" id="btnCopy">📋 ' + (currentLang === 'en' ? 'Copy' : 'ကူးယူ') + '</button>' +
-            '<button class="btn-act danger" id="btnClear">🗑 ' + (currentLang === 'en' ? 'Clear' : 'ဖျက်မည်') + '</button></div>';
+        // Contact
+        html += '<div class="contact-grid">';
+        html += '<a href="' + SOCIAL.facebook + '" target="_blank" class="contact-card fb-card"><div class="cc-icon">📘</div><strong>Facebook</strong></a>';
+        html += '<a href="' + SOCIAL.messenger + '" target="_blank" class="contact-card"><div class="cc-icon">💬</div><strong>Messenger</strong></a>';
+        html += '<a href="' + SOCIAL.tiktok + '" target="_blank" class="contact-card tiktok-card"><div class="cc-icon">🎵</div><strong>TikTok</strong></a>';
+        html += '<a href="mailto:' + SOCIAL.email + '" class="contact-card email-card"><div class="cc-icon">✉️</div><strong>Email</strong></a>';
+        html += '</div>';
 
         container.innerHTML = html;
+        updateCartBadge();
 
-        // Township
-        var townshipGrid = document.getElementById('townshipGrid');
-        var arrow = document.querySelector('.township-arrow');
-        document.getElementById('townshipHeader').addEventListener('click', function() {
-            townshipGrid.classList.toggle('collapsed');
-            arrow.textContent = townshipGrid.classList.contains('collapsed') ? '▶' : '▼';
-        });
-
-        function updateSummary() {
-            var gt = subtotal + deliveryFee;
-            document.getElementById('deliveryFeeDisplay').textContent = deliveryFee ? deliveryFee.toLocaleString() + ' Ks' : (currentLang === 'en' ? 'Free' : 'အခမဲ့');
-            document.getElementById('grandTotalDisplay').textContent = gt.toLocaleString() + ' Ks';
-        }
-
-        document.querySelectorAll('.township-card').forEach(function(card) {
-            card.addEventListener('click', function() {
-                document.querySelectorAll('.township-card').forEach(function(c) { c.classList.remove('selected'); });
-                this.classList.add('selected');
-                deliveryFee = parseInt(this.dataset.fee);
-                selectedTownship = townships[parseInt(this.dataset.index)];
-                updateSummary();
-            });
-        });
-
-        // Save Image
+        // ── Save Image ──
         document.getElementById('btnSaveImage').addEventListener('click', function() {
-            var cardDiv = document.createElement('div');
-            cardDiv.style.cssText = 'position:fixed;top:0;left:0;width:460px;background:white;padding:32px 28px 24px;border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,0.2);z-index:9999;font-family:"Plus Jakarta Sans","Padauk",sans-serif;line-height:1.6;color:#1a2e1f;';
-            var itemsHtml = '';
-            cart.forEach(function(i) {
-                var n = currentLang === 'en' ? (i.nameEN || i.file || i.service) : (i.nameMM || i.nameEN || i.file || i.service);
-                itemsHtml += '<div style="display:flex;justify-content:space-between;font-size:0.9rem;padding:7px 0;border-bottom:1px solid #eef3ed;font-family:inherit"><span style="font-family:inherit">' + n + ' ×' + i.qty + '</span><span style="font-weight:600;font-family:inherit">' + ((i.unitPrice || 0) * i.qty).toLocaleString() + ' Ks</span></div>';
+            var el = document.getElementById('estimateSection');
+            html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#f8faf8' })
+                .then(function(canvas) {
+                    var link = document.createElement('a');
+                    link.download = 'estimate.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                })
+                .catch(function() {
+                    showToast(currentLang === 'mm' ? 'ပုံသိမ်းရာတွင် အမှားရှိသည်' : 'Error saving image');
+                });
+        });
+
+        // ── Clear Cart ──
+        document.getElementById('btnClearCart').addEventListener('click', function() {
+            if (confirm(currentLang === 'mm' ? 'ဈေးခြင်းကို ရှင်းမည်လား?' : 'Clear cart?')) {
+                cart = [];
+                localStorage.setItem('ptt_cart', JSON.stringify(cart));
+                renderEstimate();
+                renderCatalog();
+                showToast(currentLang === 'mm' ? '🗑️ ရှင်းပြီးပါပြီ' : '🗑️ Cleared');
+            }
+        });
+
+        // ── Remove Item ──
+        container.querySelectorAll('.ei-remove').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var idx = parseInt(this.dataset.idx);
+                cart.splice(idx, 1);
+                localStorage.setItem('ptt_cart', JSON.stringify(cart));
+                renderEstimate();
+                renderCatalog();
+                showToast(currentLang === 'mm' ? '❌ ဖယ်ရှားပြီးပါပြီ' : '❌ Removed');
             });
-            var gt = subtotal + deliveryFee;
-            var tn = currentLang === 'en' ? selectedTownship.nameEN : selectedTownship.nameMM;
-            cardDiv.innerHTML = '<div style="text-align:center;border-bottom:3px double #74c69d;padding-bottom:16px;margin-bottom:16px;font-family:inherit"><div style="font-weight:900;font-size:1.5rem;color:#1a3b2e;font-family:inherit">🌿 ပန်းသတင်း LANDSCAPE</div><div style="font-weight:700;color:#2d6a4f;margin-top:4px;font-family:inherit">Estimate / ခန့်မှန်းခြေ</div><div style="font-size:0.7rem;color:#888;margin-top:4px">' + new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) + '</div></div><div style="margin-bottom:14px;font-family:inherit">' + itemsHtml + '</div><div style="background:#f5faf6;border-radius:16px;padding:14px 16px;margin-bottom:14px;font-family:inherit"><div style="display:flex;justify-content:space-between;padding:3px 0;font-family:inherit"><span style="font-family:inherit">Subtotal</span><span style="font-family:inherit">' + subtotal.toLocaleString() + ' Ks</span></div><div style="display:flex;justify-content:space-between;padding:3px 0;font-family:inherit"><span style="font-family:inherit">Delivery (' + tn + ')</span><span style="font-family:inherit">' + (deliveryFee ? deliveryFee.toLocaleString() + ' Ks' : 'Free') + '</span></div><div style="display:flex;justify-content:space-between;font-weight:900;font-size:1.2rem;padding-top:10px;margin-top:8px;border-top:2px solid #74c69d;color:#1a3b2e;font-family:inherit"><span style="font-family:inherit">💰 GRAND TOTAL</span><span style="font-family:inherit">' + gt.toLocaleString() + ' Ks</span></div></div><div style="text-align:center;font-size:0.75rem;color:#6b7280;border-top:1px dashed #d0d5d0;padding-top:14px;font-family:inherit"><div style="font-weight:700;margin-bottom:8px;font-family:inherit">📞 Contact Us:</div><div style="font-family:inherit">💬 FB: fb.com/yourpage | 🎵 TikTok: @yourhandle | 📧 ' + SOCIAL.email + '</div><div style="margin-top:8px;font-size:0.68rem;color:#aaa;font-family:inherit">ပန်းသတင်း Landscape Services</div></div>';
-            document.body.appendChild(cardDiv);
-            html2canvas(cardDiv, { backgroundColor: 'white', scale: 2, useCORS: true, logging: false }).then(function(canvas) {
-                document.body.removeChild(cardDiv);
-                var a = document.createElement('a');
-                a.download = 'estimate-' + new Date().toISOString().slice(0, 10) + '.png';
-                a.href = canvas.toDataURL('image/png');
-                a.click();
-                showToast('📸 ' + (currentLang === 'en' ? 'Image saved!' : 'ပုံသိမ်းပြီးပါပြီ！'));
-            }).catch(function() { document.body.removeChild(cardDiv); showToast('⚠️ Failed'); });
-        });
-
-        document.getElementById('btnEmailEst').addEventListener('click', function() {
-            window.location.href = 'mailto:' + SOCIAL.email + '?subject=' + encodeURIComponent('Landscape Estimate') + '&body=' + encodeURIComponent(buildText(deliveryFee, selectedTownship));
-        });
-        document.getElementById('btnFBMessenger').addEventListener('click', function() { window.open(SOCIAL.messenger, '_blank'); showToast('💬 Opening Messenger...'); });
-        document.getElementById('btnTikTok').addEventListener('click', function() { window.open(SOCIAL.tiktok, '_blank'); showToast('🎵 Opening TikTok...'); });
-        document.getElementById('btnPrint').addEventListener('click', function() { window.print(); });
-        document.getElementById('btnCopy').addEventListener('click', function() { navigator.clipboard.writeText(buildText(deliveryFee, selectedTownship)).then(function() { showToast('📋 Copied!'); }); });
-        document.getElementById('btnClear').addEventListener('click', function() {
-            if (confirm(currentLang === 'en' ? 'Clear all items?' : 'ဖျက်မှာသေချာလား။')) { cart = []; saveCart(); updateCartBadge(); renderEstimate(); }
         });
     }
 
-    function buildText(deliveryFee, township) {
-        var t = '🌿 ပန်းသတင်း LANDSCAPE ESTIMATE\n' + '═'.repeat(40) + '\n\n';
-        cart.forEach(function(i) { var n = currentLang === 'en' ? (i.nameEN || i.file || i.service) : (i.nameMM || i.nameEN || i.file || i.service); t += '• ' + n + ' ×' + i.qty + ' = ' + ((i.unitPrice || 0) * i.qty).toLocaleString() + ' Ks\n'; });
-        var subtotal = cart.reduce(function(s, i) { return s + (i.unitPrice || 0) * (i.qty || 1); }, 0);
-        var gt = subtotal + deliveryFee;
-        t += '\nSubtotal: ' + subtotal.toLocaleString() + ' Ks';
-        t += '\nDelivery (' + (currentLang === 'en' ? township.nameEN : township.nameMM) + '): ' + (deliveryFee ? deliveryFee.toLocaleString() + ' Ks' : 'Free');
-        t += '\n💰 GRAND TOTAL: ' + gt.toLocaleString() + ' Ks';
-        t += '\n\n📞 Contact: ' + SOCIAL.facebook + ' | ' + SOCIAL.tiktok + ' | ' + SOCIAL.email;
-        return t;
+    // ─── Bind Card Buttons ──────────────────────────────────
+    function bindButtons() {
+        // Qty minus
+        document.querySelectorAll('.qty-minus').forEach(function(b) {
+            b.addEventListener('click', function(e) {
+                e.preventDefault();
+                var span = this.parentElement.querySelector('.qty-num');
+                var v = parseInt(span.textContent) || 1;
+                if (v > 1) span.textContent = v - 1;
+            });
+        });
+        // Qty plus
+        document.querySelectorAll('.qty-plus').forEach(function(b) {
+            b.addEventListener('click', function(e) {
+                e.preventDefault();
+                var span = this.parentElement.querySelector('.qty-num');
+                var v = parseInt(span.textContent) || 1;
+                if (v < 99) span.textContent = v + 1;
+            });
+        });
+        // Add to Cart (plants)
+        document.querySelectorAll('.btn-add[data-file]').forEach(function(b) {
+            b.addEventListener('click', function() {
+                var file = this.dataset.file;
+                var en = this.dataset.en;
+                var mm = this.dataset.mm;
+                var lo = parseInt(this.dataset.lo);
+                var hi = parseInt(this.dataset.hi);
+                var qtySpan = this.parentElement.querySelector('.qty-num');
+                var qty = qtySpan ? parseInt(qtySpan.textContent) || 1 : 1;
+                var unit = Math.round((lo + hi) / 2);
+
+                var existing = cart.find(function(c) { return c.file === file; });
+                if (existing) {
+                    existing.qty += qty;
+                } else {
+                    cart.push({ file: file, nameEN: en, nameMM: mm, unitPrice: unit, qty: qty, type: 'plant' });
+                }
+                localStorage.setItem('ptt_cart', JSON.stringify(cart));
+                renderEstimate();
+                updateCartBadge();
+                showToast(currentLang === 'mm' ? '✅ ထည့်ပြီးပါပြီ' : '✅ Added!');
+
+                this.classList.add('added');
+                var orig = this.innerHTML;
+                this.innerHTML = '✅';
+                var self = this;
+                setTimeout(function() {
+                    self.classList.remove('added');
+                    self.innerHTML = orig;
+                }, 1200);
+
+                if (qtySpan) qtySpan.textContent = '1';
+            });
+        });
+
+        // Add to Cart (services)
+        document.querySelectorAll('.btn-add[data-svc]').forEach(function(b) {
+            b.addEventListener('click', function() {
+                var svc = this.dataset.svc;
+                var mm = this.dataset.mm || svc;
+                var price = parseInt(this.dataset.price);
+
+                var existing = cart.find(function(c) { return c.service === svc; });
+                if (existing) {
+                    existing.qty = (existing.qty || 1) + 1;
+                } else {
+                    cart.push({ service: svc, nameEN: svc, nameMM: mm, unitPrice: price, qty: 1, type: 'service' });
+                }
+                localStorage.setItem('ptt_cart', JSON.stringify(cart));
+                renderEstimate();
+                updateCartBadge();
+                showToast(currentLang === 'mm' ? '✅ ထည့်ပြီးပါပြီ' : '✅ Added!');
+            });
+        });
     }
 
-    function switchLanguage(lang) {
+    // ─── Cart Badge ──────────────────────────────────────────
+    function updateCartBadge() {
+        var count = cart.reduce(function(s, i) { return s + (i.qty || 1); }, 0);
+        var badge = document.getElementById('cartCountHeader');
+        if (count > 0) {
+            badge.style.display = 'flex';
+            badge.textContent = count;
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    // ─── Toast ────────────────────────────────────────────────
+    function showToast(msg) {
+        var el = document.getElementById('toast');
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(el._timer);
+        el._timer = setTimeout(function() { el.classList.remove('show'); }, 2500);
+    }
+
+    // ─── Language Switch ──────────────────────────────────────
+    function setLanguage(lang) {
         currentLang = lang;
-        document.querySelectorAll('.lang-btn').forEach(function(btn) { btn.classList.remove('active'); if (btn.dataset.lang === lang) btn.classList.add('active'); });
-        document.querySelectorAll('[data-lang-en][data-lang-my]').forEach(function(el) { var text = el.dataset[lang === 'en' ? 'langEn' : 'langMy']; if (text) el.textContent = text; });
-        document.documentElement.lang = lang === 'en' ? 'en' : 'my';
-        localStorage.setItem('ptt_lang_pref', lang);
+        document.querySelectorAll('.lang-btn').forEach(function(b) {
+            b.classList.toggle('active', b.dataset.lang === lang);
+        });
         renderCatalog();
         renderEstimate();
     }
 
-    document.querySelectorAll('.lang-btn').forEach(function(btn) { btn.addEventListener('click', function() { switchLanguage(this.dataset.lang); }); });
-    var savedLang = localStorage.getItem('ptt_lang_pref');
-    if (savedLang && (savedLang === 'en' || savedLang === 'my')) switchLanguage(savedLang);
-
-    document.querySelectorAll('.catalog-tab').forEach(function(tab) {
-        tab.addEventListener('click', function() {
-            document.querySelectorAll('.catalog-tab').forEach(function(t) { t.classList.remove('active'); });
-            this.classList.add('active');
-            currentCatalogTab = this.dataset.cat;
-            renderCatalog();
+    // ─── Tab Switching ────────────────────────────────────────
+    function setupTabs() {
+        document.querySelectorAll('.catalog-tab').forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.catalog-tab').forEach(function(t) { t.classList.remove('active'); });
+                this.classList.add('active');
+                currentCatalogTab = this.dataset.cat;
+                renderCatalog();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         });
-    });
+    }
 
-    // Back to Top
-    var backToTopBtn = document.getElementById('backToTop');
-    window.addEventListener('scroll', function() {
-        if (window.scrollY > 400) {
-            backToTopBtn.classList.add('visible');
-        } else {
-            backToTopBtn.classList.remove('visible');
-        }
-    });
-    backToTopBtn.addEventListener('click', function() {
+    // ─── Back to Top ──────────────────────────────────────────
+    document.getElementById('backToTop').addEventListener('click', function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    function showToast(msg) {
-        var t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t);
-        setTimeout(function() { t.classList.add('show'); }, 100);
-        setTimeout(function() { t.classList.remove('show'); setTimeout(function() { t.remove(); }, 300); }, 2800);
-    }
+    // ─── Init ──────────────────────────────────────────────────
+    document.querySelectorAll('.lang-btn').forEach(function(b) {
+        b.addEventListener('click', function() { setLanguage(this.dataset.lang); });
+    });
 
-    // Initialize
+    setupTabs();
     loadAllData().then(function() {
         renderCatalog();
-        renderEstimate();
-        updateCartBadge();
-    }).catch(function() {
-        document.getElementById('catalogContent').innerHTML = '<p style="text-align:center;color:#c62828;padding:40px;">⚠️ Unable to load catalog. Please check your connection.</p>';
         renderEstimate();
         updateCartBadge();
     });
 })();
 </script>
+
 </body>
 </html>
