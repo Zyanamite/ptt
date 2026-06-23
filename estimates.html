@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>ပန်းသတင်း Landscaping | Estimate &amp; Catalog</title>
+    <title>ပန်းသတင်း Landscaping | Estimate & Catalog</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Padauk:wght@400;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         /* ── Reset & Variables ── */
@@ -403,6 +403,7 @@
             max-width: 720px;
             margin: 0 auto;
             border: 1px solid rgba(0,0,0,0.04);
+            position: relative;
         }
         .empty-cart { text-align: center; padding: 30px 0; }
         .empty-cart .empty-icon { font-size: 3rem; margin-bottom: 12px; }
@@ -428,6 +429,47 @@
             transition: var(--transition);
         }
         .estimate-item .ei-remove:hover { transform: scale(1.2); }
+
+        /* ── Delivery Selector ── */
+        .delivery-selector {
+            margin: 16px 0;
+            padding: 16px;
+            background: var(--bg-light);
+            border-radius: 16px;
+            border: 1.5px solid rgba(0,0,0,0.06);
+        }
+        .delivery-selector label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        .delivery-selector select {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(0,0,0,0.08);
+            font-family: inherit;
+            font-size: 0.9rem;
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-dark);
+        }
+        .delivery-selector select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(116, 198, 157, 0.2);
+        }
+        .delivery-selector .delivery-fee-display {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: var(--text-soft);
+        }
+        .delivery-selector .delivery-fee-display strong {
+            color: #9e5e00;
+        }
 
         .summary-line { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.9rem; color: var(--text-soft); }
         .summary-line.grand {
@@ -506,6 +548,138 @@
         .contact-card .cc-icon { font-size: 1.5rem; margin-bottom: 5px; }
         .contact-card strong { display: block; font-size: 0.75rem; color: var(--primary); }
 
+        /* ── Voucher Modal ── */
+        .voucher-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        .voucher-overlay.active { display: flex; }
+        .voucher-container {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        .voucher-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 30px 24px;
+            text-align: center;
+            border-radius: 20px 20px 0 0;
+        }
+        .voucher-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+        .voucher-header .voucher-subtitle {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        .voucher-body {
+            padding: 24px;
+        }
+        .voucher-items {
+            margin-bottom: 20px;
+        }
+        .voucher-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .voucher-item-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+            background: #f0f0f0;
+        }
+        .voucher-item-details {
+            flex: 1;
+        }
+        .voucher-item-name {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        .voucher-item-qty {
+            font-size: 0.8rem;
+            color: var(--text-soft);
+        }
+        .voucher-item-price {
+            font-weight: 700;
+            color: #9e5e00;
+            text-align: right;
+            min-width: 80px;
+        }
+        .voucher-summary {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .voucher-summary .voucher-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 0.9rem;
+        }
+        .voucher-summary .voucher-total {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            border-top: 2px solid var(--accent);
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        .voucher-footer {
+            text-align: center;
+            padding: 20px 24px;
+            border-top: 1px solid #eee;
+        }
+        .voucher-footer .btn-close-voucher {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            margin: 0 6px;
+        }
+        .voucher-footer .btn-download-voucher {
+            background: var(--gold);
+            color: #3d2a00;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            margin: 0 6px;
+        }
+        .voucher-footer button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
         /* ── Back to Top ── */
         .back-to-top {
             position: fixed;
@@ -582,6 +756,10 @@
             .back-to-top { bottom: 20px; right: 20px; width: 42px; height: 42px; font-size: 1.1rem; }
             .toast { font-size: 0.8rem; padding: 10px 20px; bottom: 80px; }
             .summary-line.grand { font-size: 1.05rem; }
+            .delivery-selector { padding: 12px; }
+            .delivery-selector select { font-size: 0.82rem; padding: 10px 12px; }
+            .voucher-container { width: 95%; }
+            .voucher-item-img { width: 50px; height: 50px; }
         }
 
         @media (max-width: 420px) {
@@ -604,13 +782,20 @@
 <!-- ─── Toast ─── -->
 <div class="toast" id="toast"></div>
 
+<!-- ─── Voucher Overlay ─── -->
+<div class="voucher-overlay" id="voucherOverlay">
+    <div class="voucher-container" id="voucherContainer">
+        <!-- Voucher content generated dynamically -->
+    </div>
+</div>
+
 <!-- ─── Header ─── -->
 <header>
     <div class="container header-content">
         <div class="logo">
             <a href="index.html">
                 <h1>ပန်းသတင်း Landscape</h1>
-                <span data-lang-en="ESTIMATE &amp; CATALOG" data-lang-my="ခန့်မှန်းခြေနှင့် Catalog">ESTIMATE &amp; CATALOG</span>
+                <span id="headerSubtitle">ESTIMATE &amp; CATALOG</span>
             </a>
         </div>
         <div class="header-right">
@@ -618,9 +803,9 @@
                 <button class="lang-btn active" data-lang="en">EN</button>
                 <button class="lang-btn" data-lang="my">မြန်မာ</button>
             </div>
-            <a href="index.html" class="home-btn"><i class="fas fa-home"></i> <span data-lang-en="Home" data-lang-my="ပင်မ">Home</span></a>
+            <a href="index.html" class="home-btn"><i class="fas fa-home"></i> <span id="homeText">Home</span></a>
             <button class="cart-btn-header" onclick="document.getElementById('estimateSection').scrollIntoView({behavior:'smooth'});">
-                🛒 <span data-lang-en="Cart" data-lang-my="ဈေးခြင်း">Cart</span>
+                🛒 <span id="cartText">Cart</span>
                 <span class="cart-count-header" id="cartCountHeader" style="display:none;">0</span>
             </button>
         </div>
@@ -632,20 +817,20 @@
     <section style="padding: 60px 0 40px;">
         <div class="container">
             <div class="section-title">
-                <h2 data-lang-en="Plant Shop &amp; Services" data-lang-my="အပင်ဆိုင်နှင့် ဝန်ဆောင်မှုများ">Plant Shop &amp; Services</h2>
-                <div class="subhead" data-lang-en="Browse our catalog and add items to your estimate" data-lang-my="Catalog ကိုကြည့်ပြီး ခန့်မှန်းခြေထဲသို့ ထည့်ပါ">Browse our catalog and add items to your estimate</div>
+                <h2 id="catalogTitle">Plant Shop &amp; Services</h2>
+                <div class="subhead" id="catalogSubhead">Browse our catalog and add items to your estimate</div>
             </div>
 
             <div class="catalog-tabs" id="catalogTabs">
-                <button class="catalog-tab popular-tab active" data-cat="popular">🔥 <span data-lang-en="Popular" data-lang-my="လူကြိုက်များ">Popular</span></button>
-                <button class="catalog-tab" data-cat="all">🌿 <span data-lang-en="All Plants" data-lang-my="အပင်အားလုံး">All Plants</span></button>
-                <button class="catalog-tab" data-cat="fruits">🍋 <span data-lang-en="Fruits" data-lang-my="သီးပင်များ">Fruits</span></button>
-                <button class="catalog-tab" data-cat="orchids">🌸 <span data-lang-en="Orchids" data-lang-my="သစ်ခွများ">Orchids</span></button>
-                <button class="catalog-tab" data-cat="pots">🪴 <span data-lang-en="Pots" data-lang-my="အိုးများ">Pots</span></button>
-                <button class="catalog-tab" data-cat="shrubs">🌺 <span data-lang-en="Shrubs" data-lang-my="ချုံပင်များ">Shrubs</span></button>
-                <button class="catalog-tab" data-cat="trees">🌳 <span data-lang-en="Trees" data-lang-my="သစ်ပင်များ">Trees</span></button>
-                <button class="catalog-tab" data-cat="indoor">🏠 <span data-lang-en="Indoor" data-lang-my="အိမ်တွင်း">Indoor</span></button>
-                <button class="catalog-tab" data-cat="services">🛠️ <span data-lang-en="Services" data-lang-my="ဝန်ဆောင်မှုများ">Services</span></button>
+                <button class="catalog-tab popular-tab active" data-cat="popular">🔥 <span class="tab-label">Popular</span></button>
+                <button class="catalog-tab" data-cat="all">🌿 <span class="tab-label">All Plants</span></button>
+                <button class="catalog-tab" data-cat="fruits">🍋 <span class="tab-label">Fruits</span></button>
+                <button class="catalog-tab" data-cat="orchids">🌸 <span class="tab-label">Orchids</span></button>
+                <button class="catalog-tab" data-cat="pots">🪴 <span class="tab-label">Pots</span></button>
+                <button class="catalog-tab" data-cat="shrubs">🌺 <span class="tab-label">Shrubs</span></button>
+                <button class="catalog-tab" data-cat="trees">🌳 <span class="tab-label">Trees</span></button>
+                <button class="catalog-tab" data-cat="indoor">🏠 <span class="tab-label">Indoor</span></button>
+                <button class="catalog-tab" data-cat="services">🛠️ <span class="tab-label">Services</span></button>
             </div>
 
             <div id="catalogContent">
@@ -658,14 +843,14 @@
     <section id="estimateSection" class="estimator-section">
         <div class="container">
             <div class="section-title">
-                <h2 data-lang-en="Your Estimate" data-lang-my="သင့်ခန့်မှန်းခြေ">Your Estimate</h2>
-                <div class="subhead" data-lang-en="Review your selections, save as image, and contact us." data-lang-my="သင်ရွေးချယ်ထားသည်များကို ပြန်ကြည့်ပါ၊ ပုံသိမ်းပါ၊ ဆက်သွယ်ပါ။">Review your selections, save as image, and contact us.</div>
+                <h2 id="estimateTitle">Your Estimate</h2>
+                <div class="subhead" id="estimateSubhead">Review your selections, save as image, and contact us.</div>
             </div>
             <div class="estimator-card" id="estimatorContent">
                 <div class="empty-cart">
                     <div class="empty-icon">🛒</div>
-                    <p style="font-size:1.05rem; color: var(--text-soft);" data-lang-en="Your cart is empty" data-lang-my="ဈေးခြင်းဗလာဖြစ်နေသည်">Your cart is empty</p>
-                    <p style="color: var(--text-soft); font-size:0.85rem;" data-lang-en="Add plants or services from the catalog above" data-lang-my="အပေါ်က catalog မှ အပင်များ သို့မဟုတ် ဝန်ဆောင်မှုများ ထည့်ပါ">Add plants or services from the catalog above</p>
+                    <p style="font-size:1.05rem; color: var(--text-soft);" id="emptyCartText">Your cart is empty</p>
+                    <p style="color: var(--text-soft); font-size:0.85rem;" id="emptyCartSub">Add plants or services from the catalog above</p>
                 </div>
             </div>
         </div>
@@ -684,16 +869,7 @@
     var currentCatalogTab = 'popular';
     var plantCatalogData = [];
     var serviceCatalogData = [];
-
-    var PLANTS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR22WF-9wb_hxPWqloOoUYxRgbcWi46lbDIw65JtHLMtMMETMzChz1pcRieoJR_nBHb210NxJzmOqDT/pub?gid=616508581&single=true&output=csv';
-    var SERVICES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR22WF-9wb_hxPWqloOoUYxRgbcWi46lbDIw65JtHLMtMMETMzChz1pcRieoJR_nBHb210NxJzmOqDT/pub?gid=237556812&single=true&output=csv';
-
-    var SOCIAL = {
-        facebook: 'https://facebook.com/yourpage',
-        messenger: 'https://m.me/yourpage',
-        tiktok: 'https://tiktok.com/@yourhandle',
-        email: 'pttlandscapeservices@gmail.com'
-    };
+    var selectedTownship = localStorage.getItem('ptt_township') || 'Self Pickup';
 
     var townships = [
         { nameEN: "Self Pickup", nameMM: "ကိုယ်တိုင်လာယူ", fee: 0, icon: "🚶" },
@@ -712,7 +888,123 @@
         { nameEN: "Thanlyin", nameMM: "သန်လျင်", fee: 10000, icon: "🌉" }
     ];
 
-    // ─── CSV Helpers ──────────────────────────────────────────────
+    var translations = {
+        en: {
+            headerSubtitle: 'ESTIMATE & CATALOG',
+            homeText: 'Home',
+            cartText: 'Cart',
+            catalogTitle: 'Plant Shop & Services',
+            catalogSubhead: 'Browse our catalog and add items to your estimate',
+            estimateTitle: 'Your Estimate',
+            estimateSubhead: 'Review your selections, save as image, and contact us.',
+            emptyCartText: 'Your cart is empty',
+            emptyCartSub: 'Add plants or services from the catalog above',
+            tabs: {
+                popular: 'Popular',
+                all: 'All Plants',
+                fruits: 'Fruits',
+                orchids: 'Orchids',
+                pots: 'Pots',
+                shrubs: 'Shrubs',
+                trees: 'Trees',
+                indoor: 'Indoor',
+                services: 'Services'
+            },
+            addToCart: 'Add to Cart',
+            soldOut: 'Sold Out',
+            saveImage: 'Save as Voucher',
+            clear: 'Clear',
+            subtotal: 'Subtotal',
+            delivery: 'Delivery',
+            total: 'Total',
+            selectDelivery: 'Select Delivery Location',
+            deliveryFee: 'Delivery Fee',
+            saveHint: '💡 Click "Save as Voucher" to view and download your estimate',
+            cartAdded: '✅ Added!',
+            cartCleared: '🗑️ Cleared',
+            itemRemoved: '❌ Removed',
+            errorSave: 'Error saving voucher',
+            confirmClear: 'Clear cart?',
+            voucherTitle: 'ESTIMATE VOUCHER',
+            voucherSubtitle: 'ပန်းသတင်း Landscaping Services',
+            voucherDate: 'Date',
+            voucherId: 'Estimate #',
+            closeVoucher: 'Close',
+            downloadVoucher: 'Download PNG',
+            voucherThankYou: 'Thank you for choosing ပန်းသတင်း Landscaping! 🌿',
+            contactUs: 'Contact us to confirm your order',
+            loading: 'Loading catalog...',
+            noItems: 'No items found',
+            errorLoading: 'Error loading catalog. Please refresh the page.'
+        },
+        my: {
+            headerSubtitle: 'ခန့်မှန်းခြေနှင့် Catalog',
+            homeText: 'ပင်မ',
+            cartText: 'ဈေးခြင်း',
+            catalogTitle: 'အပင်ဆိုင်နှင့် ဝန်ဆောင်မှုများ',
+            catalogSubhead: 'Catalog ကိုကြည့်ပြီး ခန့်မှန်းခြေထဲသို့ ထည့်ပါ',
+            estimateTitle: 'သင့်ခန့်မှန်းခြေ',
+            estimateSubhead: 'သင်ရွေးချယ်ထားသည်များကို ပြန်ကြည့်ပါ၊ ပုံသိမ်းပါ၊ ဆက်သွယ်ပါ။',
+            emptyCartText: 'ဈေးခြင်းဗလာဖြစ်နေသည်',
+            emptyCartSub: 'အပေါ်က catalog မှ အပင်များ သို့မဟုတ် ဝန်ဆောင်မှုများ ထည့်ပါ',
+            tabs: {
+                popular: 'လူကြိုက်များ',
+                all: 'အပင်အားလုံး',
+                fruits: 'သီးပင်များ',
+                orchids: 'သစ်ခွများ',
+                pots: 'အိုးများ',
+                shrubs: 'ချုံပင်များ',
+                trees: 'သစ်ပင်များ',
+                indoor: 'အိမ်တွင်း',
+                services: 'ဝန်ဆောင်မှုများ'
+            },
+            addToCart: 'ထည့်မည်',
+            soldOut: 'ရောင်းပြီး',
+            saveImage: 'ဘောက်ချာအဖြစ်သိမ်းမည်',
+            clear: 'ရှင်းမည်',
+            subtotal: 'ကြားဖြတ်ပေါင်း',
+            delivery: 'ပို့ဆောင်ခ',
+            total: 'စုစုပေါင်း',
+            selectDelivery: 'ပို့ဆောင်မည့်နေရာရွေးပါ',
+            deliveryFee: 'ပို့ဆောင်ခ',
+            saveHint: '💡 "ဘောက်ချာအဖြစ်သိမ်းမည်" ကိုနှိပ်၍ ကြည့်ရှုပြီး ဒေါင်းလုဒ်လုပ်ပါ',
+            cartAdded: '✅ ထည့်ပြီးပါပြီ',
+            cartCleared: '🗑️ ရှင်းပြီးပါပြီ',
+            itemRemoved: '❌ ဖယ်ရှားပြီးပါပြီ',
+            errorSave: 'ဘောက်ချာသိမ်းရာတွင် အမှားရှိသည်',
+            confirmClear: 'ဈေးခြင်းကို ရှင်းမည်လား?',
+            voucherTitle: 'ခန့်မှန်းခြေ ဘောက်ချာ',
+            voucherSubtitle: 'ပန်းသတင်း Landscaping ဝန်ဆောင်မှုများ',
+            voucherDate: 'ရက်စွဲ',
+            voucherId: 'ခန့်မှန်းခြေနံပါတ်',
+            closeVoucher: 'ပိတ်မည်',
+            downloadVoucher: 'PNG ဒေါင်းလုဒ်',
+            voucherThankYou: 'ပန်းသတင်း Landscaping ကိုရွေးချယ်သည့်အတွက် ကျေးဇူးတင်ပါသည်။ 🌿',
+            contactUs: 'အော်ဒါအတည်ပြုရန် ဆက်သွယ်ပါ',
+            loading: 'Catalog ဖွင့်နေသည်...',
+            noItems: 'ပစ္စည်းမရှိပါ',
+            errorLoading: 'Catalog ဖွင့်၍မရပါ။ ကျေးဇူးပြု၍ ပြန်စမ်းကြည့်ပါ။'
+        }
+    };
+
+    function t(key) {
+        return (translations[currentLang] || translations.en)[key] || key;
+    }
+
+    function tTab(key) {
+        return (translations[currentLang] || translations.en).tabs[key] || key;
+    }
+
+    var PLANTS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR22WF-9wb_hxPWqloOoUYxRgbcWi46lbDIw65JtHLMtMMETMzChz1pcRieoJR_nBHb210NxJzmOqDT/pub?gid=616508581&single=true&output=csv';
+    var SERVICES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR22WF-9wb_hxPWqloOoUYxRgbcWi46lbDIw65JtHLMtMMETMzChz1pcRieoJR_nBHb210NxJzmOqDT/pub?gid=237556812&single=true&output=csv';
+
+    var SOCIAL = {
+        facebook: 'https://facebook.com/yourpage',
+        messenger: 'https://m.me/yourpage',
+        tiktok: 'https://tiktok.com/@yourhandle',
+        email: 'pttlandscapeservices@gmail.com'
+    };
+
     function parseCSV(t) {
         var r = [], c = '', q = false;
         for (var i = 0; i < t.length; i++) {
@@ -726,11 +1018,32 @@
     }
 
     function fetchCSV(url) {
-        return fetch(url).then(function(r) { return r.text(); })
+        return fetch(url)
+            .then(function(r) {
+                if (!r.ok) throw new Error('Failed to fetch CSV');
+                return r.text();
+            })
             .then(function(t) { return t.trim().split('\n').map(parseCSV); });
     }
 
-    // ─── Load Data ──────────────────────────────────────────────
+    function updateHeaderTranslations() {
+        document.getElementById('headerSubtitle').textContent = t('headerSubtitle');
+        document.getElementById('homeText').textContent = t('homeText');
+        document.getElementById('cartText').textContent = t('cartText');
+    }
+
+    function updateSectionTitles() {
+        document.getElementById('catalogTitle').textContent = t('catalogTitle');
+        document.getElementById('catalogSubhead').textContent = t('catalogSubhead');
+        document.getElementById('estimateTitle').textContent = t('estimateTitle');
+        document.getElementById('estimateSubhead').textContent = t('estimateSubhead');
+        
+        document.querySelectorAll('.catalog-tab').forEach(function(tab) {
+            var label = tab.querySelector('.tab-label');
+            if (label) label.textContent = tTab(tab.dataset.cat);
+        });
+    }
+
     function loadAllData() {
         return Promise.all([fetchCSV(PLANTS_CSV_URL), fetchCSV(SERVICES_CSV_URL)])
             .then(function(results) {
@@ -776,10 +1089,14 @@
 
                 renderCatalog();
                 renderEstimate();
+            })
+            .catch(function(err) {
+                console.error('Error loading data:', err);
+                document.getElementById('catalogContent').innerHTML = 
+                    '<p style="text-align:center;color:#cc5555;padding:40px 0;">' + t('errorLoading') + '</p>';
             });
     }
 
-    // ─── Filter Functions ──────────────────────────────────────
     function getPopular() {
         return plantCatalogData.filter(function(p) {
             return p.badge && /popular|bestseller|trending|premium/i.test(p.badge);
@@ -793,7 +1110,6 @@
         return k ? plantCatalogData.filter(function(p) { return new RegExp(k, 'i').test(p.catEN); }) : plantCatalogData;
     }
 
-    // ─── Render Card (Full Details from estimate.html) ──────
     function renderPlantCard(p) {
         var name = currentLang === 'mm' ? p.nameMM : p.nameEN;
         var price = p.priceLow === p.priceHigh ?
@@ -820,7 +1136,6 @@
             h += '<div class="soldout-badge">SOLD OUT</div>';
         }
         h += '</div>';
-
         h += '<div class="plant-card-body">';
         h += '<h4>' + name + '</h4>';
         if (p.nameMM !== p.nameEN) {
@@ -836,7 +1151,6 @@
             h += '<div class="plant-tags">' + p.tags.map(function(t) { return '<span>' + t + '</span>'; }).join('') + '</div>';
         }
         h += '<span class="plant-card-price">' + price + '</span>';
-
         if (!isSold) {
             h += '<div class="plant-qty-row">';
             h += '<button class="qty-minus">−</button>';
@@ -844,17 +1158,15 @@
             h += '<button class="qty-plus">+</button>';
             h += '</div>';
             h += '<button class="btn-add" data-file="' + p.file + '" data-en="' + p.nameEN + '" data-mm="' + p.nameMM + '" data-lo="' + p.priceLow + '" data-hi="' + p.priceHigh + '">';
-            h += '🛒 ' + (currentLang === 'mm' ? 'ထည့်မည်' : 'Add to Cart');
+            h += '🛒 ' + t('addToCart');
             h += '</button>';
         } else {
-            h += '<button class="btn-add" style="background:#ccc;color:#666;cursor:not-allowed;" disabled>Sold Out</button>';
+            h += '<button class="btn-add" style="background:#ccc;color:#666;cursor:not-allowed;" disabled>' + t('soldOut') + '</button>';
         }
-
         h += '</div></div>';
         return h;
     }
 
-    // ─── Render Services ──────────────────────────────────────
     function renderServices() {
         var g = {};
         serviceCatalogData.forEach(function(s) {
@@ -862,7 +1174,6 @@
             if (!g[c]) g[c] = [];
             g[c].push(s);
         });
-
         var h = '<h2 class="section-title">🛠️ ' + (currentLang === 'mm' ? 'ဝန်ဆောင်မှုများ' : 'Services') + '</h2>';
         for (var c in g) {
             h += '<h3 style="margin:24px 0 12px;color:var(--primary);font-weight:700;font-size:1.05rem;">' + c + '</h3>';
@@ -880,7 +1191,7 @@
                     h += '<div class="s-features">' + s.features.map(function(f) { return '🌿 ' + f; }).join('<br>') + '</div>';
                 }
                 h += '<button class="btn-add" data-svc="' + s.nameEN + '" data-mm="' + s.nameMM + '" data-price="' + Math.round((s.priceLow + s.priceHigh) / 2) + '">';
-                h += '+' + (currentLang === 'mm' ? ' ထည့်မည်' : ' Add to Cart');
+                h += '+' + t('addToCart');
                 h += '</button>';
                 h += '</div>';
             });
@@ -889,18 +1200,15 @@
         return h;
     }
 
-    // ─── Render Catalog ──────────────────────────────────────
     function renderCatalog() {
         var container = document.getElementById('catalogContent');
         var html = '';
-
         if (currentCatalogTab === 'services') {
             html = renderServices();
         } else {
             var items = currentCatalogTab === 'popular' ? getPopular() :
                         currentCatalogTab === 'all' ? plantCatalogData :
                         getByCat(currentCatalogTab);
-
             if (currentCatalogTab === 'all' || currentCatalogTab === 'popular') {
                 html = '<div class="catalog-grid">' + items.map(renderPlantCard).join('') + '</div>';
             } else {
@@ -916,51 +1224,179 @@
                 }
             }
         }
-
-        container.innerHTML = html || '<p style="text-align:center;color:var(--text-soft);padding:40px 0;">No items found</p>';
+        container.innerHTML = html || '<p style="text-align:center;color:var(--text-soft);padding:40px 0;">' + t('noItems') + '</p>';
         bindButtons();
     }
 
-    // ─── Render Estimate ──────────────────────────────────────
+    function getDeliveryFee() {
+        var found = townships.find(function(t) { return t.nameEN === selectedTownship; });
+        return found ? found.fee : 0;
+    }
+
+    function getTownshipDisplay() {
+        var found = townships.find(function(t) { return t.nameEN === selectedTownship; });
+        if (!found) return selectedTownship;
+        return currentLang === 'mm' ? found.nameMM : found.nameEN;
+    }
+
+    // ─── Show Voucher Modal ─────────────────────────────────
+    function showVoucher() {
+        var overlay = document.getElementById('voucherOverlay');
+        var container = document.getElementById('voucherContainer');
+        
+        var subtotal = 0;
+        var itemsHtml = '';
+        
+        cart.forEach(function(item) {
+            var name = currentLang === 'mm' ? (item.nameMM || item.nameEN) : item.nameEN;
+            var price = item.unitPrice || 0;
+            var itemTotal = price * (item.qty || 1);
+            subtotal += itemTotal;
+            
+            var imgSrc = '';
+            if (item.file) {
+                imgSrc = 'images/' + item.file;
+            } else if (item.type === 'service') {
+                imgSrc = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><rect width="60" height="60" fill="#e8f5e9"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="24">🛠️</text></svg>');
+            }
+            
+            itemsHtml += '<div class="voucher-item">';
+            if (imgSrc) {
+                itemsHtml += '<img class="voucher-item-img" src="' + imgSrc + '" alt="' + name + '" onerror="this.src=\'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><rect width="60" height="60" fill="#f0f0f0"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="20">🌿</text></svg>') + '\'">';
+            }
+            itemsHtml += '<div class="voucher-item-details">';
+            itemsHtml += '<div class="voucher-item-name">' + name + '</div>';
+            itemsHtml += '<div class="voucher-item-qty">×' + (item.qty || 1) + '</div>';
+            itemsHtml += '</div>';
+            itemsHtml += '<div class="voucher-item-price">' + itemTotal.toLocaleString() + ' Ks</div>';
+            itemsHtml += '</div>';
+        });
+        
+        var deliveryFee = getDeliveryFee();
+        var total = subtotal + deliveryFee;
+        var now = new Date();
+        var dateStr = now.toLocaleDateString(currentLang === 'mm' ? 'my-MM' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        var voucherId = 'PTT-' + Date.now().toString(36).toUpperCase().slice(-6);
+        
+        var voucherHtml = '<div id="voucherPrintArea">';
+        voucherHtml += '<div class="voucher-header">';
+        voucherHtml += '<h2>🌿 ' + t('voucherTitle') + '</h2>';
+        voucherHtml += '<div class="voucher-subtitle">' + t('voucherSubtitle') + '</div>';
+        voucherHtml += '</div>';
+        voucherHtml += '<div class="voucher-body">';
+        voucherHtml += '<div style="display:flex;justify-content:space-between;margin-bottom:16px;font-size:0.8rem;color:var(--text-soft);">';
+        voucherHtml += '<span>' + t('voucherDate') + ': ' + dateStr + '</span>';
+        voucherHtml += '<span>' + t('voucherId') + ': ' + voucherId + '</span>';
+        voucherHtml += '</div>';
+        voucherHtml += '<div class="voucher-items">' + itemsHtml + '</div>';
+        voucherHtml += '<div class="voucher-summary">';
+        voucherHtml += '<div class="voucher-row"><span>' + t('subtotal') + '</span><span>' + subtotal.toLocaleString() + ' Ks</span></div>';
+        voucherHtml += '<div class="voucher-row"><span>🚚 ' + t('delivery') + ' (' + getTownshipDisplay() + ')</span><span>' + deliveryFee.toLocaleString() + ' Ks</span></div>';
+        voucherHtml += '<div class="voucher-row voucher-total"><span>' + t('total') + '</span><span>' + total.toLocaleString() + ' Ks</span></div>';
+        voucherHtml += '</div>';
+        voucherHtml += '<p style="text-align:center;margin-top:20px;color:var(--text-soft);font-size:0.85rem;">' + t('contactUs') + '</p>';
+        voucherHtml += '<div style="display:flex;gap:8px;justify-content:center;margin-top:12px;">';
+        voucherHtml += '<span style="font-size:0.75rem;">📘 Facebook</span>';
+        voucherHtml += '<span style="font-size:0.75rem;">💬 Messenger</span>';
+        voucherHtml += '<span style="font-size:0.75rem;">✉️ ' + SOCIAL.email + '</span>';
+        voucherHtml += '</div>';
+        voucherHtml += '</div>';
+        voucherHtml += '<div style="text-align:center;padding:16px;background:var(--bg-light);border-radius:0 0 20px 20px;font-size:0.85rem;color:var(--primary);">';
+        voucherHtml += t('voucherThankYou');
+        voucherHtml += '</div>';
+        voucherHtml += '</div>';
+        
+        voucherHtml += '<div class="voucher-footer">';
+        voucherHtml += '<button class="btn-download-voucher" id="btnDownloadVoucher">📥 ' + t('downloadVoucher') + '</button>';
+        voucherHtml += '<button class="btn-close-voucher" id="btnCloseVoucher">✕ ' + t('closeVoucher') + '</button>';
+        voucherHtml += '</div>';
+        
+        container.innerHTML = voucherHtml;
+        overlay.classList.add('active');
+        
+        // Close button
+        document.getElementById('btnCloseVoucher').addEventListener('click', function() {
+            overlay.classList.remove('active');
+        });
+        
+        // Download button
+        document.getElementById('btnDownloadVoucher').addEventListener('click', function() {
+            var voucherArea = document.getElementById('voucherPrintArea');
+            html2canvas(voucherArea, { 
+                scale: 2, 
+                useCORS: true, 
+                backgroundColor: '#ffffff',
+                allowTaint: true,
+                logging: false
+            })
+            .then(function(canvas) {
+                var link = document.createElement('a');
+                link.download = 'estimate-voucher-' + voucherId + '.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast('✅ Voucher downloaded!');
+            })
+            .catch(function() {
+                showToast(t('errorSave'));
+            });
+        });
+        
+        // Close on overlay click
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) {
+                overlay.classList.remove('active');
+            }
+        });
+    }
+
+    // ─── Render Estimate ────────────────────────────────────
     function renderEstimate() {
         var container = document.getElementById('estimatorContent');
         if (!cart.length) {
-            container.innerHTML = '<div class="empty-cart"><div class="empty-icon">🛒</div><p style="font-size:1.05rem;color:var(--text-soft);" data-lang-en="Your cart is empty" data-lang-my="ဈေးခြင်းဗလာဖြစ်နေသည်">Your cart is empty</p><p style="color:var(--text-soft);font-size:0.85rem;" data-lang-en="Add plants or services from the catalog above" data-lang-my="အပေါ်က catalog မှ အပင်များ သို့မဟုတ် ဝန်ဆောင်မှုများ ထည့်ပါ">Add plants or services from the catalog above</p></div>';
+            container.innerHTML = '<div class="empty-cart"><div class="empty-icon">🛒</div><p style="font-size:1.05rem;color:var(--text-soft);">' + t('emptyCartText') + '</p><p style="color:var(--text-soft);font-size:0.85rem;">' + t('emptyCartSub') + '</p></div>';
             updateCartBadge();
             return;
         }
 
-        var total = 0;
+        var subtotal = 0;
         var html = '';
 
         cart.forEach(function(item, idx) {
             var name = currentLang === 'mm' ? (item.nameMM || item.nameEN) : item.nameEN;
             var price = item.unitPrice || 0;
-            var subtotal = price * (item.qty || 1);
-            total += subtotal;
+            var itemTotal = price * (item.qty || 1);
+            subtotal += itemTotal;
             html += '<div class="estimate-item">';
             html += '<div><span class="ei-name">' + name + '</span> <span class="ei-qty">×' + (item.qty || 1) + '</span></div>';
-            html += '<div><span class="ei-price">' + subtotal.toLocaleString() + ' Ks</span>';
+            html += '<div><span class="ei-price">' + itemTotal.toLocaleString() + ' Ks</span>';
             html += '<button class="ei-remove" data-idx="' + idx + '" title="Remove">✕</button></div>';
             html += '</div>';
         });
 
-        // Delivery (simple: default to first township)
-        var deliveryFee = 3000;
-        total += deliveryFee;
-
-        html += '<div class="summary-line"><span>Subtotal</span><span>' + (total - deliveryFee).toLocaleString() + ' Ks</span></div>';
-        html += '<div class="summary-line"><span>🚚 Delivery</span><span>' + deliveryFee.toLocaleString() + ' Ks</span></div>';
-        html += '<div class="summary-line grand"><span>Total</span><span>' + total.toLocaleString() + ' Ks</span></div>';
-
-        html += '<div class="save-hint">💡 ' + (currentLang === 'mm' ? 'အောက်က ခလုတ်ကို နှိပ်ပြီး ပုံသိမ်းပါ၊ ပြီးရင် ဆက်သွယ်ပါ။' : 'Save as image below, then contact us.') + '</div>';
-
-        html += '<div class="action-grid">';
-        html += '<button class="btn-act gold" id="btnSaveImage"><i class="fas fa-image"></i> ' + (currentLang === 'mm' ? 'ပုံသိမ်းမည်' : 'Save Image') + '</button>';
-        html += '<button class="btn-act green" id="btnClearCart"><i class="fas fa-trash"></i> ' + (currentLang === 'mm' ? 'ရှင်းမည်' : 'Clear') + '</button>';
+        html += '<div class="delivery-selector">';
+        html += '<label for="townshipSelect">' + t('selectDelivery') + '</label>';
+        html += '<select id="townshipSelect">';
+        townships.forEach(function(t) {
+            var name = currentLang === 'mm' ? t.nameMM : t.nameEN;
+            var selected = t.nameEN === selectedTownship ? 'selected' : '';
+            html += '<option value="' + t.nameEN + '" ' + selected + '>' + t.icon + ' ' + name + ' (' + t.fee.toLocaleString() + ' Ks)</option>';
+        });
+        html += '</select>';
+        html += '<div class="delivery-fee-display">' + t('deliveryFee') + ': <strong id="deliveryFeeDisplay">' + getDeliveryFee().toLocaleString() + ' Ks</strong></div>';
         html += '</div>';
 
-        // Contact
+        var deliveryFee = getDeliveryFee();
+        var total = subtotal + deliveryFee;
+
+        html += '<div class="summary-line"><span>' + t('subtotal') + '</span><span>' + subtotal.toLocaleString() + ' Ks</span></div>';
+        html += '<div class="summary-line"><span>🚚 ' + t('delivery') + ' (' + getTownshipDisplay() + ')</span><span>' + deliveryFee.toLocaleString() + ' Ks</span></div>';
+        html += '<div class="summary-line grand"><span>' + t('total') + '</span><span>' + total.toLocaleString() + ' Ks</span></div>';
+        html += '<div class="save-hint">' + t('saveHint') + '</div>';
+        html += '<div class="action-grid">';
+        html += '<button class="btn-act gold" id="btnSaveImage"><i class="fas fa-receipt"></i> ' + t('saveImage') + '</button>';
+        html += '<button class="btn-act green" id="btnClearCart"><i class="fas fa-trash"></i> ' + t('clear') + '</button>';
+        html += '</div>';
+
         html += '<div class="contact-grid">';
         html += '<a href="' + SOCIAL.facebook + '" target="_blank" class="contact-card fb-card"><div class="cc-icon">📘</div><strong>Facebook</strong></a>';
         html += '<a href="' + SOCIAL.messenger + '" target="_blank" class="contact-card"><div class="cc-icon">💬</div><strong>Messenger</strong></a>';
@@ -971,33 +1407,39 @@
         container.innerHTML = html;
         updateCartBadge();
 
-        // ── Save Image ──
-        document.getElementById('btnSaveImage').addEventListener('click', function() {
-            var el = document.getElementById('estimateSection');
-            html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#f8faf8' })
-                .then(function(canvas) {
-                    var link = document.createElement('a');
-                    link.download = 'estimate.png';
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-                })
-                .catch(function() {
-                    showToast(currentLang === 'mm' ? 'ပုံသိမ်းရာတွင် အမှားရှိသည်' : 'Error saving image');
-                });
-        });
-
-        // ── Clear Cart ──
-        document.getElementById('btnClearCart').addEventListener('click', function() {
-            if (confirm(currentLang === 'mm' ? 'ဈေးခြင်းကို ရှင်းမည်လား?' : 'Clear cart?')) {
-                cart = [];
-                localStorage.setItem('ptt_cart', JSON.stringify(cart));
+        // Delivery Selector Event
+        var select = document.getElementById('townshipSelect');
+        if (select) {
+            select.addEventListener('change', function() {
+                selectedTownship = this.value;
+                localStorage.setItem('ptt_township', selectedTownship);
                 renderEstimate();
-                renderCatalog();
-                showToast(currentLang === 'mm' ? '🗑️ ရှင်းပြီးပါပြီ' : '🗑️ Cleared');
-            }
-        });
+            });
+        }
 
-        // ── Remove Item ──
+        // Save Voucher Button
+        var saveBtn = document.getElementById('btnSaveImage');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', function() {
+                showVoucher();
+            });
+        }
+
+        // Clear Cart Button
+        var clearBtn = document.getElementById('btnClearCart');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function() {
+                if (confirm(t('confirmClear'))) {
+                    cart = [];
+                    localStorage.setItem('ptt_cart', JSON.stringify(cart));
+                    renderEstimate();
+                    renderCatalog();
+                    showToast(t('cartCleared'));
+                }
+            });
+        }
+
+        // Remove Item
         container.querySelectorAll('.ei-remove').forEach(function(btn) {
             btn.addEventListener('click', function() {
                 var idx = parseInt(this.dataset.idx);
@@ -1005,14 +1447,12 @@
                 localStorage.setItem('ptt_cart', JSON.stringify(cart));
                 renderEstimate();
                 renderCatalog();
-                showToast(currentLang === 'mm' ? '❌ ဖယ်ရှားပြီးပါပြီ' : '❌ Removed');
+                showToast(t('itemRemoved'));
             });
         });
     }
 
-    // ─── Bind Card Buttons ──────────────────────────────────
     function bindButtons() {
-        // Qty minus
         document.querySelectorAll('.qty-minus').forEach(function(b) {
             b.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -1021,7 +1461,6 @@
                 if (v > 1) span.textContent = v - 1;
             });
         });
-        // Qty plus
         document.querySelectorAll('.qty-plus').forEach(function(b) {
             b.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -1030,7 +1469,6 @@
                 if (v < 99) span.textContent = v + 1;
             });
         });
-        // Add to Cart (plants)
         document.querySelectorAll('.btn-add[data-file]').forEach(function(b) {
             b.addEventListener('click', function() {
                 var file = this.dataset.file;
@@ -1051,7 +1489,7 @@
                 localStorage.setItem('ptt_cart', JSON.stringify(cart));
                 renderEstimate();
                 updateCartBadge();
-                showToast(currentLang === 'mm' ? '✅ ထည့်ပြီးပါပြီ' : '✅ Added!');
+                showToast(t('cartAdded'));
 
                 this.classList.add('added');
                 var orig = this.innerHTML;
@@ -1066,7 +1504,6 @@
             });
         });
 
-        // Add to Cart (services)
         document.querySelectorAll('.btn-add[data-svc]').forEach(function(b) {
             b.addEventListener('click', function() {
                 var svc = this.dataset.svc;
@@ -1082,12 +1519,11 @@
                 localStorage.setItem('ptt_cart', JSON.stringify(cart));
                 renderEstimate();
                 updateCartBadge();
-                showToast(currentLang === 'mm' ? '✅ ထည့်ပြီးပါပြီ' : '✅ Added!');
+                showToast(t('cartAdded'));
             });
         });
     }
 
-    // ─── Cart Badge ──────────────────────────────────────────
     function updateCartBadge() {
         var count = cart.reduce(function(s, i) { return s + (i.qty || 1); }, 0);
         var badge = document.getElementById('cartCountHeader');
@@ -1099,7 +1535,6 @@
         }
     }
 
-    // ─── Toast ────────────────────────────────────────────────
     function showToast(msg) {
         var el = document.getElementById('toast');
         el.textContent = msg;
@@ -1108,17 +1543,17 @@
         el._timer = setTimeout(function() { el.classList.remove('show'); }, 2500);
     }
 
-    // ─── Language Switch ──────────────────────────────────────
     function setLanguage(lang) {
         currentLang = lang;
         document.querySelectorAll('.lang-btn').forEach(function(b) {
             b.classList.toggle('active', b.dataset.lang === lang);
         });
+        updateHeaderTranslations();
+        updateSectionTitles();
         renderCatalog();
         renderEstimate();
     }
 
-    // ─── Tab Switching ────────────────────────────────────────
     function setupTabs() {
         document.querySelectorAll('.catalog-tab').forEach(function(tab) {
             tab.addEventListener('click', function() {
@@ -1131,21 +1566,19 @@
         });
     }
 
-    // ─── Back to Top ──────────────────────────────────────────
     document.getElementById('backToTop').addEventListener('click', function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // ─── Init ──────────────────────────────────────────────────
     document.querySelectorAll('.lang-btn').forEach(function(b) {
         b.addEventListener('click', function() { setLanguage(this.dataset.lang); });
     });
 
     setupTabs();
     loadAllData().then(function() {
-        renderCatalog();
-        renderEstimate();
         updateCartBadge();
+        updateHeaderTranslations();
+        updateSectionTitles();
     });
 })();
 </script>
