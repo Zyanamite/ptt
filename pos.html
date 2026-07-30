@@ -3,19 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>ပန်းအိုးဆိုင် POS | Dual Pricing</title>
+  <title>ပန်းအိုးဆိုင် POS</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Pot Shop">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%238D6E63'/%3E%3Ctext x='256' y='360' font-size='300' text-anchor='middle' fill='white' font-family='sans-serif'%3E🏺%3C/text%3E%3C/svg%3E">
-  <script>
-    const m={name:"ပန်းအိုးဆိုင် POS",short_name:"Pot Shop",start_url:"./",display:"standalone",background_color:"#FAF7F2",theme_color:"#8D6E63",icons:[{src:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%238D6E63'/%3E%3Ctext x='256' y='360' font-size='300' text-anchor='middle' fill='white' font-family='sans-serif'%3E🏺%3C/text%3E%3C/svg%3E",sizes:"512x512",type:"image/svg+xml",purpose:"any maskable"}]};
-    const b=new Blob([JSON.stringify(m)],{type:'application/json'});
-    document.head.insertAdjacentHTML('beforeend',`<link rel="manifest" href="${URL.createObjectURL(b)}">`);
-  </script>
- <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+  
   <style>
     :root{--clay:#8D6E63;--clay-dark:#5D4037;--terracotta:#E2725B;--cream:#FAF7F2;--card:#FFF;--text:#3E2723;--text-light:#6D4C41;--border:#D7CCC8;--shadow:0 2px 12px rgba(62,39,35,0.08);--radius:14px}
     *{margin:0;padding:0;box-sizing:border-box}
@@ -23,17 +19,16 @@
     .app{max-width:1200px;margin:0 auto;padding:.8rem}
     .header{background:linear-gradient(135deg,var(--clay-dark),var(--clay));color:#fff;border-radius:var(--radius);padding:1rem 1.5rem;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;box-shadow:0 4px 16px rgba(93,64,55,.3)}
     .header .brand{font-size:1.3rem;font-weight:800;display:flex;align-items:center;gap:.5rem}
-    .header .brand span{font-size:2rem}
     .header .stats{display:flex;gap:1.5rem;flex-wrap:wrap}
-    .header .stats .s-item{text-align:center}
-    .header .stats .s-val{font-weight:800;font-size:1.2rem}
-    .header .stats .s-lbl{font-size:.7rem;opacity:.9}
+    .header .stats div{text-align:center}
+    .header .stats .val{font-weight:800;font-size:1.2rem}
+    .header .stats .lbl{font-size:.7rem;opacity:.9}
     .nav{display:flex;gap:.3rem;background:var(--card);border-radius:var(--radius);padding:.3rem;margin-bottom:1rem;box-shadow:var(--shadow);overflow-x:auto}
     .nav-btn{padding:.6rem 1.2rem;border-radius:20px;border:none;background:0 0;font-weight:600;cursor:pointer;white-space:nowrap;font-size:.85rem;color:var(--text-light);transition:all .2s}
     .nav-btn.active{background:var(--clay);color:#fff}
     .main-grid{display:grid;grid-template-columns:1fr 380px;gap:1rem}
     @media(max-width:900px){.main-grid{grid-template-columns:1fr}}
-    .card{background:var(--card);border-radius:var(--radius);padding:1.2rem;box-shadow:var(--shadow);border:1px solid var(--border)}
+    .card{background:var(--card);border-radius:var(--radius);padding:1.2rem;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:1rem}
     .card-header{font-weight:700;font-size:1rem;margin-bottom:.8rem;display:flex;justify-content:space-between;align-items:center}
     .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.8rem;max-height:55vh;overflow-y:auto}
     .product-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);padding:.8rem;cursor:pointer;transition:all .2s;text-align:center;position:relative}
@@ -41,7 +36,6 @@
     .product-card img{width:100%;height:100px;object-fit:cover;border-radius:8px;background:#F5F0EB;margin-bottom:.4rem}
     .product-card .name{font-weight:700;font-size:.9rem}
     .product-card .info{font-size:.7rem;color:var(--text-light)}
-    .product-card .prices{margin-top:.3rem}
     .product-card .price-retail{font-weight:700;color:var(--terracotta);font-size:.9rem}
     .product-card .price-wholesale{font-weight:600;color:var(--clay-dark);font-size:.75rem}
     .product-card .badge{position:absolute;top:8px;right:8px;padding:.2rem .5rem;border-radius:10px;font-size:.6rem;font-weight:700}
@@ -80,7 +74,6 @@
     .sale-type-toggle{display:flex;gap:.5rem;margin-bottom:.8rem}
     .sale-type-btn{flex:1;padding:.5rem;border-radius:20px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-weight:600;font-size:.8rem;text-align:center;transition:.2s}
     .sale-type-btn.active{background:var(--clay);color:#fff;border-color:var(--clay)}
-    .sale-type-btn.wholesale.active{background:var(--clay-dark)}
   </style>
 </head>
 <body>
@@ -88,10 +81,10 @@
   <header class="header">
     <div class="brand"><span>🏺</span> ပန်းအိုးဆိုင်</div>
     <div class="stats">
-      <div class="s-item"><div class="s-val" id="hdrRevenue">0</div><div class="s-lbl">ယနေ့ရောင်းရငွေ</div></div>
-      <div class="s-item"><div class="s-val" id="hdrProfit">0</div><div class="s-lbl">ယနေ့အမြတ်</div></div>
-      <div class="s-item"><div class="s-val" id="hdrStock">0</div><div class="s-lbl">စတော့တန်ဖိုး</div></div>
-      <div class="s-item"><div class="s-val" id="hdrItems">0</div><div class="s-lbl">ပစ္စည်းမျိုး</div></div>
+      <div><div class="val" id="hdrRevenue">0</div><div class="lbl">ယနေ့ရောင်းရငွေ</div></div>
+      <div><div class="val" id="hdrProfit">0</div><div class="lbl">ယနေ့အမြတ်</div></div>
+      <div><div class="val" id="hdrStock">0</div><div class="lbl">စတော့တန်ဖိုး</div></div>
+      <div><div class="val" id="hdrItems">0</div><div class="lbl">ပစ္စည်းမျိုး</div></div>
     </div>
   </header>
 
@@ -102,12 +95,16 @@
     <button class="nav-btn" data-view="dashboard">📊 Dashboard</button>
   </nav>
 
-  <!-- SELL -->
+  <!-- SELL VIEW -->
   <div id="viewSell" class="main-grid">
     <div>
       <div class="card">
-        <div class="card-header"><span>ပန်းအိုးများ</span>
-          <div style="display:flex;gap:.5rem;"><input type="text" id="potSearch" placeholder="🔍 ရှာရန်..." style="max-width:200px;"><button class="btn btn-outline btn-sm" onclick="scanBarcode()">📷</button></div>
+        <div class="card-header">
+          <span>ပန်းအိုးများ</span>
+          <div style="display:flex;gap:.5rem;">
+            <input type="text" id="potSearch" placeholder="🔍 ရှာရန်..." style="max-width:200px;">
+            <button class="btn btn-outline btn-sm" onclick="scanBarcode()">📷</button>
+          </div>
         </div>
         <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.5rem;" id="categoryFilters"></div>
         <div class="product-grid" id="productGrid"></div>
@@ -118,10 +115,15 @@
         <div class="card-header">🛒 ဈေးခြင်း <button class="btn-sm btn-outline" onclick="clearCart()">ရှင်း</button></div>
         <div class="sale-type-toggle" id="saleTypeToggle">
           <button class="sale-type-btn active" onclick="setSaleType('retail',this)">လက်လီ (Retail)</button>
-          <button class="sale-type-btn wholesale" onclick="setSaleType('wholesale',this)">လက်ကား (Wholesale)</button>
+          <button class="sale-type-btn" onclick="setSaleType('wholesale',this)">လက်ကား (Wholesale)</button>
         </div>
-        <div id="cartItems" style="max-height:30vh;overflow-y:auto;margin-bottom:.8rem;"><p style="color:var(--text-light);text-align:center;">ပစ္စည်းမထည့်ရသေး</p></div>
-        <div class="flex-between" style="font-weight:700;font-size:1.1rem;margin-bottom:.8rem;"><span>စုစုပေါင်း</span><span id="cartTotal" style="color:var(--terracotta);">0 ကျပ်</span></div>
+        <div id="cartItems" style="max-height:30vh;overflow-y:auto;margin-bottom:.8rem;">
+          <p style="color:var(--text-light);text-align:center;">ပစ္စည်းမထည့်ရသေး</p>
+        </div>
+        <div class="flex-between" style="font-weight:700;font-size:1.1rem;margin-bottom:.8rem;">
+          <span>စုစုပေါင်း</span>
+          <span id="cartTotal" style="color:var(--terracotta);">0 ကျပ်</span>
+        </div>
         <input type="text" id="customerName" placeholder="ဝယ်သူအမည်" class="mb-1">
         <input type="text" id="customerPhone" placeholder="ဖုန်းနံပါတ် (optional)" class="mb-1">
         <button class="btn btn-accent btn-block" onclick="checkout()">💳 ရောင်းမယ်</button>
@@ -129,67 +131,115 @@
     </div>
   </div>
 
-  <!-- INVENTORY -->
+  <!-- INVENTORY VIEW -->
   <div id="viewInventory" class="hidden">
-    <div class="card"><div class="card-header"><span>ပန်းအိုးစာရင်း</span><button class="btn btn-primary btn-sm" onclick="openPotForm()">+ အိုးအသစ်</button></div><div id="inventoryTable" style="overflow-x:auto;"></div></div>
+    <div class="card">
+      <div class="card-header">
+        <span>ပန်းအိုးစာရင်း</span>
+        <button class="btn btn-primary btn-sm" onclick="openPotForm()">+ အိုးအသစ်</button>
+      </div>
+      <div id="inventoryTable" style="overflow-x:auto;"></div>
+    </div>
   </div>
 
-  <!-- STOCK IN -->
+  <!-- STOCK IN VIEW -->
   <div id="viewStockin" class="hidden">
-    <div class="card" style="max-width:500px;"><h3 class="mb-1">ပစ္စည်းအသစ်ဝယ်ယူ</h3>
-      <label>အိုးရွေးပါ</label><select id="stockinPot" class="mb-1"></select>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;"><div><label>အရေအတွက်</label><input type="number" id="stockinQty" value="1" min="1"></div><div><label>ဝယ်စျေး (တစ်လုံး)</label><input type="number" id="stockinCost"></div></div>
-      <label>ပေးသွင်းသူ</label><input type="text" id="stockinSupplier" placeholder="ဆိုင်အမည်" class="mb-1">
+    <div class="card" style="max-width:500px;">
+      <h3 class="mb-1">ပစ္စည်းအသစ်ဝယ်ယူ</h3>
+      <label>အိုးရွေးပါ</label>
+      <select id="stockinPot" class="mb-1"></select>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+        <div><label>အရေအတွက်</label><input type="number" id="stockinQty" value="1" min="1"></div>
+        <div><label>ဝယ်စျေး (တစ်လုံး)</label><input type="number" id="stockinCost"></div>
+      </div>
+      <label>ပေးသွင်းသူ</label>
+      <input type="text" id="stockinSupplier" placeholder="ဆိုင်အမည်" class="mb-1">
       <button class="btn btn-accent btn-block" onclick="recordStockIn()">📥 ဝယ်ယူမှတ်တမ်းတင်</button>
     </div>
   </div>
 
-  <!-- DASHBOARD -->
+  <!-- DASHBOARD VIEW -->
   <div id="viewDashboard" class="hidden">
     <div class="dash-grid" id="dashStats"></div>
-    <div class="card"><div class="card-header"><span>လစဉ်အစီရင်ခံစာ</span>
-      <div style="display:flex;gap:.5rem;"><select id="reportMonth"><option value="1">ဇန်</option><option value="2">ဖေ</option><option value="3">မတ်</option><option value="4">ဧပြီ</option><option value="5">မေ</option><option value="6">ဇွန်</option><option value="7">ဇူ</option><option value="8">ဩ</option><option value="9">စက်</option><option value="10">အောက်</option><option value="11">နို</option><option value="12">ဒီ</option></select>
-      <input type="number" id="reportYear" value="2025" style="width:80px;"><button class="btn btn-primary btn-sm" onclick="loadReport()">ကြည့်</button></div>
-    </div><div id="reportContent"></div></div>
-    <div class="card mt-1"><h3>စတော့နည်းနေသောပစ္စည်းများ</h3><div id="lowStockList"></div></div>
+    <div class="card">
+      <div class="card-header">
+        <span>လစဉ်အစီရင်ခံစာ</span>
+        <div style="display:flex;gap:.5rem;">
+          <select id="reportMonth">
+            <option value="1">ဇန်</option><option value="2">ဖေ</option><option value="3">မတ်</option>
+            <option value="4">ဧပြီ</option><option value="5">မေ</option><option value="6">ဇွန်</option>
+            <option value="7">ဇူ</option><option value="8">ဩ</option><option value="9">စက်</option>
+            <option value="10">အောက်</option><option value="11">နို</option><option value="12">ဒီ</option>
+          </select>
+          <input type="number" id="reportYear" value="2025" style="width:80px;">
+          <button class="btn btn-primary btn-sm" onclick="loadReport()">ကြည့်</button>
+        </div>
+      </div>
+      <div id="reportContent"></div>
+    </div>
+    <div class="card mt-1">
+      <h3>စတော့နည်းနေသောပစ္စည်းများ</h3>
+      <div id="lowStockList"></div>
+    </div>
   </div>
 </div>
 
 <!-- POT MODAL -->
-<div class="modal" id="potModal"><div class="modal-content">
-  <h3 id="potModalTitle">အိုးအသစ်</h3>
-  <div style="display:grid;gap:.5rem;">
-    <div><label>အိုးအမည် *</label><input type="text" id="pName" placeholder="ဥပမာ - မြေအိုးအကြီး"></div>
-    <div><label>အမျိုးအစား</label><select id="pCategory"><option>မြေအိုး</option><option>စဉ့်အိုး</option><option>ပလပ်စတစ်</option><option>ဘိလပ်မြေ</option><option>သစ်သား</option><option>အခြား</option></select></div>
-    <div><label>အရွယ်အစား</label><input type="text" id="pSize" placeholder="ဥပမာ - ၁၂လက်မ"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;"><div><label>ဝယ်စျေး</label><input type="number" id="pCost"></div><div><label>လက်လီစျေး</label><input type="number" id="pRetail"></div></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;"><div><label>လက်ကားစျေး</label><input type="number" id="pWholesale"></div><div><label>လက်ကျန်</label><input type="number" id="pQty"></div></div>
-    <div><label>အနည်းဆုံး</label><input type="number" id="pMin" value="5"></div>
-    <div><label>ပုံ URL</label><input type="text" id="pImage" placeholder="https://..."></div>
-    <input type="hidden" id="pEditId">
+<div class="modal" id="potModal">
+  <div class="modal-content">
+    <h3 id="potModalTitle">အိုးအသစ်</h3>
+    <div style="display:grid;gap:.5rem;">
+      <div><label>အိုးအမည် *</label><input type="text" id="pName" placeholder="ဥပမာ - မြေအိုးအကြီး"></div>
+      <div><label>အမျိုးအစား</label>
+        <select id="pCategory">
+          <option>မြေအိုး</option><option>စဉ့်အိုး</option><option>ပလပ်စတစ်</option>
+          <option>ဘိလပ်မြေ</option><option>သစ်သား</option><option>အခြား</option>
+        </select>
+      </div>
+      <div><label>အရွယ်အစား</label><input type="text" id="pSize" placeholder="ဥပမာ - ၁၂လက်မ"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+        <div><label>ဝယ်စျေး</label><input type="number" id="pCost"></div>
+        <div><label>လက်လီစျေး</label><input type="number" id="pRetail"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+        <div><label>လက်ကားစျေး</label><input type="number" id="pWholesale"></div>
+        <div><label>လက်ကျန်</label><input type="number" id="pQty"></div>
+      </div>
+      <div><label>အနည်းဆုံး</label><input type="number" id="pMin" value="5"></div>
+      <div><label>ပုံ URL</label><input type="text" id="pImage" placeholder="https://..."></div>
+      <input type="hidden" id="pEditId">
+    </div>
+    <div style="display:flex;gap:.5rem;margin-top:1rem;">
+      <button class="btn btn-primary" onclick="savePot()" style="flex:1;">သိမ်းမယ်</button>
+      <button class="btn btn-outline" onclick="closeModal('potModal')" style="flex:1;">မလုပ်တော့</button>
+    </div>
   </div>
-  <div style="display:flex;gap:.5rem;margin-top:1rem;"><button class="btn btn-primary" onclick="savePot()" style="flex:1;">သိမ်းမယ်</button><button class="btn btn-outline" onclick="closeModal('potModal')" style="flex:1;">မလုပ်တော့</button></div>
-</div></div>
+</div>
 
 <!-- RECEIPT MODAL -->
-<div class="modal" id="receiptModal"><div class="modal-content" id="receiptContent"></div></div>
+<div class="modal" id="receiptModal">
+  <div class="modal-content" id="receiptContent"></div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-const API = 'https://script.google.com/macros/s/AKfycbx1Dv_k6LdFY_SmakWnVaD5H17lZXfLxB86VyFmGiCXfd2Q7WB1tZecGyRCHzKK9Tsl/exec';
-let inventory=[],cart=[],activeCategory='all',saleType='retail';
+// ═══════════════ REPLACE WITH YOUR NEW DEPLOYMENT URL ═══════════════
+const API = 'https://script.google.com/macros/s/AKfycbzC4Qt7pNrsadTxT8z9d3r3FivEYOSDHse2EniTwQTVZo_9jup3Wqd2RVkZbec3IIKf/exec';
 
+let inventory=[],cart=[],activeCategory='all',saleType='retail';
 const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2500)}
 function closeModal(id){$('#'+id).classList.remove('active')}
 
 async function apiCall(action,params={},method='GET'){
   const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),15000);
-  let url=API;const opts={method,signal:ctrl.signal,headers:method==='POST'?{'Content-Type':'application/json'}:{}};
-  if(method==='GET'){url+='?action='+encodeURIComponent(action);if(Object.keys(params).length)url+='&'+new URLSearchParams(params)}
-  else opts.body=JSON.stringify({action,...params});
-  try{const r=await fetch(url,opts);clearTimeout(timer);if(!r.ok)throw new Error('Status '+r.status);return await r.json()}
-  catch(e){clearTimeout(timer);console.error(e);return null}
+  let url=API;
+  const opts={method,signal:ctrl.signal};
+  if(method==='POST'){opts.headers={'Content-Type':'application/json'};opts.body=JSON.stringify({action,...params})}
+  else{url+='?action='+encodeURIComponent(action);if(Object.keys(params).length)url+='&'+new URLSearchParams(params)}
+  try{const r=await fetch(url,opts);clearTimeout(timer);if(!r.ok){console.error('API error:',r.status);return null}return await r.json()}
+  catch(e){clearTimeout(timer);console.error(e);toast('Connection error');return null}
 }
 
 async function loadInventory(){const d=await apiCall('getInventory');if(d)inventory=d}
@@ -208,7 +258,7 @@ function renderProducts(){
   if(activeCategory!=='all')f=f.filter(i=>i.category===activeCategory);
   const g=$('#productGrid');
   if(!f.length){g.innerHTML='<p style="grid-column:1/-1;text-align:center;color:var(--text-light);padding:2rem;">အိုးမရှိပါ</p>';return}
-  g.innerHTML=f.map(i=>{const b=getBadge(i);return`<div class="product-card" onclick="addToCart('${i.id}')"><div class="badge ${b.cls}">${b.text}</div><img src="${i.imageUrl||'https://placehold.co/200x150/F5F0EB/8D6E63?text=🏺'}" alt="${i.name}" loading="lazy" onerror="this.src='https://placehold.co/200x150/F5F0EB/8D6E63?text=🏺'"><div class="name">${i.name}</div><div class="info">${i.category||''} | လက်ကျန်: ${i.quantity}</div><div class="prices"><div class="price-retail">လက်လီ: ${(i.retailPrice||0).toLocaleString('my-MM')} ကျပ်</div><div class="price-wholesale">လက်ကား: ${(i.wholesalePrice||0).toLocaleString('my-MM')} ကျပ်</div></div></div>`}).join('')
+  g.innerHTML=f.map(i=>{const b=getBadge(i);return`<div class="product-card" onclick="addToCart('${i.id}')"><div class="badge ${b.cls}">${b.text}</div><img src="${i.imageUrl||'https://placehold.co/200x150/F5F0EB/8D6E63?text=🏺'}" alt="${i.name}" loading="lazy" onerror="this.src='https://placehold.co/200x150/F5F0EB/8D6E63?text=🏺'"><div class="name">${i.name}</div><div class="info">${i.category||''} | လက်ကျန်: ${i.quantity}</div><div class="price-retail">လက်လီ: ${(i.retailPrice||0).toLocaleString('my-MM')} ကျပ်</div><div class="price-wholesale">လက်ကား: ${(i.wholesalePrice||0).toLocaleString('my-MM')} ကျပ်</div></div>`}).join('')
 }
 
 function setSaleType(type,btn){saleType=type;$$('.sale-type-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderCart()}
@@ -232,14 +282,15 @@ async function checkout(){
   if(!cart.length)return toast('ပစ္စည်းထည့်ပါ');
   const cust=$('#customerName').value.trim()||'Walk-in',ph=$('#customerPhone').value.trim(),date=new Date().toISOString().split('T')[0],snap=[...cart];
   for(const c of snap){const p=getItemPrice(c);await apiCall('addSale',{sale:{id:Date.now().toString(36)+Math.random().toString(36).substr(2,5),itemId:c.id,itemName:c.name,quantity:c.qty,unitPrice:p,customer:`${cust}${ph?' | '+ph:''}`,date,saleType}},'POST')}
-  showReceipt(snap,cust,ph,date);cart=[];renderCart();await refreshAll();toast('✅ ရောင်းပြီး')
+  showReceipt(snap,cust,ph,date);cart=[];renderCart();await refreshAll();toast('ရောင်းပြီး')
 }
 
 function showReceipt(snap,cust,ph,date){
   const t=snap.reduce((s,i)=>s+getItemPrice(i)*i.qty,0);
-  $('#receiptContent').innerHTML=`<div class="receipt"><h2 style="text-align:center;">🏺 ပန်းအိုးဆိုင်</h2><p style="text-align:center;">ဖုန်း: 09-000000000</p><p><small>ရက်စွဲ: ${date} | ဝယ်သူ: ${cust}${ph?' | '+ph:''}</small></p><p><small>အမျိုးအစား: ${saleType==='wholesale'?'လက်ကား':'လက်လီ'}</small></p><hr><table><tr><th>အိုး</th><th>အရေအတွက်</th><th>စျေး</th><th>စုစုပေါင်း</th></tr>${snap.map(c=>`<tr><td>${c.name}</td><td>${c.qty}</td><td>${getItemPrice(c).toLocaleString('my-MM')}</td><td>${(getItemPrice(c)*c.qty).toLocaleString('my-MM')}</td></tr>`).join('')}</table><hr><p style="text-align:right;font-size:1.2rem;font-weight:bold;">စုစုပေါင်း: ${t.toLocaleString('my-MM')} ကျပ်</p><p style="text-align:center;color:var(--clay);">🏺 ကျေးဇူးတင်ပါတယ်</p></div><button class="btn btn-accent btn-block mt-1" onclick="printReceipt()">🖨️ ပရင့်ထုတ်</button><button class="btn btn-outline btn-block mt-1" onclick="closeModal('receiptModal')">ပိတ်</button>`;
+  $('#receiptContent').innerHTML=`<div class="receipt"><h2 style="text-align:center;">🏺 ပန်းအိုးဆိုင်</h2><p style="text-align:center;">ဖုန်း: 09-000000000</p><p><small>ရက်စွဲ: ${date} | ဝယ်သူ: ${cust}${ph?' | '+ph:''}</small></p><p><small>အမျိုးအစား: ${saleType==='wholesale'?'လက်ကား':'လက်လီ'}</small></p><hr><table><tr><th>အိုး</th><th>အရေအတွက်</th><th>စျေး</th><th>စုစုပေါင်း</th></tr>${snap.map(c=>`<tr><td>${c.name}</td><td>${c.qty}</td><td>${getItemPrice(c).toLocaleString('my-MM')}</td><td>${(getItemPrice(c)*c.qty).toLocaleString('my-MM')}</td></tr>`).join('')}</table><hr><p style="text-align:right;font-size:1.2rem;font-weight:bold;">စုစုပေါင်း: ${t.toLocaleString('my-MM')} ကျပ်</p></div><button class="btn btn-accent btn-block mt-1" onclick="printReceipt()">🖨️ ပရင့်ထုတ်</button><button class="btn btn-outline btn-block mt-1" onclick="closeModal('receiptModal')">ပိတ်</button>`;
   $('#receiptModal').classList.add('active')
 }
+
 function printReceipt(){html2canvas($('#receiptContent .receipt')).then(c=>{const w=window.open('');w.document.write(`<img src="${c.toDataURL()}" onload="window.print();">`)})}
 
 function renderInvTable(){
