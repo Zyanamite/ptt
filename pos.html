@@ -14,8 +14,8 @@
     const b=new Blob([JSON.stringify(m)],{type:'application/json'});
     document.head.insertAdjacentHTML('beforeend',`<link rel="manifest" href="${URL.createObjectURL(b)}">`);
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js" crossorigin="anonymous" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous" defer></script>
+ <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
   <style>
     :root{--clay:#8D6E63;--clay-dark:#5D4037;--terracotta:#E2725B;--cream:#FAF7F2;--card:#FFF;--text:#3E2723;--text-light:#6D4C41;--border:#D7CCC8;--shadow:0 2px 12px rgba(62,39,35,0.08);--radius:14px}
     *{margin:0;padding:0;box-sizing:border-box}
