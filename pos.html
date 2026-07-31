@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>ပန်းအိုးဆိုင် POS Pro 4.0</title>
+  <title>ပန်းအိုးဆိုင် POS Pro 4.1</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%23065f46'/%3E%3Ctext x='256' y='380' font-size='320' text-anchor='middle' fill='white'%3Eပ%3C/text%3E%3C/svg%3E">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -118,13 +118,14 @@
     .cart-item .controls { display: flex; gap: 0.2rem; align-items: center; flex-shrink: 0; }
     .receipt-card { background: white; border-radius: 12px; padding: 1rem; border: 2px dashed var(--primary-100); }
     .error-box { background: #fee2e2; color: #991b1b; padding: 1rem; border-radius: 12px; margin-bottom: 1rem; text-align: center; }
+    .empty-state { text-align:center; padding:2rem; color:var(--muted); }
   </style>
 </head>
 <body>
 <div class="app">
   <!-- HEADER -->
   <div class="header">
-    <div class="brand"><div class="logo">🪴</div><div><h2>ပန်းအိုးဆိုင်</h2><small style="color:var(--muted);">POS Pro 4.0</small></div></div>
+    <div class="brand"><div class="logo">🪴</div><div><h2>ပန်းအိုးဆိုင်</h2><small style="color:var(--muted);">POS Pro 4.1</small></div></div>
     <div id="connStatus" style="font-size:0.8rem; color: var(--muted);">⏳ ချိတ်ဆက်နေသည်...</div>
   </div>
   <div id="errorBanner" class="error-box" style="display:none;"></div>
@@ -144,7 +145,7 @@
     <div class="card"><div class="card-header"><h3>⚠️ စတော့နည်းနေသောပစ္စည်းများ</h3></div><div id="lowStockList"></div></div>
   </div>
 
-  <!-- POS -->
+  <!-- POS TAB (always shows products) -->
   <div id="viewPOS" class="view">
     <div class="pos-layout">
       <div class="card">
@@ -293,7 +294,12 @@
       ]);
       document.getElementById('connStatus').innerHTML = '✅ ချိတ်ဆက်ပြီး';
       document.getElementById('errorBanner').style.display = 'none';
-      renderProducts(); renderInvTable(); updateSelects(); updateCustomerSelect(); loadDashboard();
+      // Render all data-dependent views, but also call renderProducts to ensure POS is up-to-date
+      renderProducts();
+      renderInvTable();
+      updateSelects();
+      updateCustomerSelect();
+      loadDashboard();
     } catch(e) {
       document.getElementById('connStatus').innerHTML = '❌ ချိတ်ဆက်မရပါ';
       document.getElementById('errorBanner').style.display = 'block';
@@ -331,12 +337,28 @@
   function renderProducts(){
     const search = (document.getElementById('posSearch')?.value||'').toLowerCase();
     const cat = document.getElementById('catFilter')?.value||'';
-    const filtered = inventory.filter(i => (i.name||'').toLowerCase().includes(search) && (!cat || i.category===cat));
-    document.getElementById('catFilter').innerHTML = '<option value="">အားလုံး</option>' + [...new Set(inventory.map(i=>i.category).filter(Boolean))].map(c => `<option value="${c}">${c}</option>`).join('');
-    document.getElementById('productGrid').innerHTML = filtered.length ? filtered.map(i => {
+    const filtered = Array.isArray(inventory) ? inventory.filter(i => (i.name||'').toLowerCase().includes(search) && (!cat || i.category===cat)) : [];
+    // Update category filter
+    const catEl = document.getElementById('catFilter');
+    if(catEl) catEl.innerHTML = '<option value="">အားလုံး</option>' + [...new Set(inventory.map(i=>i.category).filter(Boolean))].map(c => `<option value="${c}">${c}</option>`).join('');
+    
+    const grid = document.getElementById('productGrid');
+    if(!filtered.length) {
+      grid.innerHTML = `<div class="empty-state">
+        <p>ပစ္စည်းမရှိသေးပါ</p>
+        <button class="btn btn-primary btn-sm" onclick="switchView('inventory'); openItemModal();">+ ပထမဆုံးပစ္စည်းထည့်မယ်</button>
+      </div>`;
+      return;
+    }
+    grid.innerHTML = filtered.map(i => {
       const price = getPrice(i);
-      return `<div class="product" onclick="addToCart('${i._key}')"><img src="${i.imageUrl||'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22%3E%3Crect width=%2260%22 height=%2260%22 fill=%22%23d1fae5%22/%3E%3Ctext x=%2230%22 y=%2240%22 text-anchor=%22middle%22 fill=%22%23065f46%22%3EN/A%3C/text%3E%3C/svg%3E'}"><div class="name">${i.name}</div><div class="price">${formatMoney(price)}</div><div class="stock">လက်ကျန်: ${i.quantity||0}</div></div>`;
-    }).join('') : '<p style="grid-column:1/-1;text-align:center;color:var(--muted);">ပစ္စည်းမရှိပါ</p>';
+      return `<div class="product" onclick="addToCart('${i._key}')">
+        <img src="${i.imageUrl||'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22%3E%3Crect width=%2260%22 height=%2260%22 fill=%22%23d1fae5%22/%3E%3Ctext x=%2230%22 y=%2240%22 text-anchor=%22middle%22 fill=%22%23065f46%22%3EN/A%3C/text%3E%3C/svg%3E'}">
+        <div class="name">${i.name}</div>
+        <div class="price">${formatMoney(price)}</div>
+        <div class="stock">လက်ကျန်: ${i.quantity||0}</div>
+      </div>`;
+    }).join('');
   }
 
   function addToCart(key){
@@ -474,10 +496,19 @@
     document.getElementById('view'+view.charAt(0).toUpperCase()+view.slice(1)).classList.add('active');
     document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
     document.querySelector(`.nav-item[onclick="switchView('${view}')"]`).classList.add('active');
-    if(view==='dashboard') loadDashboard();
-    else if(view==='pos') renderProducts();
-    else if(view==='inventory') renderInvTable();
-    else if(view==='purchases') updateSelects();
+    
+    // When switching to POS, always refresh the product grid
+    if(view === 'pos') {
+      renderProducts();
+    } else if(view === 'dashboard') {
+      loadDashboard();
+    } else if(view === 'inventory') {
+      renderInvTable();
+    } else if(view === 'purchases') {
+      updateSelects();
+    } else if(view === 'reports') {
+      // report date can be set here if desired
+    }
   }
 
   document.addEventListener('firebaseReady', loadAll);
