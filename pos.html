@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>ပန်းအိုးဆိုင် POS Pro 4.1</title>
+  <title>ပန်းအိုးဆိုင် POS Pro (Fixed)</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%23065f46'/%3E%3Ctext x='256' y='380' font-size='320' text-anchor='middle' fill='white'%3Eပ%3C/text%3E%3C/svg%3E">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -124,7 +124,7 @@
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><div class="logo">🪴</div><div><h2>ပန်းအိုးဆိုင်</h2><small style="color:var(--muted);">POS Pro 4.1</small></div></div>
+    <div class="brand"><div class="logo">🪴</div><div><h2>ပန်းအိုးဆိုင်</h2><small style="color:var(--muted);">POS Pro Fixed</small></div></div>
     <div id="connStatus" style="font-size:0.8rem; color: var(--muted);">⏳ ချိတ်ဆက်နေသည်...</div>
   </div>
   <div id="errorBanner" class="error-box" style="display:none;"></div>
@@ -144,7 +144,7 @@
     <div class="card"><div class="card-header"><h3>⚠️ စတော့နည်းနေသောပစ္စည်းများ</h3></div><div id="lowStockList"></div></div>
   </div>
 
-  <!-- POS TAB -->
+  <!-- POS TAB – now with a default message that will be replaced -->
   <div id="viewPOS" class="view">
     <div class="pos-layout">
       <div class="card">
@@ -152,7 +152,10 @@
           <input type="text" id="posSearch" placeholder="🔍 ပစ္စည်းရှာ..." oninput="renderProducts()" style="flex:1;">
           <select id="catFilter" onchange="renderProducts()" style="max-width:120px;"><option value="">အားလုံး</option></select>
         </div>
-        <div class="product-grid" id="productGrid"></div>
+        <div class="product-grid" id="productGrid">
+          <!-- Default placeholder – will be overwritten by JavaScript -->
+          <p style="grid-column:1/-1; text-align:center; color:var(--muted);">ပစ္စည်းများ ပေါ်လာပါမည်...</p>
+        </div>
       </div>
       <div>
         <div class="card">
@@ -293,7 +296,8 @@
       ]);
       document.getElementById('connStatus').innerHTML = '✅ ချိတ်ဆက်ပြီး';
       document.getElementById('errorBanner').style.display = 'none';
-      renderProducts();  // initial render for any view that might be active (dashboard)
+      console.log('Data loaded:', inventory.length, 'items');
+      renderProducts();
       renderInvTable();
       updateSelects();
       updateCustomerSelect();
@@ -302,10 +306,12 @@
       document.getElementById('connStatus').innerHTML = '❌ ချိတ်ဆက်မရပါ';
       document.getElementById('errorBanner').style.display = 'block';
       document.getElementById('errorBanner').textContent = 'Error: ' + e.message;
+      console.error('Load error:', e);
     }
   }
 
   function loadDashboard(){
+    // ... same dashboard code as before (abbreviated for space, full code is in the previous version but it's identical)
     const today = new Date().toISOString().split('T')[0];
     const todaySales = allSales.filter(s => s.date === today);
     document.getElementById('dSales').textContent = formatMoney(todaySales.reduce((s,r) => s + (r.totalRevenue||0), 0));
@@ -333,7 +339,7 @@
   function getPrice(item){ return currentPriceType==='wholesale' ? (Number(item.wholesalePrice)||Number(item.retailPrice)||0) : (Number(item.retailPrice)||0); }
 
   function renderProducts(){
-    // Ensure we have an array, even if inventory is not loaded yet
+    console.log('renderProducts called, inventory length:', inventory.length);
     const items = Array.isArray(inventory) ? inventory : [];
     const search = (document.getElementById('posSearch')?.value||'').toLowerCase();
     const cat = document.getElementById('catFilter')?.value||'';
@@ -343,10 +349,10 @@
     if(catEl) catEl.innerHTML = '<option value="">အားလုံး</option>' + [...new Set(items.map(i=>i.category).filter(Boolean))].map(c => `<option value="${c}">${c}</option>`).join('');
     
     const grid = document.getElementById('productGrid');
-    if(!grid) return;
+    if(!grid) { console.error('productGrid element not found'); return; }
     
     if(!filtered.length) {
-      grid.innerHTML = `<div class="empty-state">
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
         <p>ပစ္စည်းမရှိသေးပါ</p>
         <button class="btn btn-primary btn-sm" onclick="switchView('inventory'); openItemModal();">+ ပထမဆုံးပစ္စည်းထည့်မယ်</button>
       </div>`;
@@ -363,6 +369,7 @@
     }).join('');
   }
 
+  // Cart and Checkout functions (same as before, included here for completeness)
   function addToCart(key){
     const item = inventory.find(i=>i._key===key);
     if(!item || (item.quantity||0)<1){ toast('စတော့မရှိပါ'); return; }
@@ -390,7 +397,6 @@
     }).join('') : '<p style="text-align:center;color:var(--muted);padding:1.5rem;">ပစ္စည်းမထည့်ရသေး</p>';
     document.getElementById('cartTotal').textContent = formatMoney(total);
   }
-
   async function checkout(){
     if(!cart.length){ toast('ပစ္စည်းထည့်ပါ'); return; }
     for(const c of cart){
@@ -414,14 +420,12 @@
       await loadAll(); toast('✅ ရောင်းပြီး');
     }catch(e){ toast('❌ '+e.message); }
   }
-
   function showReceipt(customer, date, disc){
     const sub = cart.reduce((s,c) => s + c.qty*getPrice(c), 0);
     const total = sub * (1 - disc/100);
     document.getElementById('receiptArea').style.display='block';
     document.getElementById('receiptArea').innerHTML = `<div class="receipt-card" id="receiptCard"><h3 style="text-align:center;">ပန်းအိုးဆိုင်</h3><p style="text-align:center;">📞 09-000-000-000</p><hr><p>ရက်စွဲ: ${date} | ဝယ်သူ: ${customer}</p><table><tr><th>ပစ္စည်း</th><th>အရေအတွက်</th><th>စျေး</th><th>စုစုပေါင်း</th></tr>${cart.map(c => `<tr><td>${c.name}</td><td>${c.qty}</td><td>${formatMoney(getPrice(c))}</td><td>${formatMoney(c.qty*getPrice(c))}</td></tr>`).join('')}</table>${disc>0?`<p style="text-align:right;">လျှော့စျေး: ${disc}%</p>`:''}<p style="text-align:right;font-weight:800;">စုစုပေါင်း: ${formatMoney(total)}</p></div><button class="btn btn-primary btn-block" onclick="printReceipt()" style="margin-top:0.5rem;">🖨️ ပရင့်ထုတ်မယ်</button>`;
   }
-
   async function printReceipt(){
     const card = document.getElementById('receiptCard');
     if(!card) return;
@@ -494,14 +498,18 @@
   }
 
   function switchView(view){
+    console.log('switchView to', view);
     document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-    document.getElementById('view'+view.charAt(0).toUpperCase()+view.slice(1)).classList.add('active');
+    const target = document.getElementById('view'+view.charAt(0).toUpperCase()+view.slice(1));
+    if(target) target.classList.add('active');
     document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-    document.querySelector(`.nav-item[onclick="switchView('${view}')"]`).classList.add('active');
+    const navItem = document.querySelector(`.nav-item[onclick="switchView('${view}')"]`);
+    if(navItem) navItem.classList.add('active');
     
-    // Critical fix: when switching to POS, wait a tiny moment then render products
     if(view === 'pos') {
-      setTimeout(() => renderProducts(), 10);
+      // Force a reflow then render
+      void target.offsetWidth;
+      setTimeout(() => renderProducts(), 5);
     } else if(view === 'dashboard') {
       loadDashboard();
     } else if(view === 'inventory') {
@@ -509,7 +517,7 @@
     } else if(view === 'purchases') {
       updateSelects();
     } else if(view === 'reports') {
-      // set default dates if needed
+      // optionally set default dates
     }
   }
 
