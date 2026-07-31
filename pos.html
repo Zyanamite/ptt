@@ -123,7 +123,6 @@
 </head>
 <body>
 <div class="app">
-  <!-- HEADER -->
   <div class="header">
     <div class="brand"><div class="logo">🪴</div><div><h2>ပန်းအိုးဆိုင်</h2><small style="color:var(--muted);">POS Pro 4.1</small></div></div>
     <div id="connStatus" style="font-size:0.8rem; color: var(--muted);">⏳ ချိတ်ဆက်နေသည်...</div>
@@ -145,7 +144,7 @@
     <div class="card"><div class="card-header"><h3>⚠️ စတော့နည်းနေသောပစ္စည်းများ</h3></div><div id="lowStockList"></div></div>
   </div>
 
-  <!-- POS TAB (always shows products) -->
+  <!-- POS TAB -->
   <div id="viewPOS" class="view">
     <div class="pos-layout">
       <div class="card">
@@ -294,8 +293,7 @@
       ]);
       document.getElementById('connStatus').innerHTML = '✅ ချိတ်ဆက်ပြီး';
       document.getElementById('errorBanner').style.display = 'none';
-      // Render all data-dependent views, but also call renderProducts to ensure POS is up-to-date
-      renderProducts();
+      renderProducts();  // initial render for any view that might be active (dashboard)
       renderInvTable();
       updateSelects();
       updateCustomerSelect();
@@ -335,14 +333,18 @@
   function getPrice(item){ return currentPriceType==='wholesale' ? (Number(item.wholesalePrice)||Number(item.retailPrice)||0) : (Number(item.retailPrice)||0); }
 
   function renderProducts(){
+    // Ensure we have an array, even if inventory is not loaded yet
+    const items = Array.isArray(inventory) ? inventory : [];
     const search = (document.getElementById('posSearch')?.value||'').toLowerCase();
     const cat = document.getElementById('catFilter')?.value||'';
-    const filtered = Array.isArray(inventory) ? inventory.filter(i => (i.name||'').toLowerCase().includes(search) && (!cat || i.category===cat)) : [];
-    // Update category filter
+    const filtered = items.filter(i => (i.name||'').toLowerCase().includes(search) && (!cat || i.category===cat));
+    
     const catEl = document.getElementById('catFilter');
-    if(catEl) catEl.innerHTML = '<option value="">အားလုံး</option>' + [...new Set(inventory.map(i=>i.category).filter(Boolean))].map(c => `<option value="${c}">${c}</option>`).join('');
+    if(catEl) catEl.innerHTML = '<option value="">အားလုံး</option>' + [...new Set(items.map(i=>i.category).filter(Boolean))].map(c => `<option value="${c}">${c}</option>`).join('');
     
     const grid = document.getElementById('productGrid');
+    if(!grid) return;
+    
     if(!filtered.length) {
       grid.innerHTML = `<div class="empty-state">
         <p>ပစ္စည်းမရှိသေးပါ</p>
@@ -497,9 +499,9 @@
     document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
     document.querySelector(`.nav-item[onclick="switchView('${view}')"]`).classList.add('active');
     
-    // When switching to POS, always refresh the product grid
+    // Critical fix: when switching to POS, wait a tiny moment then render products
     if(view === 'pos') {
-      renderProducts();
+      setTimeout(() => renderProducts(), 10);
     } else if(view === 'dashboard') {
       loadDashboard();
     } else if(view === 'inventory') {
@@ -507,7 +509,7 @@
     } else if(view === 'purchases') {
       updateSelects();
     } else if(view === 'reports') {
-      // report date can be set here if desired
+      // set default dates if needed
     }
   }
 
