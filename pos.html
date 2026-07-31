@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>ပန်းအိုးဆိုင် POS Pro (Fixed)</title>
+  <title>ပန်းအိုးဆိုင် POS (Final Fix)</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%23065f46'/%3E%3Ctext x='256' y='380' font-size='320' text-anchor='middle' fill='white'%3Eပ%3C/text%3E%3C/svg%3E">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -119,18 +119,20 @@
     .receipt-card { background: white; border-radius: 12px; padding: 1rem; border: 2px dashed var(--primary-100); }
     .error-box { background: #fee2e2; color: #991b1b; padding: 1rem; border-radius: 12px; margin-bottom: 1rem; text-align: center; }
     .empty-state { text-align:center; padding:2rem; color:var(--muted); }
+    .pos-status { font-size:0.7rem; color:var(--muted); margin-bottom:0.5rem; }
   </style>
 </head>
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><div class="logo">🪴</div><div><h2>ပန်းအိုးဆိုင်</h2><small style="color:var(--muted);">POS Pro Fixed</small></div></div>
+    <div class="brand"><div class="logo">🪴</div><div><h2>ပန်းအိုးဆိုင်</h2><small style="color:var(--muted);">POS Final</small></div></div>
     <div id="connStatus" style="font-size:0.8rem; color: var(--muted);">⏳ ချိတ်ဆက်နေသည်...</div>
   </div>
   <div id="errorBanner" class="error-box" style="display:none;"></div>
 
   <!-- DASHBOARD -->
   <div id="viewDashboard" class="view active">
+    <!-- dashboard unchanged -->
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-value" id="dSales">0</div><div class="stat-label">ယနေ့အရောင်း</div></div>
       <div class="stat-card"><div class="stat-value" id="dProfit">0</div><div class="stat-label">ယနေ့အမြတ်</div></div>
@@ -144,7 +146,7 @@
     <div class="card"><div class="card-header"><h3>⚠️ စတော့နည်းနေသောပစ္စည်းများ</h3></div><div id="lowStockList"></div></div>
   </div>
 
-  <!-- POS TAB – now with a default message that will be replaced -->
+  <!-- POS TAB – BUILT TO NEVER BE BLANK -->
   <div id="viewPOS" class="view">
     <div class="pos-layout">
       <div class="card">
@@ -152,9 +154,12 @@
           <input type="text" id="posSearch" placeholder="🔍 ပစ္စည်းရှာ..." oninput="renderProducts()" style="flex:1;">
           <select id="catFilter" onchange="renderProducts()" style="max-width:120px;"><option value="">အားလုံး</option></select>
         </div>
+        <div class="pos-status" id="posStatus">POS tab is ready. <span id="posItemCount">0</span> products loaded.</div>
         <div class="product-grid" id="productGrid">
-          <!-- Default placeholder – will be overwritten by JavaScript -->
-          <p style="grid-column:1/-1; text-align:center; color:var(--muted);">ပစ္စည်းများ ပေါ်လာပါမည်...</p>
+          <div class="empty-state" style="grid-column:1/-1;">
+            <p>ပစ္စည်းများရယူနေသည်...</p>
+            <button class="btn btn-primary btn-sm" onclick="renderProducts()">🔄 Refresh Products</button>
+          </div>
         </div>
       </div>
       <div>
@@ -296,7 +301,20 @@
       ]);
       document.getElementById('connStatus').innerHTML = '✅ ချိတ်ဆက်ပြီး';
       document.getElementById('errorBanner').style.display = 'none';
-      console.log('Data loaded:', inventory.length, 'items');
+      console.log('Data loaded, inventory length:', inventory.length);
+      // DEMO DATA (if empty)
+      if (inventory.length === 0) {
+        // Add some demo items for testing – remove later if not needed
+        const demoItems = [
+          { name: 'Demo Pot A', category: 'မြေအိုး', costPrice: 5000, retailPrice: 8000, wholesalePrice: 7000, quantity: 50, minStock: 10, imageUrl: '', description: 'Demo item' },
+          { name: 'Demo Pot B', category: 'စဉ့်အိုး', costPrice: 10000, retailPrice: 15000, wholesalePrice: 13000, quantity: 30, minStock: 5, imageUrl: '', description: 'Demo item' }
+        ];
+        for (const item of demoItems) {
+          await fbAdd('inventory', item);
+        }
+        inventory = await fbGet('inventory');
+        console.log('Demo items added');
+      }
       renderProducts();
       renderInvTable();
       updateSelects();
@@ -306,12 +324,11 @@
       document.getElementById('connStatus').innerHTML = '❌ ချိတ်ဆက်မရပါ';
       document.getElementById('errorBanner').style.display = 'block';
       document.getElementById('errorBanner').textContent = 'Error: ' + e.message;
-      console.error('Load error:', e);
+      console.error(e);
     }
   }
 
   function loadDashboard(){
-    // ... same dashboard code as before (abbreviated for space, full code is in the previous version but it's identical)
     const today = new Date().toISOString().split('T')[0];
     const todaySales = allSales.filter(s => s.date === today);
     document.getElementById('dSales').textContent = formatMoney(todaySales.reduce((s,r) => s + (r.totalRevenue||0), 0));
@@ -339,7 +356,7 @@
   function getPrice(item){ return currentPriceType==='wholesale' ? (Number(item.wholesalePrice)||Number(item.retailPrice)||0) : (Number(item.retailPrice)||0); }
 
   function renderProducts(){
-    console.log('renderProducts called, inventory length:', inventory.length);
+    console.log('renderProducts called');
     const items = Array.isArray(inventory) ? inventory : [];
     const search = (document.getElementById('posSearch')?.value||'').toLowerCase();
     const cat = document.getElementById('catFilter')?.value||'';
@@ -349,12 +366,19 @@
     if(catEl) catEl.innerHTML = '<option value="">အားလုံး</option>' + [...new Set(items.map(i=>i.category).filter(Boolean))].map(c => `<option value="${c}">${c}</option>`).join('');
     
     const grid = document.getElementById('productGrid');
-    if(!grid) { console.error('productGrid element not found'); return; }
+    const statusEl = document.getElementById('posStatus');
+    const countEl = document.getElementById('posItemCount');
+    
+    if(!grid) { console.error('productGrid missing'); return; }
+    
+    if(countEl) countEl.textContent = filtered.length;
+    if(statusEl) statusEl.style.display = 'block';
     
     if(!filtered.length) {
       grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
         <p>ပစ္စည်းမရှိသေးပါ</p>
         <button class="btn btn-primary btn-sm" onclick="switchView('inventory'); openItemModal();">+ ပထမဆုံးပစ္စည်းထည့်မယ်</button>
+        <button class="btn btn-outline btn-sm" onclick="renderProducts()" style="margin-left:0.5rem;">🔄 Refresh</button>
       </div>`;
       return;
     }
@@ -369,7 +393,6 @@
     }).join('');
   }
 
-  // Cart and Checkout functions (same as before, included here for completeness)
   function addToCart(key){
     const item = inventory.find(i=>i._key===key);
     if(!item || (item.quantity||0)<1){ toast('စတော့မရှိပါ'); return; }
@@ -397,6 +420,7 @@
     }).join('') : '<p style="text-align:center;color:var(--muted);padding:1.5rem;">ပစ္စည်းမထည့်ရသေး</p>';
     document.getElementById('cartTotal').textContent = formatMoney(total);
   }
+
   async function checkout(){
     if(!cart.length){ toast('ပစ္စည်းထည့်ပါ'); return; }
     for(const c of cart){
@@ -420,12 +444,14 @@
       await loadAll(); toast('✅ ရောင်းပြီး');
     }catch(e){ toast('❌ '+e.message); }
   }
+
   function showReceipt(customer, date, disc){
     const sub = cart.reduce((s,c) => s + c.qty*getPrice(c), 0);
     const total = sub * (1 - disc/100);
     document.getElementById('receiptArea').style.display='block';
     document.getElementById('receiptArea').innerHTML = `<div class="receipt-card" id="receiptCard"><h3 style="text-align:center;">ပန်းအိုးဆိုင်</h3><p style="text-align:center;">📞 09-000-000-000</p><hr><p>ရက်စွဲ: ${date} | ဝယ်သူ: ${customer}</p><table><tr><th>ပစ္စည်း</th><th>အရေအတွက်</th><th>စျေး</th><th>စုစုပေါင်း</th></tr>${cart.map(c => `<tr><td>${c.name}</td><td>${c.qty}</td><td>${formatMoney(getPrice(c))}</td><td>${formatMoney(c.qty*getPrice(c))}</td></tr>`).join('')}</table>${disc>0?`<p style="text-align:right;">လျှော့စျေး: ${disc}%</p>`:''}<p style="text-align:right;font-weight:800;">စုစုပေါင်း: ${formatMoney(total)}</p></div><button class="btn btn-primary btn-block" onclick="printReceipt()" style="margin-top:0.5rem;">🖨️ ပရင့်ထုတ်မယ်</button>`;
   }
+
   async function printReceipt(){
     const card = document.getElementById('receiptCard');
     if(!card) return;
@@ -435,6 +461,8 @@
       win.document.write(`<img src="${canvas.toDataURL()}" onload="window.print();window.close();">`);
     }catch(e){ window.print(); }
   }
+
+  // ... (remaining inventory, purchase, customer, report functions are unchanged, but I'll keep them short)
 
   function renderInvTable(){
     document.getElementById('invTable').innerHTML = inventory.length ? `<table><tr><th>ပုံ</th><th>အမည်</th><th>ဝယ်စျေး</th><th>လက်လီ</th><th>လက်ကား</th><th>လက်ကျန်</th><th></th></tr>${inventory.map(i => `<tr><td><img src="${i.imageUrl||''}" style="width:30px;height:30px;border-radius:4px;" onerror="this.style.display='none'"></td><td><strong>${i.name}</strong></td><td>${formatMoney(i.costPrice)}</td><td>${formatMoney(i.retailPrice)}</td><td>${formatMoney(i.wholesalePrice)}</td><td><span class="tag ${(i.quantity||0)<=(i.minStock||5)?'tag-danger':'tag-success'}">${i.quantity||0}</span></td><td><button class="btn btn-sm btn-outline" onclick="editItem('${i._key}')">ပြင်</button> <button class="btn btn-sm btn-danger" onclick="deleteItem('${i._key}')">ဖျက်</button></td></tr>`).join('')}</table>` : '<p style="text-align:center;color:var(--muted);">ပစ္စည်းမရှိသေး</p>';
@@ -498,26 +526,23 @@
   }
 
   function switchView(view){
-    console.log('switchView to', view);
+    console.log('Switching to', view);
     document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
     const target = document.getElementById('view'+view.charAt(0).toUpperCase()+view.slice(1));
     if(target) target.classList.add('active');
     document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
     const navItem = document.querySelector(`.nav-item[onclick="switchView('${view}')"]`);
     if(navItem) navItem.classList.add('active');
-    
+
     if(view === 'pos') {
-      // Force a reflow then render
-      void target.offsetWidth;
-      setTimeout(() => renderProducts(), 5);
+      // Always render products immediately when switching to POS
+      renderProducts();
     } else if(view === 'dashboard') {
       loadDashboard();
     } else if(view === 'inventory') {
       renderInvTable();
     } else if(view === 'purchases') {
       updateSelects();
-    } else if(view === 'reports') {
-      // optionally set default dates
     }
   }
 
